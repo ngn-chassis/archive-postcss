@@ -1,0 +1,262 @@
+/* NGN Chassis PostCSS
+
+/* Color Definitions ---------------------------------------------------------*/
+
+:root {
+
+    /* Copic Greys
+	 * Grey Scale: lightest (00) to darkest (10) in one-shade increments */
+
+    /* :: Cool Grey */
+
+    /* #EDEDED */
+
+    /* #EAEAEA */
+
+    /* #E1E1DF */
+
+    /* #D3D4CF */
+
+    /* #BCBBB9 */
+
+    /* #A8A7A3 */
+
+    /* #939391 */
+
+    /* #777674 */
+
+    /* #636361 */
+
+    /* #4c4b49 */
+
+    /* #332F2E */
+
+    /* :: Neutral Grey */
+
+    /* #EEEEEE */
+
+    /* #E2E3E5 */
+
+    /* #DADBDD */
+
+    /* #D1D2D4 */
+
+    /* #BCBDC1 */
+
+    /* #A9AAAE */
+
+    /* #949599 */
+
+    /* #77787C */
+
+    /* #636466 */
+
+    /* #4C4D4F */
+
+    /* #312F32 */
+
+    /* :: Toner Grey */
+
+    /* #E8F0F3 */
+
+    /* #E1E9EC */
+
+    /* #DAE3E8 */
+
+    /* #CCD7DD */
+
+    /* #C0CBD1 */
+
+    /* #92A0A9 */
+
+    /* #7D8B96 */
+
+    /* #637079 */
+
+    /* #535D67 */
+
+    /* #3C474D */
+
+    /* #212A31 */
+}
+
+/* NGN Chassis PostCSS
+ * Layout Defaults
+ * ---------------------------------------------------------------------------*/
+
+/* NGN Chassis PostCSS
+ * Browser Reset -------------------------------------------------------------*/
+
+*, *:before, *:after {
+
+    box-sizing: border-box
+}
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+
+    margin: 0;
+
+    padding: 0;
+
+    border: 0;
+
+    font: inherit;
+
+    font-size: 100%;
+
+    vertical-align: baseline
+}
+
+ol, ul {
+
+    list-style: none
+}
+
+q, blockquote {
+
+    quotes: none
+}
+
+q:before, q:after, blockquote:before, blockquote:after {
+
+    content: "";
+
+    content: none
+}
+
+a img {
+
+    border: none
+}
+
+/* For IE and Opera Mini
+ * Set default box model on HTML5 semantic elements */
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+
+    display: block
+}
+
+input, textarea, button {
+
+    font-size: inherit
+}
+/* NGN Chassis PostCSS 
+ * Helper Classes 
+
+ * These classes can be injected with javascript 
+
+ * Add !important to rules that absolutely must overwrite any other styles. */
+/*----------------------------------------------------------------------------*/
+.hidden {
+
+    display: none !important;
+
+    visibility: hidden !important;
+
+    opacity: 0 !important
+}
+/* Limit width of a container to the min and max UI widths
+ * <div class="width-constraint"> should be placed inside elements that span the
+ * full width of the viewport to maintain proper UI dimensions
+
+ * For  elements that need to be constrained to the max UI width
+ * (e.g. inner containers on top-level elements, etc.) */
+.width-constraint {
+
+    width: 100%;
+
+    min-width:  !important;
+
+    max-width:  !important;
+
+    margin: 0 auto;
+
+    padding-left: 6.18vw;
+
+    padding-right: 6.18vw
+
+    /*@media screen and (max-width: $min-width) {
+		@if unit($min-width) != 'rem' {
+			@if unit($min-width) == 'px' {
+				padding: {
+					left: round((strip-units($min-width) * (strip-units($ui-gutter) / 100)) * 1px);
+					right: round((strip-units($min-width) * (strip-units($ui-gutter) / 100)) * 1px);
+				}
+			} @else {
+				@warn '#{unit($min-width)} cannot be used as a unit for $ui-min-width. Please use rem or px instead.';
+			}
+		} @else {
+			padding: {
+				left: round(((strip-units($min-width) * strip-units($typography-base)) * (strip-units($ui-gutter) / 100)) * 1px);
+				right: round(((strip-units($min-width) * strip-units($typography-base)) * (strip-units($ui-gutter) / 100)) * 1px);
+			}
+		}
+	}*/
+}
+/*@mixin width-constraint($min-width: $ui-min-width, $max-width: $ui-max-width, $has-padding: true) {
+	width: 100%;
+	min-width: $min-width !important;
+	max-width: $max-width !important;
+	margin: 0 auto;
+
+	@if $has-padding {
+		padding: {
+	    left: $ui-gutter;
+	    right: $ui-gutter;
+	  }
+
+		// Prevent vw padding from shrinking at viewport widths below minimum ui width
+		@media screen and (max-width: $min-width) {
+			@if unit($min-width) != 'rem' {
+	      @if unit($min-width) == 'px' {
+					padding: {
+						left: round((strip-units($min-width) * (strip-units($ui-gutter) / 100)) * 1px);
+						right: round((strip-units($min-width) * (strip-units($ui-gutter) / 100)) * 1px);
+				  }
+	      } @else {
+	        @warn '#{unit($min-width)} cannot be used as a unit for $ui-min-width. Please use rem or px instead.';
+	      }
+	    } @else {
+				padding: {
+					left: round(((strip-units($min-width) * strip-units($typography-base)) * (strip-units($ui-gutter) / 100)) * 1px);
+					right: round(((strip-units($min-width) * strip-units($typography-base)) * (strip-units($ui-gutter) / 100)) * 1px);
+			  }
+			}
+		}
+
+		// Prevent vw padding from enlarging at viewport widths above maximum ui width
+		@media screen and (min-width: $max-width) {
+			@if unit($max-width) != 'rem' {
+	      @if unit($max-width) == 'px' {
+					padding: {
+						left: round((strip-units($max-width) * (strip-units($ui-gutter) / 100)) * 1px);
+						right: round((strip-units($max-width) * (strip-units($ui-gutter) / 100)) * 1px);
+				  }
+	      } @else {
+	        @warn '#{unit($max-width)} cannot be used as a unit for $ui-max-width. Please use rem or px instead.';
+	      }
+	    } @else {
+				padding: {
+					left: round(((strip-units($max-width) * strip-units($typography-base)) * (strip-units($ui-gutter) / 100)) * 1px);
+					right: round(((strip-units($max-width) * strip-units($typography-base)) * (strip-units($ui-gutter) / 100)) * 1px);
+			  }
+			}
+		}
+	}
+}
+
+%width-constraint {
+	@include width-constraint;
+}
+
+.width-constraint {
+	@extend %width-constraint;
+}*/
+
+.chassis {
+	
+	
+	
+}
+/*# sourceMappingURL=_chassis.css.map */

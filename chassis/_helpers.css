@@ -1,0 +1,118 @@
+/* NGN Chassis PostCSS 
+ * Helper Classes 
+
+ * These classes can be injected with javascript 
+
+ * Add !important to rules that absolutely must overwrite any other styles. */
+/*----------------------------------------------------------------------------*/
+
+.hidden {
+	display: none !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+}
+
+/* Limit width of a container to the min and max UI widths
+ * <div class="width-constraint"> should be placed inside elements that span the
+ * full width of the viewport to maintain proper UI dimensions
+
+ * For  elements that need to be constrained to the max UI width
+ * (e.g. inner containers on top-level elements, etc.) */
+ 
+@define-mixin width-constraint $min-width: getMinViewportBound(), $max-width: getMaxViewportBound(), $has-padding: true {
+	width: 100%;
+	min-width: $min-width !important;
+	max-width: $max-width !important;
+	margin: 0 auto;
+	
+	@if $has-padding == true {
+		padding-left: $ui-gutter;
+	  padding-right: $ui-gutter;
+	}
+	
+	/*@media screen and (max-width: $min-width) {
+		@if unit($min-width) != 'rem' {
+			@if unit($min-width) == 'px' {
+				padding: {
+					left: round((strip-units($min-width) * (strip-units($ui-gutter) / 100)) * 1px);
+					right: round((strip-units($min-width) * (strip-units($ui-gutter) / 100)) * 1px);
+				}
+			} @else {
+				@warn '#{unit($min-width)} cannot be used as a unit for $ui-min-width. Please use rem or px instead.';
+			}
+		} @else {
+			padding: {
+				left: round(((strip-units($min-width) * strip-units($typography-base)) * (strip-units($ui-gutter) / 100)) * 1px);
+				right: round(((strip-units($min-width) * strip-units($typography-base)) * (strip-units($ui-gutter) / 100)) * 1px);
+			}
+		}
+	}*/
+}
+
+@define-extend width-constraint {
+  @mixin width-constraint;
+}
+
+.width-constraint {
+	@extend width-constraint;
+}
+ 
+/*@mixin width-constraint($min-width: $ui-min-width, $max-width: $ui-max-width, $has-padding: true) {
+	width: 100%;
+	min-width: $min-width !important;
+	max-width: $max-width !important;
+	margin: 0 auto;
+
+	@if $has-padding {
+		padding: {
+	    left: $ui-gutter;
+	    right: $ui-gutter;
+	  }
+
+		// Prevent vw padding from shrinking at viewport widths below minimum ui width
+		@media screen and (max-width: $min-width) {
+			@if unit($min-width) != 'rem' {
+	      @if unit($min-width) == 'px' {
+					padding: {
+						left: round((strip-units($min-width) * (strip-units($ui-gutter) / 100)) * 1px);
+						right: round((strip-units($min-width) * (strip-units($ui-gutter) / 100)) * 1px);
+				  }
+	      } @else {
+	        @warn '#{unit($min-width)} cannot be used as a unit for $ui-min-width. Please use rem or px instead.';
+	      }
+	    } @else {
+				padding: {
+					left: round(((strip-units($min-width) * strip-units($typography-base)) * (strip-units($ui-gutter) / 100)) * 1px);
+					right: round(((strip-units($min-width) * strip-units($typography-base)) * (strip-units($ui-gutter) / 100)) * 1px);
+			  }
+			}
+		}
+
+		// Prevent vw padding from enlarging at viewport widths above maximum ui width
+		@media screen and (min-width: $max-width) {
+			@if unit($max-width) != 'rem' {
+	      @if unit($max-width) == 'px' {
+					padding: {
+						left: round((strip-units($max-width) * (strip-units($ui-gutter) / 100)) * 1px);
+						right: round((strip-units($max-width) * (strip-units($ui-gutter) / 100)) * 1px);
+				  }
+	      } @else {
+	        @warn '#{unit($max-width)} cannot be used as a unit for $ui-max-width. Please use rem or px instead.';
+	      }
+	    } @else {
+				padding: {
+					left: round(((strip-units($max-width) * strip-units($typography-base)) * (strip-units($ui-gutter) / 100)) * 1px);
+					right: round(((strip-units($max-width) * strip-units($typography-base)) * (strip-units($ui-gutter) / 100)) * 1px);
+			  }
+			}
+		}
+	}
+}
+
+%width-constraint {
+	@include width-constraint;
+}
+
+.width-constraint {
+	@extend %width-constraint;
+}*/

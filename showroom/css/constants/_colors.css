@@ -1,0 +1,19 @@
+/* NGN Chassis PostCSS
+
+/* Color Definitions ---------------------------------------------------------*/
+
+:root {
+
+	/* Copic Greys
+	 * Grey Scale: lightest (00) to darkest (10) in one-shade increments */
+
+	/* :: Cool Grey */ /* #EDEDED */ /* #EAEAEA */ /* #E1E1DF */ /* #D3D4CF */ /* #BCBBB9 */ /* #A8A7A3 */ /* #939391 */  /* #777674 */   /* #636361 */    /* #4c4b49 */    /* #332F2E */
+
+	/* :: Neutral Grey */ /* #EEEEEE */ /* #E2E3E5 */ /* #DADBDD */ /* #D1D2D4 */ /* #BCBDC1 */ /* #A9AAAE */ /* #949599 */ /* #77787C */  /* #636466 */    /* #4C4D4F */    /* #312F32 */
+
+	/* :: Toner Grey */ /* #E8F0F3 */ /* #E1E9EC */ /* #DAE3E8 */ /* #CCD7DD */ /* #C0CBD1 */ /* #92A0A9 */ /* #7D8B96 */ /* #637079 */    /* #535D67 */    /* #3C474D */    /* #212A31 */
+
+}
+
+
+/*# sourceMappingURL=_colors.css.map */

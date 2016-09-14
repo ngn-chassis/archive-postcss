@@ -1,0 +1,12 @@
+@import 'chassis';
+
+.showroom {
+	/*Account for sticky footer*/
+	padding-bottom: 3.618em;
+	
+	& > header {
+		padding: 1.46em 0 .90169942em;
+
+    border-bottom: 4px solid var(--grey-n00);
+	}
+}
