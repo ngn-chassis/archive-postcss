@@ -20,7 +20,9 @@ var CHASSIS_FUNCTIONS = {
   getUiGutter: CHASSIS.getUiGutter,
   getUiMinWidth: CHASSIS.getUiMinWidth,
   getUiMaxWidth: CHASSIS.getUiMaxWidth,
-  getViewportWidthRange: CHASSIS.getViewportWidthRange
+  getViewportWidthRange: CHASSIS.getViewportWidthRange,
+  getUnit: CHASSIS.getUnit,
+  warn: CHASSIS.warn
 }
 
 // Sass Paths ------------------------------------------------------------------
@@ -34,13 +36,15 @@ var DEST = './showroom'
 gulp.task('css', function () {
   return gulp.src(SOURCE.CHASSIS + '/**/*.css')
     .pipe( sourcemaps.init() )
-    .pipe( postcss([ 
-      require('autoprefixer'), 
+    .pipe( postcss([
+      require('autoprefixer'),
       require('precss'),
       require('postcss-functions')({
         functions: CHASSIS_FUNCTIONS
-      })
-    ])) 
+      }),
+      require('postcss-strip-units'),
+      require('postcss-round-subpixels')
+    ]))
     .pipe( sourcemaps.write('.') )
     .pipe( gulp.dest(DEST + '/css') );
 })
@@ -59,7 +63,7 @@ gulp.task('clean', function (next) {
 //     del.sync(DIST)
 //   }
 //   // fs.mkdirSync(DIST)
-// 
+//
 //   wrench.copyDirSyncRecursive(SOURCE, DIST, {
 //     forceDelete: true, // Whether to overwrite existing directory or not
 //     excludeHiddenUnix: false, // Whether to copy hidden Unix files or not (preceding .)
