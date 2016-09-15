@@ -19,15 +19,15 @@
  * For  elements that need to be constrained to the max UI width
  * (e.g. inner containers on top-level elements, etc.) */
  
-@define-mixin width-constraint $min-width: getMinViewportBound(), $max-width: getMaxViewportBound(), $has-padding: true {
+@define-mixin width-constraint $min-width: getUiMinWidth(), $max-width: getUiMaxWidth(), $has-padding: true {
 	width: 100%;
 	min-width: $min-width !important;
 	max-width: $max-width !important;
 	margin: 0 auto;
 	
 	@if $has-padding == true {
-		padding-left: $ui-gutter;
-	  padding-right: $ui-gutter;
+		padding-left: getUiGutter();
+	  padding-right: getUiGutter();
 	}
 	
 	/*@media screen and (max-width: $min-width) {

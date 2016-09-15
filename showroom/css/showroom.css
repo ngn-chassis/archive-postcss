@@ -43,9 +43,6 @@
 	/* #212A31 */
 }
 /* NGN Chassis PostCSS
- * Layout Defaults
- * ---------------------------------------------------------------------------*/
-/* NGN Chassis PostCSS
  * Browser Reset -------------------------------------------------------------*/
 
 *, *:before, *:after {
@@ -109,8 +106,8 @@ input, textarea, button {
 
 .width-constraint {
 	width: 100%;
-	min-width:  !important;
-	max-width:  !important;
+	min-width: 320px !important;
+	max-width: 1440px !important;
 	margin: 0 auto;
 	padding-left: 6.18vw;
 	padding-right: 6.18vw

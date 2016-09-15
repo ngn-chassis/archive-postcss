@@ -1,1 +1,0 @@
-{"version":3,"sources":["config/_layout.css"],"names":[],"mappings":"AAAA;;gFAEgF","file":"config/_layout.css","sourcesContent":["/* NGN Chassis PostCSS\n * Layout Defaults\n * ---------------------------------------------------------------------------*/\n\n$ui-gutter : 6.18vw;\n\n$default-border-radius : .240625em;"],"sourceRoot":"/source/"}

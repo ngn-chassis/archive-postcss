@@ -16,6 +16,12 @@ var sourcemaps = require('gulp-sourcemaps')
 var ChassisProject = require('./chassis-postcss.js')
 
 var CHASSIS = new ChassisProject()
+var CHASSIS_FUNCTIONS = {
+  getUiGutter: CHASSIS.getUiGutter,
+  getUiMinWidth: CHASSIS.getUiMinWidth,
+  getUiMaxWidth: CHASSIS.getUiMaxWidth,
+  getViewportWidthRange: CHASSIS.getViewportWidthRange
+}
 
 // Sass Paths ------------------------------------------------------------------
 var SOURCE = {
@@ -32,35 +38,7 @@ gulp.task('css', function () {
       require('autoprefixer'), 
       require('precss'),
       require('postcss-functions')({
-        functions: {
-          getMinViewportBound: function() {
-            if ( CHASSIS.config.uiMinWidth ) {
-              return CHASSIS.config.uiMinWidth
-            } else {
-              console.log('UI Minimum Width Value has not been set!')
-              return ''
-            }
-          },
-          getMaxViewportBound: function() {
-            if ( CHASSIS.config.uiMaxWidth ) {
-              return CHASSIS.config.uiMaxWidth
-            } else {
-              console.log('UI Maximum Width Value has not been set!')
-              return ''
-            }
-          },
-          getViewportBound: function(name, bound) {
-            var value = CHASSIS.config.viewportWidthRanges[name][bound]
-            
-            if ( value ) {
-              return value
-            } else {
-              console.warn('Invalid viewport width range.')
-              return ''
-            }
-          },
-          
-        }
+        functions: CHASSIS_FUNCTIONS
       })
     ])) 
     .pipe( sourcemaps.write('.') )

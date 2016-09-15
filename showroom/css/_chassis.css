@@ -81,10 +81,6 @@
 }
 
 /* NGN Chassis PostCSS
- * Layout Defaults
- * ---------------------------------------------------------------------------*/
-
-/* NGN Chassis PostCSS
  * Browser Reset -------------------------------------------------------------*/
 
 *, *:before, *:after {
@@ -166,9 +162,9 @@ input, textarea, button {
 
     width: 100%;
 
-    min-width:  !important;
+    min-width: 320px !important;
 
-    max-width:  !important;
+    max-width: 1440px !important;
 
     margin: 0 auto;
 
