@@ -1,12 +1,19 @@
 @import 'constants/colors';
 
 @import 'mixins/media-queries';
+@import 'mixins/misc';
 
 @import 'reset';
 @import 'helpers';
 
+:root {
+	--num-viewport-width-ranges: getNumViewportWidthRanges();
+}
+
 .chassis {
-	
-	
-	
+	@for $i from 1 to var(--num-viewport-width-ranges) {
+		@mixin at-viewport-width getViewportWidthRangeName($i) {
+			background: blue;
+		}
+	};
 }

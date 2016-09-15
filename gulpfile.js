@@ -22,6 +22,9 @@ var CHASSIS_FUNCTIONS = {
   getLayoutMaxWidth: CHASSIS.getLayoutMaxWidth,
   getViewportWidthBound: CHASSIS.getViewportWidthBound,
   getMediaQueryValue: CHASSIS.getMediaQueryValue,
+  getViewportWidthRangesList: CHASSIS.getViewportWidthRangesList,
+  getNumViewportWidthRanges: CHASSIS.getNumViewportWidthRanges,
+  getViewportWidthRangeName: CHASSIS.getViewportWidthRangeName,
   getUnit: CHASSIS.getUnit,
   warn: CHASSIS.warn
 }
@@ -39,11 +42,25 @@ gulp.task('css', function () {
     .pipe( sourcemaps.init() )
     .pipe( postcss([
       require('autoprefixer'),
-      require('precss'),
+      require('postcss-partial-import'),
+      require('postcss-mixins'),
       require('postcss-functions')({
         functions: CHASSIS_FUNCTIONS
       }),
-      require('postcss-strip-units')
+      require('postcss-at-rules-variables'),
+      require('postcss-advanced-variables'),
+      require('postcss-custom-media'),
+      require('postcss-custom-properties'),
+      require('postcss-media-minmax'),
+      require('postcss-color-function'),
+      require('postcss-nesting'),
+      require('postcss-nested'),
+      require('postcss-custom-selectors'),
+      require('postcss-atroot'),
+      require('postcss-property-lookup'),
+      require('postcss-extend'),
+      require('postcss-selector-matches'),
+      require('postcss-selector-not')
     ]))
     .pipe( sourcemaps.write('.') )
     .pipe( gulp.dest(DEST + '/css') );
