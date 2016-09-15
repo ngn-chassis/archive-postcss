@@ -19,8 +19,8 @@
  * For  elements that need to be constrained to the max UI width
  * (e.g. inner containers on top-level elements, etc.) */
 
-@define-mixin width-constraint $min-width: getUiMinWidth(), $max-width: getUiMaxWidth(), $has-padding: true {
-	$ui-gutter: getUiGutter();
+@define-mixin width-constraint $min-width: getLayoutMinWidth(), $max-width: getLayoutMaxWidth(), $has-padding: true {
+	$gutter: getLayoutGutter();
 
 	width: 100%;
 	min-width: $min-width !important;
@@ -28,18 +28,18 @@
 	margin: 0 auto;
 
 	@if $has-padding == true {
-		padding-left: $ui-gutter;
-	  padding-right: $ui-gutter;
+		padding-left: $gutter;
+	  padding-right: $gutter;
 	}
 
 	@media screen and (max-width: $min-width) {
-		padding-left: calc((strip($min-width) * (strip($ui-gutter) / 100)) * 1px);
-		padding-right: calc((strip($min-width) * (strip($ui-gutter) / 100)) * 1px);
+		padding-left: calc((strip($min-width) * (strip($gutter) / 100)) * 1px);
+		padding-right: calc((strip($min-width) * (strip($gutter) / 100)) * 1px);
 	}
 
 	@media screen and (min-width: $max-width) {
-		padding-left: calc((strip($max-width) * (strip($ui-gutter) / 100)) * 1px);
-		padding-right: calc((strip($max-width) * (strip($ui-gutter) / 100)) * 1px);
+		padding-left: calc((strip($max-width) * (strip($gutter) / 100)) * 1px);
+		padding-right: calc((strip($max-width) * (strip($gutter) / 100)) * 1px);
 	}
 }
 

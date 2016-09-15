@@ -9,50 +9,82 @@ class ChassisProject extends NGN.EventEmitter {
 
 		super()
 
-		const defaultMinWidth = '320px'
-		const defaultMaxWidth = '1440px'
+		const defaultMinWidth = 320
+		const defaultMaxWidth = 1440
+		const goldenRatio = 1.61803398875
 
 		Object.defineProperties(this, {
+			constants: NGN.const({
+				math: {
+					goldenRatio: goldenRatio
+				}
+			}),
 			defaults: NGN.privateconst({
 				layout: {
-					uiGutter: '6.18vw',
-					uiMinWidth: defaultMinWidth,
-					uiMaxWidth: defaultMaxWidth
+					gutter: '6.18vw',
+					minWidth: defaultMinWidth,
+					maxWidth: defaultMaxWidth
 				},
-				viewportWidthRanges: {
-					tiny: {
+				typography: {
+					typeScaleRatio: goldenRatio,
+					globalMultiplier: 1
+				},
+				viewportWidthRanges: [
+					{
+						name: 'tiny',
 						lowerBound: defaultMinWidth,
-						upperBound: '512px'
+						upperBound: 512
 					},
-					small: {
-						lowerBound: '512px',
-						upperBound: '768px'
+					{
+						name: 'small',
+						lowerBound: 512,
+						upperBound: 768
 					},
-					medium: {
-						lowerBound: '768px',
-						upperBound: '1024px'
+					{
+						name: 'medium',
+						lowerBound: 768,
+						upperBound: 1024
 					},
-					large: {
-						lowerBound: '1024px',
-						upperBound: '1200px'
+					{
+						name: 'large',
+						lowerBound: 1024,
+						upperBound: 1200
 					},
-					huge: {
-						lowerBound: '1200px',
+					{
+						name: 'huge',
+						lowerBound: 1200,
 						upperBound: defaultMaxWidth
 					}
+				],
+				zIndex: {
+					min: -1000,
+					behind: -1,
+					default: 1,
+					front: 2,
+					max: 1000
 				}
 			}),
 
-			constructLayoutConfig: NGN.privateconst((custom) => {
+			constructLayoutConfig: NGN.privateconst(custom => {
+				const defaults = this.defaults.layout
+				
 				return {
-					uiGutter: NGN.coalesce(custom.uiGutter, this.defaults.layout.uiGutter),
-					uiMinWidth: NGN.coalesce(custom.uiMinWidth, this.defaults.layout.uiMinWidth),
-					uiMaxWidth: NGN.coalesce(custom.uiMaxWidth, this.defaults.layout.uiMaxWidth),
-					defaultBorderRadius: NGN.coalesce(custom.defaultBorderRadius, this.defaults.layout.defaultBorderRadius)
+					gutter: NGN.coalesce(custom.gutter, defaults.gutter),
+					minWidth: NGN.coalesce(custom.minWidth, defaults.minWidth),
+					maxWidth: NGN.coalesce(custom.maxWidth, defaults.maxWidth)
+				}
+			}),
+			
+			constructTypographyConfig: NGN.privateconst(custom => {
+				const defaults = this.defaults.typography
+				
+				return {
+					typeScaleRatio: NGN.coalesce(custom.typeScaleRatio, defaults.typeScaleRatio),
+					globalMultiplier: NGN.coalesce(custom.globalMultiplier, defaults.globalMultiplier)
 				}
 			}),
 
-			constructViewportWidthRangesConfig: NGN.privateconst((custom) => {
+			constructViewportWidthRangesConfig: NGN.privateconst(custom => {
 				const vwr = {}
 
 				Object.keys(custom).forEach(key => {
@@ -61,43 +93,97 @@ class ChassisProject extends NGN.EventEmitter {
 
 				return vwr
 			}),
-
-			getUiGutter: NGN.const(() => {
-				if (this.layout.uiGutter) {
-					return this.layout.uiGutter
+			
+			constructZIndexConfig: NGN.privateconst(custom => {
+				const defaults = this.defaults.zIndex
+				
+				return {
+					min: NGN.coalesce(custom.min, defaults.min),
+					behind: NGN.coalesce(custom.behind, defaults.behind),
+					default: NGN.coalesce(custom.default, defaults.default),
+					front: NGN.coalesce(custom.front, defaults.front),
+					max: NGN.coalesce(custom.max, defaults.max)
 				}
-
-				console.warn('UI Gutter Value has not been set!')
-				return ''
 			}),
 
-			getUiMinWidth: NGN.const(() => {
-				if (this.layout.uiMinWidth) {
-					return this.layout.uiMinWidth
-				}
-
-				console.warn('UI Minimum Width Value has not been set!')
-				return ''
-			}),
-
-			getUiMaxWidth: NGN.const(() => {
-				if (!this.layout.uiMaxWidth) {
-					console.warn('UI Maximum Width Value has not been set!')
+			getLayoutGutter: NGN.const(() => {
+				if (!this.layout.gutter) {
+					console.warn('Layout Gutter Value has not been set!')
 					return ''
 				}
 
-				return this.layout.uiMaxWidth
+				return this.layout.gutter
 			}),
 
-			getViewportWidthRange: NGN.const((name) => {
-				const range = this.viewportWidthRanges[name]
+			getLayoutMinWidth: NGN.const(() => {
+				if (!this.layout.minWidth) {
+					console.warn('Layout Minimum Width Value has not been set!')
+					return ''
+				}
+
+				return `${this.layout.minWidth}px`
+			}),
+
+			getLayoutMaxWidth: NGN.const(() => {
+				if (!this.layout.maxWidth) {
+					console.warn('Layout Maximum Width Value has not been set!')
+					return ''
+				}
+
+				return `${this.layout.maxWidth}px`
+			}),
+
+			getViewportWidthBound: NGN.const((name, bound) => {
+				const range = this.viewportWidthRanges.filter(vwr => {
+					return name === vwr.name
+				})
 
 				if ( !range ) {
 					console.warn(`Viewport Width Range ${name} does not exist.`)
 					return ''
 				}
 
-				return range
+				return `${range[bound]}px`
+			}),
+			
+			getMediaQueryValue: NGN.privateconst((type, name) => {
+				let index = 0;
+				
+				const range = this.viewportWidthRanges.filter((vwr, i) => {
+					index = i
+					return name === vwr.name
+				}).pop()
+				
+				if (!range) {
+					console.warn(`Viewport Width Range ${name} does not exist.`)
+					return ''
+				}
+				
+				switch (type) {
+					case 'below':
+						return `${range.lowerBound - 1}px`
+						break
+					
+					case 'max':
+						return `${range.upperBound - 1}px`
+						break
+						
+					case 'at-min':
+						return `${range.lowerBound}px`
+						break
+						
+					case 'at-max':
+						return index === this.viewportWidthRanges.length ? `${range.upperBound}px` : `${range.upperBound - 1}px`
+						break						
+						
+					case 'min':
+						return `${range.lowerBound}px`
+						break	
+						
+					case 'above':
+						return `${range.upperBound + 1}px`
+						break	
+				}
 			}),
 
 			getUnit: NGN.const(value => {
@@ -110,8 +196,10 @@ class ChassisProject extends NGN.EventEmitter {
 		})
 
 		this.layout = cfg.hasOwnProperty('layout') ? this.constructLayoutConfig(cfg.layout) : this.defaults.layout
+		this.typography = cfg.hasOwnProperty('typography') ? this.constructTypographyConfig(cfg.typography) : this.defaults.typography
 		this.viewportWidthRanges = cfg.hasOwnProperty('viewportWidthRanges') ? this.constructViewportWidthRangesConfig(cfg.viewportWidthRanges) : this.defaults.viewportWidthRanges
-
+		this.zIndex = cfg.hasOwnProperty('zIndex') ? this.constructZIndexConfig(cfg.zIndex) : this.defaults.zIndex
+		
 	}
 }
 

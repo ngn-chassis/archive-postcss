@@ -17,11 +17,11 @@ main {
   @mixin width-constraint;
 
   padding-top: 2em;
-
-  /*@include min-viewport-width(medium) {
-    display: flex;
+	
+	@mixin min-viewport-width medium {
+		display: flex;
     align-items: flex-start;
 
     padding-top: 3.82em;
-  }*/
+	}
 }

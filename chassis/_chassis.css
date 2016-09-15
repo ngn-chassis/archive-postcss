@@ -1,5 +1,7 @@
 @import 'constants/colors';
 
+@import 'mixins/media-queries';
+
 @import 'reset';
 @import 'helpers';
 

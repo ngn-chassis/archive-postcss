@@ -17,10 +17,11 @@ var ChassisProject = require('./chassis-postcss.js')
 
 var CHASSIS = new ChassisProject()
 var CHASSIS_FUNCTIONS = {
-  getUiGutter: CHASSIS.getUiGutter,
-  getUiMinWidth: CHASSIS.getUiMinWidth,
-  getUiMaxWidth: CHASSIS.getUiMaxWidth,
-  getViewportWidthRange: CHASSIS.getViewportWidthRange,
+  getLayoutGutter: CHASSIS.getLayoutGutter,
+  getLayoutMinWidth: CHASSIS.getLayoutMinWidth,
+  getLayoutMaxWidth: CHASSIS.getLayoutMaxWidth,
+  getViewportWidthBound: CHASSIS.getViewportWidthBound,
+  getMediaQueryValue: CHASSIS.getMediaQueryValue,
   getUnit: CHASSIS.getUnit,
   warn: CHASSIS.warn
 }
@@ -42,8 +43,7 @@ gulp.task('css', function () {
       require('postcss-functions')({
         functions: CHASSIS_FUNCTIONS
       }),
-      require('postcss-strip-units'),
-      require('postcss-round-subpixels')
+      require('postcss-strip-units')
     ]))
     .pipe( sourcemaps.write('.') )
     .pipe( gulp.dest(DEST + '/css') );
