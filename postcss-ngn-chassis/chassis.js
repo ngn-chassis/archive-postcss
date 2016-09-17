@@ -177,20 +177,20 @@ class Chassis extends NGN.EventEmitter {
 					max: 1000
 				}
 			}),
-						
+
 			constructLayoutConfig: NGN.privateconst(custom => {
 				const defaultSettings = this.defaultSettings.layout
-				
+
 				return {
 					gutter: NGN.coalesce(custom.gutter, defaultSettings.gutter),
 					minWidth: NGN.coalesce(custom.minWidth, defaultSettings.minWidth),
 					maxWidth: NGN.coalesce(custom.maxWidth, defaultSettings.maxWidth)
 				}
 			}),
-			
+
 			constructTypographyConfig: NGN.privateconst(custom => {
 				const defaultSettings = this.defaultSettings.typography
-				
+
 				return {
 					typeScaleRatio: NGN.coalesce(custom.typeScaleRatio, defaultSettings.typeScaleRatio),
 					globalMultiplier: NGN.coalesce(custom.globalMultiplier, defaultSettings.globalMultiplier)
@@ -206,10 +206,10 @@ class Chassis extends NGN.EventEmitter {
 
 				return vwr
 			}),
-			
+
 			constructZIndexConfig: NGN.privateconst(custom => {
 				const defaultSettings = this.defaultSettings.zIndex
-				
+
 				return {
 					min: NGN.coalesce(custom.min, defaultSettings.min),
 					behind: NGN.coalesce(custom.behind, defaultSettings.behind),
@@ -218,53 +218,53 @@ class Chassis extends NGN.EventEmitter {
 					max: NGN.coalesce(custom.max, defaultSettings.max)
 				}
 			}),
-			
+
 			getFontSize: NGN.privateconst((type, upperBound) => {
 				const match = this.constants.typography.definitions.filter(definition => {
 					return upperBound >= definition.upperBound
 				}).pop()
-				
+
 				if ( !match ) {
-					console.log(`No Font Size found matching type: "${type}" at upper bound: "${upperBound}"`);
+					console.error(`Font Size: "${type}" not found`);
 				}
-				
+
 				return match.fontSizes[type] * this.settings.typography.globalMultiplier
 			}),
-			
+
 			getLineHeight: NGN.privateconst((type, upperBound) => {
 				const fontSize = this.getFontSize(type, upperBound)
-				
+
 				return this.getOptimalLineHeight(fontSize, upperBound)
 			}),
-			
-			getOptimalWidth: NGN.privateconst((fontSize, ratio) => {
+
+			getOptimalLineWidth: NGN.privateconst((fontSize, ratio) => {
 				const lineHeight = Math.round(fontSize * ratio)
-				
+
 				return Math.pow(lineHeight, 2)
 			}),
-			
+
 			getOptimalLineHeight: NGN.privateconst((fontSize, upperBound) => {
 				const typeScaleRatio = this.settings.typography.typeScaleRatio
-				const optimalLineWidth = this.getOptimalWidth(fontSize, typeScaleRatio)
-				
+				const optimalLineWidth = this.getOptimalLineWidth(fontSize, typeScaleRatio)
+
 				return Math.round((typeScaleRatio - ((1 / (2 * typeScaleRatio)) * (1 - (upperBound / optimalLineWidth)))) * fontSize)
 			}),
-			
+
 			getHeadingMargin: NGN.privateconst((fontSize, upperBound) => {
 				return Math.round(this.getLineHeight(fontSize, upperBound) / this.settings.typography.typeScaleRatio)
 			}),
-			
+
 			getContainerMargin: NGN.privateconst((fontSize, upperBound) => {
 				return Math.round(this.getLineHeight(fontSize, upperBound) * this.settings.typography.typeScaleRatio)
 			}),
-			
+
 			getBlockMargin: NGN.privateconst((fontSize, upperBound) => {
 				return this.getLineHeight(fontSize, upperBound)
 			}),
 
 			getLayoutGutter: NGN.public(() => {
 				const layout = this.settings.layout
-				
+
 				if (!layout.gutter) {
 					console.warn('Layout Gutter Value has not been set!')
 					return ''
@@ -275,24 +275,24 @@ class Chassis extends NGN.EventEmitter {
 
 			getLayoutMinWidth: NGN.public(() => {
 				const layout = this.settings.layout
-				
+
 				if (!layout.minWidth) {
 					console.warn('Layout Minimum Width Value has not been set!')
 					return ''
 				}
 
-				return `${layout.minWidth}px`
+				return layout.minWidth
 			}),
 
 			getLayoutMaxWidth: NGN.public(() => {
 				const layout = this.settings.layout
-				
+
 				if (!layout.maxWidth) {
 					console.warn('Layout Maximum Width Value has not been set!')
 					return ''
 				}
 
-				return `${layout.maxWidth}px`
+				return layout.maxWidth
 			}),
 
 			getViewportWidthBound: NGN.public((name, bound) => {
@@ -307,57 +307,57 @@ class Chassis extends NGN.EventEmitter {
 
 				return `${range[bound]}px`
 			}),
-			
+
 			getMediaQueryValue: NGN.private((type, name) => {
 				const viewportWidthRanges = this.settings.viewportWidthRanges
 				let index = 0;
-				
+
 				const range = viewportWidthRanges.filter((vwr, i) => {
 					index = i
 					return name === vwr.name
 				}).pop()
-				
+
 				if (!range) {
 					console.warn(`Viewport Width Range ${name} does not exist.`)
 					return ''
 				}
-				
+
 				switch (type) {
 					case 'below':
 						return `${range.lowerBound - 1}px`
 						break
-					
+
 					case 'max':
 						return `${range.upperBound - 1}px`
 						break
-						
+
 					case 'at-min':
 						return `${range.lowerBound}px`
 						break
-						
+
 					case 'at-max':
 						return index === viewportWidthRanges.length ? `${range.upperBound}px` : `${range.upperBound - 1}px`
-						break						
-						
+						break
+
 					case 'min':
 						return `${range.lowerBound}px`
-						break	
-						
+						break
+
 					case 'above':
 						return `${range.upperBound + 1}px`
-						break	
+						break
 				}
 			}),
-			
+
 			getViewportWidthRanges: NGN.private(() => {
 				return this.settings.viewportWidthRanges
 			}),
-			
+
 			getViewportWidthRangeName: NGN.private(index => {
 				console.log(index);
 				// return this.viewportWidthRanges[index].name
 			}),
-			
+
 			getNumViewportWidthRanges: NGN.private(() => {
 				return this.settings.viewportWidthRanges.length
 			}),
@@ -365,16 +365,18 @@ class Chassis extends NGN.EventEmitter {
 			getUnit: NGN.const(value => {
 				return value.match(/\D+$/)[0]
 			}),
-			
+
 			stripUnits: NGN.const(value => {
-				return value.match(/\D+$/)[1]
+				const data = value.match(/\D+$/)
+
+				return data.input.slice(0, data.index)
 			}),
 
 			warn: NGN.const(message => {
 				console.warn(message)
 			})
 		})
-		
+
 		Object.defineProperty(this, 'settings', NGN.const({
 			layout: cfg.hasOwnProperty('layout') ? this.constructLayoutConfig(cfg.layout) : this.defaultSettings.layout,
 			typography: cfg.hasOwnProperty('typography') ? this.constructTypographyConfig(cfg.typography) : this.defaultSettings.typography,

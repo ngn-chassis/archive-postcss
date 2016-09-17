@@ -26,12 +26,14 @@ ul {
 q,
 blockquote {
   quotes: none;
+}
 
-  &:before,
-  &:after {
-    content: "";
-  	content: none;
-  }
+q:before,
+q:after,
+blockquote:before,
+blockquote:after {
+  content: "";
+  content: none;
 }
 
 a img {
