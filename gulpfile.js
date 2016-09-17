@@ -13,21 +13,23 @@ var sourcemaps = require('gulp-sourcemaps')
 // var header = require('gulp-header')
 // var headerComment = '/**\n  * v' + pkg.version + ' generated on: ' + (new Date()) + '\n  * Copyright (c) 2014-' + (new Date()).getFullYear() + ', Ecor Ventures LLC. All Rights Reserved.\n  */\n'
 
-var ChassisProject = require('./chassis-postcss.js')
+// var ChassisProject = require('./chassis-postcss.js')
 
-var CHASSIS = new ChassisProject()
-var CHASSIS_FUNCTIONS = {
-  getLayoutGutter: CHASSIS.getLayoutGutter,
-  getLayoutMinWidth: CHASSIS.getLayoutMinWidth,
-  getLayoutMaxWidth: CHASSIS.getLayoutMaxWidth,
-  getViewportWidthBound: CHASSIS.getViewportWidthBound,
-  getMediaQueryValue: CHASSIS.getMediaQueryValue,
-  getViewportWidthRangesList: CHASSIS.getViewportWidthRangesList,
-  getNumViewportWidthRanges: CHASSIS.getNumViewportWidthRanges,
-  getViewportWidthRangeName: CHASSIS.getViewportWidthRangeName,
-  getUnit: CHASSIS.getUnit,
-  warn: CHASSIS.warn
-}
+var chassis = require('./postcss-ngn-chassis/index.js')
+
+// var CHASSIS = new ChassisProject()
+// var CHASSIS_FUNCTIONS = {
+//   getLayoutGutter: CHASSIS.getLayoutGutter,
+//   getLayoutMinWidth: CHASSIS.getLayoutMinWidth,
+//   getLayoutMaxWidth: CHASSIS.getLayoutMaxWidth,
+//   getViewportWidthBound: CHASSIS.getViewportWidthBound,
+//   getMediaQueryValue: CHASSIS.getMediaQueryValue,
+//   getViewportWidthRangesList: CHASSIS.getViewportWidthRangesList,
+//   getNumViewportWidthRanges: CHASSIS.getNumViewportWidthRanges,
+//   getViewportWidthRangeName: CHASSIS.getViewportWidthRangeName,
+//   getUnit: CHASSIS.getUnit,
+//   warn: CHASSIS.warn
+// }
 
 // Sass Paths ------------------------------------------------------------------
 var SOURCE = {
@@ -41,26 +43,27 @@ gulp.task('css', function () {
   return gulp.src(SOURCE.CHASSIS + '/**/*.css')
     .pipe( sourcemaps.init() )
     .pipe( postcss([
-      require('autoprefixer'),
-      require('postcss-partial-import'),
-      require('postcss-mixins'),
-      require('postcss-functions')({
-        functions: CHASSIS_FUNCTIONS
-      }),
-      require('postcss-at-rules-variables'),
-      require('postcss-advanced-variables'),
-      require('postcss-custom-media'),
-      require('postcss-custom-properties'),
-      require('postcss-media-minmax'),
-      require('postcss-color-function'),
-      require('postcss-nesting'),
-      require('postcss-nested'),
-      require('postcss-custom-selectors'),
-      require('postcss-atroot'),
-      require('postcss-property-lookup'),
-      require('postcss-extend'),
-      require('postcss-selector-matches'),
-      require('postcss-selector-not')
+      chassis
+      // require('autoprefixer'),
+      // require('postcss-partial-import'),
+      // require('postcss-mixins'),
+      // require('postcss-functions')({
+      //   functions: CHASSIS_FUNCTIONS
+      // }),
+      // require('postcss-at-rules-variables'),
+      // require('postcss-advanced-variables'),
+      // require('postcss-custom-media'),
+      // require('postcss-custom-properties'),
+      // require('postcss-media-minmax'),
+      // require('postcss-color-function'),
+      // require('postcss-nesting'),
+      // require('postcss-nested'),
+      // require('postcss-custom-selectors'),
+      // require('postcss-atroot'),
+      // require('postcss-property-lookup'),
+      // require('postcss-extend'),
+      // require('postcss-selector-matches'),
+      // require('postcss-selector-not')
     ]))
     .pipe( sourcemaps.write('.') )
     .pipe( gulp.dest(DEST + '/css') );

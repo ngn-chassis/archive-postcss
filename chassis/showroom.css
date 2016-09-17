@@ -1,27 +1,7 @@
-@import 'chassis';
-
-.showroom {
-	/*Account for sticky footer*/
-	padding-bottom: 3.618em;
-
-	& > header {
-		padding: 1.46em 0 .90169942em;
-
-    border-bottom: 4px solid var(--grey-n00);
-	}
-}
+@chassis init;
 
 /* Singletons ----------------------------------------------------------------*/
 
 main {
-  @mixin width-constraint;
-
   padding-top: 2em;
-	
-	@mixin min-viewport-width medium {
-		display: flex;
-    align-items: flex-start;
-
-    padding-top: 3.82em;
-	}
 }

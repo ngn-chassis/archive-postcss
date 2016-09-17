@@ -26,6 +26,7 @@ class ChassisProject extends NGN.EventEmitter {
 					maxWidth: defaultMaxWidth
 				},
 				typography: {
+					baseFontSize: 16,
 					typeScaleRatio: goldenRatio,
 					globalMultiplier: 1,
 					definitions: [
@@ -208,34 +209,44 @@ class ChassisProject extends NGN.EventEmitter {
 			}),
 
 			getLayoutGutter: NGN.const(() => {
-				if (!this.layout.gutter) {
+				const layout = this.settings.layout
+				
+				if (!layout.gutter) {
 					console.warn('Layout Gutter Value has not been set!')
 					return ''
 				}
 
-				return this.layout.gutter
+				return layout.gutter
 			}),
 
 			getLayoutMinWidth: NGN.const(() => {
-				if (!this.layout.minWidth) {
+				const layout = this.settings.layout
+				
+				console.log(layout);
+				
+				if (!layout.minWidth) {
 					console.warn('Layout Minimum Width Value has not been set!')
 					return ''
 				}
 
-				return `${this.layout.minWidth}px`
+				return `${layout.minWidth}px`
 			}),
 
 			getLayoutMaxWidth: NGN.const(() => {
-				if (!this.layout.maxWidth) {
+				const layout = this.settings.layout
+				
+				if (!layout.maxWidth) {
 					console.warn('Layout Maximum Width Value has not been set!')
 					return ''
 				}
 
-				return `${this.layout.maxWidth}px`
+				return `${layout.maxWidth}px`
 			}),
 
 			getViewportWidthBound: NGN.const((name, bound) => {
-				const range = this.viewportWidthRanges.filter(vwr => {
+				const viewportWidthRanges = this.settings.viewportWidthRanges
+				
+				const range = viewportWidthRanges.filter(vwr => {
 					return name === vwr.name
 				})
 
@@ -248,9 +259,10 @@ class ChassisProject extends NGN.EventEmitter {
 			}),
 			
 			getMediaQueryValue: NGN.privateconst((type, name) => {
+				const viewportWidthRanges = this.settings.viewportWidthRanges
 				let index = 0;
 				
-				const range = this.viewportWidthRanges.filter((vwr, i) => {
+				const range = viewportWidthRanges.filter((vwr, i) => {
 					index = i
 					return name === vwr.name
 				}).pop()
@@ -274,7 +286,7 @@ class ChassisProject extends NGN.EventEmitter {
 						break
 						
 					case 'at-max':
-						return index === this.viewportWidthRanges.length ? `${range.upperBound}px` : `${range.upperBound - 1}px`
+						return index === viewportWidthRanges.length ? `${range.upperBound}px` : `${range.upperBound - 1}px`
 						break						
 						
 					case 'min':
@@ -288,7 +300,7 @@ class ChassisProject extends NGN.EventEmitter {
 			}),
 			
 			getViewportWidthRangesList: NGN.privateconst(() => {
-				return this.viewportWidthRanges.map(range => {
+				return this.settings.viewportWidthRanges.map(range => {
 					return range.name
 				})
 			}),
@@ -299,7 +311,7 @@ class ChassisProject extends NGN.EventEmitter {
 			}),
 			
 			getNumViewportWidthRanges: NGN.privateconst(() => {
-				return this.viewportWidthRanges.length
+				return this.settings.viewportWidthRanges.length
 			}),
 
 			getUnit: NGN.const(value => {
