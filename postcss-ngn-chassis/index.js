@@ -11,6 +11,21 @@ module.exports = postcss.plugin('postcss-ngn-chassis', config => {
 
     const chassis = new ChassisProject(config)
 
+    const newRule = (selector, decls = []) => {
+      const rule = postcss.rule({
+        selector
+      })
+
+      decls.forEach(decl => {
+        rule.append(postcss.decl({
+          prop: decl.prop,
+          value: decl.value
+        }))
+      })
+
+      return rule
+    }
+
     const coreTypography = () => {
       const ranges = chassis.getViewportWidthRanges()
       const mediaQueries = []
@@ -34,15 +49,15 @@ module.exports = postcss.plugin('postcss-ngn-chassis', config => {
           return
         }
 
-        mediaQuery.nodes.push(postcss.rule({
-          selector: '.chassis'
-        }).append(postcss.decl({
-          prop: 'font-size',
-          value: `${chassis.getFontSize('root', range.upperBound)}px`
-        })).append(postcss.decl({
-          prop: 'line-height',
-          value: `${chassis.getLineHeight('root', range.upperBound)}px`
-        })))
+        mediaQuery.nodes.push(newRule('.chassis', [
+          {
+            prop: 'font-size',
+            value: `${chassis.getFontSize('root', range.upperBound)}px`
+          }, {
+            prop: 'line-height',
+            value: `${chassis.getLineHeight('root', range.upperBound)}px`
+          }
+        ]))
 
         for (let i = 1; i <= 6; i++) {
           mediaQuery.nodes.push(headingStyles(`${i}`, range))
@@ -55,18 +70,18 @@ module.exports = postcss.plugin('postcss-ngn-chassis', config => {
     }
 
     const headingStyles = (level, range) => {
-      return postcss.rule({
-        selector: `.chassis h${level}`
-      }).append(postcss.decl({
-        prop: 'font-size',
-        value: `${chassis.getFontSize(chassis.constants.typography.headingAliases[level], range.upperBound)}px`
-      })).append(postcss.decl({
-        prop: 'line-height',
-        value: `${chassis.getLineHeight(chassis.constants.typography.headingAliases[level], range.upperBound)}px`
-      })).append(postcss.decl({
-        prop: 'margin-bottom',
-        value: `${chassis.getHeadingMargin(chassis.constants.typography.headingAliases[level], range.upperBound)}px`
-      }))
+      return newRule(`.chassis h${level}`, [
+        {
+          prop: 'font-size',
+          value: `${chassis.getFontSize(chassis.constants.typography.headingAliases[level], range.upperBound)}px`
+        }, {
+          prop: 'line-height',
+          value: `${chassis.getLineHeight(chassis.constants.typography.headingAliases[level], range.upperBound)}px`
+        }, {
+          prop: 'margin-bottom',
+          value: `${chassis.getHeadingMargin(chassis.constants.typography.headingAliases[level], range.upperBound)}px`
+        }
+      ])
     }
 
     const constrainWidthDecls = (hasPadding = true) => {
@@ -112,27 +127,27 @@ module.exports = postcss.plugin('postcss-ngn-chassis', config => {
       const reset = postcss.parse(fs.readFileSync(path.join(__dirname, 'stylesheets', 'reset.css')))
       const helpers = postcss.parse(fs.readFileSync(path.join(__dirname, 'stylesheets', 'helpers.css')))
 
-      const widthConstraint = postcss.rule({
-        selector: '.width-constraint'
-      })
-
-      constrainWidthDecls().forEach(decl => {
-        widthConstraint.append(decl)
-      })
+      const widthConstraint = newRule('.width-constraint', constrainWidthDecls())
 
       const widthConstraintBelowMin = postcss.atRule({
         name: 'media',
         params: `screen and (max-width: ${chassis.getLayoutMinWidth()}px)`,
         nodes: [
-          postcss.rule({
-            selector: '.width-constraint'
-          }).append(postcss.decl({
-            prop: 'padding-left',
-            value: `calc(${chassis.getLayoutMinWidth()}px * ${parseFloat(chassis.getLayoutGutter())} / 100)`
-          })).append(postcss.decl({
-            prop: 'padding-right',
-            value: `calc(${chassis.getLayoutMinWidth()}px * ${parseFloat(chassis.getLayoutGutter())} / 100)`
-          }))
+          newRule('.width-constraint', [
+            {
+              prop: 'padding-left',
+              // TODO: check for percentage or vw/vh unit before parseFloat;
+              // this will not work the same way when using px, ems, or rems
+              // for Layout Gutter value
+              value: `calc(${chassis.getLayoutMinWidth()}px * ${parseFloat(chassis.getLayoutGutter())} / 100)`
+            }, {
+              prop: 'padding-right',
+              // TODO: check for percentage or vw/vh unit before parseFloat;
+              // this will not work the same way when using px, ems, or rems
+              // for Layout Gutter value
+              value: `calc(${chassis.getLayoutMinWidth()}px * ${parseFloat(chassis.getLayoutGutter())} / 100)`
+            }
+          ])
         ]
       })
 
@@ -140,73 +155,72 @@ module.exports = postcss.plugin('postcss-ngn-chassis', config => {
         name: 'media',
         params: `screen and (min-width: ${chassis.getLayoutMaxWidth()}px)`,
         nodes: [
-          postcss.rule({
-            selector: '.width-constraint'
-          }).append(postcss.decl({
-            prop: 'padding-left',
-            value: `calc(${chassis.getLayoutMaxWidth()}px * ${parseFloat(chassis.getLayoutGutter())} / 100)`
-          })).append(postcss.decl({
-            prop: 'padding-right',
-            value: `calc(${chassis.getLayoutMaxWidth()}px * ${parseFloat(chassis.getLayoutGutter())} / 100)`
-          }))
+          newRule('.width-constraint', [
+            {
+              prop: 'padding-left',
+              // TODO: check for percentage or vw/vh unit before parseFloat;
+              // this will not work the same way when using px, ems, or rems
+              // for Layout Gutter value
+              value: `calc(${chassis.getLayoutMaxWidth()}px * ${parseFloat(chassis.getLayoutGutter())} / 100)`
+            }, {
+              prop: 'padding-right',
+              // TODO: check for percentage or vw/vh unit before parseFloat;
+              // this will not work the same way when using px, ems, or rems
+              // for Layout Gutter value
+              value: `calc(${chassis.getLayoutMaxWidth()}px * ${parseFloat(chassis.getLayoutGutter())} / 100)`
+            }
+          ])
         ]
       })
 
-      const base = postcss.rule({
-        selector: '.chassis'
-      }).append(postcss.decl({
-        prop: 'min-width',
-        value: `${chassis.getLayoutMinWidth()}px`
-      })).append(postcss.decl({
-        prop: 'margin',
-        value: '0'
-      })).append(postcss.decl({
-        prop: 'padding',
-        value: '0'
-      })).append(postcss.decl({
-        prop: 'font-size',
-        value: `${chassis.getFontSize('root', firstRange.upperBound)}px`
-      })).append(postcss.decl({
-        prop: 'line-height',
-        value: `${chassis.getLineHeight('root', firstRange.upperBound)}px`
-      }))
+      const base = newRule('.chassis', [
+        {
+          prop: 'min-width',
+          value: `${chassis.getLayoutMinWidth()}px`
+        }, {
+          prop: 'margin',
+          value: '0'
+        }, {
+          prop: 'padding',
+          value: '0'
+        }, {
+          prop: 'font-size',
+          value: `${chassis.getFontSize('root', firstRange.upperBound)}px`
+        }, {
+          prop: 'line-height',
+          value: `${chassis.getLineHeight('root', firstRange.upperBound)}px`
+        }
+      ])
 
-      const formLegend = postcss.rule({
-        selector: '.chassis legend'
-      }).append(postcss.decl({
-        prop: 'font-size',
-        value: `${chassis.getFontSize(chassis.constants.typography.formLegendAlias, firstRange.upperBound)}px`
-      })).append(postcss.decl({
-        prop: 'line-height',
-        value: `${chassis.getLineHeight(chassis.constants.typography.formLegendAlias, firstRange.upperBound)}px`
-      })).append(postcss.decl({
-        prop: 'margin-bottom',
-        value: `${chassis.getHeadingMargin(chassis.constants.typography.formLegendAlias, firstRange.upperBound)}px`
-      }))
+      const formLegend = newRule('.chassis legend', [
+        {
+          prop: 'font-size',
+          value: `${chassis.getFontSize(chassis.constants.typography.formLegendAlias, firstRange.upperBound)}px`
+        }, {
+          prop: 'line-height',
+          value: `${chassis.getLineHeight(chassis.constants.typography.formLegendAlias, firstRange.upperBound)}px`
+        }, {
+          prop: 'margin-bottom',
+          value: `${chassis.getHeadingMargin(chassis.constants.typography.formLegendAlias, firstRange.upperBound)}px`
+        }
+      ])
 
-      const containers = postcss.rule({
-        selector: '.chassis section, .chassis nav, .chassis form'
-      }).append(postcss.decl({
+      const containers = newRule('.chassis section, .chassis nav, .chassis form', [{
         prop: 'margin-bottom',
         value: `${chassis.getContainerMargin('root', firstRange.upperBound)}px`
-      }))
+      }])
 
-      const blocks = postcss.rule({
-        selector: '.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed'
-      }).append(postcss.decl({
+      const blocks = newRule('.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed', [{
         prop: 'margin-bottom',
         value: `${chassis.getBlockMargin('root', firstRange.upperBound)}px`
-      }))
+      }])
 
-      const p = postcss.rule({
-        selector: '.chassis p'
-      }).append(postcss.decl({
+      const p = newRule('.chassis p', [{
         prop: 'margin-bottom',
         value: '1em'
-      }))
+      }])
 
-      const coreStyles = reset
-        .append(helpers)
+      const coreStyles = reset.append(helpers)
         .append(widthConstraint)
         .append(widthConstraintBelowMin)
         .append(widthConstraintAboveMax)
