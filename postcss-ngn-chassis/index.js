@@ -26,7 +26,7 @@ module.exports = postcss.plugin('postcss-ngn-chassis', config => {
           let viewport = method.split(' ')[1]
           let type = method.substring(0, method.indexOf('-'))
 
-          rule.replaceWith(chassis.generateMediaQuery(type, viewport, rule.nodes))
+          rule.replaceWith(chassis.mediaQueries.generate(type, viewport, rule.nodes))
           return
         }
       })
