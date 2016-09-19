@@ -1,6 +1,6 @@
 @chassis init;
 
 .showroom {
-  @chassis constrain-width;
+  
 }
 

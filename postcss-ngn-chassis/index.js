@@ -18,7 +18,53 @@ module.exports = postcss.plugin('postcss-ngn-chassis', config => {
         }
 
         if (method === 'constrain-width') {
-          console.log('apply width-constraint')
+          const {selector} = rule.parent
+          
+          input.insertAfter(rule.parent, postcss.atRule({
+            name: 'media',
+            params: `screen and (max-width: ${chassis.layout.minWidth()}px)`,
+            nodes: [
+              postcss.rule({
+                selector
+              }).append(postcss.decl({
+                prop: 'padding-left',
+                // TODO: check for percentage or vw/vh unit before parseFloat;
+                // this will not work the same way when using px, ems, or rems
+                // for Layout Gutter value
+                value: `calc(${chassis.layout.minWidth()}px * ${parseFloat(chassis.layout.gutter())} / 100)`
+              })).append(postcss.decl({
+                prop: 'padding-right',
+                // TODO: check for percentage or vw/vh unit before parseFloat;
+                // this will not work the same way when using px, ems, or rems
+                // for Layout Gutter value
+                value: `calc(${chassis.layout.minWidth()}px * ${parseFloat(chassis.layout.gutter())} / 100)`
+              }))
+            ]
+          }))
+          
+          input.insertAfter(rule.parent, postcss.atRule({
+            name: 'media',
+            params: `screen and (min-width: ${chassis.layout.maxWidth()}px)`,
+            nodes: [
+              postcss.rule({
+                selector
+              }).append(postcss.decl({
+                prop: 'padding-left',
+                // TODO: check for percentage or vw/vh unit before parseFloat;
+                // this will not work the same way when using px, ems, or rems
+                // for Layout Gutter value
+                value: `calc(${chassis.layout.maxWidth()}px * ${parseFloat(chassis.layout.gutter())} / 100)`
+              })).append(postcss.decl({
+                prop: 'padding-right',
+                // TODO: check for percentage or vw/vh unit before parseFloat;
+                // this will not work the same way when using px, ems, or rems
+                // for Layout Gutter value
+                value: `calc(${chassis.layout.maxWidth()}px * ${parseFloat(chassis.layout.gutter())} / 100)`
+              }))
+            ]
+          }))
+          
+          rule.replaceWith(chassis.mixins.constrainWidth())
           return
         }
 

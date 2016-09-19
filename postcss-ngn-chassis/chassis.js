@@ -133,6 +133,7 @@ class ChassisProject extends NGN.EventEmitter {
 					]
 				}
 			}),
+			
 			defaultSettings: NGN.privateconst({
 				layout: {
 					gutter: '6.18vw',
@@ -394,7 +395,46 @@ class ChassisProject extends NGN.EventEmitter {
 					return data.input.slice(0, data.index)
 				})
 			}),
-
+			
+			mixins: NGN.privateconst({
+				constrainWidth: (hasPadding = true) => {
+					const decls = []
+				
+		      decls.push(postcss.decl({
+		        prop: 'width',
+		        value: '100%'
+		      }))
+				
+		      decls.push(postcss.decl({
+		        prop: 'min-width',
+		        value: `${this.layout.minWidth()}px`
+		      }))
+				
+		      decls.push(postcss.decl({
+		        prop: 'max-width',
+		        value: `${this.layout.maxWidth()}px`
+		      }))
+				
+		      decls.push(postcss.decl({
+		        prop: 'margin',
+		        value: '0 auto'
+		      }))
+				
+		      if (hasPadding) {
+		        decls.push(postcss.decl({
+		          prop: 'padding-left',
+		          value: this.layout.gutter()
+		        }))
+		        decls.push(postcss.decl({
+		          prop: 'padding-right',
+		          value: this.layout.gutter()
+		        }))
+		      }
+				
+		      return decls
+				}
+			}),
+			
       coreStyles: NGN.privateconst(() => {
         const firstRange = this.viewport.widthRanges()[0]
 
@@ -474,44 +514,7 @@ class ChassisProject extends NGN.EventEmitter {
 		      ])
 		    }
 
-		    const constrainWidthDecls = (hasPadding = true) => {
-		      const decls = []
-				
-		      decls.push(postcss.decl({
-		        prop: 'width',
-		        value: '100%'
-		      }))
-				
-		      decls.push(postcss.decl({
-		        prop: 'min-width',
-		        value: `${this.layout.minWidth()}px`
-		      }))
-				
-		      decls.push(postcss.decl({
-		        prop: 'max-width',
-		        value: `${this.layout.maxWidth()}px`
-		      }))
-				
-		      decls.push(postcss.decl({
-		        prop: 'margin',
-		        value: '0 auto'
-		      }))
-				
-		      if (hasPadding) {
-		        decls.push(postcss.decl({
-		          prop: 'padding-left',
-		          value: this.layout.gutter()
-		        }))
-		        decls.push(postcss.decl({
-		          prop: 'padding-right',
-		          value: this.layout.gutter()
-		        }))
-		      }
-				
-		      return decls
-		    }
-
-        const widthConstraint = newRule('.width-constraint', constrainWidthDecls())
+        const widthConstraint = newRule('.width-constraint', this.mixins.constrainWidth())
 				
         const widthConstraintBelowMin = postcss.atRule({
           name: 'media',
