@@ -1,7 +1,35 @@
 @chassis init;
 
-/* Singletons ----------------------------------------------------------------*/
+.showroom {
+  @chassis constrain-width;
+}
 
-main {
-  padding-top: 2em;
+@chassis below-viewport-width tiny {
+  .showroom {
+    background: yellow;
+  }
+}
+
+@chassis min-viewport-width tiny {
+  .showroom {
+    background: orange;
+  }
+}
+
+@chassis at-viewport-width small {
+  .showroom {
+    background: red;
+  }
+}
+
+@chassis min-viewport-width medium {
+  .showroom {
+    background: purple;
+  }
+}
+
+@chassis above-viewport-width medium {
+  .showroom {
+    background: blue;
+  }
 }
