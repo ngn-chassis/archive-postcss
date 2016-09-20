@@ -3,6 +3,7 @@
 require('ngn')
 const fs = require('fs')
 const path = require('path')
+const newRule = require('./utilities/rule')
 
 class ChassisProject extends NGN.EventEmitter {
 	constructor(cfg, postcss) {
@@ -21,15 +22,6 @@ class ChassisProject extends NGN.EventEmitter {
 					goldenRatio: goldenRatio
 				},
 				typography: {
-					headingAliases: {
-						'1': 'larger',
-						'2': 'large',
-						'3': 'root',
-						'4': 'small',
-						'5': 'small',
-						'6': 'small'
-					},
-					formLegendAlias: 'large',
 					definitions: [
 						{
 							lowerBound: 0,
@@ -143,7 +135,26 @@ class ChassisProject extends NGN.EventEmitter {
 				typography: {
 					baseFontSize: 16,
 					typeScaleRatio: goldenRatio,
-					globalMultiplier: 1
+					globalMultiplier: 1,
+					fontWeights: {
+						thin: 100,
+						light: 300,
+						regular: 400,
+						semibold: 500,
+						bold: 700,
+						ultra: 900
+					},
+					fontSizes: {
+						headings: {
+							'1': 'larger',
+							'2': 'large',
+							'3': 'root',
+							'4': 'small',
+							'5': 'small',
+							'6': 'small'
+						},
+						formLegend: 'large'
+					}
 				},
 				viewportWidthRanges: [
 					{
@@ -191,12 +202,33 @@ class ChassisProject extends NGN.EventEmitter {
 						maxWidth: NGN.coalesce(custom.maxWidth, defaultSettings.maxWidth)
 					}
 				}),
+				
 				typography: NGN.privateconst(custom => {
 					const defaultSettings = this.defaultSettings.typography
 
 					return {
+						baseFontSize: NGN.coalesce(custom.baseFontSize, defaultSettings.baseFontSize),
 						typeScaleRatio: NGN.coalesce(custom.typeScaleRatio, defaultSettings.typeScaleRatio),
-						globalMultiplier: NGN.coalesce(custom.globalMultiplier, defaultSettings.globalMultiplier)
+						globalMultiplier: NGN.coalesce(custom.globalMultiplier, defaultSettings.globalMultiplier),
+						fontWeights: {
+							thin: NGN.coalesce(custom.fontWeights.thin, defaultSettings.fontWeights.thin),
+							light: NGN.coalesce(custom.fontWeights.light, defaultSettings.fontWeights.light),
+							regular: NGN.coalesce(custom.fontWeights.regular, defaultSettings.fontWeights.regular),
+							semibold: NGN.coalesce(custom.fontWeights.semibold, defaultSettings.fontWeights.semibold),
+							bold: NGN.coalesce(custom.fontWeights.bold, defaultSettings.fontWeights.bold),
+							ultra: NGN.coalesce(custom.fontWeights.ultra, defaultSettings.fontWeights.ultra)
+						},
+						fontSizes: {
+							headings: {
+								'1': NGN.coalesce(custom.fontSizes.headings['1'], defaultSettings.fontSizes.headings['1']),
+								'2': NGN.coalesce(custom.fontSizes.headings['2'], defaultSettings.fontSizes.headings['2']),
+								'3': NGN.coalesce(custom.fontSizes.headings['3'], defaultSettings.fontSizes.headings['3']),
+								'4': NGN.coalesce(custom.fontSizes.headings['4'], defaultSettings.fontSizes.headings['4']),
+								'5': NGN.coalesce(custom.fontSizes.headings['5'], defaultSettings.fontSizes.headings['5']),
+								'6': NGN.coalesce(custom.fontSizes.headings['6'], defaultSettings.fontSizes.headings['6'])
+							},
+							formLegend: NGN.coalesce(custom.fontSizes.formLegend, defaultSettings.fontSizes.formLegend)
+						}
 					}
 				}),
 
@@ -441,21 +473,6 @@ class ChassisProject extends NGN.EventEmitter {
         const reset = postcss.parse(fs.readFileSync(path.join(__dirname, 'stylesheets', 'reset.css')))
         const helpers = postcss.parse(fs.readFileSync(path.join(__dirname, 'stylesheets', 'helpers.css')))
 
-				const newRule = (selector, decls = []) => {
-		      const rule = postcss.rule({
-		        selector
-		      })
-				
-		      decls.forEach(decl => {
-		        rule.append(postcss.decl({
-		          prop: decl.prop,
-		          value: decl.value
-		        }))
-		      })
-				
-		      return rule
-		    }
-
 		    const coreTypography = () => {
 		      const ranges = this.viewport.widthRanges()
 		      const mediaQueries = []
@@ -492,6 +509,46 @@ class ChassisProject extends NGN.EventEmitter {
 		        for (let i = 1; i <= 6; i++) {
 		          mediaQuery.nodes.push(headingStyles(`${i}`, range))
 		        }
+						
+						mediaQuery.append(
+							newRule('.chassis legend', [
+			          {
+			            prop: 'font-size',
+			            value: `${this.typography.fontSize(this.settings.typography.fontSizes.formLegend, range.upperBound)}px`
+			          }, {
+			            prop: 'line-height',
+			            value: `${this.typography.lineHeight(this.settings.typography.fontSizes.formLegend, range.upperBound)}px`
+			          }, {
+			            prop: 'margin-bottom',
+			            value: `${this.element.margin('heading', this.settings.typography.fontSizes.formLegend, range.upperBound)}px`
+			          }
+			        ])
+						).append(
+							newRule('.chassis section, .chassis nav, .chassis form', [{
+			          prop: 'margin-bottom',
+			          value: `${this.element.margin('container', 'root', range.upperBound)}px`
+			        }])
+						).append(
+							newRule('.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed', [{
+			          prop: 'margin-bottom',
+			          value: `${this.element.margin('block', 'root', range.upperBound)}px`
+			        }])
+						).append(
+							newRule('.chassis p', [{
+			          prop: 'margin-bottom',
+			          value: '1em'
+			        }])
+						).append(
+							newRule('input, textarea', [{
+								prop: 'font-size',
+								value: `${this.typography.fontSize('root', range.upperBound)}px`
+							}])
+						).append(
+							newRule('textarea', [{
+								prop: 'line-height',
+								value: `${this.typography.lineHeight('root', range.upperBound)}px`
+							}])
+						)
 				
 		        mediaQueries.push(mediaQuery)
 		      })
@@ -503,124 +560,128 @@ class ChassisProject extends NGN.EventEmitter {
 		      return newRule(`.chassis h${level}`, [
 		        {
 		          prop: 'font-size',
-		          value: `${this.typography.fontSize(this.constants.typography.headingAliases[level], range.upperBound)}px`
+		          value: `${this.typography.fontSize(this.settings.typography.fontSizes.headings[level], range.upperBound)}px`
 		        }, {
 		          prop: 'line-height',
-		          value: `${this.typography.lineHeight(this.constants.typography.headingAliases[level], range.upperBound)}px`
+		          value: `${this.typography.lineHeight(this.settings.typography.fontSizes.headings[level], range.upperBound)}px`
 		        }, {
 		          prop: 'margin-bottom',
-		          value: `${this.element.margin('heading', this.constants.typography.headingAliases[level], range.upperBound)}px`
+		          value: `${this.element.margin('heading', this.settings.typography.fontSizes.headings[level], range.upperBound)}px`
 		        }
 		      ])
 		    }
 
-        const widthConstraint = newRule('.width-constraint', this.mixins.constrainWidth())
-				
-        const widthConstraintBelowMin = postcss.atRule({
-          name: 'media',
-          params: `screen and (max-width: ${this.layout.minWidth()}px)`,
-          nodes: [
-            newRule('.width-constraint', [
-              {
-                prop: 'padding-left',
-                // TODO: check for percentage or vw/vh unit before parseFloat;
-                // this will not work the same way when using px, ems, or rems
-                // for Layout Gutter value
-                value: `calc(${this.layout.minWidth()}px * ${parseFloat(this.layout.gutter())} / 100)`
-              }, {
-                prop: 'padding-right',
-                // TODO: check for percentage or vw/vh unit before parseFloat;
-                // this will not work the same way when using px, ems, or rems
-                // for Layout Gutter value
-                value: `calc(${this.layout.minWidth()}px * ${parseFloat(this.layout.gutter())} / 100)`
-              }
-            ])
-          ]
-        })
-				
-        const widthConstraintAboveMax = postcss.atRule({
-          name: 'media',
-          params: `screen and (min-width: ${this.layout.maxWidth()}px)`,
-          nodes: [
-            newRule('.width-constraint', [
-              {
-                prop: 'padding-left',
-                // TODO: check for percentage or vw/vh unit before parseFloat;
-                // this will not work the same way when using px, ems, or rems
-                // for Layout Gutter value
-                value: `calc(${this.layout.maxWidth()}px * ${parseFloat(this.layout.gutter())} / 100)`
-              }, {
-                prop: 'padding-right',
-                // TODO: check for percentage or vw/vh unit before parseFloat;
-                // this will not work the same way when using px, ems, or rems
-                // for Layout Gutter value
-                value: `calc(${this.layout.maxWidth()}px * ${parseFloat(this.layout.gutter())} / 100)`
-              }
-            ])
-          ]
-        })
-
-        const base = newRule('.chassis', [
-          {
-            prop: 'min-width',
-            value: `${this.layout.minWidth()}px`
-          }, {
-            prop: 'margin',
-            value: '0'
-          }, {
-            prop: 'padding',
-            value: '0'
-          }, {
-            prop: 'font-size',
-            value: `${this.typography.fontSize('root', firstRange.upperBound)}px`
-          }, {
-            prop: 'line-height',
-            value: `${this.typography.lineHeight('root', firstRange.upperBound)}px`
-          }
-        ])
-				
-        const formLegend = newRule('.chassis legend', [
-          {
-            prop: 'font-size',
-            value: `${this.typography.fontSize(this.constants.typography.formLegendAlias, firstRange.upperBound)}px`
-          }, {
-            prop: 'line-height',
-            value: `${this.typography.lineHeight(this.constants.typography.formLegendAlias, firstRange.upperBound)}px`
-          }, {
-            prop: 'margin-bottom',
-            value: `${this.element.margin('heading', this.constants.typography.formLegendAlias, firstRange.upperBound)}px`
-          }
-        ])
-				
-        const containers = newRule('.chassis section, .chassis nav, .chassis form', [{
-          prop: 'margin-bottom',
-          value: `${this.element.margin('container', 'root', firstRange.upperBound)}px`
-        }])
-				
-        const blocks = newRule('.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed', [{
-          prop: 'margin-bottom',
-          value: `${this.element.margin('block', 'root', firstRange.upperBound)}px`
-        }])
-				
-        const p = newRule('.chassis p', [{
-          prop: 'margin-bottom',
-          value: '1em'
-        }])
-
         const coreStyles = reset.append(helpers)
-          .append(widthConstraint)
-          .append(widthConstraintBelowMin)
-          .append(widthConstraintAboveMax)
-          .append(base)
+          .append(
+						newRule('.width-constraint', this.mixins.constrainWidth())
+					).append(
+						postcss.atRule({
+		          name: 'media',
+		          params: `screen and (max-width: ${this.layout.minWidth()}px)`,
+		          nodes: [
+		            newRule('.width-constraint', [
+		              {
+		                prop: 'padding-left',
+		                // TODO: check for percentage or vw/vh unit before parseFloat;
+		                // this will not work the same way when using px, ems, or rems
+		                // for Layout Gutter value
+		                value: `calc(${this.layout.minWidth()}px * ${parseFloat(this.layout.gutter())} / 100)`
+		              }, {
+		                prop: 'padding-right',
+		                // TODO: check for percentage or vw/vh unit before parseFloat;
+		                // this will not work the same way when using px, ems, or rems
+		                // for Layout Gutter value
+		                value: `calc(${this.layout.minWidth()}px * ${parseFloat(this.layout.gutter())} / 100)`
+		              }
+		            ])
+		          ]
+		        })
+					).append(
+						postcss.atRule({
+		          name: 'media',
+		          params: `screen and (min-width: ${this.layout.maxWidth()}px)`,
+		          nodes: [
+		            newRule('.width-constraint', [
+		              {
+		                prop: 'padding-left',
+		                // TODO: check for percentage or vw/vh unit before parseFloat;
+		                // this will not work the same way when using px, ems, or rems
+		                // for Layout Gutter value
+		                value: `calc(${this.layout.maxWidth()}px * ${parseFloat(this.layout.gutter())} / 100)`
+		              }, {
+		                prop: 'padding-right',
+		                // TODO: check for percentage or vw/vh unit before parseFloat;
+		                // this will not work the same way when using px, ems, or rems
+		                // for Layout Gutter value
+		                value: `calc(${this.layout.maxWidth()}px * ${parseFloat(this.layout.gutter())} / 100)`
+		              }
+		            ])
+		          ]
+		        })
+					).append(
+						newRule('.chassis', [
+		          {
+		            prop: 'min-width',
+		            value: `${this.layout.minWidth()}px`
+		          }, {
+		            prop: 'margin',
+		            value: '0'
+		          }, {
+		            prop: 'padding',
+		            value: '0'
+		          }, {
+		            prop: 'font-size',
+		            value: `${this.typography.fontSize('root', firstRange.upperBound)}px`
+		          }, {
+		            prop: 'line-height',
+		            value: `${this.typography.lineHeight('root', firstRange.upperBound)}px`
+		          }
+		        ])
+					)
 
         for (let i = 1; i <=6; i++) {
           coreStyles.append(headingStyles(`${i}`, firstRange))
         }
 
-        coreStyles.append(formLegend)
-          .append(containers)
-          .append(blocks)
-          .append(p)
+        coreStyles.append(
+					newRule('.chassis legend', [
+	          {
+	            prop: 'font-size',
+	            value: `${this.typography.fontSize(this.settings.typography.fontSizes.formLegend, firstRange.upperBound)}px`
+	          }, {
+	            prop: 'line-height',
+	            value: `${this.typography.lineHeight(this.settings.typography.fontSizes.formLegend, firstRange.upperBound)}px`
+	          }, {
+	            prop: 'margin-bottom',
+	            value: `${this.element.margin('heading', this.settings.typography.fontSizes.formLegend, firstRange.upperBound)}px`
+	          }
+	        ])
+				).append(
+					newRule('.chassis section, .chassis nav, .chassis form', [{
+	          prop: 'margin-bottom',
+	          value: `${this.element.margin('container', 'root', firstRange.upperBound)}px`
+	        }])
+				).append(
+					newRule('.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed', [{
+	          prop: 'margin-bottom',
+	          value: `${this.element.margin('block', 'root', firstRange.upperBound)}px`
+	        }])
+				).append(
+					newRule('.chassis p', [{
+	          prop: 'margin-bottom',
+	          value: '1em'
+	        }])
+				).append(
+					newRule('input, textarea', [{
+						prop: 'font-size',
+						value: `${this.typography.fontSize('root', firstRange.upperBound)}px`
+					}])
+				).append(
+					newRule('textarea', [{
+						prop: 'line-height',
+						value: `${this.typography.lineHeight('root', firstRange.upperBound)}px`
+					}])
+				)
 				
         coreTypography().forEach(mediaQuery => {
           coreStyles.append(mediaQuery)
