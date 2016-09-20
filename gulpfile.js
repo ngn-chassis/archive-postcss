@@ -13,23 +13,7 @@ var sourcemaps = require('gulp-sourcemaps')
 // var header = require('gulp-header')
 // var headerComment = '/**\n  * v' + pkg.version + ' generated on: ' + (new Date()) + '\n  * Copyright (c) 2014-' + (new Date()).getFullYear() + ', Ecor Ventures LLC. All Rights Reserved.\n  */\n'
 
-// var ChassisProject = require('./chassis-postcss.js')
-
 var chassis = require('./postcss-ngn-chassis/index.js')
-
-// var CHASSIS = new ChassisProject()
-// var CHASSIS_FUNCTIONS = {
-//   getLayoutGutter: CHASSIS.getLayoutGutter,
-//   getLayoutMinWidth: CHASSIS.getLayoutMinWidth,
-//   getLayoutMaxWidth: CHASSIS.getLayoutMaxWidth,
-//   getViewportWidthBound: CHASSIS.getViewportWidthBound,
-//   getMediaQueryValue: CHASSIS.getMediaQueryValue,
-//   getViewportWidthRangesList: CHASSIS.getViewportWidthRangesList,
-//   getNumViewportWidthRanges: CHASSIS.getNumViewportWidthRanges,
-//   getViewportWidthRangeName: CHASSIS.getViewportWidthRangeName,
-//   getUnit: CHASSIS.getUnit,
-//   warn: CHASSIS.warn
-// }
 
 // Sass Paths ------------------------------------------------------------------
 var SOURCE = {
