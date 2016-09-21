@@ -19,6 +19,7 @@ module.exports = postcss.plugin('postcss-ngn-chassis', config => {
 
         if (mixin === 'constrain-width') {
           const {selector} = rule.parent
+          let parsedGutterValue = chassis.layout.parsedGutter()
           
           input.insertAfter(rule.parent, postcss.atRule({
             name: 'media',
@@ -28,16 +29,10 @@ module.exports = postcss.plugin('postcss-ngn-chassis', config => {
                 selector
               }).append(postcss.decl({
                 prop: 'padding-left',
-                // TODO: check for percentage or vw/vh unit before parseFloat;
-                // this will not work the same way when using px, ems, or rems
-                // for Layout Gutter value
-                value: `calc(${chassis.layout.minWidth()}px * ${parseFloat(chassis.layout.gutter())} / 100)`
+                value: chassis.layout.parsedGutter(chassis.layout.minWidth())
               })).append(postcss.decl({
                 prop: 'padding-right',
-                // TODO: check for percentage or vw/vh unit before parseFloat;
-                // this will not work the same way when using px, ems, or rems
-                // for Layout Gutter value
-                value: `calc(${chassis.layout.minWidth()}px * ${parseFloat(chassis.layout.gutter())} / 100)`
+                value: chassis.layout.parsedGutter(chassis.layout.minWidth())
               }))
             ]
           }))
@@ -50,16 +45,10 @@ module.exports = postcss.plugin('postcss-ngn-chassis', config => {
                 selector
               }).append(postcss.decl({
                 prop: 'padding-left',
-                // TODO: check for percentage or vw/vh unit before parseFloat;
-                // this will not work the same way when using px, ems, or rems
-                // for Layout Gutter value
-                value: `calc(${chassis.layout.maxWidth()}px * ${parseFloat(chassis.layout.gutter())} / 100)`
+                value: chassis.layout.parsedGutter(chassis.layout.maxWidth())
               })).append(postcss.decl({
                 prop: 'padding-right',
-                // TODO: check for percentage or vw/vh unit before parseFloat;
-                // this will not work the same way when using px, ems, or rems
-                // for Layout Gutter value
-                value: `calc(${chassis.layout.maxWidth()}px * ${parseFloat(chassis.layout.gutter())} / 100)`
+                value: chassis.layout.parsedGutter(chassis.layout.maxWidth())
               }))
             ]
           }))

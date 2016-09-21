@@ -193,7 +193,7 @@ class ChassisProject extends NGN.EventEmitter {
 			}),
 						
 			constructConfig: NGN.privateconst({
-				layout: NGN.privateconst(custom => {
+				layout: custom => {
 					const defaultSettings = this.defaultSettings.layout
 
 					return {
@@ -201,9 +201,9 @@ class ChassisProject extends NGN.EventEmitter {
 						minWidth: NGN.coalesce(custom.minWidth, defaultSettings.minWidth),
 						maxWidth: NGN.coalesce(custom.maxWidth, defaultSettings.maxWidth)
 					}
-				}),
+				},
 				
-				typography: NGN.privateconst(custom => {
+				typography: custom => {
 					const defaultSettings = this.defaultSettings.typography
 
 					return {
@@ -230,9 +230,9 @@ class ChassisProject extends NGN.EventEmitter {
 							formLegend: NGN.coalesce(custom.fontSizes.formLegend, defaultSettings.fontSizes.formLegend)
 						}
 					}
-				}),
+				},
 
-				viewportWidthRanges: NGN.privateconst(custom => {
+				viewportWidthRanges: custom => {
 					const vwr = {}
 
 					Object.keys(custom).forEach(key => {
@@ -240,9 +240,9 @@ class ChassisProject extends NGN.EventEmitter {
 					})
 
 					return vwr
-				}),
+				},
 
-				zIndex: NGN.privateconst(custom => {
+				zIndex: custom => {
 					const defaultSettings = this.defaultSettings.zIndex
 
 					return {
@@ -252,7 +252,7 @@ class ChassisProject extends NGN.EventEmitter {
 						front: NGN.coalesce(custom.front, defaultSettings.front),
 						max: NGN.coalesce(custom.max, defaultSettings.max)
 					}
-				}),
+				}
 			}),
 			
 			typography: NGN.privateconst({
@@ -298,6 +298,30 @@ class ChassisProject extends NGN.EventEmitter {
 					}
 
 					return layout.gutter
+				},
+				
+				parsedGutter: width => {
+					const unit = this.utilities.getUnit(this.layout.gutter())
+					
+					switch (unit) {
+            case 'vw':
+              return `calc(${width}px * ${parseFloat(this.layout.gutter())} / 100)`
+              break
+            case '%':
+              return `calc(${width}px * ${parseFloat(this.layout.gutter())} / 100)`
+              break
+            case 'px':
+              return this.layout.gutter()
+              break
+						case 'em':
+							return this.layout.gutter()
+							break
+            case 'rem':
+              return `${parseFloat(this.layout.gutter()) * (this.settings.typography.baseFontSize * this.settings.typography.globalMultiplier)}px`
+              break
+            default:
+              console.error(`"${unit}" units cannot be used for Layout Gutter. Please use vw, %, px or rem instead.`)
+          }
 				},
 				
 				minWidth: () => {
@@ -416,16 +440,16 @@ class ChassisProject extends NGN.EventEmitter {
 				},
 			}),
 			
-			utilites: NGN.privateconst({
-				getUnit: NGN.const(value => {
+			utilities: NGN.privateconst({
+				getUnit: value => {
 					return value.match(/\D+$/)[0]
-				}),
+				},
 
-				stripUnits: NGN.const(value => {
+				stripUnits: value => {
 					const data = value.match(/\D+$/)
 
 					return data.input.slice(0, data.index)
-				})
+				}
 			}),
 			
 			mixins: NGN.privateconst({
@@ -582,16 +606,10 @@ class ChassisProject extends NGN.EventEmitter {
 		            newRule('.width-constraint', [
 		              {
 		                prop: 'padding-left',
-		                // TODO: check for percentage or vw/vh unit before parseFloat;
-		                // this will not work the same way when using px, ems, or rems
-		                // for Layout Gutter value
-		                value: `calc(${this.layout.minWidth()}px * ${parseFloat(this.layout.gutter())} / 100)`
+		                value: this.layout.parsedGutter(this.layout.minWidth())
 		              }, {
 		                prop: 'padding-right',
-		                // TODO: check for percentage or vw/vh unit before parseFloat;
-		                // this will not work the same way when using px, ems, or rems
-		                // for Layout Gutter value
-		                value: `calc(${this.layout.minWidth()}px * ${parseFloat(this.layout.gutter())} / 100)`
+		                value: this.layout.parsedGutter(this.layout.minWidth())
 		              }
 		            ])
 		          ]
@@ -604,16 +622,10 @@ class ChassisProject extends NGN.EventEmitter {
 		            newRule('.width-constraint', [
 		              {
 		                prop: 'padding-left',
-		                // TODO: check for percentage or vw/vh unit before parseFloat;
-		                // this will not work the same way when using px, ems, or rems
-		                // for Layout Gutter value
-		                value: `calc(${this.layout.maxWidth()}px * ${parseFloat(this.layout.gutter())} / 100)`
+		                value: this.layout.parsedGutter(this.layout.maxWidth())
 		              }, {
 		                prop: 'padding-right',
-		                // TODO: check for percentage or vw/vh unit before parseFloat;
-		                // this will not work the same way when using px, ems, or rems
-		                // for Layout Gutter value
-		                value: `calc(${this.layout.maxWidth()}px * ${parseFloat(this.layout.gutter())} / 100)`
+		                value: this.layout.parsedGutter(this.layout.maxWidth())
 		              }
 		            ])
 		          ]
