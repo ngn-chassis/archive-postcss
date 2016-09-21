@@ -496,6 +496,7 @@ class ChassisProject extends NGN.EventEmitter {
 
         const reset = postcss.parse(fs.readFileSync(path.join(__dirname, 'stylesheets', 'reset.css')))
         const helpers = postcss.parse(fs.readFileSync(path.join(__dirname, 'stylesheets', 'helpers.css')))
+				const copicGreys = postcss.parse(fs.readFileSync(path.join(__dirname, 'stylesheets', 'copic-greys.css')))
 
 		    const coreTypography = () => {
 		      const ranges = this.viewport.widthRanges()
@@ -595,7 +596,7 @@ class ChassisProject extends NGN.EventEmitter {
 		      ])
 		    }
 
-        const coreStyles = reset.append(helpers)
+        const coreStyles = reset.append(helpers).append(copicGreys)
           .append(
 						newRule('.width-constraint', this.mixins.constrainWidth())
 					).append(
