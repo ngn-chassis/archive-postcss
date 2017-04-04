@@ -9,9 +9,6 @@ var path = require('path')
 var pkg = require('./package.json')
 var fs = require('fs')
 var sourcemaps = require('gulp-sourcemaps')
-// var wrench = require('wrench')
-// var header = require('gulp-header')
-// var headerComment = '/**\n  * v' + pkg.version + ' generated on: ' + (new Date()) + '\n  * Copyright (c) 2014-' + (new Date()).getFullYear() + ', Ecor Ventures LLC. All Rights Reserved.\n  */\n'
 
 var chassis = require('./postcss-ngn-chassis/index.js')
 
@@ -25,8 +22,8 @@ var DEST = './showroom'
 // CSS ------------------------------------------------------------------------
 gulp.task('css', function () {
   return gulp.src(SOURCE.CHASSIS + '/**/*.css')
-    .pipe( sourcemaps.init() )
-    .pipe( postcss([
+    .pipe(sourcemaps.init())
+    .pipe(postcss([
       chassis
       // require('autoprefixer'),
       // require('postcss-partial-import'),
@@ -49,8 +46,8 @@ gulp.task('css', function () {
       // require('postcss-selector-matches'),
       // require('postcss-selector-not')
     ]))
-    .pipe( sourcemaps.write('.') )
-    .pipe( gulp.dest(DEST + '/css') );
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(DEST + '/css'))
 })
 
 // Cleanup ---------------------------------------------------------------------
@@ -60,22 +57,6 @@ gulp.task('clean', function (next) {
     next()
   })
 })
-
-// gulp.task('make', function () {
-//   // Recreate dist directory
-//   if (fs.existsSync(DIST)) {
-//     del.sync(DIST)
-//   }
-//   // fs.mkdirSync(DIST)
-//
-//   wrench.copyDirSyncRecursive(SOURCE, DIST, {
-//     forceDelete: true, // Whether to overwrite existing directory or not
-//     excludeHiddenUnix: false, // Whether to copy hidden Unix files or not (preceding .)
-//     preserveFiles: false, // If we're overwriting something and the file already exists, keep the existing
-//     preserveTimestamps: true, // Preserve the mtime and atime when copying files
-//     inflateSymlinks: true // Whether to follow symlinks or not when copying files
-//   })
-// })
 
 // Build -----------------------------------------------------------------------
 gulp.task('build', ['clean', 'css'])

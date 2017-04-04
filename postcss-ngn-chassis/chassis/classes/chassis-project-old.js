@@ -3,7 +3,7 @@
 require('ngn')
 const fs = require('fs')
 const path = require('path')
-const newRule = require('./utilities/rule')
+const newRule = require('../utilities/rule')
 
 class ChassisProject extends NGN.EventEmitter {
 	constructor(cfg, postcss) {
@@ -125,7 +125,7 @@ class ChassisProject extends NGN.EventEmitter {
 					]
 				}
 			}),
-			
+
 			defaultSettings: NGN.privateconst({
 				layout: {
 					gutter: '6.18vw',
@@ -191,8 +191,8 @@ class ChassisProject extends NGN.EventEmitter {
 					max: 1000
 				}
 			}),
-						
-			constructConfig: NGN.privateconst({
+
+			coalesceSettings: NGN.privateconst({
 				layout: custom => {
 					const defaultSettings = this.defaultSettings.layout
 
@@ -202,7 +202,7 @@ class ChassisProject extends NGN.EventEmitter {
 						maxWidth: NGN.coalesce(custom.maxWidth, defaultSettings.maxWidth)
 					}
 				},
-				
+
 				typography: custom => {
 					const defaultSettings = this.defaultSettings.typography
 
@@ -254,7 +254,7 @@ class ChassisProject extends NGN.EventEmitter {
 					}
 				}
 			}),
-			
+
 			typography: NGN.privateconst({
 				fontSize: (type, upperBound) => {
 					const match = this.constants.typography.definitions.filter(definition => {
@@ -287,7 +287,7 @@ class ChassisProject extends NGN.EventEmitter {
 					return Math.round((typeScaleRatio - ((1 / (2 * typeScaleRatio)) * (1 - (upperBound / optimalLineWidth)))) * fontSize)
 				}
 			}),
-			
+
 			layout: NGN.const({
 				gutter: () => {
 					const layout = this.settings.layout
@@ -299,10 +299,10 @@ class ChassisProject extends NGN.EventEmitter {
 
 					return layout.gutter
 				},
-				
+
 				parsedGutter: width => {
 					const unit = this.utilities.getUnit(this.layout.gutter())
-					
+
 					switch (unit) {
             case 'vw':
               return `calc(${width}px * ${parseFloat(this.layout.gutter())} / 100)`
@@ -323,7 +323,7 @@ class ChassisProject extends NGN.EventEmitter {
               console.error(`"${unit}" units cannot be used for Layout Gutter. Please use vw, %, px or rem instead.`)
           }
 				},
-				
+
 				minWidth: () => {
 					const layout = this.settings.layout
 
@@ -346,10 +346,10 @@ class ChassisProject extends NGN.EventEmitter {
 					return layout.maxWidth
 				},
 			}),
-			
+
 			mediaQueries: NGN.privateconst({
 				getBound: (type, name) => {
-					const viewportWidthRanges = this.settings.viewportWidthRanges
+					let { viewportWidthRanges } = this.settings
 					let index = 0;
 
 					const range = viewportWidthRanges.filter((vwr, i) => {
@@ -409,18 +409,18 @@ class ChassisProject extends NGN.EventEmitter {
 					return mediaQuery
 				},
 			}),
-			
+
 			element: NGN.privateconst({
 				margin: (type, fontSize, upperBound) => {
 					switch (type) {
 						case 'heading':
 							return Math.round(this.typography.lineHeight(fontSize, upperBound) / this.settings.typography.typeScaleRatio)
 							break
-						
+
 						case 'container':
 							return Math.round(this.typography.lineHeight(fontSize, upperBound) * this.settings.typography.typeScaleRatio)
 							break
-							
+
 						case 'block':
 							return this.typography.lineHeight(fontSize, upperBound)
 							break
@@ -429,7 +429,7 @@ class ChassisProject extends NGN.EventEmitter {
 					}
 				}
 			}),
-			
+
 			viewport: NGN.privateconst({
 				widthRanges: () => {
 					return this.settings.viewportWidthRanges
@@ -439,7 +439,7 @@ class ChassisProject extends NGN.EventEmitter {
 					return this.settings.viewportWidthRanges.length
 				},
 			}),
-			
+
 			utilities: NGN.privateconst({
 				getUnit: value => {
 					return value.match(/\D+$/)[0]
@@ -451,31 +451,31 @@ class ChassisProject extends NGN.EventEmitter {
 					return data.input.slice(0, data.index)
 				}
 			}),
-			
+
 			mixins: NGN.privateconst({
 				constrainWidth: (hasPadding = true) => {
 					const decls = []
-				
+
 		      decls.push(postcss.decl({
 		        prop: 'width',
 		        value: '100%'
 		      }))
-				
+
 		      decls.push(postcss.decl({
 		        prop: 'min-width',
 		        value: `${this.layout.minWidth()}px`
 		      }))
-				
+
 		      decls.push(postcss.decl({
 		        prop: 'max-width',
 		        value: `${this.layout.maxWidth()}px`
 		      }))
-				
+
 		      decls.push(postcss.decl({
 		        prop: 'margin',
 		        value: '0 auto'
 		      }))
-				
+
 		      if (hasPadding) {
 		        decls.push(postcss.decl({
 		          prop: 'padding-left',
@@ -486,11 +486,11 @@ class ChassisProject extends NGN.EventEmitter {
 		          value: this.layout.gutter()
 		        }))
 		      }
-				
+
 		      return decls
 				}
 			}),
-			
+
       coreStyles: NGN.privateconst(() => {
         const firstRange = this.viewport.widthRanges()[0]
 
@@ -501,14 +501,14 @@ class ChassisProject extends NGN.EventEmitter {
 		    const coreTypography = () => {
 		      const ranges = this.viewport.widthRanges()
 		      const mediaQueries = []
-				
+
 		      ranges.forEach((range, index) => {
 		        let mediaQuery = postcss.atRule({
 		          name: 'media',
 		          params: '',
 		          nodes: []
 		        })
-				
+
 		        if ( index === ranges.length - 1 ) {
 		          mediaQuery.params = `screen and (min-width: ${this.mediaQueries.getBound('min', range.name)})`
 		        } else if ( index !== 0 ) {
@@ -516,11 +516,11 @@ class ChassisProject extends NGN.EventEmitter {
 		        } else {
 		          return
 		        }
-				
+
 		        if (!mediaQuery) {
 		          return
 		        }
-				
+
 		        mediaQuery.nodes.push(newRule('.chassis', [
 		          {
 		            prop: 'font-size',
@@ -530,11 +530,11 @@ class ChassisProject extends NGN.EventEmitter {
 		            value: `${this.typography.lineHeight('root', range.upperBound)}px`
 		          }
 		        ]))
-				
+
 		        for (let i = 1; i <= 6; i++) {
 		          mediaQuery.nodes.push(headingStyles(`${i}`, range))
 		        }
-						
+
 						mediaQuery.append(
 							newRule('.chassis legend', [
 			          {
@@ -574,13 +574,13 @@ class ChassisProject extends NGN.EventEmitter {
 								value: `${this.typography.lineHeight('root', range.upperBound)}px`
 							}])
 						)
-				
+
 		        mediaQueries.push(mediaQuery)
 		      })
-				
+
 		      return mediaQueries
 		    }
-				
+
 		    const headingStyles = (level, range) => {
 		      return newRule(`.chassis h${level}`, [
 		        {
@@ -695,22 +695,41 @@ class ChassisProject extends NGN.EventEmitter {
 						value: `${this.typography.lineHeight('root', firstRange.upperBound)}px`
 					}])
 				)
-				
+
         coreTypography().forEach(mediaQuery => {
           coreStyles.append(mediaQuery)
         })
 
         return coreStyles
       })
+
+			processMixin: NGN.privateconst((rule) => {
+		    let params = rule.params.split(' ')
+		    let mixin = params[0]
+		    let args = params.length > 1 ? params.slice(1) : []
+		    let css = this.mixins.hasOwnProperty(mixin) ? this.mixins[mixin](args) : ''
+
+		    rule.replaceWith(css)
+		  })
 		})
 
 		Object.defineProperty(this, 'settings', NGN.const({
-			layout: cfg.hasOwnProperty('layout') ? this.constructConfig.layout(cfg.layout) : this.defaultSettings.layout,
-			typography: cfg.hasOwnProperty('typography') ? this.constructConfig.typography(cfg.typography) : this.defaultSettings.typography,
-			viewportWidthRanges: cfg.hasOwnProperty('viewportWidthRanges') ? this.constructConfig.viewportWidthRanges(cfg.viewportWidthRanges) : this.defaultSettings.viewportWidthRanges,
-			zIndex: cfg.hasOwnProperty('zIndex') ? this.constructConfig.zIndex(cfg.zIndex) : this.defaultSettings.zIndex
+			layout: cfg.hasOwnProperty('layout') ? this.coalesceSettings.layout(cfg.layout) : this.defaultSettings.layout,
+			typography: cfg.hasOwnProperty('typography') ? this.coalesceSettings.typography(cfg.typography) : this.defaultSettings.typography,
+			viewportWidthRanges: cfg.hasOwnProperty('viewportWidthRanges') ? this.coalesceSettings.viewportWidthRanges(cfg.viewportWidthRanges) : this.defaultSettings.viewportWidthRanges,
+			zIndex: cfg.hasOwnProperty('zIndex') ? this.coalesceSettings.zIndex(cfg.zIndex) : this.defaultSettings.zIndex
 		}))
 	}
+
+  init () {
+    this.coalesceSettings()
+
+    return (input, output) => {
+      input.walkAtRules('chassis', (rule) => {
+        this.processMixin(rule)
+      })
+    }
+  }
 }
 
 module.exports = ChassisProject

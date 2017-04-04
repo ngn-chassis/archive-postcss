@@ -1,15 +1,7 @@
 /* NGN Chassis PostCSS
-
 /* Color Definitions ---------------------------------------------------------*/
 
 :root {
-	--white : rgba(255,255,255,1);
-	--black : rgba(0,0,0,1);
-
-	--red   : red;
-	--green : rgba(104,187,18,1);
-	--blue  : rgba(0,152,230,1);
-
 	/* Copic Greys
 	 * Grey Scale: lightest (00) to darkest (10) in one-shade increments */
 
@@ -52,4 +44,3 @@
 	--grey-t09 : rgba(76,75,73,1);    /* #3C474D */
 	--grey-t10 : rgba(51,47,46,1);    /* #212A31 */
 }
-
