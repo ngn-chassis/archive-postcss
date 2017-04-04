@@ -28,7 +28,7 @@ class ChassisPostCss {
 
     return (input, output) => {
       input.walkAtRules('chassis', (rule) => {
-        this.project.atRules.process(rule)
+        this.project.atRules.process(rule, input)
       })
     }
   }

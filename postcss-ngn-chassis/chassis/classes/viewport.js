@@ -1,4 +1,4 @@
-const postcss = require('postcss')
+const util = require('../utilities')
 
 class ChassisViewport {
   constructor (widthRanges) {
@@ -50,10 +50,12 @@ class ChassisViewport {
   }
 
   getMediaQuery (type, range, nodes) {
-    let mediaQuery = postcss.atRule({
+    nodes = nodes || []
+
+    let mediaQuery = util.newAtRule({
       name: 'media',
       params: '',
-      nodes: []
+      nodes
     })
 
     let value = this.getBound(type, range)

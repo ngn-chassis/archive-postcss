@@ -3,7 +3,11 @@ const util = require('../utilities')
 class ChassisTypography {
   constructor (viewport, settings) {
     this.viewport = viewport
-    this.settings = settings
+    this.baseFontSize = settings.baseFontSize
+    this.typeScaleRatio = settings.typeScaleRatio
+    this.globalMultiplier = settings.globalMultiplier
+    this.fontWeights = settings.fontWeights
+    this.fontSizes = settings.fontSizes
 
     this.definitions = [
       {
@@ -118,7 +122,7 @@ class ChassisTypography {
       console.error(`Chassis Typography: Font Size "${type}" not found`)
     }
 
-    return definition.fontSizes[type] * this.settings.globalMultiplier
+    return definition.fontSizes[type] * this.globalMultiplier
   }
 
   getLineHeight (type, upperBound) {
@@ -134,10 +138,9 @@ class ChassisTypography {
   }
 
   getOptimalLineHeight (fontSize, upperBound) {
-    let { typeScaleRatio } = this.settings
-    let optimalLineWidth = this.getOptimalLineWidth(fontSize, typeScaleRatio)
+    let optimalLineWidth = this.getOptimalLineWidth(fontSize, this.typeScaleRatio)
 
-    return Math.round((typeScaleRatio - ((1 / (2 * typeScaleRatio)) * (1 - (upperBound / optimalLineWidth)))) * fontSize)
+    return Math.round((this.typeScaleRatio - ((1 / (2 * this.typeScaleRatio)) * (1 - (upperBound / optimalLineWidth)))) * fontSize)
   }
 
   getParagraphStyles (range) {
@@ -149,7 +152,7 @@ class ChassisTypography {
   getMargin (fontSize, upperBound, type) {
     switch (type) {
       case 'heading':
-        return Math.round(this.getLineHeight(fontSize, upperBound) / this.settings.typeScaleRatio)
+        return Math.round(this.getLineHeight(fontSize, upperBound) / this.typeScaleRatio)
         break
 
       default:
@@ -159,17 +162,17 @@ class ChassisTypography {
 
   getFormLegendStyles (range) {
     return util.newRule('.chassis legend', [
-      util.newDeclObj('font-size', `${this.getFontSize(this.settings.fontSizes.formLegend, range.upperBound)}px`),
-      util.newDeclObj('line-height', `${this.getLineHeight(this.settings.fontSizes.formLegend, range.upperBound)}px`),
-      util.newDeclObj('margin-bottom', `${this.getMargin(this.settings.fontSizes.formLegend, range.upperBound, 'heading')}px`)
+      util.newDeclObj('font-size', `${this.getFontSize(this.fontSizes.formLegend, range.upperBound)}px`),
+      util.newDeclObj('line-height', `${this.getLineHeight(this.fontSizes.formLegend, range.upperBound)}px`),
+      util.newDeclObj('margin-bottom', `${this.getMargin(this.fontSizes.formLegend, range.upperBound, 'heading')}px`)
     ])
   }
 
   getHeadingStyles (level, range) {
     return util.newRule(`.chassis h${level}`, [
-      util.newDeclObj('font-size', `${this.getFontSize(this.settings.fontSizes.headings[level], range.upperBound)}px`),
-      util.newDeclObj('line-height', `${this.getLineHeight(this.settings.fontSizes.headings[level], range.upperBound)}px`),
-      util.newDeclObj('margin-bottom', `${this.getMargin(this.settings.fontSizes.headings[level], range.upperBound, 'heading')}px`)
+      util.newDeclObj('font-size', `${this.getFontSize(this.fontSizes.headings[level], range.upperBound)}px`),
+      util.newDeclObj('line-height', `${this.getLineHeight(this.fontSizes.headings[level], range.upperBound)}px`),
+      util.newDeclObj('margin-bottom', `${this.getMargin(this.fontSizes.headings[level], range.upperBound, 'heading')}px`)
     ])
   }
 }
