@@ -1,11 +1,5 @@
-@chassis init all;
-
-/*@chassis media-query below small width {
-  .showroom {
-    background: blue;
-  }
-}*/
+@chassis init;
 
 .showroom {
-  /*@chassis hide;*/
+
 }

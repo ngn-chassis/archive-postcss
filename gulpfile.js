@@ -12,7 +12,7 @@ var sourcemaps = require('gulp-sourcemaps')
 
 var chassis = require('./postcss-ngn-chassis/index.js')
 
-// Sass Paths ------------------------------------------------------------------
+// Paths ------------------------------------------------------------------
 var SOURCE = {
   CHASSIS: './chassis'
 }

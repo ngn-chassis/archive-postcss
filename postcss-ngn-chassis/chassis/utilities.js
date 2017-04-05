@@ -24,6 +24,10 @@ class ChassisUtils {
 	  }
 	}
 
+	static newDecl (key, value) {
+		return postcss.decl(this.newDeclObj(key, value))
+	}
+
 	static getUnit (value) {
 	  return value.match(/\D+$/)[0]
 	}

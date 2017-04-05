@@ -1,5 +1,5 @@
 const postcss = require('postcss')
-const util = require('../utilities')
+const ChassisUtils = require('../utilities')
 
 class ChassisAtRules {
   constructor (project) {
@@ -8,14 +8,12 @@ class ChassisAtRules {
     this.viewport = project.viewport
   }
 
-  init (args) {
-    console.log(args);
-
-
+  initMixin (line, args) {
+    // console.log(args);
     return this.project.coreStyles
   }
 
-  constrainWidth (hasPadding = true) {
+  constrainWidthMixin (line, hasPadding = true) {
     const decls = []
 
     decls.push(postcss.decl({
@@ -52,15 +50,39 @@ class ChassisAtRules {
     return decls
   }
 
-  mediaQuery (config, nodes) {
+  mediaQueryMixin (line, config, nodes) {
     let type = config[0]
     let viewport = config[1]
-    let dimension = config[2]
 
-    return this.viewport.getMediaQuery(type, viewport, nodes)
+    if (!this.viewport.validateMediaQuery(line, type, viewport)) {
+      return
+    }
+
+    let dimension = NGN.coalesce(config[2], 'width')
+
+    return this.viewport.getMediaQuery(type, viewport, nodes, dimension)
   }
 
-  addWidthConstraintMediaQueries (input, selector) {
+  hideMixin () {
+    return [
+      ChassisUtils.newDecl('display', 'none'),
+      ChassisUtils.newDecl('visibility', 'hidden'),
+      ChassisUtils.newDecl('opacity', '0')
+    ]
+  }
+
+  showMixin (args) {
+    let boxModel = NGN.coalesce(args, 'block')
+    // TODO: Handle invalid box-model values
+
+    return [
+      ChassisUtils.newDecl('display', boxModel),
+      ChassisUtils.newDecl('visibility', 'visible'),
+      ChassisUtils.newDecl('opacity', '1')
+    ]
+  }
+
+  _addWidthConstraintMediaQueries (input, selector) {
     input.insertAfter(selector, util.newAtRule({
       name: 'media',
       params: `screen and (max-width: ${this.layout.minWidth}px)`,
@@ -85,23 +107,26 @@ class ChassisAtRules {
   }
 
   process (rule, input) {
+    let line = Object.keys(rule.source.start).map(key => `${key}: ${rule.source.start[key]}`).join(', ')
     let params = rule.params.split(' ')
     let mixin = params[0]
     let args = params.length > 1 ? params.slice(1) : null
+    let nodes = NGN.coalesce(rule.nodes || [])
     let css
+    let append = false
 
     switch (mixin) {
       case 'init':
-        css = this.init(args)
+        rule.replaceWith(this.initMixin(line, args))
         break
 
       case 'constrain-width':
-        this.addWidthConstraintMediaQueries(input, rule.parent)
-        css = this.constrainWidth(!args.includes('no-padding'))
+        this._addWidthConstraintMediaQueries(input, rule.parent)
+        rule.replaceWith(this.constrainWidthMixin(line, !args.includes('no-padding')))
         break
 
       case 'media-query':
-        css = this.mediaQuery(args, rule.nodes)
+        rule.replaceWith(this.mediaQueryMixin(line, args, nodes))
         break
 
       case 'block-layout':
@@ -113,11 +138,11 @@ class ChassisAtRules {
         break
 
       case 'hide':
-        console.log('hide element')
+        rule.parent.append(this.hideMixin())
         break
 
       case 'show':
-        console.log('show element')
+        rule.parent.append(this.showMixin(args))
         break
 
       case 'ellipsis':
@@ -130,12 +155,7 @@ class ChassisAtRules {
 
       default:
         console.error(`Chassis At-Rules: At-Rule ${mixin} not found`)
-    }
-
-    if (css) {
-      rule.replaceWith(css)
-    } else {
-      rule.remove()
+        rule.remove()
     }
   }
 }
