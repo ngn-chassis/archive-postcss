@@ -8,7 +8,10 @@ class ChassisAtRules {
     this.viewport = project.viewport
   }
 
-  init () {
+  init (args) {
+    console.log(args);
+
+
     return this.project.coreStyles
   }
 
@@ -89,7 +92,7 @@ class ChassisAtRules {
 
     switch (mixin) {
       case 'init':
-        css = this.init()
+        css = this.init(args)
         break
 
       case 'constrain-width':

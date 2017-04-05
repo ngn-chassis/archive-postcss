@@ -1,9 +1,10 @@
+const MustHave = require('musthave')
+const ChassisUtils = require('../utilities')
+
 const ChassisAtRules = require('./at-rules')
 const ChassisViewport = require('./viewport')
 const ChassisTypography = require('./typography')
 const ChassisLayout = require('./layout')
-
-const util = require('../utilities')
 
 class ChassisProject extends NGN.EventEmitter {
   constructor () {
@@ -204,55 +205,10 @@ class ChassisProject extends NGN.EventEmitter {
     })
   }
 
-  get coreStyles () {
+  _buildMediaQueries () {
     let { widthRanges } = this.viewport
-    let firstRange = widthRanges[0]
-    let styles
-    let mediaQueries = []
 
-    styles = util.parseStylesheets(this.stylesheets)
-    .append(util.newRule('.width-constraint', this.atRules.constrainWidth()))
-
-    .append(util.newAtRule({
-      name: 'media',
-      params: `screen and (max-width: ${this.layout.minWidth}px)`,
-      nodes: [
-        util.newRule('.width-constraint', [
-          util.newDeclObj('padding-left', this.layout.getParsedGutter(this.layout.minWidth)),
-          util.newDeclObj('padding-right', this.layout.getParsedGutter(this.layout.minWidth))
-        ])
-      ]
-    }))
-
-    .append(util.newAtRule({
-      name: 'media',
-      params: `screen and (min-width: ${this.layout.maxWidth}px)`,
-      nodes: [
-        util.newRule('.width-constraint', [
-          util.newDeclObj('padding-left', this.layout.getParsedGutter(this.layout.maxWidth)),
-          util.newDeclObj('padding-right', this.layout.getParsedGutter(this.layout.maxWidth))
-        ])
-      ]
-    }))
-
-    .append(util.newRule('.chassis', [
-      util.newDeclObj('min-width', `${this.layout.minWidth}px`),
-      util.newDeclObj('margin', '0'),
-      util.newDeclObj('padding', '0'),
-      util.newDeclObj('font-size', `${this.typography.getFontSize('root', firstRange.upperBound)}px`),
-      util.newDeclObj('line-height', `${this.typography.getLineHeight('root', firstRange.upperBound)}px`)
-    ]))
-
-    for (let i = 1; i <=6; i++) {
-      styles.append(this.typography.getHeadingStyles(i.toString(), firstRange))
-    }
-
-    styles.append(this.typography.getFormLegendStyles(firstRange))
-    .append(this.layout.getContainerStyles(firstRange))
-    .append(this.layout.getBlockElementStyles(firstRange))
-    .append(this.typography.getParagraphStyles(firstRange))
-
-    widthRanges.forEach((range, index) => {
+    return widthRanges.map((range, index) => {
       let mediaQuery
 
       if ( index === widthRanges.length - 1 ) {
@@ -267,28 +223,80 @@ class ChassisProject extends NGN.EventEmitter {
         return
       }
 
-      let rule = util.newRule('.chassis', [
-        util.newDeclObj('font-size', `${this.typography.getFontSize('root', range.upperBound)}px`),
-        util.newDeclObj('line-height', `${this.typography.getLineHeight('root', range.upperBound)}px`)
+      let rule = ChassisUtils.newRule('.chassis', [
+        ChassisUtils.newDeclObj('font-size', `${this.typography.getFontSize('root', range.upperBound)}px`),
+        ChassisUtils.newDeclObj('line-height', `${this.typography.getLineHeight('root', range.upperBound)}px`)
       ])
 
-      mediaQuery.nodes.push(rule)
+      mediaQuery.nodes = [
+        ...mediaQuery.nodes,
+        rule,
+        ...this._getHeadingStyles(range),
+        this.typography.getFormLegendStyles(range),
+        this.layout.getContainerStyles(range),
+        this.layout.getBlockElementStyles(range),
+        this.typography.getParagraphStyles(range)
+      ]
 
-      for (let i = 1; i <= 6; i++) {
-        mediaQuery.nodes.push(this.typography.getHeadingStyles(i.toString(), range))
-      }
+      return mediaQuery
 
-      mediaQuery.nodes.push(this.typography.getFormLegendStyles(range))
-      mediaQuery.nodes.push(this.layout.getContainerStyles(range))
-      mediaQuery.nodes.push(this.layout.getBlockElementStyles(range))
-      mediaQuery.nodes.push(this.typography.getParagraphStyles(range))
+    }).filter(mediaQuery => mediaQuery !== undefined)
+  }
 
-      mediaQueries.push(mediaQuery)
-    })
+  _getHeadingStyles (range) {
+    let headings = []
 
-    mediaQueries.forEach(mediaQuery => {
-      styles.append(mediaQuery)
-    })
+    for (let i = 1; i <= 6; i++) {
+      headings.push(this.typography.getHeadingStyles(i.toString(), range))
+    }
+
+    return headings
+  }
+
+  get coreStyles () {
+    let firstRange = this.viewport.widthRanges[0]
+    let styles
+    let mediaQueries = this._buildMediaQueries()
+
+    styles = ChassisUtils.parseStylesheets(this.stylesheets)
+    .append(ChassisUtils.newRule('.width-constraint', this.atRules.constrainWidth()))
+
+    .append(ChassisUtils.newAtRule({
+      name: 'media',
+      params: `screen and (max-width: ${this.layout.minWidth}px)`,
+      nodes: [
+        ChassisUtils.newRule('.width-constraint', [
+          ChassisUtils.newDeclObj('padding-left', this.layout.getParsedGutter(this.layout.minWidth)),
+          ChassisUtils.newDeclObj('padding-right', this.layout.getParsedGutter(this.layout.minWidth))
+        ])
+      ]
+    }))
+
+    .append(ChassisUtils.newAtRule({
+      name: 'media',
+      params: `screen and (min-width: ${this.layout.maxWidth}px)`,
+      nodes: [
+        ChassisUtils.newRule('.width-constraint', [
+          ChassisUtils.newDeclObj('padding-left', this.layout.getParsedGutter(this.layout.maxWidth)),
+          ChassisUtils.newDeclObj('padding-right', this.layout.getParsedGutter(this.layout.maxWidth))
+        ])
+      ]
+    }))
+
+    .append(ChassisUtils.newRule('.chassis', [
+      ChassisUtils.newDeclObj('min-width', `${this.layout.minWidth}px`),
+      ChassisUtils.newDeclObj('margin', '0'),
+      ChassisUtils.newDeclObj('padding', '0'),
+      ChassisUtils.newDeclObj('font-size', `${this.typography.getFontSize('root', firstRange.upperBound)}px`),
+      ChassisUtils.newDeclObj('line-height', `${this.typography.getLineHeight('root', firstRange.upperBound)}px`)
+    ]))
+
+    styles.append(this._getHeadingStyles(firstRange))
+    .append(this.typography.getFormLegendStyles(firstRange))
+    .append(this.layout.getContainerStyles(firstRange))
+    .append(this.layout.getBlockElementStyles(firstRange))
+    .append(this.typography.getParagraphStyles(firstRange))
+    .append(mediaQueries)
 
     return styles
   }

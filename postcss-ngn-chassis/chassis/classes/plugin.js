@@ -1,5 +1,6 @@
+require('ngn')
+require('ngn-data')
 const ChassisProject = require('./project')
-const util = require('../utilities')
 
 class ChassisPostCss {
   constructor (config) {

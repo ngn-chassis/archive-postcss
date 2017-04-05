@@ -1,4 +1,4 @@
-@chassis init;
+@chassis init all;
 
 /*@chassis media-query below small width {
   .showroom {
