@@ -88,8 +88,8 @@ class ChassisAtRules {
       params: `screen and (max-width: ${this.layout.minWidth}px)`,
       nodes: [
         util.newRule(selector, [
-          util.newDeclObj('padding-left', this.layout.getParsedGutter(this.layout.minWidth)),
-          util.newDeclObj('padding-right', this.layout.getParsedGutter(this.layout.minWidth))
+          util.newDeclObj('padding-left', this.layout.getGutterLimit(this.layout.minWidth)),
+          util.newDeclObj('padding-right', this.layout.getGutterLimit(this.layout.minWidth))
         ])
       ]
     }))
@@ -99,8 +99,8 @@ class ChassisAtRules {
       params: `screen and (min-width: ${this.layout.maxWidth}px)`,
       nodes: [
         util.newRule(selector, [
-          util.newDeclObj('padding-left', this.layout.getParsedGutter(this.layout.maxWidth)),
-          util.newDeclObj('padding-right', this.layout.getParsedGutter(this.layout.maxWidth))
+          util.newDeclObj('padding-left', this.layout.getGutterLimit(this.layout.maxWidth)),
+          util.newDeclObj('padding-right', this.layout.getGutterLimit(this.layout.maxWidth))
         ])
       ]
     }))

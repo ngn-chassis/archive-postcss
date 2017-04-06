@@ -205,6 +205,11 @@ class ChassisProject extends NGN.EventEmitter {
     })
   }
 
+  /**
+   * @method _buildMediaQueries
+   * Create media queries for default typography settings
+   * @private
+   */
   _buildMediaQueries () {
     let { widthRanges } = this.viewport
 
@@ -243,6 +248,11 @@ class ChassisProject extends NGN.EventEmitter {
     }).filter(mediaQuery => mediaQuery !== undefined)
   }
 
+  /**
+   * @method _getHeadingStyles
+   * Generate default styles for h1-h6
+   * @private
+   */
   _getHeadingStyles (range) {
     let headings = []
 
@@ -253,6 +263,11 @@ class ChassisProject extends NGN.EventEmitter {
     return headings
   }
 
+  /**
+   * @getter coreStyles
+   * Generate core styles including default typography and layout configuration
+   * @return {PostCss AST}
+   */
   get coreStyles () {
     let firstRange = this.viewport.widthRanges[0]
     let styles
@@ -266,8 +281,8 @@ class ChassisProject extends NGN.EventEmitter {
       params: `screen and (max-width: ${this.layout.minWidth}px)`,
       nodes: [
         ChassisUtils.newRule('.width-constraint', [
-          ChassisUtils.newDeclObj('padding-left', this.layout.getParsedGutter(this.layout.minWidth)),
-          ChassisUtils.newDeclObj('padding-right', this.layout.getParsedGutter(this.layout.minWidth))
+          ChassisUtils.newDeclObj('padding-left', this.layout.getGutterLimit(this.layout.minWidth)),
+          ChassisUtils.newDeclObj('padding-right', this.layout.getGutterLimit(this.layout.minWidth))
         ])
       ]
     }))
@@ -277,8 +292,8 @@ class ChassisProject extends NGN.EventEmitter {
       params: `screen and (min-width: ${this.layout.maxWidth}px)`,
       nodes: [
         ChassisUtils.newRule('.width-constraint', [
-          ChassisUtils.newDeclObj('padding-left', this.layout.getParsedGutter(this.layout.maxWidth)),
-          ChassisUtils.newDeclObj('padding-right', this.layout.getParsedGutter(this.layout.maxWidth))
+          ChassisUtils.newDeclObj('padding-left', this.layout.getGutterLimit(this.layout.maxWidth)),
+          ChassisUtils.newDeclObj('padding-right', this.layout.getGutterLimit(this.layout.maxWidth))
         ])
       ]
     }))

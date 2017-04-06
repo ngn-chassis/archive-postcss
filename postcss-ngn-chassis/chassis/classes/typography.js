@@ -9,6 +9,7 @@ class ChassisTypography {
     this.fontWeights = settings.fontWeights
     this.fontSizes = settings.fontSizes
 
+    // Standard font-sizes at different viewport widths
     this.definitions = [
       {
         lowerBound: 0,
@@ -112,43 +113,93 @@ class ChassisTypography {
     ]
   }
 
+  /**
+   * @method getFontSize
+   * Get GR-Typography font size by type at the specified viewport width
+   * @param {string} type
+   * GR-Typography font-size: root, small, large, larger, largest
+   * @param {number} upperBound
+   * Upper bound of current viewport width range
+   * @return {number}
+   */
   getFontSize (type, upperBound) {
-    let definition = this.definitions.filter(def => {
+    let definition = [...this.definitions].filter(def => {
       return upperBound >= def.upperBound
     }).pop()
 
 
     if (!definition) {
-      console.error(`Chassis Typography: Font Size "${type}" not found`)
+      console.error(`[ERROR] Chassis Typography: Font Size "${type}" not found`)
     }
 
     return definition.fontSizes[type] * this.globalMultiplier
   }
 
+  /**
+   * @method getLineHeight
+   * Get GR-Typography calculated line-height by type at the specified viewport
+   * width
+   * @param {string} type
+   * GR-Typography font-size: root, small, large, larger, largest
+   * @param {number} upperBound
+   * Upper bound of current viewport width range
+   * @return {number}
+   */
   getLineHeight (type, upperBound) {
     let fontSize = this.getFontSize(type, upperBound)
 
     return this.getOptimalLineHeight(fontSize, upperBound)
   }
 
+  /**
+   * @method getOptimalLineWidth
+   * Calculate optimal line width for the given font size
+   * @param {number} fontSize in pixels
+   * @param {number} ratio
+   * Type scale ratio
+   * @return {number}
+   */
   getOptimalLineWidth (fontSize, ratio) {
     let lineHeight = Math.round(fontSize * ratio)
 
     return Math.pow(lineHeight, 2)
   }
 
+  /**
+   * @method getOptimalLineHeight
+   * Calculate optimal line height for the given font size
+   * @param {number} fontSize in pixels
+   * @param {number} upperBound
+   * Upper bound of the current viewport width range
+   * @return {number}
+   */
   getOptimalLineHeight (fontSize, upperBound) {
     let optimalLineWidth = this.getOptimalLineWidth(fontSize, this.typeScaleRatio)
 
     return Math.round((this.typeScaleRatio - ((1 / (2 * this.typeScaleRatio)) * (1 - (upperBound / optimalLineWidth)))) * fontSize)
   }
 
+  /**
+   * @method getParagraphStyles
+   * Get default styles for p tags
+   */
   getParagraphStyles (range) {
     return util.newRule('.chassis p', [
       util.newDeclObj('margin-bottom', '1em')
     ])
   }
 
+  /**
+   * @method getMargin
+   * Get calculated GR-Typography margin-bottom values for typography elements
+   * @param {string} fontSize
+   * GR-Typography font-size type
+   * @param {number} upperBound
+   * Upper bound of current viewport width range
+   * @param {string} type
+   * Options: 'heading'
+   * Headings have slightly larger margins than other elements such as p tags
+   */
   getMargin (fontSize, upperBound, type) {
     switch (type) {
       case 'heading':
@@ -160,6 +211,13 @@ class ChassisTypography {
     }
   }
 
+  /**
+   * @method getFormLegendStyles
+   * Get GR-Typography default settings for legend tags
+   * @param {object} range
+   * Viewport Width Range
+   * @return {rule}
+   */
   getFormLegendStyles (range) {
     return util.newRule('.chassis legend', [
       util.newDeclObj('font-size', `${this.getFontSize(this.fontSizes.formLegend, range.upperBound)}px`),
@@ -168,6 +226,15 @@ class ChassisTypography {
     ])
   }
 
+  /**
+   * @method getHeadingStyles
+   * Get GR-Typography default settings for heading tags
+   * @param {string} level
+   * 1-6
+   * @param {object} range
+   * Viewport Width Range
+   * @return {rule}
+   */
   getHeadingStyles (level, range) {
     return util.newRule(`.chassis h${level}`, [
       util.newDeclObj('font-size', `${this.getFontSize(this.fontSizes.headings[level], range.upperBound)}px`),

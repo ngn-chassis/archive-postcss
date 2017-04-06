@@ -6,18 +6,44 @@ class ChassisViewport {
     this.validQueryTypes = ['min', 'max', 'below', 'at', 'above']
   }
 
+  /**
+   * @getter numWidthRanges
+   * @return {number}
+   */
   get numWidthRanges () {
     return this.widthRanges.length
   }
 
+  /**
+   * @getter _widthRangesList
+   * Get a comma-separated human-readable list of viewport width ranges
+   * @return {string}
+   * @private
+   */
   get _widthRangesList () {
     return `${[...this.widthRanges].slice(0, this.widthRanges.length - 1).map(range => range.name).join(', ')}, or ${this.widthRanges.pop().name}`
   }
 
+  /**
+   * @getter _queryTypesList
+   * Get a comma-separated human-readable list of media query types
+   * @return {string}
+   * @private
+   */
   get _queryTypesList () {
     return `${[...this.validQueryTypes].slice(0, this.validQueryTypes.length - 1).join(', ')}, or ${this.validQueryTypes.pop()}`
   }
 
+  /**
+   * @method getBound
+   * Get a boundary, in pixels, for use in a media query
+   * @param {string} type
+   * Type of boundary to return values for
+   * Accepts 'min', 'max', 'below', 'at', or 'above'
+   * @param {string} rangeName
+   * Viewport Width Range name
+   * @return {string}
+   */
   getBound (type, rangeName) {
     let index = 0
 
@@ -58,6 +84,16 @@ class ChassisViewport {
     }
   }
 
+  /**
+   * @method getMediaQuery
+   * Get a postcss Media Query at-rule
+   * @param {string} type
+   * Type of boundary to return values for
+   * Accepts 'min', 'max', 'below', 'at', or 'above'
+   * @param {string} rangeName
+   * Viewport Width Range name
+   * @return {at-rule}
+   */
   getMediaQuery (type, range, nodes, dimension) {
     nodes = NGN.coalesce(nodes || [])
 
@@ -78,6 +114,18 @@ class ChassisViewport {
     return mediaQuery
   }
 
+  /**
+   * @method validateMediaQuery
+   * Validate a user media query mixin ie '@chassis media-query at small width'
+   * @param {object} line
+   * line the the user's CSS where the media query mixin is called
+   * Shape: {line: {number}, column: {number}}
+   * @param {string} type
+   * Type of media query
+   * Accepts 'min', 'max', 'below', 'at', or 'above'
+   * @param {string} viewport
+   * Viewport Width Range name
+   */
   validateMediaQuery (line, type, viewport) {
     if (!type || !this.validQueryTypes.includes(type)) {
       console.error(`[ERROR] ${line}: Invalid Media Query type. Please specify ${this._queryTypesList}`)

@@ -8,24 +8,38 @@ class ChassisPostCss {
     this.project = new ChassisProject()
   }
 
-  loadConfig () {
+  /**
+   * @method _loadConfig
+   * Load user configuration
+   * @private
+   */
+  _loadConfig () {
     if (!this.config.hasOwnProperty('viewportWidthRanges')) {
       this.config.viewportWidthRanges = this.project.defaultViewportWidthRanges
     }
 
     this.project.settings.load(this.config)
-    this.validateSettings()
+    this._validateSettings()
   }
 
-  validateSettings () {
+  /**
+   * @method _validateSettings
+   * Validate project settings configuration
+   * @private
+   */
+  _validateSettings () {
     if (!this.project.settings.valid) {
       console.error('Chassis Configuration Error: Invalid fields')
       console.error(this.project.settings.invalidDataAttributes.join(', '))
     }
   }
 
+  /**
+   * @method init
+   * Initialize ChassisPostCss plugin and process at-rules
+   */
   init () {
-    this.loadConfig()
+    this._loadConfig()
 
     return (input, output) => {
       input.walkAtRules('chassis', (rule) => {
