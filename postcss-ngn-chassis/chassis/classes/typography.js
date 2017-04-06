@@ -1,4 +1,4 @@
-const util = require('../utilities')
+const ChassisUtils = require('../utilities')
 
 class ChassisTypography {
   constructor (viewport, settings) {
@@ -10,6 +10,7 @@ class ChassisTypography {
     this.fontSizes = settings.fontSizes
 
     // Standard font-sizes at different viewport widths
+    // [alias]: [fontSize] in px
     this.definitions = [
       {
         lowerBound: 0,
@@ -116,14 +117,14 @@ class ChassisTypography {
   /**
    * @method getFontSize
    * Get GR-Typography font size by type at the specified viewport width
-   * @param {string} type
-   * GR-Typography font-size: root, small, large, larger, largest
+   * @param {string} alias
+   * GR-Typography font-size alias: root, small, large, larger, largest
    * @param {number} upperBound
    * Upper bound of current viewport width range
    * @return {number}
    */
-  getFontSize (type, upperBound) {
-    let definition = [...this.definitions].filter(def => {
+  getFontSize (alias, upperBound, inEms = false) {
+    let definition = this.definitions.filter(def => {
       return upperBound >= def.upperBound
     }).pop()
 
@@ -132,21 +133,29 @@ class ChassisTypography {
       console.error(`[ERROR] Chassis Typography: Font Size "${type}" not found`)
     }
 
-    return definition.fontSizes[type] * this.globalMultiplier
+    if (inEms) {
+      return (definition.fontSizes[alias] * this.globalMultiplier) / definition.fontSizes.root
+    }
+
+    return definition.fontSizes[alias] * this.globalMultiplier
   }
 
   /**
    * @method getLineHeight
    * Get GR-Typography calculated line-height by type at the specified viewport
    * width
-   * @param {string} type
-   * GR-Typography font-size: root, small, large, larger, largest
+   * @param {string} fontSizeAlias
+   * GR-Typography font-size alias: root, small, large, larger, largest
    * @param {number} upperBound
    * Upper bound of current viewport width range
    * @return {number}
    */
-  getLineHeight (type, upperBound) {
-    let fontSize = this.getFontSize(type, upperBound)
+  getLineHeight (fontSizeAlias, upperBound, inEms = false) {
+    let fontSize = this.getFontSize(fontSizeAlias, upperBound)
+
+    if (inEms) {
+      return this.getOptimalLineHeight(fontSize, upperBound) / fontSize
+    }
 
     return this.getOptimalLineHeight(fontSize, upperBound)
   }
@@ -159,8 +168,8 @@ class ChassisTypography {
    * Type scale ratio
    * @return {number}
    */
-  getOptimalLineWidth (fontSize, ratio) {
-    let lineHeight = Math.round(fontSize * ratio)
+  getOptimalLineWidth (fontSize, ratio = this.typeScaleRatio) {
+    let lineHeight = fontSize * ratio
 
     return Math.pow(lineHeight, 2)
   }
@@ -174,7 +183,7 @@ class ChassisTypography {
    * @return {number}
    */
   getOptimalLineHeight (fontSize, upperBound) {
-    let optimalLineWidth = this.getOptimalLineWidth(fontSize, this.typeScaleRatio)
+    let optimalLineWidth = this.getOptimalLineWidth(fontSize)
 
     return Math.round((this.typeScaleRatio - ((1 / (2 * this.typeScaleRatio)) * (1 - (upperBound / optimalLineWidth)))) * fontSize)
   }
@@ -184,30 +193,31 @@ class ChassisTypography {
    * Get default styles for p tags
    */
   getParagraphStyles (range) {
-    return util.newRule('.chassis p', [
-      util.newDeclObj('margin-bottom', '1em')
+    return ChassisUtils.newRule('.chassis p', [
+      ChassisUtils.newDeclObj('margin-bottom', '1em')
     ])
   }
 
   /**
    * @method getMargin
    * Get calculated GR-Typography margin-bottom values for typography elements
-   * @param {string} fontSize
-   * GR-Typography font-size type
+   * @param {string} fontSizeAlias
+   * GR-Typography font-size alias
    * @param {number} upperBound
    * Upper bound of current viewport width range
    * @param {string} type
    * Options: 'heading'
    * Headings have slightly larger margins than other elements such as p tags
+   * @return {number} in ems
    */
-  getMargin (fontSize, upperBound, type) {
+  getMargin (fontSizeAlias, upperBound, type) {
     switch (type) {
       case 'heading':
-        return Math.round(this.getLineHeight(fontSize, upperBound) / this.typeScaleRatio)
+        return (this.getLineHeight(fontSizeAlias, upperBound) / this.typeScaleRatio) / this.getFontSize(fontSizeAlias, upperBound)
         break
 
       default:
-        return '1em'
+        return 1
     }
   }
 
@@ -219,10 +229,14 @@ class ChassisTypography {
    * @return {rule}
    */
   getFormLegendStyles (range) {
-    return util.newRule('.chassis legend', [
-      util.newDeclObj('font-size', `${this.getFontSize(this.fontSizes.formLegend, range.upperBound)}px`),
-      util.newDeclObj('line-height', `${this.getLineHeight(this.fontSizes.formLegend, range.upperBound)}px`),
-      util.newDeclObj('margin-bottom', `${this.getMargin(this.fontSizes.formLegend, range.upperBound, 'heading')}px`)
+    let fontSize = `${this.getFontSize(this.fontSizes.formLegend, range.upperBound, true)}em`
+    let lineHeight = `${this.getLineHeight(this.fontSizes.formLegend, range.upperBound, true)}em`
+    let marginBottom = `${this.getMargin(this.fontSizes.formLegend, range.upperBound, 'heading')}em`
+
+    return ChassisUtils.newRule('.chassis legend', [
+      ChassisUtils.newDeclObj('font-size', fontSize),
+      ChassisUtils.newDeclObj('line-height', lineHeight),
+      ChassisUtils.newDeclObj('margin-bottom', marginBottom)
     ])
   }
 
@@ -236,11 +250,45 @@ class ChassisTypography {
    * @return {rule}
    */
   getHeadingStyles (level, range) {
-    return util.newRule(`.chassis h${level}`, [
-      util.newDeclObj('font-size', `${this.getFontSize(this.fontSizes.headings[level], range.upperBound)}px`),
-      util.newDeclObj('line-height', `${this.getLineHeight(this.fontSizes.headings[level], range.upperBound)}px`),
-      util.newDeclObj('margin-bottom', `${this.getMargin(this.fontSizes.headings[level], range.upperBound, 'heading')}px`)
+    let fontSize = `${this.getFontSize(this.fontSizes.headings[level], range.upperBound, true)}em`
+    let lineHeight = `${this.getLineHeight(this.fontSizes.headings[level], range.upperBound, true)}em`
+    let marginBottom = `${this.getMargin(this.fontSizes.headings[level], range.upperBound, 'heading')}em`
+
+    return ChassisUtils.newRule(`.chassis h${level}`, [
+      ChassisUtils.newDeclObj('font-size', fontSize),
+      ChassisUtils.newDeclObj('line-height', lineHeight),
+      ChassisUtils.newDeclObj('margin-bottom', marginBottom)
     ])
+  }
+
+  getTypographyRules (rule, line, config) {
+    let alias = NGN.coalesce(config.alias, 'root')
+
+    let multiplier = NGN.coalesce(config.multiplier, 1)
+    let addMargin = NGN.coalesce(config.addMargin, false)
+
+    return this.viewport.widthRanges.map((range, index) => {
+      let type = 'at'
+      let fontSize = this.getFontSize(alias, range.upperBound) * multiplier
+      let lineHeight = this.getLineHeight(alias, range.upperBound) * multiplier
+
+      let css = [ChassisUtils.newRule(rule.parent.selector, [
+        ChassisUtils.newDeclObj('font-size', `${fontSize}px`),
+        ChassisUtils.newDeclObj('line-height', `${lineHeight}px`)
+      ])]
+
+      if (addMargin) {
+        css[0].append(ChassisUtils.newDecl('margin-bottom', `${lineHeight / fontSize}em`))
+      }
+
+      if (index === 1) {
+        type = 'max'
+      } else if (index === this.viewport.widthRanges.length) {
+        type = 'min'
+      }
+
+      return this.viewport.getMediaQuery(type, range.name, css)
+    })
   }
 }
 

@@ -8,9 +8,9 @@ class ChassisLayout {
   }
 
   /**
-   * @getter gutter
-   * Project side-gutter width
-   * @return {string}
+   * @property {string} gutter
+   * Project side-gutter width CSS Property value
+   * @readonly
    */
   get gutter () {
     if (!this.settings.gutter) {
@@ -22,9 +22,9 @@ class ChassisLayout {
   }
 
   /**
-   * @getter gutter
-   * Project min-width
-   * @return {string}
+   * @property {number} minWidth
+   * Project min-width in pixels
+   * @readonly
    */
   get minWidth () {
     if (!this.settings.minWidth) {
@@ -36,9 +36,9 @@ class ChassisLayout {
   }
 
   /**
-   * @getter gutter
-   * Project max-width
-   * @return {string}
+   * @property {number} maxWidth
+   * Project max-width in pixels
+   * @readonly
    */
   get maxWidth () {
     if (!this.settings.maxWidth) {
@@ -55,34 +55,37 @@ class ChassisLayout {
    * @param {string} type
    * "container" or "block"; containers are top-level elements, blocks are
    * children
-   * @param fontSize
-   * Current font size to use as a base for calculation
-   * * @param upperBound
+   * @param {string} fontSizeAlias
+   * font size alias to use as a base for calculation
+   * Accepts root, small, large, larger, largest
+   * @param {number} upperBound
    * Upper bound of current viewport width range
+   * @return {number} in ems
    */
-  getMargin (type, fontSize, upperBound) {
+  getMargin (type, fontSizeAlias, upperBound) {
     switch (type) {
       case 'container':
-        return Math.round(this.typography.getLineHeight(fontSize, upperBound) * this.typography.typeScaleRatio)
+        return this.typography.getLineHeight(fontSizeAlias, upperBound, true) * this.typography.typeScaleRatio
         break
 
       case 'block':
-        return this.typography.getLineHeight(fontSize, upperBound)
+        return this.typography.getLineHeight(fontSizeAlias, upperBound, true)
         break
 
       default:
-        return '1em'
+        return this.typography.getFontSize(fontSizeAlias, upperBound, true)
     }
   }
 
   /**
-   * @method getMargin
+   * @method getPadding
    * Get calculated GR-Typography padding value (left or right)
    * @param {string} type
-   * --
-   * @param fontSize
-   * Current font size to use as a base for calculation
-   * * @param upperBound
+   * TODO: Add type description
+   * @param {string} fontSize
+   * Current font size type to use as a base for calculation
+   * Accepts root, small, large, larger, largest
+   * @param {number} upperBound
    * Upper bound of current viewport width range
    */
   getPadding (type, fontSize, upperBound) {
@@ -94,7 +97,7 @@ class ChassisLayout {
    * Get a pixel-value for gutter width at min or max viewport width ranges
    * This prevents gutters from shrinking or enlarging when the window has
    * shrunk below the minimum or grown larger than the maximum layout width
-   * @param {number} width
+   * @param {number} width in px
    * Width of layout at current viewport size
    * Only applicable at min or max
    */
@@ -136,7 +139,7 @@ class ChassisLayout {
    */
   getDefaultContainerStyles (range) {
     return ChassisUtils.newRule('.chassis section, .chassis nav, .chassis form', [
-      ChassisUtils.newDeclObj('margin-bottom', `${this.getMargin('container', 'root', range.upperBound)}px`)
+      ChassisUtils.newDeclObj('margin-bottom', `${this.getMargin('container', 'root', range.upperBound)}em`)
     ])
   }
 
@@ -149,11 +152,97 @@ class ChassisLayout {
    */
   getDefaultBlockElementStyles (range) {
     return ChassisUtils.newRule('.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed', [
-      ChassisUtils.newDeclObj('margin-bottom', `${this.getMargin('block', 'root', range.upperBound)}px`)
+      ChassisUtils.newDeclObj('margin-bottom', `${this.getMargin('block', 'root', range.upperBound)}em`)
     ])
   }
 
+  _parsePropertyValues (array) {
+    return array.map(value => value === 0 ? 0 : `${value}em`).join(' ')
+  }
+
+  getInlineElementStyles (rule, line, config) {
+    let alias = NGN.coalesce(config.alias, 'root')
+    let stripPadding = NGN.coalesce(config.stripPadding, false)
+    let stripMargin = NGN.coalesce(config.stripMargin, false)
+    let stripVerticalMargin = NGN.coalesce(config.stripVerticalMargin, false)
+    let stripHorizontalMargin = NGN.coalesce(config.stripHorizontalMargin, false)
+
+    let multiLine = NGN.coalesce(config.multiLine, false)
+    let setHeight = NGN.coalesce(config.setHeight, false)
+
+    let css = []
+
+    this.viewport.widthRanges.forEach((range, index) => {
+      let fontSize = this.typography.getFontSize(alias, range.upperBound, true)
+      let baseLineHeight = this.typography.getLineHeight(alias, range.upperBound, true) / fontSize
+
+      if (index === 1) {
+        if (setHeight) {
+          if (multiLine) {
+            css.push(ChassisUtils.newDecl(
+              'height',
+              `${baseLineHeight}em`
+            ))
+          } else {
+            css.push(ChassisUtils.newDecl(
+              'height',
+              `${baseLineHeight * this.typography.typeScaleRatio}em`
+            ))
+          }
+        }
+
+        if (!stripPadding) {
+          let padding = [0, baseLineHeight / 2]
+
+          if (multiLine) {
+            padding[0] = ((baseLineHeight * this.typography.typeScaleRatio) - baseLineHeight) / 2
+          }
+
+          css.push(ChassisUtils.newDecl(
+            'padding',
+            this._parsePropertyValues(padding)
+          ))
+        }
+
+        if (!stripMargin) {
+          let margin = [0, baseLineHeight / 2, baseLineHeight, 0]
+
+          if (stripVerticalMargin) {
+            margin[2] = 0
+          }
+
+          if (stripHorizontalMargin) {
+            margin[1] = 0
+          }
+
+          css.push(ChassisUtils.newDecl(
+            'margin',
+            this._parsePropertyValues(margin)
+          ))
+        }
+
+        if (multiLine) {
+          css.push(ChassisUtils.newDecl(
+            'line-height',
+            `${baseLineHeight}em`
+          ))
+        } else {
+          css.push(ChassisUtils.newDecl(
+            'line-height',
+            `${baseLineHeight * this.typography.typeScaleRatio}em`
+          ))
+        }
+      } else {
+        // TODO: Add media queries
+      }
+    })
+
+    console.log(css);
+    return css
+  }
+
   getBlockElementStyles (rule, line, config) {
+    let alias = NGN.coalesce(config.alias, 'root')
     let stripMargin = NGN.coalesce(config.stripMargin, false)
     let stripPadding = NGN.coalesce(config.stripPadding, false)
     let stripVerticalPadding = NGN.coalesce(config.stripVerticalPadding, false)
@@ -162,8 +251,8 @@ class ChassisLayout {
     let css = []
 
     this.viewport.widthRanges.forEach((range, index) => {
-      let fontSize = this.typography.getFontSize('root', range.upperBound)
-      let lineHeight = this.typography.getLineHeight('root', range.upperBound) / fontSize
+      let fontSize = this.typography.getFontSize(alias, range.upperBound, true)
+      let lineHeight = this.typography.getLineHeight(alias, range.upperBound, true) / fontSize
 
       if (index === 1) {
         if (!stripMargin) {
@@ -183,8 +272,8 @@ class ChassisLayout {
 
           css.push(ChassisUtils.newDecl(
             'padding',
-            padding.map(value => value === 0 ? 0 : `${value}em`).join(' '))
-          )
+            this._parsePropertyValues(padding)
+          ))
         }
       } else {
         // TODO: Add Media Queries

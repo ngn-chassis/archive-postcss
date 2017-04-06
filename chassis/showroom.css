@@ -1,5 +1,5 @@
 @chassis init;
 
 .showroom {
-	@chassis block-layout;
+	/*@chassis set-typography small;*/
 }

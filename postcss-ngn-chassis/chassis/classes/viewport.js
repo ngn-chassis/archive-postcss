@@ -1,4 +1,4 @@
-const util = require('../utilities')
+const ChassisUtils = require('../utilities')
 
 class ChassisViewport {
   constructor (widthRanges) {
@@ -96,8 +96,9 @@ class ChassisViewport {
    */
   getMediaQuery (type, range, nodes, dimension) {
     nodes = NGN.coalesce(nodes || [])
+    dimension = NGN.coalesce(dimension, 'width')
 
-    let mediaQuery = util.newAtRule({
+    let mediaQuery = ChassisUtils.newAtRule({
       name: 'media',
       params: '',
       nodes

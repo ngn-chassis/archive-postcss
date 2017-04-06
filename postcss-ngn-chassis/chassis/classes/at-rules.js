@@ -5,6 +5,7 @@ class ChassisAtRules {
   constructor (project) {
     this.project = project
     this.layout = project.layout
+    this.typography = project.typography
     this.viewport = project.viewport
 
     this.mixins = {
@@ -120,13 +121,91 @@ class ChassisAtRules {
         ]
       },
 
+      setTypography: (rule, line, args) => {
+        let config = {
+          alias: 'root'
+        }
+
+        if (args) {
+          let alias = NGN.coalesce(args.find(arg => ['root', 'small', 'large', 'larger', 'largest'].includes(arg)), 'root')
+          let multiplier = NGN.coalesce(args.find(arg => typeof arg === 'number'), 1)
+          let addMargin = NGN.coalesce(args.includes('add-margin'), false)
+
+          if (!alias) {
+            console.error('[ERROR] Chassis At Rule set-typography must include a size alias. Valid values include "root", "small", "large", "larger", and "largest"')
+            return ''
+          }
+
+          config.alias = alias
+
+          if (multiplier) {
+            config.multiplier = multiplier
+          }
+
+          if (addMargin) {
+            config.addMargin = true
+          }
+        }
+
+        return this.typography.getTypographyRules(rule, line, config)
+      },
+
+      inlineLayout: (rule, line, args) => {
+        let config = {
+          alias: 'root'
+        }
+
+        if (args) {
+          let stripMargin = NGN.coalesce(args.includes('no-margin'), true)
+          let stripHorizontalMargin = NGN.coalesce(args.includes('no-horizontal-margin'), true)
+          let stripVerticalMargin = NGN.coalesce(args.includes('no-vertical-margin'), true)
+
+          let stripPadding = NGN.coalesce(args.includes('no-padding'), false)
+
+          let multiLine = NGN.coalesce(args.includes('multi-line'), false)
+
+          let setHeight = NGN.coalesce(args.includes('set-height'), false)
+
+          if (stripHorizontalMargin) {
+            config.stripHorizontalMargin = stripHorizontalMargin
+          }
+
+          if (stripVerticalMargin) {
+            config.stripVerticalMargin = stripVerticalMargin
+          }
+
+          if (stripMargin || (stripHorizontalMargin && stripVerticalMargin)) {
+            delete config.stripHorizontalMargin
+            delete config.stripVerticalMargin
+            config.stripMargin = true
+          }
+
+          if (stripPadding) {
+            config.stripPadding = true
+          }
+
+          if (multiLine) {
+            config.multiLine = true
+          }
+
+          if (setHeight) {
+            config.setHeight = true
+          }
+        }
+
+        return this.layout.getInlineElementStyles(rule, line, config)
+      },
+
       blockLayout: (rule, line, args) => {
-        let config = {}
+        let config = {
+          alias: 'root'
+        }
 
         if (args) {
           let stripPadding = NGN.coalesce(args.includes('no-padding'), true)
           let stripHorizontalPadding = NGN.coalesce(args.includes('no-horizontal-padding'), true)
           let stripVerticalPadding = NGN.coalesce(args.includes('no-vertical-padding'), true)
+          let stripMargin = NGN.coalesce(args.includes('no-margin'), false)
 
           if (stripHorizontalPadding) {
             config.stripHorizontalPadding = stripHorizontalPadding
@@ -142,7 +221,7 @@ class ChassisAtRules {
             config.stripPadding = true
           }
 
-          if (NGN.coalesce(args.includes('no-margin'), false)) {
+          if (stripMargin) {
             config.stripMargin = true
           }
         }
@@ -217,12 +296,17 @@ class ChassisAtRules {
         rule.replaceWith(this.mixins.mediaQuery(line, args, nodes))
         break
 
+      case 'set-typography':
+        rule.parent.parent.append(this.mixins.setTypography(rule, line, args))
+        rule.remove()
+        break
+
       case 'block-layout':
         rule.parent.append(this.mixins.blockLayout(rule, line, args))
         break
 
       case 'inline-layout':
-        console.log('apply inline layout rules')
+        rule.parent.append(this.mixins.inlineLayout(rule, line, args))
         break
 
       case 'hide':
