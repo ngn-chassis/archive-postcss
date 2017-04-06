@@ -274,7 +274,7 @@ class ChassisProject extends NGN.EventEmitter {
     let mediaQueries = this._buildMediaQueries()
 
     styles = ChassisUtils.parseStylesheets(this.stylesheets)
-    .append(ChassisUtils.newRule('.width-constraint', this.atRules.constrainWidthMixin()))
+    .append(ChassisUtils.newRule('.width-constraint', this.atRules.mixins.constrainWidth()))
 
     .append(ChassisUtils.newAtRule({
       name: 'media',

@@ -6,101 +6,85 @@ class ChassisAtRules {
     this.project = project
     this.layout = project.layout
     this.viewport = project.viewport
-  }
 
-  initMixin (line, args) {
-    // console.log(args);
-    return this.project.coreStyles
-  }
+    this.mixins = {
+      init: (line, args) => {
+        // console.log(args);
+        return this.project.coreStyles
+      },
 
-  constrainWidthMixin (line, hasPadding = true) {
-    const decls = []
+      constrainWidth: (line, hasPadding = true) => {
+        let decls = [
+          ChassisUtils.newDecl('width', '100%'),
+          ChassisUtils.newDecl('min-width', `${this.layout.minWidth}px`),
+          ChassisUtils.newDecl('max-width', `${this.layout.maxWidth}px`),
+          ChassisUtils.newDecl('margin', '0 auto')
+        ]
 
-    decls.push(postcss.decl({
-      prop: 'width',
-      value: '100%'
-    }))
+        if (hasPadding) {
+          decls = [
+            ...decls,
+            ChassisUtils.newDecl('padding-left', this.layout.gutter),
+            ChassisUtils.newDecl('padding-right', this.layout.gutter)
+          ]
+        }
 
-    decls.push(postcss.decl({
-      prop: 'min-width',
-      value: `${this.layout.minWidth}px`
-    }))
+        return decls
+      },
 
-    decls.push(postcss.decl({
-      prop: 'max-width',
-      value: `${this.layout.maxWidth}px`
-    }))
+      mediaQuery: (line, config, nodes) => {
+        let type = config[0]
+        let viewport = config[1]
 
-    decls.push(postcss.decl({
-      prop: 'margin',
-      value: '0 auto'
-    }))
+        if (!this.viewport.validateMediaQuery(line, type, viewport)) {
+          return
+        }
 
-    if (hasPadding) {
-      decls.push(postcss.decl({
-        prop: 'padding-left',
-        value: this.layout.gutter
-      }))
-      decls.push(postcss.decl({
-        prop: 'padding-right',
-        value: this.layout.gutter
-      }))
+        let dimension = NGN.coalesce(config[2], 'width')
+
+        return this.viewport.getMediaQuery(type, viewport, nodes, dimension)
+      },
+
+      hide: () => {
+        return [
+          ChassisUtils.newDecl('display', 'none'),
+          ChassisUtils.newDecl('visibility', 'hidden'),
+          ChassisUtils.newDecl('opacity', '0')
+        ]
+      },
+
+      show: (args) => {
+        let boxModel = NGN.coalesce(args, 'block')
+        // TODO: Handle invalid box-model values
+
+        return [
+          ChassisUtils.newDecl('display', boxModel),
+          ChassisUtils.newDecl('visibility', 'visible'),
+          ChassisUtils.newDecl('opacity', '1')
+        ]
+      }
     }
-
-    return decls
-  }
-
-  mediaQueryMixin (line, config, nodes) {
-    let type = config[0]
-    let viewport = config[1]
-
-    if (!this.viewport.validateMediaQuery(line, type, viewport)) {
-      return
-    }
-
-    let dimension = NGN.coalesce(config[2], 'width')
-
-    return this.viewport.getMediaQuery(type, viewport, nodes, dimension)
-  }
-
-  hideMixin () {
-    return [
-      ChassisUtils.newDecl('display', 'none'),
-      ChassisUtils.newDecl('visibility', 'hidden'),
-      ChassisUtils.newDecl('opacity', '0')
-    ]
-  }
-
-  showMixin (args) {
-    let boxModel = NGN.coalesce(args, 'block')
-    // TODO: Handle invalid box-model values
-
-    return [
-      ChassisUtils.newDecl('display', boxModel),
-      ChassisUtils.newDecl('visibility', 'visible'),
-      ChassisUtils.newDecl('opacity', '1')
-    ]
   }
 
   _addWidthConstraintMediaQueries (input, selector) {
-    input.insertAfter(selector, util.newAtRule({
+    input.insertAfter(selector, ChassisUtils.newAtRule({
       name: 'media',
       params: `screen and (max-width: ${this.layout.minWidth}px)`,
       nodes: [
-        util.newRule(selector, [
-          util.newDeclObj('padding-left', this.layout.getGutterLimit(this.layout.minWidth)),
-          util.newDeclObj('padding-right', this.layout.getGutterLimit(this.layout.minWidth))
+        ChassisUtils.newRule(selector, [
+          ChassisUtils.newDeclObj('padding-left', this.layout.getGutterLimit(this.layout.minWidth)),
+          ChassisUtils.newDeclObj('padding-right', this.layout.getGutterLimit(this.layout.minWidth))
         ])
       ]
     }))
 
-    input.insertAfter(selector, util.newAtRule({
+    input.insertAfter(selector, ChassisUtils.newAtRule({
       name: 'media',
       params: `screen and (min-width: ${this.layout.maxWidth}px)`,
       nodes: [
-        util.newRule(selector, [
-          util.newDeclObj('padding-left', this.layout.getGutterLimit(this.layout.maxWidth)),
-          util.newDeclObj('padding-right', this.layout.getGutterLimit(this.layout.maxWidth))
+        ChassisUtils.newRule(selector, [
+          ChassisUtils.newDeclObj('padding-left', this.layout.getGutterLimit(this.layout.maxWidth)),
+          ChassisUtils.newDeclObj('padding-right', this.layout.getGutterLimit(this.layout.maxWidth))
         ])
       ]
     }))
@@ -117,16 +101,16 @@ class ChassisAtRules {
 
     switch (mixin) {
       case 'init':
-        rule.replaceWith(this.initMixin(line, args))
+        rule.replaceWith(this.mixins.init(line, args))
         break
 
       case 'constrain-width':
         this._addWidthConstraintMediaQueries(input, rule.parent)
-        rule.replaceWith(this.constrainWidthMixin(line, !args.includes('no-padding')))
+        rule.replaceWith(this.mixins.constrainWidth(line, args && !args.includes('no-padding')))
         break
 
       case 'media-query':
-        rule.replaceWith(this.mediaQueryMixin(line, args, nodes))
+        rule.replaceWith(this.mixins.mediaQuery(line, args, nodes))
         break
 
       case 'block-layout':
@@ -138,11 +122,11 @@ class ChassisAtRules {
         break
 
       case 'hide':
-        rule.parent.append(this.hideMixin())
+        rule.parent.append(this.mixins.hide())
         break
 
       case 'show':
-        rule.parent.append(this.showMixin(args))
+        rule.parent.append(this.mixins.show(args))
         break
 
       case 'ellipsis':
