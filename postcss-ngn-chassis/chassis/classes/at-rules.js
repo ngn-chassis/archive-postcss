@@ -8,11 +8,29 @@ class ChassisAtRules {
     this.viewport = project.viewport
 
     this.mixins = {
+
+      /**
+       * @mixin init
+       * Generate core stylesheet from user configuration
+       * @param  {object} line
+       * Line and column at which mixin was called
+       * @param  {array} args
+       * additional params passed to mixin
+       * @return {AST}
+       */
       init: (line, args) => {
         // console.log(args);
         return this.project.coreStyles
       },
 
+      /**
+       * @mixin constrainWidth
+       * @param  {object}  line
+       * Line and column at which mixin was called
+       * @param  {Boolean} [hasPadding=true]
+       * Whether or not to add layout gutter to left and right
+       * @return {array} of decls
+       */
       constrainWidth: (line, hasPadding = true) => {
         let decls = [
           ChassisUtils.newDecl('width', '100%'),
@@ -32,6 +50,16 @@ class ChassisAtRules {
         return decls
       },
 
+      /**
+       * @mixin mediaQuery
+       * @param  {object} line
+       * Line and column at which mixin was called
+       * @param  {object} config
+       * media query params. Shape: {name: {string}, params: {string}, nodes: {array}}
+       * @param  {array} nodes
+       * rules to add inside media query
+       * @return {CSS}
+       */
       mediaQuery: (line, config, nodes) => {
         let type = config[0]
         let viewport = config[1]
@@ -45,6 +73,15 @@ class ChassisAtRules {
         return this.viewport.getMediaQuery(type, viewport, nodes, dimension)
       },
 
+      /**
+       * @mixin hide
+       * Hide element
+       * Sets the following properties:
+       * display: none;
+       * visibility: hidden;
+       * opacity: 0;
+       * @return {decls}
+       */
       hide: () => {
         return [
           ChassisUtils.newDecl('display', 'none'),
@@ -53,6 +90,17 @@ class ChassisAtRules {
         ]
       },
 
+      /**
+       * @mixin show
+       * Show element
+       * Sets the following properties:
+       * display: {string};
+       * visibility: visible;
+       * opacity: 1;
+       * @param {array} args
+       * Accepts CSS box model property values
+       * @return {decls}
+       */
       show: (args) => {
         let boxModel = NGN.coalesce(args, 'block')
         // TODO: Handle invalid box-model values
@@ -66,6 +114,16 @@ class ChassisAtRules {
     }
   }
 
+  /**
+   * @method _addWidthConstraintMediaQueries
+   * Added to prevent shrinking or growing gutters when constrainWidth mixin is
+   * called on an element
+   * @param {object} input
+   * PostCss AST
+   * @param {string} selector
+   * Element to apply media queries to
+   * @private
+   */
   _addWidthConstraintMediaQueries (input, selector) {
     input.insertAfter(selector, ChassisUtils.newAtRule({
       name: 'media',
@@ -90,6 +148,14 @@ class ChassisAtRules {
     }))
   }
 
+  /**
+   * @method process
+   * Handle @chassis at-rules
+   * @param {object} rule
+   * PostCss AST
+   * @param {object} input
+   * PostCss AST
+   */
   process (rule, input) {
     let line = Object.keys(rule.source.start).map(key => `${key}: ${rule.source.start[key]}`).join(', ')
     let params = rule.params.split(' ')
