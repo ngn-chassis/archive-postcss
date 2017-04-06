@@ -35,6 +35,10 @@ class ChassisUtils {
 		return rule
 	}
 
+	static printTree (tree) {
+		console.log(JSON.stringify(tree, null, 2));
+	}
+
 	/**
 	 * @method newDeclObj
 	 * Utility method to reduce code repetition

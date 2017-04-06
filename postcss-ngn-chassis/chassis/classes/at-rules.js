@@ -101,7 +101,7 @@ class ChassisAtRules {
        * Accepts CSS box model property values
        * @return {decls}
        */
-      show: (args) => {
+      show: (line, args) => {
         let boxModel = NGN.coalesce(args, 'block')
         // TODO: Handle invalid box-model values
 
@@ -110,6 +110,44 @@ class ChassisAtRules {
           ChassisUtils.newDecl('visibility', 'visible'),
           ChassisUtils.newDecl('opacity', '1')
         ]
+      },
+
+      ellipsis: () => {
+        return [
+          ChassisUtils.newDecl('white-space', 'nowrap'),
+          ChassisUtils.newDecl('overflow', 'hidden'),
+          ChassisUtils.newDecl('text-overflow', 'ellipsis')
+        ]
+      },
+
+      blockLayout: (rule, line, args) => {
+        let config = {}
+
+        if (args) {
+          let stripPadding = NGN.coalesce(args.includes('no-padding'), true)
+          let stripHorizontalPadding = NGN.coalesce(args.includes('no-horizontal-padding'), true)
+          let stripVerticalPadding = NGN.coalesce(args.includes('no-vertical-padding'), true)
+
+          if (stripHorizontalPadding) {
+            config.stripHorizontalPadding = stripHorizontalPadding
+          }
+
+          if (stripVerticalPadding) {
+            config.stripVerticalPadding = stripVerticalPadding
+          }
+
+          if (stripPadding || (stripHorizontalPadding && stripVerticalPadding)) {
+            delete config.stripHorizontalPadding
+            delete config.stripVerticalPadding
+            config.stripPadding = true
+          }
+
+          if (NGN.coalesce(args.includes('no-margin'), false)) {
+            config.stripMargin = true
+          }
+        }
+
+        return this.layout.getBlockElementStyles(rule, line, config)
       }
     }
   }
@@ -180,7 +218,7 @@ class ChassisAtRules {
         break
 
       case 'block-layout':
-        console.log('apply block layout rules')
+        rule.parent.append(this.mixins.blockLayout(rule, line, args))
         break
 
       case 'inline-layout':
@@ -192,11 +230,11 @@ class ChassisAtRules {
         break
 
       case 'show':
-        rule.parent.append(this.mixins.show(args))
+        rule.parent.append(this.mixins.show(line, args))
         break
 
       case 'ellipsis':
-        console.log('apply ellipsis')
+        rule.parent.append(this.mixins.ellipsis())
         break
 
       case 'z-index':

@@ -1,4 +1,4 @@
-const util = require('../utilities')
+const ChassisUtils = require('../utilities')
 
 class ChassisLayout {
   constructor (viewport, typography, settings) {
@@ -99,7 +99,7 @@ class ChassisLayout {
    * Only applicable at min or max
    */
   getGutterLimit (width) {
-    let unit = util.getUnit(this.gutter)
+    let unit = ChassisUtils.getUnit(this.gutter)
 
     switch (unit) {
       case 'vw':
@@ -134,9 +134,9 @@ class ChassisLayout {
    * Current viewport width range
    * @return {rule}
    */
-  getContainerStyles (range) {
-    return util.newRule('.chassis section, .chassis nav, .chassis form', [
-      util.newDeclObj('margin-bottom', `${this.getMargin('container', 'root', range.upperBound)}px`)
+  getDefaultContainerStyles (range) {
+    return ChassisUtils.newRule('.chassis section, .chassis nav, .chassis form', [
+      ChassisUtils.newDeclObj('margin-bottom', `${this.getMargin('container', 'root', range.upperBound)}px`)
     ])
   }
 
@@ -147,10 +147,52 @@ class ChassisLayout {
    * Current viewport width range
    * @return {rule}
    */
-  getBlockElementStyles (range) {
-    return util.newRule('.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed', [
-      util.newDeclObj('margin-bottom', `${this.getMargin('block', 'root', range.upperBound)}px`)
+  getDefaultBlockElementStyles (range) {
+    return ChassisUtils.newRule('.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed', [
+      ChassisUtils.newDeclObj('margin-bottom', `${this.getMargin('block', 'root', range.upperBound)}px`)
     ])
+  }
+
+  getBlockElementStyles (rule, line, config) {
+    let stripMargin = NGN.coalesce(config.stripMargin, false)
+    let stripPadding = NGN.coalesce(config.stripPadding, false)
+    let stripVerticalPadding = NGN.coalesce(config.stripVerticalPadding, false)
+    let stripHorizontalPadding = NGN.coalesce(config.stripHorizontalPadding, false)
+
+    let css = []
+
+    this.viewport.widthRanges.forEach((range, index) => {
+      let fontSize = this.typography.getFontSize('root', range.upperBound)
+      let lineHeight = this.typography.getLineHeight('root', range.upperBound) / fontSize
+
+      if (index === 1) {
+        if (!stripMargin) {
+          css.push(ChassisUtils.newDecl('margin', `0 0 ${lineHeight}em 0`))
+        }
+
+        if (!stripPadding) {
+          let padding = [(lineHeight / this.typography.typeScaleRatio) / 2, 1]
+
+          if (stripVerticalPadding) {
+            padding[0] = 0
+          }
+
+          if (stripHorizontalPadding) {
+            padding[1] = 0
+          }
+
+          css.push(ChassisUtils.newDecl(
+            'padding',
+            padding.map(value => value === 0 ? 0 : `${value}em`).join(' '))
+          )
+        }
+      } else {
+        // TODO: Add Media Queries
+      }
+    })
+
+    console.log(css);
+    return css
   }
 }
 

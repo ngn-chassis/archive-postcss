@@ -238,8 +238,8 @@ class ChassisProject extends NGN.EventEmitter {
         rule,
         ...this._getHeadingStyles(range),
         this.typography.getFormLegendStyles(range),
-        this.layout.getContainerStyles(range),
-        this.layout.getBlockElementStyles(range),
+        this.layout.getDefaultContainerStyles(range),
+        this.layout.getDefaultBlockElementStyles(range),
         this.typography.getParagraphStyles(range)
       ]
 
@@ -308,8 +308,8 @@ class ChassisProject extends NGN.EventEmitter {
 
     styles.append(this._getHeadingStyles(firstRange))
     .append(this.typography.getFormLegendStyles(firstRange))
-    .append(this.layout.getContainerStyles(firstRange))
-    .append(this.layout.getBlockElementStyles(firstRange))
+    .append(this.layout.getDefaultContainerStyles(firstRange))
+    .append(this.layout.getDefaultBlockElementStyles(firstRange))
     .append(this.typography.getParagraphStyles(firstRange))
     .append(mediaQueries)
 
