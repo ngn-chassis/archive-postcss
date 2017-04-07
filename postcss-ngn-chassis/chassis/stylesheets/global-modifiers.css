@@ -1,0 +1,31 @@
+/* NGN Chassis */
+/* Helper Classes ------------------------------------------------------------*/
+
+/* Hide element */
+.hidden {
+	display: none !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+}
+
+/* Font Styles */
+.normal-style {
+	font-style: normal !important;
+}
+
+.italic-style {
+	font-style: italic !important;
+}
+
+.oblique-style {
+	font-style: oblique !important;
+}
+
+/* Font Variants */
+.normal-variant {
+	font-variant: normal;
+}
+
+.small-caps-variant {
+	font-variant: small-caps;
+}

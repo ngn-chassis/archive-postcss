@@ -16,7 +16,7 @@ class ChassisProject extends NGN.EventEmitter {
 
     this.stylesheets = [
       'stylesheets/reset.css',
-      'stylesheets/helpers.css',
+      'stylesheets/global-modifiers.css',
       'stylesheets/copic-greys.css'
     ]
 
@@ -205,62 +205,12 @@ class ChassisProject extends NGN.EventEmitter {
     })
   }
 
-  /**
-   * @method _buildMediaQueries
-   * Create media queries for default typography settings
-   * @private
-   */
-  _buildMediaQueries () {
-    let { widthRanges } = this.viewport
-
-    return widthRanges.map((range, index) => {
-      let mediaQuery
-
-      if ( index === widthRanges.length - 1 ) {
-        mediaQuery = this.viewport.getMediaQuery('min', range.name)
-      } else if ( index !== 0 ) {
-        mediaQuery = this.viewport.getMediaQuery('at', range.name)
-      } else {
-        return
-      }
-
-      if (!mediaQuery) {
-        return
-      }
-
-      let rule = ChassisUtils.newRule('.chassis', [
-        ChassisUtils.newDeclObj('font-size', `${this.typography.getFontSize('root', range.upperBound)}px`),
-        ChassisUtils.newDeclObj('line-height', `${this.typography.getLineHeight('root', range.upperBound)}px`)
+  _getFontWeightClasses () {
+    return Object.keys(this.typography.fontWeights).map(weight => {
+      return ChassisUtils.newRule(`.${weight}-weight`, [
+        ChassisUtils.newDeclObj('font-weight', `${this.typography.fontWeights[weight]} !important`)
       ])
-
-      mediaQuery.nodes = [
-        ...mediaQuery.nodes,
-        rule,
-        ...this._getHeadingStyles(range),
-        this.typography.getFormLegendStyles(range),
-        this.layout.getDefaultContainerStyles(range),
-        this.layout.getDefaultBlockElementStyles(range),
-        this.typography.getParagraphStyles(range)
-      ]
-
-      return mediaQuery
-
-    }).filter(mediaQuery => mediaQuery !== undefined)
-  }
-
-  /**
-   * @method _getHeadingStyles
-   * Generate default styles for h1-h6
-   * @private
-   */
-  _getHeadingStyles (range) {
-    let headings = []
-
-    for (let i = 1; i <= 6; i++) {
-      headings.push(this.typography.getHeadingStyles(i.toString(), range))
-    }
-
-    return headings
+    })
   }
 
   /**
@@ -274,6 +224,9 @@ class ChassisProject extends NGN.EventEmitter {
     let mediaQueries = this._buildMediaQueries()
 
     styles = ChassisUtils.parseStylesheets(this.stylesheets)
+
+    .append(this._getFontWeightClasses())
+
     .append(ChassisUtils.newRule('.width-constraint', this.atRules.mixins.constrainWidth()))
 
     .append(ChassisUtils.newAtRule({
@@ -306,14 +259,72 @@ class ChassisProject extends NGN.EventEmitter {
       ChassisUtils.newDeclObj('line-height', `${this.typography.getLineHeight('root', firstRange.upperBound)}px`)
     ]))
 
-    styles.append(this._getHeadingStyles(firstRange))
-    .append(this.typography.getFormLegendStyles(firstRange))
-    .append(this.layout.getDefaultContainerStyles(firstRange))
-    .append(this.layout.getDefaultBlockElementStyles(firstRange))
+    styles.append(this._getHeadingProperties(firstRange))
+    .append(this.typography.getFormLegendProperties(firstRange))
+    .append(this.layout.getDefaultContainerProperties(firstRange))
+    .append(this.layout.getDefaultBlockProperties(firstRange))
     .append(this.typography.getParagraphStyles(firstRange))
     .append(mediaQueries)
 
     return styles
+  }
+
+  /**
+   * @method _buildMediaQueries
+   * Create media queries for default typography settings
+   * @private
+   */
+  _buildMediaQueries () {
+    let { widthRanges } = this.viewport
+
+    return widthRanges.map((range, index) => {
+      let mediaQuery
+
+      if ( index === widthRanges.length - 1 ) {
+        mediaQuery = this.viewport.getMediaQuery('min', range.name)
+      } else if ( index !== 0 ) {
+        mediaQuery = this.viewport.getMediaQuery('at', range.name)
+      } else {
+        return
+      }
+
+      if (!mediaQuery) {
+        return
+      }
+
+      let rule = ChassisUtils.newRule('.chassis', [
+        ChassisUtils.newDeclObj('font-size', `${this.typography.getFontSize('root', range.upperBound)}px`),
+        ChassisUtils.newDeclObj('line-height', `${this.typography.getLineHeight('root', range.upperBound)}px`)
+      ])
+
+      mediaQuery.nodes = [
+        ...mediaQuery.nodes,
+        rule,
+        ...this._getHeadingProperties(range),
+        this.typography.getFormLegendProperties(range),
+        this.layout.getDefaultContainerProperties(range),
+        this.layout.getDefaultBlockProperties(range),
+        this.typography.getParagraphStyles(range)
+      ]
+
+      return mediaQuery
+
+    }).filter(mediaQuery => mediaQuery !== undefined)
+  }
+
+  /**
+   * @method _getHeadingProperties
+   * Generate default styles for h1-h6
+   * @private
+   */
+  _getHeadingProperties (range) {
+    let headings = []
+
+    for (let i = 1; i <= 6; i++) {
+      headings.push(this.typography.getHeadingProperties(i.toString(), range))
+    }
+
+    return headings
   }
 }
 

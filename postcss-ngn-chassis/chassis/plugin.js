@@ -1,10 +1,10 @@
 require('ngn')
 require('ngn-data')
-const ChassisProject = require('./project')
+const ChassisProject = require('./classes/project')
 
 class ChassisPostCss {
   constructor (config) {
-    this.config = config || {}
+    this.config = NGN.coalesce(config, {})
     this.project = new ChassisProject()
   }
 

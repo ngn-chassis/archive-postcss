@@ -2,51 +2,14 @@ const ChassisUtils = require('../utilities')
 
 class ChassisLayout {
   constructor (viewport, typography, settings) {
-    this.viewport = viewport
-    this.typography = typography
-    this.settings = settings
-  }
-
-  /**
-   * @property {string} gutter
-   * Project side-gutter width CSS Property value
-   * @readonly
-   */
-  get gutter () {
-    if (!this.settings.gutter) {
-      console.warn('[WARNING] Chassis Layout: Gutter Value has not been set!')
-      return ''
+    this.project = {
+      viewport,
+      typography
     }
 
-    return this.settings.gutter
-  }
-
-  /**
-   * @property {number} minWidth
-   * Project min-width in pixels
-   * @readonly
-   */
-  get minWidth () {
-    if (!this.settings.minWidth) {
-      console.warn('[WARNING] Chassis Layout: Minimum Width Value has not been set!')
-      return ''
-    }
-
-    return this.settings.minWidth
-  }
-
-  /**
-   * @property {number} maxWidth
-   * Project max-width in pixels
-   * @readonly
-   */
-  get maxWidth () {
-    if (!this.settings.maxWidth) {
-      console.warn('[WARNING] Chassis Layout: Maximum Width Value has not been set!')
-      return ''
-    }
-
-    return this.settings.maxWidth
+    Object.keys(settings).forEach(key => {
+      this[key] = settings[key]
+    })
   }
 
   /**
@@ -65,15 +28,15 @@ class ChassisLayout {
   getMargin (type, fontSizeAlias, upperBound) {
     switch (type) {
       case 'container':
-        return this.typography.getLineHeight(fontSizeAlias, upperBound, true) * this.typography.typeScaleRatio
+        return this.project.typography.getLineHeight(fontSizeAlias, upperBound, true) * this.project.typography.typeScaleRatio
         break
 
       case 'block':
-        return this.typography.getLineHeight(fontSizeAlias, upperBound, true)
+        return this.project.typography.getLineHeight(fontSizeAlias, upperBound, true)
         break
 
       default:
-        return this.typography.getFontSize(fontSizeAlias, upperBound, true)
+        return this.project.typography.getFontSize(fontSizeAlias, upperBound, true)
     }
   }
 
@@ -122,7 +85,7 @@ class ChassisLayout {
         break
 
       case 'rem':
-        return `${parseFloat(this.gutter) * (this.typography.baseFontSize * this.typography.globalMultiplier)}px`
+        return `${parseFloat(this.gutter) * (this.project.typography.baseFontSize * this.project.typography.globalMultiplier)}px`
         break
 
       default:
@@ -137,20 +100,20 @@ class ChassisLayout {
    * Current viewport width range
    * @return {rule}
    */
-  getDefaultContainerStyles (range) {
+  getDefaultContainerProperties (range) {
     return ChassisUtils.newRule('.chassis section, .chassis nav, .chassis form', [
       ChassisUtils.newDeclObj('margin-bottom', `${this.getMargin('container', 'root', range.upperBound)}em`)
     ])
   }
 
   /**
-   * @method getBlockElementStyles
+   * @method getBlockElementProperties
    * Get default decls for Block elements
    * @param {string} range
    * Current viewport width range
    * @return {rule}
    */
-  getDefaultBlockElementStyles (range) {
+  getDefaultBlockProperties (range) {
     return ChassisUtils.newRule('.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed', [
       ChassisUtils.newDeclObj('margin-bottom', `${this.getMargin('block', 'root', range.upperBound)}em`)
     ])
@@ -160,7 +123,7 @@ class ChassisLayout {
     return array.map(value => value === 0 ? 0 : `${value}em`).join(' ')
   }
 
-  getInlineElementStyles (rule, line, config) {
+  getInlineElementProperties (rule, line, config) {
     let alias = NGN.coalesce(config.alias, 'root')
     let stripPadding = NGN.coalesce(config.stripPadding, false)
     let stripMargin = NGN.coalesce(config.stripMargin, false)
@@ -172,9 +135,9 @@ class ChassisLayout {
 
     let css = []
 
-    this.viewport.widthRanges.forEach((range, index) => {
-      let fontSize = this.typography.getFontSize(alias, range.upperBound, true)
-      let baseLineHeight = this.typography.getLineHeight(alias, range.upperBound, true) / fontSize
+    this.project.viewport.widthRanges.forEach((range, index) => {
+      let fontSize = this.project.typography.getFontSize(alias, range.upperBound, true)
+      let baseLineHeight = this.project.typography.getLineHeight(alias, range.upperBound, true) / fontSize
 
       if (index === 1) {
         if (setHeight) {
@@ -186,7 +149,7 @@ class ChassisLayout {
           } else {
             css.push(ChassisUtils.newDecl(
               'height',
-              `${baseLineHeight * this.typography.typeScaleRatio}em`
+              `${baseLineHeight * this.project.typography.typeScaleRatio}em`
             ))
           }
         }
@@ -195,7 +158,7 @@ class ChassisLayout {
           let padding = [0, baseLineHeight / 2]
 
           if (multiLine) {
-            padding[0] = ((baseLineHeight * this.typography.typeScaleRatio) - baseLineHeight) / 2
+            padding[0] = ((baseLineHeight * this.project.typography.typeScaleRatio) - baseLineHeight) / 2
           }
 
           css.push(ChassisUtils.newDecl(
@@ -229,7 +192,7 @@ class ChassisLayout {
         } else {
           css.push(ChassisUtils.newDecl(
             'line-height',
-            `${baseLineHeight * this.typography.typeScaleRatio}em`
+            `${baseLineHeight * this.project.typography.typeScaleRatio}em`
           ))
         }
       } else {
@@ -241,7 +204,7 @@ class ChassisLayout {
     return css
   }
 
-  getBlockElementStyles (rule, line, config) {
+  getBlockElementProperties (rule, line, config) {
     let alias = NGN.coalesce(config.alias, 'root')
     let stripMargin = NGN.coalesce(config.stripMargin, false)
     let stripPadding = NGN.coalesce(config.stripPadding, false)
@@ -250,9 +213,9 @@ class ChassisLayout {
 
     let css = []
 
-    this.viewport.widthRanges.forEach((range, index) => {
-      let fontSize = this.typography.getFontSize(alias, range.upperBound, true)
-      let lineHeight = this.typography.getLineHeight(alias, range.upperBound, true) / fontSize
+    this.project.viewport.widthRanges.forEach((range, index) => {
+      let fontSize = this.project.typography.getFontSize(alias, range.upperBound, true)
+      let lineHeight = this.project.typography.getLineHeight(alias, range.upperBound, true) / fontSize
 
       if (index === 1) {
         if (!stripMargin) {
@@ -260,7 +223,7 @@ class ChassisLayout {
         }
 
         if (!stripPadding) {
-          let padding = [(lineHeight / this.typography.typeScaleRatio) / 2, 1]
+          let padding = [(lineHeight / this.project.typography.typeScaleRatio) / 2, 1]
 
           if (stripVerticalPadding) {
             padding[0] = 0

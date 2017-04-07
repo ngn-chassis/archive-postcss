@@ -4,24 +4,39 @@ const ChassisUtils = require('../utilities')
 class ChassisAtRules {
   constructor (project) {
     this.project = project
-    this.layout = project.layout
-    this.typography = project.typography
-    this.viewport = project.viewport
 
     this.mixins = {
+      blockLayout: (rule, line, args) => {
+        let config = {
+          alias: 'root'
+        }
 
-      /**
-       * @mixin init
-       * Generate core stylesheet from user configuration
-       * @param  {object} line
-       * Line and column at which mixin was called
-       * @param  {array} args
-       * additional params passed to mixin
-       * @return {AST}
-       */
-      init: (line, args) => {
-        // console.log(args);
-        return this.project.coreStyles
+        if (args) {
+          let stripPadding = NGN.coalesce(args.includes('no-padding'), true)
+          let stripHorizontalPadding = NGN.coalesce(args.includes('no-horizontal-padding'), true)
+          let stripVerticalPadding = NGN.coalesce(args.includes('no-vertical-padding'), true)
+          let stripMargin = NGN.coalesce(args.includes('no-margin'), false)
+
+          if (stripHorizontalPadding) {
+            config.stripHorizontalPadding = stripHorizontalPadding
+          }
+
+          if (stripVerticalPadding) {
+            config.stripVerticalPadding = stripVerticalPadding
+          }
+
+          if (stripPadding || (stripHorizontalPadding && stripVerticalPadding)) {
+            delete config.stripHorizontalPadding
+            delete config.stripVerticalPadding
+            config.stripPadding = true
+          }
+
+          if (stripMargin) {
+            config.stripMargin = true
+          }
+        }
+
+        return this.project.layout.getBlockElementProperties(rule, line, config)
       },
 
       /**
@@ -35,43 +50,48 @@ class ChassisAtRules {
       constrainWidth: (line, hasPadding = true) => {
         let decls = [
           ChassisUtils.newDecl('width', '100%'),
-          ChassisUtils.newDecl('min-width', `${this.layout.minWidth}px`),
-          ChassisUtils.newDecl('max-width', `${this.layout.maxWidth}px`),
+          ChassisUtils.newDecl('min-width', `${this.project.layout.minWidth}px`),
+          ChassisUtils.newDecl('max-width', `${this.project.layout.maxWidth}px`),
           ChassisUtils.newDecl('margin', '0 auto')
         ]
 
         if (hasPadding) {
           decls = [
             ...decls,
-            ChassisUtils.newDecl('padding-left', this.layout.gutter),
-            ChassisUtils.newDecl('padding-right', this.layout.gutter)
+            ChassisUtils.newDecl('padding-left', this.project.layout.gutter),
+            ChassisUtils.newDecl('padding-right', this.project.layout.gutter)
           ]
         }
 
         return decls
       },
 
+      ellipsis: () => {
+        return [
+          ChassisUtils.newDecl('white-space', 'nowrap'),
+          ChassisUtils.newDecl('overflow', 'hidden'),
+          ChassisUtils.newDecl('text-overflow', 'ellipsis')
+        ]
+      },
+
+      fontSize: (atRule, line, args) => {
+        // TODO: Add error handling
+        let fontSizeAlias = args
+        return this.project.typography.getCalculatedFontSizeProperty(atRule, line, fontSizeAlias)
+      },
+
       /**
-       * @mixin mediaQuery
+       * @mixin generate
+       * Generate core stylesheet from user configuration
        * @param  {object} line
        * Line and column at which mixin was called
-       * @param  {object} config
-       * media query params. Shape: {name: {string}, params: {string}, nodes: {array}}
-       * @param  {array} nodes
-       * rules to add inside media query
-       * @return {CSS}
+       * @param  {array} args
+       * additional params passed to mixin
+       * @return {AST}
        */
-      mediaQuery: (line, config, nodes) => {
-        let type = config[0]
-        let viewport = config[1]
-
-        if (!this.viewport.validateMediaQuery(line, type, viewport)) {
-          return
-        }
-
-        let dimension = NGN.coalesce(config[2], 'width')
-
-        return this.viewport.getMediaQuery(type, viewport, nodes, dimension)
+      generate: (line, args) => {
+        // console.log(args);
+        return this.project.coreStyles
       },
 
       /**
@@ -89,65 +109,6 @@ class ChassisAtRules {
           ChassisUtils.newDecl('visibility', 'hidden'),
           ChassisUtils.newDecl('opacity', '0')
         ]
-      },
-
-      /**
-       * @mixin show
-       * Show element
-       * Sets the following properties:
-       * display: {string};
-       * visibility: visible;
-       * opacity: 1;
-       * @param {array} args
-       * Accepts CSS box model property values
-       * @return {decls}
-       */
-      show: (line, args) => {
-        let boxModel = NGN.coalesce(args, 'block')
-        // TODO: Handle invalid box-model values
-
-        return [
-          ChassisUtils.newDecl('display', boxModel),
-          ChassisUtils.newDecl('visibility', 'visible'),
-          ChassisUtils.newDecl('opacity', '1')
-        ]
-      },
-
-      ellipsis: () => {
-        return [
-          ChassisUtils.newDecl('white-space', 'nowrap'),
-          ChassisUtils.newDecl('overflow', 'hidden'),
-          ChassisUtils.newDecl('text-overflow', 'ellipsis')
-        ]
-      },
-
-      setTypography: (rule, line, args) => {
-        let config = {
-          alias: 'root'
-        }
-
-        if (args) {
-          let alias = NGN.coalesce(args.find(arg => ['root', 'small', 'large', 'larger', 'largest'].includes(arg)), 'root')
-          let multiplier = NGN.coalesce(args.find(arg => typeof arg === 'number'), 1)
-          let addMargin = NGN.coalesce(args.includes('add-margin'), false)
-
-          if (!alias) {
-            console.error('[ERROR] Chassis At Rule set-typography must include a size alias. Valid values include "root", "small", "large", "larger", and "largest"')
-            return ''
-          }
-
-          config.alias = alias
-
-          if (multiplier) {
-            config.multiplier = multiplier
-          }
-
-          if (addMargin) {
-            config.addMargin = true
-          }
-        }
-
-        return this.typography.getTypographyRules(rule, line, config)
       },
 
       inlineLayout: (rule, line, args) => {
@@ -193,132 +154,179 @@ class ChassisAtRules {
           }
         }
 
-        return this.layout.getInlineElementStyles(rule, line, config)
+        return this.project.layout.getInlineElementProperties(rule, line, config)
       },
 
-      blockLayout: (rule, line, args) => {
+      lineHeight: (atRule, line, args) => {
+        // TODO: Add error handling
+        let fontSizeAlias = args
+        return this.project.typography.getCalculatedLineHeightProperty(atRule, line, fontSizeAlias)
+      },
+
+      /**
+       * @mixin mediaQuery
+       * @param  {object} line
+       * Line and column at which mixin was called
+       * @param  {object} config
+       * media query params. Shape: {name: {string}, params: {string}, nodes: {array}}
+       * @param  {array} nodes
+       * rules to add inside media query
+       * @return {CSS}
+       */
+      mediaQuery: (line, config, nodes) => {
+        let type = config[0]
+        let viewport = config[1]
+
+        if (!this.project.viewport.validateMediaQuery(line, type, viewport)) {
+          return
+        }
+
+        let dimension = NGN.coalesce(config[2], 'width')
+
+        return this.project.viewport.getMediaQuery(type, viewport, nodes, dimension)
+      },
+
+      setTypography: (atRule, line, args) => {
         let config = {
           alias: 'root'
         }
 
         if (args) {
-          let stripPadding = NGN.coalesce(args.includes('no-padding'), true)
-          let stripHorizontalPadding = NGN.coalesce(args.includes('no-horizontal-padding'), true)
-          let stripVerticalPadding = NGN.coalesce(args.includes('no-vertical-padding'), true)
-          let stripMargin = NGN.coalesce(args.includes('no-margin'), false)
+          let alias = NGN.coalesce(args.find(arg => ['root', 'small', 'large', 'larger', 'largest'].includes(arg)), 'root')
+          let multiplier = NGN.coalesce(args.find(arg => typeof arg === 'number'), 1)
+          let addMargin = NGN.coalesce(args.includes('add-margin'), false)
 
-          if (stripHorizontalPadding) {
-            config.stripHorizontalPadding = stripHorizontalPadding
+          if (!alias) {
+            console.error('[ERROR] Chassis At Rule set-typography must include a size alias. Valid values include "root", "small", "large", "larger", and "largest"')
+            return ''
           }
 
-          if (stripVerticalPadding) {
-            config.stripVerticalPadding = stripVerticalPadding
+          config.alias = alias
+
+          if (multiplier) {
+            config.multiplier = multiplier
           }
 
-          if (stripPadding || (stripHorizontalPadding && stripVerticalPadding)) {
-            delete config.stripHorizontalPadding
-            delete config.stripVerticalPadding
-            config.stripPadding = true
-          }
-
-          if (stripMargin) {
-            config.stripMargin = true
+          if (addMargin) {
+            config.addMargin = true
           }
         }
 
-        return this.layout.getBlockElementStyles(rule, line, config)
+        return this.project.typography.getCalculatedProperties(atRule, line, config)
+      },
+
+      /**
+       * @mixin show
+       * Show element
+       * Sets the following properties:
+       * display: {string};
+       * visibility: visible;
+       * opacity: 1;
+       * @param {array} args
+       * Accepts CSS box model property values
+       * @return {decls}
+       */
+      show: (line, args) => {
+        let boxModel = NGN.coalesce(args, 'block')
+        // TODO: Handle invalid box-model values
+
+        return [
+          ChassisUtils.newDecl('display', boxModel),
+          ChassisUtils.newDecl('visibility', 'visible'),
+          ChassisUtils.newDecl('opacity', '1')
+        ]
       }
     }
   }
 
   /**
-   * @method _addWidthConstraintMediaQueries
-   * Added to prevent shrinking or growing gutters when constrainWidth mixin is
-   * called on an element
-   * @param {object} input
-   * PostCss AST
-   * @param {string} selector
-   * Element to apply media queries to
-   * @private
-   */
-  _addWidthConstraintMediaQueries (input, selector) {
-    input.insertAfter(selector, ChassisUtils.newAtRule({
-      name: 'media',
-      params: `screen and (max-width: ${this.layout.minWidth}px)`,
-      nodes: [
-        ChassisUtils.newRule(selector, [
-          ChassisUtils.newDeclObj('padding-left', this.layout.getGutterLimit(this.layout.minWidth)),
-          ChassisUtils.newDeclObj('padding-right', this.layout.getGutterLimit(this.layout.minWidth))
-        ])
-      ]
-    }))
-
-    input.insertAfter(selector, ChassisUtils.newAtRule({
-      name: 'media',
-      params: `screen and (min-width: ${this.layout.maxWidth}px)`,
-      nodes: [
-        ChassisUtils.newRule(selector, [
-          ChassisUtils.newDeclObj('padding-left', this.layout.getGutterLimit(this.layout.maxWidth)),
-          ChassisUtils.newDeclObj('padding-right', this.layout.getGutterLimit(this.layout.maxWidth))
-        ])
-      ]
-    }))
-  }
-
-  /**
    * @method process
-   * Handle @chassis at-rules
+   * Process @chassis at-rule
    * @param {object} rule
    * PostCss AST
    * @param {object} input
    * PostCss AST
    */
-  process (rule, input) {
-    let line = Object.keys(rule.source.start).map(key => `${key}: ${rule.source.start[key]}`).join(', ')
-    let params = rule.params.split(' ')
+  process (atRule, input) {
+    let line = Object.keys(atRule.source.start).map(key => {
+      return `${key}: ${atRule.source.start[key]}`
+    }).join(', ')
+
+    let params = atRule.params.split(' ')
     let mixin = params[0]
     let args = params.length > 1 ? params.slice(1) : null
-    let nodes = NGN.coalesce(rule.nodes || [])
+    let nodes = NGN.coalesce(atRule.nodes, [])
+
     let css
-    let append = false
 
     switch (mixin) {
-      case 'init':
-        rule.replaceWith(this.mixins.init(line, args))
+      case 'block-layout':
+        atRule.replaceWith(this.mixins.blockLayout(atRule, line, args))
         break
 
       case 'constrain-width':
-        this._addWidthConstraintMediaQueries(input, rule.parent)
-        rule.replaceWith(this.mixins.constrainWidth(line, args && !args.includes('no-padding')))
-        break
+        input.insertAfter(atRule.parent, ChassisUtils.newAtRule({
+          name: 'media',
+          params: `screen and (max-width: ${this.project.layout.minWidth}px)`,
+          nodes: [
+            ChassisUtils.newRule(atRule.parent.selector, [
+              ChassisUtils.newDeclObj('padding-left', this.project.layout.getGutterLimit(this.project.layout.minWidth)),
+              ChassisUtils.newDeclObj('padding-right', this.project.layout.getGutterLimit(this.project.layout.minWidth))
+            ])
+          ]
+        }))
 
-      case 'media-query':
-        rule.replaceWith(this.mixins.mediaQuery(line, args, nodes))
-        break
+        input.insertAfter(atRule.parent, ChassisUtils.newAtRule({
+          name: 'media',
+          params: `screen and (min-width: ${this.project.layout.maxWidth}px)`,
+          nodes: [
+            ChassisUtils.newRule(atRule.parent.selector, [
+              ChassisUtils.newDeclObj('padding-left', this.project.layout.getGutterLimit(this.project.layout.maxWidth)),
+              ChassisUtils.newDeclObj('padding-right', this.project.layout.getGutterLimit(this.project.layout.maxWidth))
+            ])
+          ]
+        }))
 
-      case 'set-typography':
-        rule.parent.parent.append(this.mixins.setTypography(rule, line, args))
-        rule.remove()
-        break
-
-      case 'block-layout':
-        rule.parent.append(this.mixins.blockLayout(rule, line, args))
-        break
-
-      case 'inline-layout':
-        rule.parent.append(this.mixins.inlineLayout(rule, line, args))
-        break
-
-      case 'hide':
-        rule.parent.append(this.mixins.hide())
-        break
-
-      case 'show':
-        rule.parent.append(this.mixins.show(line, args))
+        atRule.replaceWith(this.mixins.constrainWidth(line))
         break
 
       case 'ellipsis':
-        rule.parent.append(this.mixins.ellipsis())
+        atRule.replaceWith(this.mixins.ellipsis())
+        break
+
+      case 'font-size':
+        input.insertAfter(atRule.parent, this.mixins.fontSize(atRule, line, args))
+        atRule.remove()
+        break
+
+      case 'generate':
+        atRule.replaceWith(this.mixins.generate(line, args))
+        break
+
+      case 'hide':
+        atRule.replaceWith(this.mixins.hide())
+        break
+
+      case 'inline-layout':
+        atRule.replaceWith(this.mixins.inlineLayout(atRule, line, args))
+        break
+
+      case 'line-height':
+        input.insertAfter(atRule.parent, this.mixins.lineHeight(atRule, line, args))
+        atRule.remove()
+        break
+
+      case 'media-query':
+        atRule.replaceWith(this.mixins.mediaQuery(line, args, nodes))
+        break
+
+      case 'set-typography':
+        input.insertAfter(atRule.parent, this.mixins.setTypography(atRule, line, args))
+        atRule.remove()
+        break
+
+      case 'show':
+        atRule.replaceWith(this.mixins.show(line, args))
         break
 
       case 'z-index':
@@ -327,7 +335,7 @@ class ChassisAtRules {
 
       default:
         console.error(`Chassis At-Rules: At-Rule ${mixin} not found`)
-        rule.remove()
+        atRule.remove()
     }
   }
 }
