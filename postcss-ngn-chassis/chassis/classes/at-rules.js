@@ -111,6 +111,28 @@ class ChassisAtRules {
         ]
       },
 
+      /**
+       * @mixin ieOnly
+       * @param  {object} line
+       * Line and column at which mixin was called
+       * @param  {array} nodes
+       * ie-specific rules
+       * @param  {number} version
+       * Earliest version of IE to support
+       * TODO: Implement version support
+       * @return {CSS}
+       */
+      ieOnly: (line, rules, version = 11) => {
+        return ChassisUtils.newAtRule({
+          name: 'media',
+          params: 'all and (-ms-high-contrast: none)',
+          nodes: rules.map(rule => {
+            rule.selector = `*::-ms-backdrop, ${rule.selector}`
+            return rule
+          })
+        })
+      },
+
       inlineLayout: (rule, line, args) => {
         let config = {
           alias: 'root'
@@ -305,6 +327,10 @@ class ChassisAtRules {
 
       case 'hide':
         atRule.replaceWith(this.mixins.hide())
+        break
+
+      case 'ie-only':
+        atRule.replaceWith(this.mixins.ieOnly(line, nodes, args))
         break
 
       case 'inline-layout':
