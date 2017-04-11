@@ -18,7 +18,7 @@ class DetailerPlugin {
 
 				switch (mixin) {
 					case 'generate':
-						console.log('hey you included detailer!');
+						console.log('Generate Detailer stylesheet');
 						break;
 					default:
 
