@@ -11,6 +11,7 @@ var fs = require('fs')
 var sourcemaps = require('gulp-sourcemaps')
 
 var chassis = require('./postcss-ngn-chassis/index.js')
+var detailer = require('./postcss-ngn-chassis-detailer/index.js')
 
 // Paths ------------------------------------------------------------------
 var SOURCE = {
@@ -24,7 +25,8 @@ gulp.task('css', function () {
   return gulp.src(SOURCE.CHASSIS + '/**/*.css')
     .pipe(sourcemaps.init())
     .pipe(postcss([
-      chassis
+      chassis,
+      detailer
       // require('autoprefixer'),
       // require('postcss-partial-import'),
       // require('postcss-mixins'),

@@ -65,7 +65,6 @@ class ChassisAtRules {
         break
 
       case 'font-size':
-        // TODO: Add error handling
         root.insertAfter(atRule.parent, this.project.mixins.fontSize(atRule.parent.selector, args))
         atRule.remove()
         break

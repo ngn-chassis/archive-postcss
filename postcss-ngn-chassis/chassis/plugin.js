@@ -4,7 +4,7 @@ const ChassisProject = require('./classes/project')
 const ChassisUtils = require('./utilities')
 const ChassisConstants = require('./constants')
 
-class ChassisPostCss {
+class ChassisPlugin {
   constructor (config) {
     this.config = NGN.coalesce(config, {})
     this.project = new ChassisProject()
@@ -51,4 +51,4 @@ class ChassisPostCss {
   }
 }
 
-module.exports = ChassisPostCss
+module.exports = ChassisPlugin
