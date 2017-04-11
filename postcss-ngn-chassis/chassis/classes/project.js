@@ -1,195 +1,16 @@
-const MustHave = require('musthave')
 const ChassisUtils = require('../utilities')
+const ChassisConstants = require('../constants')
 
 const ChassisAtRules = require('./at-rules')
 const ChassisViewport = require('./viewport')
 const ChassisTypography = require('./typography')
 const ChassisLayout = require('./layout')
 
+const SettingsModel = require('../models/project-settings')
+
 class ChassisProject extends NGN.EventEmitter {
   constructor () {
     super()
-
-    this.defaultMinWidth = 320
-		this.defaultMaxWidth = 1440
-		this.goldenRatio = 1.61803398875
-
-    this.stylesheets = [
-      'stylesheets/reset.css',
-      'stylesheets/global-modifiers.css',
-      'stylesheets/copic-greys.css'
-    ]
-
-    this.defaultViewportWidthRanges = [
-      {
-        name: 'tiny',
-        lowerBound: this.defaultMinWidth,
-        upperBound: 512
-      },
-      {
-        name: 'small',
-        lowerBound: 512,
-        upperBound: 768
-      },
-      {
-        name: 'medium',
-        lowerBound: 768,
-        upperBound: 1024
-      },
-      {
-        name: 'large',
-        lowerBound: 1024,
-        upperBound: 1200
-      },
-      {
-        name: 'huge',
-        lowerBound: 1200,
-        upperBound: this.defaultMaxWidth
-      }
-    ]
-
-    const ViewportWidthRangeModel = new NGN.DATA.Model({
-      fields: {
-        name: {
-          type: String,
-          pattern: /^\S*$/gi
-        },
-        lowerBound: {
-          type: Number,
-          validate (value) {
-            return value < this.upperBound
-          }
-        },
-        upperBound: {
-          type: Number,
-          validate (value) {
-            return value > this.lowerBound
-          }
-        }
-      }
-    })
-
-    const LayoutModel = new NGN.DATA.Model({
-      fields: {
-        gutter: {
-          type: String,
-          default: '6.18vw',
-          pattern: /^(auto|0)$|^[0-9]+.?([0-9]+)?(px|em|ex|%|in|cm|mm|pt|pc|vw|vh|rem)$/gi
-        },
-        minWidth: {
-          type: Number,
-          default: this.defaultMinWidth,
-          min: 0
-        },
-        maxWidth: {
-          type: Number,
-          default: this.defaultMaxWidth,
-          min: 0
-        }
-      }
-    })
-
-    const fontSizeModel = new NGN.DATA.Model({
-      fields: {
-        headings: {
-          type: Object,
-          default: {
-            '1': 'larger',
-            '2': 'large',
-            '3': 'root',
-            '4': 'small',
-            '5': 'small',
-            '6': 'small'
-          },
-          validate (data) {
-            let mh = new MustHave()
-
-            if (!mh.hasExactly(data, '1', '2', '3', '4', '5', '6')) {
-              return false
-            }
-
-            return Object.keys(data).every(key => {
-              return typeof data[key] === 'string'
-            })
-          }
-        },
-        formLegend: {
-          type: String,
-          default: 'large'
-        }
-      }
-    })
-
-    const TypographyModel = new NGN.DATA.Model({
-      relationships: {
-        fontSizes: fontSizeModel
-      },
-
-      fields: {
-        baseFontSize: {
-          type: Number,
-          default: 16,
-          min: 1
-        },
-        typeScaleRatio: {
-          type: Number,
-          default: this.goldenRatio,
-          min: 0
-        },
-        globalMultiplier: {
-          type: Number,
-          default: 1,
-          min: 0
-        },
-        fontWeights: {
-          type: Object,
-          default: {
-            thin: 100,
-            light: 300,
-            regular: 400,
-            semibold: 500,
-            bold: 700,
-            ultra: 900
-          },
-          validate (data) {
-            let legitimateValues = ['normal', 'bold', 'lighter', 'bolder', '100', '200', '300', '400', '500', '600', '700', '800', '900']
-
-            return Object.keys(data).every(key => {
-              return legitimateValues.includes(data[key].toString().trim().toLowerCase())
-            })
-          }
-        }
-      }
-    })
-
-    const SettingsModel = new NGN.DATA.Model({
-      relationships: {
-        viewportWidthRanges: [ViewportWidthRangeModel],
-        layout: LayoutModel,
-        typography: TypographyModel
-      },
-
-      fields: {
-        zIndex: {
-          type: Object,
-          default: {
-            min: -1000,
-            behind: -1,
-            default: 1,
-            front: 2,
-            max: 1000
-          },
-
-          validate (data) {
-            return Object.keys(data).every(key => {
-              return typeof data[key] === 'number'
-                && data[key] > (-2147483648)
-                && data[key] < 2147483647
-            })
-          }
-        }
-      }
-    })
 
     this.settings = new SettingsModel()
 
@@ -198,6 +19,7 @@ class ChassisProject extends NGN.EventEmitter {
         lowerBound: 'asc'
       })
 
+      this.stylesDirectory = this.settings.projectStylesDirectory
       this.viewport = new ChassisViewport(this.settings.data.viewportWidthRanges)
       this.typography = new ChassisTypography(this.viewport, this.settings.data.typography)
       this.layout = new ChassisLayout(this.viewport, this.typography, this.settings.data.layout)
@@ -208,7 +30,10 @@ class ChassisProject extends NGN.EventEmitter {
   _getFontWeightClasses () {
     return Object.keys(this.typography.fontWeights).map(weight => {
       return ChassisUtils.newRule(`.${weight}-weight`, [
-        ChassisUtils.newDeclObj('font-weight', `${this.typography.fontWeights[weight]} !important`)
+        ChassisUtils.newDeclObj(
+          'font-weight',
+          `${this.typography.fontWeights[weight]} !important`
+        )
       ])
     })
   }
@@ -220,10 +45,10 @@ class ChassisProject extends NGN.EventEmitter {
    */
   get coreStyles () {
     let firstRange = this.viewport.widthRanges[0]
-    let styles
+    let root
     let mediaQueries = this._buildMediaQueries()
 
-    styles = ChassisUtils.parseStylesheets(this.stylesheets)
+    root = ChassisUtils.parseStylesheets(ChassisConstants.stylesheets)
 
     .append(this._getFontWeightClasses())
 
@@ -259,14 +84,14 @@ class ChassisProject extends NGN.EventEmitter {
       ChassisUtils.newDeclObj('line-height', `${this.typography.getLineHeight('root', firstRange.upperBound)}px`)
     ]))
 
-    styles.append(this._getHeadingProperties(firstRange))
+    root.append(this._getHeadingProperties(firstRange))
     .append(this.typography.getFormLegendProperties(firstRange))
     .append(this.layout.getDefaultContainerProperties(firstRange))
     .append(this.layout.getDefaultBlockProperties(firstRange))
     .append(this.typography.getParagraphStyles(firstRange))
     .append(mediaQueries)
 
-    return styles
+    return root
   }
 
   /**

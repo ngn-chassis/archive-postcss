@@ -1,6 +1,8 @@
 require('ngn')
 require('ngn-data')
 const ChassisProject = require('./classes/project')
+const ChassisUtils = require('./utilities')
+const ChassisConstants = require('./constants')
 
 class ChassisPostCss {
   constructor (config) {
@@ -15,7 +17,7 @@ class ChassisPostCss {
    */
   _loadConfig () {
     if (!this.config.hasOwnProperty('viewportWidthRanges')) {
-      this.config.viewportWidthRanges = this.project.defaultViewportWidthRanges
+      this.config.viewportWidthRanges = ChassisConstants.defaultViewportWidthRanges
     }
 
     this.project.settings.load(this.config)
@@ -29,7 +31,7 @@ class ChassisPostCss {
    */
   _validateSettings () {
     if (!this.project.settings.valid) {
-      console.error('Chassis Configuration Error: Invalid fields')
+      console.error('[ERROR] Chassis Configuration: Invalid fields:')
       console.error(this.project.settings.invalidDataAttributes.join(', '))
     }
   }
@@ -41,9 +43,9 @@ class ChassisPostCss {
   init () {
     this._loadConfig()
 
-    return (input, output) => {
-      input.walkAtRules('chassis', (rule) => {
-        this.project.atRules.process(rule, input)
+    return (root, result) => {
+      root.walkAtRules('chassis', (rule) => {
+        this.project.atRules.process(rule, root)
       })
     }
   }

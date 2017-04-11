@@ -257,6 +257,16 @@ class ChassisAtRules {
           ChassisUtils.newDecl('visibility', 'visible'),
           ChassisUtils.newDecl('opacity', '1')
         ]
+      },
+
+      zIndex: (line, args) => {
+        let index = this.project.settings.zIndex[args[0]]
+
+        if (!index) {
+          console.error(`[ERROR] Chassis z-index: Invalid identifier. Accepted values: ${Object.keys(this.project.settings.zIndex).join(', ')}`)
+        }
+
+        return ChassisUtils.newDecl('z-index', index)
       }
     }
   }
@@ -266,10 +276,10 @@ class ChassisAtRules {
    * Process @chassis at-rule
    * @param {object} rule
    * PostCss AST
-   * @param {object} input
-   * PostCss AST
+   * @param {object} root
+   * CSS Root node
    */
-  process (atRule, input) {
+  process (atRule, root) {
     let line = Object.keys(atRule.source.start).map(key => {
       return `${key}: ${atRule.source.start[key]}`
     }).join(', ')
@@ -287,7 +297,7 @@ class ChassisAtRules {
         break
 
       case 'constrain-width':
-        input.insertAfter(atRule.parent, ChassisUtils.newAtRule({
+        root.insertAfter(atRule.parent, ChassisUtils.newAtRule({
           name: 'media',
           params: `screen and (max-width: ${this.project.layout.minWidth}px)`,
           nodes: [
@@ -298,7 +308,7 @@ class ChassisAtRules {
           ]
         }))
 
-        input.insertAfter(atRule.parent, ChassisUtils.newAtRule({
+        root.insertAfter(atRule.parent, ChassisUtils.newAtRule({
           name: 'media',
           params: `screen and (min-width: ${this.project.layout.maxWidth}px)`,
           nodes: [
@@ -317,7 +327,7 @@ class ChassisAtRules {
         break
 
       case 'font-size':
-        input.insertAfter(atRule.parent, this.mixins.fontSize(atRule, line, args))
+        root.insertAfter(atRule.parent, this.mixins.fontSize(atRule, line, args))
         atRule.remove()
         break
 
@@ -338,7 +348,7 @@ class ChassisAtRules {
         break
 
       case 'line-height':
-        input.insertAfter(atRule.parent, this.mixins.lineHeight(atRule, line, args))
+        root.insertAfter(atRule.parent, this.mixins.lineHeight(atRule, line, args))
         atRule.remove()
         break
 
@@ -347,7 +357,7 @@ class ChassisAtRules {
         break
 
       case 'set-typography':
-        input.insertAfter(atRule.parent, this.mixins.setTypography(atRule, line, args))
+        root.insertAfter(atRule.parent, this.mixins.setTypography(atRule, line, args))
         atRule.remove()
         break
 
@@ -356,7 +366,7 @@ class ChassisAtRules {
         break
 
       case 'z-index':
-        console.log('apply calculated z-index')
+        atRule.replaceWith(this.mixins.zIndex(line, args))
         break
 
       default:
