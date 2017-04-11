@@ -6,37 +6,51 @@ class ChassisMixins {
 		this.project = project
 	}
 
+	_listPropertyValues (array) {
+    return array.map(value => value === 0 ? 0 : `${value}em`).join(' ')
+  }
+
   blockLayout (args) {
-    let config = {
-      alias: 'root'
-    }
+		let alias = 'root'
+		let stripMargin = NGN.coalesce(args && args.includes('no-margin'), false)
+		let stripPadding = NGN.coalesce(args && args.includes('no-padding'), false)
+    let stripHorizontalPadding = NGN.coalesce(args && args.includes('no-horizontal-padding'), false)
+    let stripVerticalPadding = NGN.coalesce(args && args.includes('no-vertical-padding'), false)
 
-    if (args) {
-      let stripPadding = NGN.coalesce(args.includes('no-padding'), true)
-      let stripHorizontalPadding = NGN.coalesce(args.includes('no-horizontal-padding'), true)
-      let stripVerticalPadding = NGN.coalesce(args.includes('no-vertical-padding'), true)
-      let stripMargin = NGN.coalesce(args.includes('no-margin'), false)
+		let css = []
 
-      if (stripHorizontalPadding) {
-        config.stripHorizontalPadding = stripHorizontalPadding
-      }
+		this.project.viewport.widthRanges.forEach((range, index) => {
+			let fontSize = this.project.typography.getFontSize(alias, range.upperBound, true)
+			let lineHeight = this.project.typography.getLineHeight(alias, range.upperBound)
 
-      if (stripVerticalPadding) {
-        config.stripVerticalPadding = stripVerticalPadding
-      }
+			if (index === 1) {
+				if (!stripMargin) {
+					css.push(ChassisUtils.newDecl('margin', `0 0 ${lineHeight}em 0`))
+				}
 
-      if (stripPadding || (stripHorizontalPadding && stripVerticalPadding)) {
-        delete config.stripHorizontalPadding
-        delete config.stripVerticalPadding
-        config.stripPadding = true
-      }
+				if (!stripPadding) {
+					let padding = [(lineHeight / this.project.typography.typeScaleRatio) / 2, 1]
 
-      if (stripMargin) {
-        config.stripMargin = true
-      }
-    }
+					if (stripVerticalPadding) {
+						padding[0] = 0
+					}
 
-    return this.project.layout.getBlockElementProperties(config)
+					if (stripHorizontalPadding) {
+						padding[1] = 0
+					}
+
+					css.push(ChassisUtils.newDecl(
+            'padding',
+            this._listPropertyValues(padding)
+          ))
+				}
+			} else {
+				// TODO: Add media queries
+			}
+		})
+
+		console.log(css);
+		return css
   }
 
   /**
@@ -155,49 +169,84 @@ class ChassisMixins {
   }
 
   inlineLayout (rule, line, args) {
-    let config = {
-      alias: 'root'
-    }
+		let alias = 'root'
+		let stripPadding = NGN.coalesce(args && args.includes('no-padding'), false)
+		let stripMargin = NGN.coalesce(args && args.includes('no-margin'), false)
+		let stripHorizontalMargin = NGN.coalesce(args && args.includes('no-horizontal-margin'), false)
+    let stripVerticalMargin = NGN.coalesce(args && args.includes('no-vertical-margin'), false)
 
-    if (args) {
-      let stripMargin = NGN.coalesce(args.includes('no-margin'), true)
-      let stripHorizontalMargin = NGN.coalesce(args.includes('no-horizontal-margin'), true)
-      let stripVerticalMargin = NGN.coalesce(args.includes('no-vertical-margin'), true)
+		let multiLine = NGN.coalesce(args && args.includes('multi-line'), false)
+		let setHeight = NGN.coalesce(args && args.includes('set-height'), false)
 
-      let stripPadding = NGN.coalesce(args.includes('no-padding'), false)
+		let css = []
 
-      let multiLine = NGN.coalesce(args.includes('multi-line'), false)
+		this.project.viewport.widthRanges.forEach((range, index) => {
+			let fontSize = this.project.typography.getFontSize(alias, range.upperBound, true)
+      let baseLineHeight = this.project.typography.getLineHeight(alias, range.upperBound)
 
-      let setHeight = NGN.coalesce(args.includes('set-height'), false)
+			if (index === 1) {
+				if (setHeight) {
+					if (multiline) {
+						css.push(ChassisUtils.newDecl(
+              'height',
+              `${baseLineHeight}em`
+            ))
+					} else {
+						css.push(ChassisUtils.newDecl(
+              'height',
+              `${baseLineHeight * this.project.typography.typeScaleRatio}em`
+            ))
+					}
+				}
 
-      if (stripHorizontalMargin) {
-        config.stripHorizontalMargin = stripHorizontalMargin
-      }
+				if (!stripPadding) {
+          let padding = [0, baseLineHeight / 2]
 
-      if (stripVerticalMargin) {
-        config.stripVerticalMargin = stripVerticalMargin
-      }
+          if (multiLine) {
+            padding[0] = ((baseLineHeight * this.project.typography.typeScaleRatio) - baseLineHeight) / 2
+          }
 
-      if (stripMargin || (stripHorizontalMargin && stripVerticalMargin)) {
-        delete config.stripHorizontalMargin
-        delete config.stripVerticalMargin
-        config.stripMargin = true
-      }
+          css.push(ChassisUtils.newDecl(
+            'padding',
+            this._listPropertyValues(padding)
+          ))
+        }
 
-      if (stripPadding) {
-        config.stripPadding = true
-      }
+				if (!stripMargin) {
+          let margin = [0, baseLineHeight / 2, baseLineHeight, 0]
 
-      if (multiLine) {
-        config.multiLine = true
-      }
+          if (stripVerticalMargin) {
+            margin[2] = 0
+          }
 
-      if (setHeight) {
-        config.setHeight = true
-      }
-    }
+          if (stripHorizontalMargin) {
+            margin[1] = 0
+          }
 
-    return this.project.layout.getInlineElementProperties(rule, line, config)
+          css.push(ChassisUtils.newDecl(
+            'margin',
+            this._listPropertyValues(margin)
+          ))
+        }
+
+				if (multiLine) {
+          css.push(ChassisUtils.newDecl(
+            'line-height',
+            `${baseLineHeight}em`
+          ))
+        } else {
+          css.push(ChassisUtils.newDecl(
+            'line-height',
+            `${baseLineHeight * this.project.typography.typeScaleRatio}em`
+          ))
+        }
+			} else {
+				// TODO: Add media queries
+			}
+		})
+
+		console.log(css);
+		return css
   }
 
 	lineHeight (selector, args) {

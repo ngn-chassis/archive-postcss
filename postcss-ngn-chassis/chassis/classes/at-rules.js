@@ -87,7 +87,7 @@ class ChassisAtRules {
         break
 
       case 'inline-layout':
-        atRule.replaceWith(this.project.mixins.inlineLayout(atRule, line, args))
+        atRule.replaceWith(this.project.mixins.inlineLayout(args))
         break
 
       case 'line-height':
