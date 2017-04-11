@@ -259,6 +259,14 @@ class ChassisAtRules {
         ]
       },
 
+      /**
+       * @mixin z-index
+       * @param  {line} line
+       * line where mixin was called
+       * @param  {array} args
+       * arguments passed to mixin
+       * @return {decl}
+       */
       zIndex: (line, args) => {
         let index = this.project.settings.zIndex[args[0]]
 
