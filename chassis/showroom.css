@@ -6,9 +6,9 @@ h3,
 h4,
 h5,
 h6 {
-	font-weight: bold;
+	@chassis font-weight bold;
 }
 
 .showroom {
-	
+	font-family: 'Gotham', Helvetica, Arial, sans-serif;
 }

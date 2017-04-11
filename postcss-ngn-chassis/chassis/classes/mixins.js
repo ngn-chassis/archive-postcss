@@ -6,7 +6,7 @@ class ChassisMixins {
 		this.project = project
 	}
 
-  blockLayout (rule, line, args) {
+  blockLayout (args) {
     let config = {
       alias: 'root'
     }
@@ -36,7 +36,7 @@ class ChassisMixins {
       }
     }
 
-    return this.project.layout.getBlockElementProperties(rule, line, config)
+    return this.project.layout.getBlockElementProperties(config)
   }
 
   /**
@@ -47,7 +47,7 @@ class ChassisMixins {
    * Whether or not to add layout gutter to left and right
    * @return {array} of decls
    */
-  constrainWidth (line, hasPadding = true) {
+  constrainWidth (hasPadding = true) {
     let decls = [
       ChassisUtils.newDecl('width', '100%'),
       ChassisUtils.newDecl('min-width', `${this.project.layout.minWidth}px`),
@@ -74,10 +74,31 @@ class ChassisMixins {
     ]
   }
 
-  fontSize (atRule, line, args) {
+  fontSize (selector, args) {
+    let alias = NGN.coalesce(args, 'root')
+
+		return this.project.viewport.widthRanges.map((range, index) => {
+			let type = 'at'
+			let fontSize = this.project.typography.getFontSize(alias, range.upperBound)
+
+			let output = [ChassisUtils.newRule(selector, [
+				ChassisUtils.newDeclObj('font-size', `${fontSize}px`)
+			])]
+
+			if (index === 1) {
+				type = 'max'
+			} else if (index === this.project.viewport.widthRanges.length) {
+				type = 'min'
+			}
+
+			return this.project.viewport.getMediaQuery(type, range.name, output)
+		})
+  }
+
+	fontWeight (atRule, line, args) {
     // TODO: Add error handling
-    let fontSizeAlias = args
-    return this.project.typography.getCalculatedFontSizeProperty(atRule, line, fontSizeAlias)
+    let fontWeightAlias = args[0]
+    return ChassisUtils.newDecl('font-weight', this.project.typography.getFontWeight(line, fontWeightAlias))
   }
 
   /**
@@ -179,10 +200,25 @@ class ChassisMixins {
     return this.project.layout.getInlineElementProperties(rule, line, config)
   }
 
-  lineHeight (atRule, line, args) {
-    // TODO: Add error handling
-    let fontSizeAlias = args
-    return this.project.typography.getCalculatedLineHeightProperty(atRule, line, fontSizeAlias)
+	lineHeight (selector, args) {
+    let alias = NGN.coalesce(args, 'root')
+
+		return this.project.viewport.widthRanges.map((range, index) => {
+			let type = 'at'
+			let lineHeight = this.project.typography.getLineHeight(alias, range.upperBound)
+
+			let output = [ChassisUtils.newRule(selector, [
+				ChassisUtils.newDeclObj('line-height', `${lineHeight}em`)
+			])]
+
+			if (index === 1) {
+				type = 'max'
+			} else if (index === this.project.viewport.widthRanges.length) {
+				type = 'min'
+			}
+
+			return this.project.viewport.getMediaQuery(type, range.name, output)
+		})
   }
 
   /**
@@ -208,33 +244,33 @@ class ChassisMixins {
     return this.project.viewport.getMediaQuery(type, viewport, nodes, dimension)
   }
 
-  setTypography (atRule, line, args) {
-    let config = {
-      alias: 'root'
-    }
+  setTypography (selector, args) {
+		let alias = NGN.coalesce(args.find(arg => ['root', 'small', 'large', 'larger', 'largest'].includes(arg)), 'root')
+		let multiplier = NGN.coalesce(args.find(arg => typeof arg === 'number'), 1)
+		let addMargin = NGN.coalesce(args.includes('add-margin'), false)
 
-    if (args) {
-      let alias = NGN.coalesce(args.find(arg => ['root', 'small', 'large', 'larger', 'largest'].includes(arg)), 'root')
-      let multiplier = NGN.coalesce(args.find(arg => typeof arg === 'number'), 1)
-      let addMargin = NGN.coalesce(args.includes('add-margin'), false)
+		return this.project.viewport.widthRanges.map((range, index) => {
+			let type = 'at'
+			let fontSize = this.project.typography.getFontSize(alias, range.upperBound) * multiplier
+			let lineHeight = this.project.typography.getLineHeight(alias, range.upperBound) * multiplier
 
-      if (!alias) {
-        console.error('[ERROR] Chassis At Rule set-typography must include a size alias. Valid values include "root", "small", "large", "larger", and "largest"')
-        return ''
+			let output = [ChassisUtils.newRule(selector, [
+				ChassisUtils.newDeclObj('font-size', `${fontSize}px`),
+				ChassisUtils.newDeclObj('line-height', `${lineHeight}em`)
+			])]
+
+			if (addMargin) {
+				output[0].append(ChassisUtils.newDecl('margin-bottom', `${this.project.typography.getCalculatedMargin(alias, range.upperBound)}em`))
+			}
+
+			if (index === 1) {
+				type = 'max'
+			} else if (index === this.project.viewport.widthRanges.length) {
+        type = 'min'
       }
 
-      config.alias = alias
-
-      if (multiplier) {
-        config.multiplier = multiplier
-      }
-
-      if (addMargin) {
-        config.addMargin = true
-      }
-    }
-
-    return this.project.typography.getCalculatedProperties(atRule, line, config)
+			return this.project.viewport.getMediaQuery(type, range.name, output)
+		})
   }
 
   /**

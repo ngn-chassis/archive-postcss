@@ -5,7 +5,6 @@ const ChassisMixins = require('./mixins')
 class ChassisAtRules {
   constructor (project) {
     this.project = project
-    this.mixins = new ChassisMixins(this.project)
   }
 
   /**
@@ -30,7 +29,9 @@ class ChassisAtRules {
 
     switch (mixin) {
       case 'block-layout':
-        atRule.replaceWith(this.mixins.blockLayout(atRule, line, args))
+        // TODO: Add error handling
+
+        atRule.replaceWith(this.project.mixins.blockLayout(args))
         break
 
       case 'constrain-width':
@@ -56,54 +57,59 @@ class ChassisAtRules {
           ]
         }))
 
-        atRule.replaceWith(this.mixins.constrainWidth(line))
+        atRule.replaceWith(this.project.mixins.constrainWidth())
         break
 
       case 'ellipsis':
-        atRule.replaceWith(this.mixins.ellipsis())
+        atRule.replaceWith(this.project.mixins.ellipsis())
         break
 
       case 'font-size':
-        root.insertAfter(atRule.parent, this.mixins.fontSize(atRule, line, args))
+        // TODO: Add error handling
+        root.insertAfter(atRule.parent, this.project.mixins.fontSize(atRule.parent.selector, args))
         atRule.remove()
         break
 
+      case 'font-weight':
+        atRule.replaceWith(this.project.mixins.fontWeight(atRule, line, args))
+        break
+
       case 'generate':
-        atRule.replaceWith(this.mixins.generate(line, args))
+        atRule.replaceWith(this.project.mixins.generate(line, args))
         break
 
       case 'hide':
-        atRule.replaceWith(this.mixins.hide())
+        atRule.replaceWith(this.project.mixins.hide())
         break
 
       case 'ie-only':
-        atRule.replaceWith(this.mixins.ieOnly(line, nodes, args))
+        atRule.replaceWith(this.project.mixins.ieOnly(line, nodes, args))
         break
 
       case 'inline-layout':
-        atRule.replaceWith(this.mixins.inlineLayout(atRule, line, args))
+        atRule.replaceWith(this.project.mixins.inlineLayout(atRule, line, args))
         break
 
       case 'line-height':
-        root.insertAfter(atRule.parent, this.mixins.lineHeight(atRule, line, args))
+        root.insertAfter(atRule.parent, this.project.mixins.lineHeight(atRule, line, args))
         atRule.remove()
         break
 
       case 'media-query':
-        atRule.replaceWith(this.mixins.mediaQuery(line, args, nodes))
+        atRule.replaceWith(this.project.mixins.mediaQuery(line, args, nodes))
         break
 
       case 'set-typography':
-        root.insertAfter(atRule.parent, this.mixins.setTypography(atRule, line, args))
+        root.insertAfter(atRule.parent, this.project.mixins.setTypography(atRule.parent.selector, args))
         atRule.remove()
         break
 
       case 'show':
-        atRule.replaceWith(this.mixins.show(line, args))
+        atRule.replaceWith(this.project.mixins.show(line, args))
         break
 
       case 'z-index':
-        atRule.replaceWith(this.mixins.zIndex(line, args))
+        atRule.replaceWith(this.project.mixins.zIndex(line, args))
         break
 
       default:

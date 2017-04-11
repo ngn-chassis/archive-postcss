@@ -7,52 +7,52 @@ class ChassisLayout {
       typography
     }
 
-    Object.keys(settings).forEach(key => {
+    for (let key in settings) {
       this[key] = settings[key]
-    })
-  }
-
-  /**
-   * @method getMargin
-   * Get calculated GR-Typography margin-bottom value
-   * @param {string} type
-   * "container" or "block"; containers are top-level elements, blocks are
-   * children
-   * @param {string} fontSizeAlias
-   * font size alias to use as a base for calculation
-   * Accepts root, small, large, larger, largest
-   * @param {number} upperBound
-   * Upper bound of current viewport width range
-   * @return {number} in ems
-   */
-  getMargin (type, fontSizeAlias, upperBound) {
-    switch (type) {
-      case 'container':
-        return this.project.typography.getLineHeight(fontSizeAlias, upperBound, true) * this.project.typography.typeScaleRatio
-        break
-
-      case 'block':
-        return this.project.typography.getLineHeight(fontSizeAlias, upperBound, true)
-        break
-
-      default:
-        return this.project.typography.getFontSize(fontSizeAlias, upperBound, true)
     }
   }
 
-  /**
-   * @method getPadding
-   * Get calculated GR-Typography padding value (left or right)
-   * @param {string} type
-   * TODO: Add type description
-   * @param {string} fontSize
-   * Current font size type to use as a base for calculation
-   * Accepts root, small, large, larger, largest
-   * @param {number} upperBound
-   * Upper bound of current viewport width range
-   */
-  getPadding (type, fontSize, upperBound) {
-    console.log('TODO: Finish padding getter!');
+  getBlockElementProperties (config) {
+    let alias = NGN.coalesce(config.alias, 'root')
+    let stripMargin = NGN.coalesce(config.stripMargin, false)
+    let stripPadding = NGN.coalesce(config.stripPadding, false)
+    let stripVerticalPadding = NGN.coalesce(config.stripVerticalPadding, false)
+    let stripHorizontalPadding = NGN.coalesce(config.stripHorizontalPadding, false)
+
+    let css = []
+
+    this.project.viewport.widthRanges.forEach((range, index) => {
+      let fontSize = this.project.typography.getFontSize(alias, range.upperBound, true)
+      let lineHeight = this.project.typography.getLineHeight(alias, range.upperBound)
+
+      if (index === 1) {
+        if (!stripMargin) {
+          css.push(ChassisUtils.newDecl('margin', `0 0 ${lineHeight}em 0`))
+        }
+
+        if (!stripPadding) {
+          let padding = [(lineHeight / this.project.typography.typeScaleRatio) / 2, 1]
+
+          if (stripVerticalPadding) {
+            padding[0] = 0
+          }
+
+          if (stripHorizontalPadding) {
+            padding[1] = 0
+          }
+
+          css.push(ChassisUtils.newDecl(
+            'padding',
+            this._listPropertyValues(padding)
+          ))
+        }
+      } else {
+        // TODO: Add Media Queries
+      }
+    })
+
+    console.log(css);
+    return css
   }
 
   /**
@@ -93,36 +93,6 @@ class ChassisLayout {
     }
   }
 
-  /**
-   * @method getContainerStyles
-   * Get default decls for Container elements
-   * @param {string} range
-   * Current viewport width range
-   * @return {rule}
-   */
-  getDefaultContainerProperties (range) {
-    return ChassisUtils.newRule('.chassis section, .chassis nav, .chassis form', [
-      ChassisUtils.newDeclObj('margin-bottom', `${this.getMargin('container', 'root', range.upperBound)}em`)
-    ])
-  }
-
-  /**
-   * @method getBlockElementProperties
-   * Get default decls for Block elements
-   * @param {string} range
-   * Current viewport width range
-   * @return {rule}
-   */
-  getDefaultBlockProperties (range) {
-    return ChassisUtils.newRule('.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed', [
-      ChassisUtils.newDeclObj('margin-bottom', `${this.getMargin('block', 'root', range.upperBound)}em`)
-    ])
-  }
-
-  _parsePropertyValues (array) {
-    return array.map(value => value === 0 ? 0 : `${value}em`).join(' ')
-  }
-
   getInlineElementProperties (rule, line, config) {
     let alias = NGN.coalesce(config.alias, 'root')
     let stripPadding = NGN.coalesce(config.stripPadding, false)
@@ -137,7 +107,7 @@ class ChassisLayout {
 
     this.project.viewport.widthRanges.forEach((range, index) => {
       let fontSize = this.project.typography.getFontSize(alias, range.upperBound, true)
-      let baseLineHeight = this.project.typography.getLineHeight(alias, range.upperBound, true) / fontSize
+      let baseLineHeight = this.project.typography.getLineHeight(alias, range.upperBound)
 
       if (index === 1) {
         if (setHeight) {
@@ -163,7 +133,7 @@ class ChassisLayout {
 
           css.push(ChassisUtils.newDecl(
             'padding',
-            this._parsePropertyValues(padding)
+            this._listPropertyValues(padding)
           ))
         }
 
@@ -180,7 +150,7 @@ class ChassisLayout {
 
           css.push(ChassisUtils.newDecl(
             'margin',
-            this._parsePropertyValues(margin)
+            this._listPropertyValues(margin)
           ))
         }
 
@@ -204,47 +174,51 @@ class ChassisLayout {
     return css
   }
 
-  getBlockElementProperties (rule, line, config) {
-    let alias = NGN.coalesce(config.alias, 'root')
-    let stripMargin = NGN.coalesce(config.stripMargin, false)
-    let stripPadding = NGN.coalesce(config.stripPadding, false)
-    let stripVerticalPadding = NGN.coalesce(config.stripVerticalPadding, false)
-    let stripHorizontalPadding = NGN.coalesce(config.stripHorizontalPadding, false)
+  /**
+   * @method getMargin
+   * Get calculated GR-Typography margin-bottom value
+   * @param {string} type
+   * "container" or "block"; containers are top-level elements, blocks are
+   * children
+   * @param {string} fontSizeAlias
+   * font size alias to use as a base for calculation
+   * Accepts root, small, large, larger, largest
+   * @param {number} upperBound
+   * Upper bound of current viewport width range
+   * @return {number} in ems
+   */
+  getMargin (fontSizeAlias, upperBound, type) {
+    switch (type) {
+      case 'container':
+        return this.project.typography.getLineHeight(fontSizeAlias, upperBound) * this.project.typography.typeScaleRatio
+        break
 
-    let css = []
+      case 'block':
+        return this.project.typography.getLineHeight(fontSizeAlias, upperBound)
+        break
 
-    this.project.viewport.widthRanges.forEach((range, index) => {
-      let fontSize = this.project.typography.getFontSize(alias, range.upperBound, true)
-      let lineHeight = this.project.typography.getLineHeight(alias, range.upperBound, true) / fontSize
+      default:
+        return this.project.typography.getFontSize(fontSizeAlias, upperBound, true)
+    }
+  }
 
-      if (index === 1) {
-        if (!stripMargin) {
-          css.push(ChassisUtils.newDecl('margin', `0 0 ${lineHeight}em 0`))
-        }
+  /**
+   * @method getPadding
+   * Get calculated GR-Typography padding value (left or right)
+   * @param {string} type
+   * TODO: Add type description
+   * @param {string} fontSize
+   * Current font size type to use as a base for calculation
+   * Accepts root, small, large, larger, largest
+   * @param {number} upperBound
+   * Upper bound of current viewport width range
+   */
+  getPadding (type, fontSize, upperBound) {
+    console.log('TODO: Finish padding getter!');
+  }
 
-        if (!stripPadding) {
-          let padding = [(lineHeight / this.project.typography.typeScaleRatio) / 2, 1]
-
-          if (stripVerticalPadding) {
-            padding[0] = 0
-          }
-
-          if (stripHorizontalPadding) {
-            padding[1] = 0
-          }
-
-          css.push(ChassisUtils.newDecl(
-            'padding',
-            this._parsePropertyValues(padding)
-          ))
-        }
-      } else {
-        // TODO: Add Media Queries
-      }
-    })
-
-    console.log(css);
-    return css
+  _listPropertyValues (array) {
+    return array.map(value => value === 0 ? 0 : `${value}em`).join(' ')
   }
 }
 
