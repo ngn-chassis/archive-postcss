@@ -1,5 +1,6 @@
 require('ngn')
 require('ngn-data')
+
 const ChassisProject = require('./classes/project')
 const ChassisUtils = require('./utilities')
 const ChassisConstants = require('./constants')
@@ -44,8 +45,8 @@ class ChassisPlugin {
     this._loadConfig()
 
     return (root, result) => {
-      root.walkAtRules('chassis', (rule) => {
-        this.project.atRules.process(rule, root)
+      root.walkAtRules('chassis', (atRule) => {
+        this.project.atRules.process(atRule, root)
       })
     }
   }

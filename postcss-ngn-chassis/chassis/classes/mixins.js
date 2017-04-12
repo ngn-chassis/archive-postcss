@@ -116,20 +116,6 @@ class ChassisMixins {
   }
 
   /**
-   * @mixin generate
-   * Generate core stylesheet from user configuration
-   * @param  {object} line
-   * Line and column at which mixin was called
-   * @param  {array} args
-   * additional params passed to mixin
-   * @return {AST}
-   */
-  generate (line, args) {
-    // console.log(args);
-    return this.project.coreStyles
-  }
-
-  /**
    * @mixin hide
    * Hide element
    * Sets the following properties:
@@ -166,6 +152,15 @@ class ChassisMixins {
         return rule
       })
     })
+  }
+
+	/**
+   * @mixin init
+   * Generate core stylesheet from user configuration
+   * @return {AST}
+   */
+  init () {
+    return this.project.coreStyles
   }
 
   inlineLayout (rule, line, args) {

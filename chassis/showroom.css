@@ -1,15 +1,10 @@
-@chassis generate;
-@detailer generate;
+@chassis init;
+@detailer init;
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	@chassis font-weight bold;
+:root {
+	--font-family: 'Gotham', Helvetica, Arial, sans-serif;
 }
 
 .showroom {
-	font-family: 'Gotham', Helvetica, Arial, sans-serif;
+
 }

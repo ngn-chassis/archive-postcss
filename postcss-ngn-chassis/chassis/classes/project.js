@@ -36,6 +36,13 @@ class ChassisProject extends NGN.EventEmitter {
     let firstRange = this.viewport.widthRanges[0]
     let root = ChassisUtils.parseStylesheets(ChassisConstants.stylesheets)
 
+    root.append(ChassisUtils.newRule(
+      ':root',
+      Object.keys(this.typography.fontWeights).map(weight => {
+        return ChassisUtils.newDecl(`--${weight}`, this.typography.fontWeights[weight])
+      })
+    ))
+
     root.append(this._fontWeightClasses)
 
     root.append(ChassisUtils.newRule('.width-constraint', this.mixins.constrainWidth()))
