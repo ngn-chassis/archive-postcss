@@ -378,7 +378,7 @@ class ChassisCore {
 		let Detailer = this.project.plugins.get('Detailer')
 
 		if (mixin === 'import') {
-			atRule.replaceWith(ChassisUtils.parseStylesheet(`${Detailer.basePath}/${args[0]}.css`))
+			atRule.replaceWith(ChassisUtils.parseStylesheet(`${Detailer.basePath}/stylesheets/core/${args[0]}.css`))
 			return
 		}
 

@@ -4,7 +4,7 @@ class Detailer {
   }
 
   static get basePath () {
-    return '../../ngn-chassis-detailer/detailer/stylesheets/core'
+    return '../../ngn-chassis-detailer/detailer'
   }
 }
 
