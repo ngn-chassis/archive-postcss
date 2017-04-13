@@ -1,5 +1,6 @@
 @chassis init;
-@detailer init;
+
+@detailer include button;
 
 :root {
 	--font-family: 'Gotham', Helvetica, Arial, sans-serif;

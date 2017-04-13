@@ -1,7 +1,7 @@
+/* NGN Chassis PostCSS ------------------------------------------------------ */
 @charset "UTF-8";
 
-/* NGN Chassis PostCSS
- * Browser Reset -------------------------------------------------------------*/
+/* Browser Reset ------------------------------------------------------------ */
 
 *, *:before, *:after { box-sizing: border-box; }
 
@@ -42,8 +42,8 @@ a img {
 	border: none;
 }
 
-/* For IE and Opera Mini
- * Set default box model on HTML5 semantic elements */
+/* For IE and Opera Mini */
+/* Set default box model on HTML5 semantic elements */
 article,
 aside,
 details,

@@ -25,7 +25,6 @@ class ChassisAtRules {
     let nodes = NGN.coalesce(atRule.nodes, [])
 
     let { mixins } = this.project
-    let css
 
     switch (mixin) {
       case 'block-layout':
@@ -58,6 +57,12 @@ class ChassisAtRules {
         }))
 
         atRule.replaceWith(mixins.constrainWidth())
+        break
+
+      case 'end':
+        root.walkAtRules('detailer', (atRule) => {
+          ChassisUtils.printTree(atRule);
+        })
         break
 
       case 'ellipsis':

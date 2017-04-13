@@ -1,0 +1,5 @@
+.chassis .button {
+	display: inline-block;
+
+	@chassis inline-layout;
+}

@@ -11,7 +11,7 @@ var fs = require('fs')
 var sourcemaps = require('gulp-sourcemaps')
 
 var chassis = require('./postcss-ngn-chassis/index.js')
-var detailer = require('./postcss-ngn-chassis-detailer/index.js')
+var detailer = require('./ngn-chassis-detailer/index.js')
 
 // Paths ------------------------------------------------------------------
 var SOURCE = {
@@ -25,8 +25,11 @@ gulp.task('css', function () {
   return gulp.src(SOURCE.CHASSIS + '/**/*.css')
     .pipe(sourcemaps.init())
     .pipe(postcss([
-      chassis,
-      detailer
+      // require('postcss-custom-properties'),
+      // require('postcss-css-variables'),
+      chassis({
+        plugins: [detailer]
+      })
       // require('autoprefixer'),
       // require('postcss-partial-import'),
       // require('postcss-mixins'),
@@ -36,7 +39,6 @@ gulp.task('css', function () {
       // require('postcss-at-rules-variables'),
       // require('postcss-advanced-variables'),
       // require('postcss-custom-media'),
-      // require('postcss-custom-properties'),
       // require('postcss-media-minmax'),
       // require('postcss-color-function'),
       // require('postcss-nesting'),

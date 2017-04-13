@@ -5,8 +5,11 @@ class DetailerMixins {
 		this.project = project
 	}
 
-	init (args) {
-		// console.log('args: ', args)
+	include (components) {
+		return components.map(component => this.project.components.get(component))
+	}
+
+	init () {
 		return this.project.coreStyles
 	}
 }

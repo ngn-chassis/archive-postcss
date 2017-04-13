@@ -1,0 +1,9 @@
+font-family: var(--form-legend-fonts, inherit);
+font-weight: var(--form-legend-weight, inherit);
+font-style: var(--form-legend-style, inherit);
+font-variant: var(--form-legend-variant, inherit);
+
+text-decoration: var(--form-legend-decoration, inherit);
+text-transform: var(--form-legend-transform, inherit);
+
+color: var(--form-legend-color, inherit);

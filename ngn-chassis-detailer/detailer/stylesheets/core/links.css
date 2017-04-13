@@ -1,0 +1,61 @@
+.chassis a {
+	font-family: var(--link-fonts, inherit);
+	font-weight: var(--link-weight, inherit);
+	font-style: var(--link-style, inherit);
+	font-variant: var(--link-variant, inherit);
+
+	text-decoration: var(--link-decoration, inherit);
+	text-transform: var(--link-transform, inherit);
+
+	color: var(--link-color, inherit);
+}
+
+.chassis a:visited {
+	font-family: var(--visited-link-fonts, inherit);
+	font-weight: var(--visited-link-weight, inherit);
+	font-style: var(--visited-link-style, inherit);
+	font-variant: var(--visited-link-variant, inherit);
+
+	text-decoration: var(--visited-link-decoration, inherit);
+	text-transform: var(--visited-link-transform, inherit);
+
+	color: var(--visited-link-color, inherit);
+}
+
+.chassis a:hover {
+	font-family: var(--hover-link-fonts, inherit);
+	font-weight: var(--hover-link-weight, inherit);
+	font-style: var(--hover-link-style, inherit);
+	font-variant: var(--hover-link-variant, inherit);
+
+	text-decoration: var(--hover-link-decoration, inherit);
+	text-transform: var(--hover-link-transform, inherit);
+
+	color: var(--hover-link-color, inherit);
+}
+
+.chassis a:active {
+	font-family: var(--active-link-fonts, inherit);
+	font-weight: var(--active-link-weight, inherit);
+	font-style: var(--active-link-style, inherit);
+	font-variant: var(--active-link-variant, inherit);
+
+	text-decoration: var(--active-link-decoration, inherit);
+	text-transform: var(--active-link-transform, inherit);
+
+	color: var(--active-link-color, inherit);
+}
+
+.chassis a.disabled {
+	font-family: var(--disabled-link-fonts, inherit);
+	font-weight: var(--disabled-link-weight, inherit);
+	font-style: var(--disabled-link-style, inherit);
+	font-variant: var(--disabled-link-variant, inherit);
+
+	text-decoration: var(--disabled-link-decoration, inherit);
+	text-transform: var(--disabled-link-transform, inherit);
+
+	color: var(--disabled-link-color, inherit);
+
+	pointer-events: none;
+}

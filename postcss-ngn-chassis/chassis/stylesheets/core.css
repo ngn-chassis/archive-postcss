@@ -1,0 +1,81 @@
+@chassis import reset;
+
+:root {
+	@chassis import copic-greys;
+	@chassis generate font-weight-vars;
+	@detailer import default-theme;
+}
+
+@detailer import html;
+@chassis import global-modifiers;
+
+@chassis generate font-weight-classes;
+@chassis generate width-constraint;
+
+.chassis {
+	@chassis generate root-container-styles;
+	@detailer import root-container;
+}
+
+@detailer import links;
+
+.chassis h1 {
+	@chassis generate default-h1-styles;
+	@detailer import h1;
+}
+
+.chassis h2 {
+	@chassis generate default-h2-styles;
+	@detailer import h2;
+}
+
+.chassis h3 {
+	@chassis generate default-h3-styles;
+	@detailer import h3;
+}
+
+.chassis h4 {
+	@chassis generate default-h4-styles;
+	@detailer import h4;
+}
+
+.chassis h5 {
+	@chassis generate default-h5-styles;
+	@detailer import h5;
+}
+
+.chassis h6 {
+	@chassis generate default-h6-styles;
+	@detailer import h6;
+}
+
+.chassis legend {
+	@chassis generate default-form-legend-styles;
+	@detailer import form-legend;
+}
+
+.chassis section,
+.chassis nav,
+.chassis form {
+	@chassis generate default-container-styles;
+}
+
+.chassis nav section,
+.chassis section nav,
+.chassis nav nav,
+.chassis article,
+.chassis fieldset,
+.chassis figure,
+.chassis pre,
+.chassis blockquote,
+.chassis table,
+.chassis canvas,
+.chassis embed {
+	@chassis generate default-block-styles;
+}
+
+.chassis p {
+	@chassis generate default-paragraph-styles;
+}
+
+@chassis generate default-media-queries;

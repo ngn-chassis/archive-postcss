@@ -172,14 +172,6 @@ class ChassisConstants {
       }
     ]
 	}
-
-	static get stylesheets () {
-		return [
-      'stylesheets/reset.css',
-      'stylesheets/global-modifiers.css',
-      'stylesheets/copic-greys.css'
-    ]
-	}
 }
 
 module.exports = ChassisConstants

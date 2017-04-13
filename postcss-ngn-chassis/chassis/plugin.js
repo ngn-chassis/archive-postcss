@@ -5,10 +5,16 @@ const ChassisProject = require('./classes/project')
 const ChassisUtils = require('./utilities')
 const ChassisConstants = require('./constants')
 
-class ChassisPlugin {
+class ChassisPostCss {
   constructor (config) {
     this.config = NGN.coalesce(config, {})
-    this.project = new ChassisProject()
+    this.plugins = null
+
+    if (this.config.hasOwnProperty('plugins')) {
+      this.plugins = config.plugins
+    }
+
+    this.project = new ChassisProject(this.plugins)
   }
 
   /**
@@ -17,6 +23,10 @@ class ChassisPlugin {
    * @private
    */
   _loadConfig () {
+    if (this.config.plugins) {
+      delete this.config.plugins
+    }
+
     if (!this.config.hasOwnProperty('viewportWidthRanges')) {
       this.config.viewportWidthRanges = ChassisConstants.defaultViewportWidthRanges
     }
@@ -52,4 +62,4 @@ class ChassisPlugin {
   }
 }
 
-module.exports = ChassisPlugin
+module.exports = ChassisPostCss

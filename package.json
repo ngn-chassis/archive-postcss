@@ -25,5 +25,8 @@
     "postcss-functions": "^2.1.0",
     "postcss-import": "^8.1.2",
     "precss": "^1.4.0"
+  },
+  "devDependencies": {
+    "postcss-css-variables": "^0.7.0"
   }
 }

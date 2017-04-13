@@ -1,20 +1,14 @@
-const DetailerUtils = require('../utilities')
-const DetailerConstants = require('../constants')
 const DetailerAtRules = require('./at-rules')
 const DetailerMixins = require('./mixins')
+const DetailerComponents = require('./components')
 
 class DetailerProject extends NGN.EventEmitter {
 	constructor () {
 		super()
 
+		this.components = new DetailerComponents(this)
 		this.mixins = new DetailerMixins(this)
 		this.atRules = new DetailerAtRules(this)
-	}
-
-	get coreStyles () {
-		let root = DetailerUtils.parseStylesheets(DetailerConstants.stylesheets)
-
-		return root
 	}
 }
 

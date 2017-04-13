@@ -1,0 +1,9 @@
+font-family: var(--h1-fonts, inherit);
+font-weight: var(--h1-weight, inherit);
+font-style: var(--h1-style, inherit);
+font-variant: var(--h1-variant, inherit);
+
+text-decoration: var(--h1-decoration, inherit);
+text-transform: var(--h1-transform, inherit);
+
+color: var(--h1-color, inherit);
