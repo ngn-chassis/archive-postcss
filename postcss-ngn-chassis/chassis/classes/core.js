@@ -231,7 +231,7 @@ class ChassisCore {
 			}
 
 			if (atRule.name === 'detailer' && plugins.includes('Detailer')) {
-				this.processDetailerMixin(atRule, mixin, args)
+				this.processDetailerAtRule(atRule, mixin, args)
 			} else {
 				atRule.remove()
 			}
@@ -374,7 +374,7 @@ class ChassisCore {
 		}
 	}
 
-	processDetailerMixin (atRule, mixin, args) {
+	processDetailerAtRule (atRule, mixin, args) {
 		let Detailer = this.project.plugins.get('Detailer')
 
 		if (mixin === 'import') {

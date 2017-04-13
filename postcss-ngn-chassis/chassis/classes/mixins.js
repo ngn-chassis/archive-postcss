@@ -80,6 +80,10 @@ class ChassisMixins {
     return decls
   }
 
+	disableTextSelection () {
+		return ChassisUtils.parseStylesheet('stylesheets/mixins/disable-text-selection.css')
+	}
+
   ellipsis () {
     return [
       ChassisUtils.newDecl('white-space', 'nowrap'),
@@ -163,7 +167,7 @@ class ChassisMixins {
     return this.project.coreStyles
   }
 
-  inlineLayout (rule, line, args) {
+  inlineLayout (args) {
 		let alias = 'root'
 		let stripPadding = NGN.coalesce(args && args.includes('no-padding'), false)
 		let stripMargin = NGN.coalesce(args && args.includes('no-margin'), false)

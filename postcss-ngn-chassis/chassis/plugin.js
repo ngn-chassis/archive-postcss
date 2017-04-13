@@ -58,6 +58,12 @@ class ChassisPostCss {
       root.walkAtRules('chassis', (atRule) => {
         this.project.atRules.process(atRule, root)
       })
+
+      if (this.project.plugins.includes('Detailer')) {
+        root.walkAtRules('detailer', (atRule) => {
+          this.project.plugins.get('Detailer').atRules.process(atRule, root)
+        })
+      }
     }
   }
 }

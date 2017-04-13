@@ -1,4 +1,3 @@
-const DetailerUtils = require('../utilities')
 const DetailerButtonComponent = require('./ui-components/button')
 
 class DetailerComponents {
@@ -11,7 +10,19 @@ class DetailerComponents {
 	}
 
 	get button () {
-		return DetailerUtils.parseStylesheet('stylesheets/ui-components/button.css')
+		let styles = this.project.utils.parseStylesheet(`${this.project.basePath}/stylesheets/ui-components/button.css`)
+
+		styles.walkAtRules((atRule) => {
+			if (atRule.name === 'chassis') {
+				this.project.chassis.atRules.process(atRule, styles)
+			}
+
+			if (atRule.name === 'detailer') {
+				this.project.atRules.process(atRule, styles)
+			}
+		})
+
+		return styles
 	}
 }
 

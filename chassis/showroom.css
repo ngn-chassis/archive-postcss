@@ -4,6 +4,218 @@
 	--font-family: 'Gotham', Helvetica, Arial, sans-serif;
 }
 
-.showroom {
+@detailer include button;
 
+.showroom {
+	/* Account for sticky footer */
+	padding-bottom: 3.618em;
+}
+
+/* Component: Header -------------------------------------------------------- */
+.showroom > header {
+	padding: 1.46em 0 .90169942em;
+	border-bottom: 4px solid var(--grey-n00);
+}
+
+.showroom > header h1 {
+	flex: 1;
+	margin: 0;
+
+	@chassis set-typography large;
+	color: var(--grey-n05);
+}
+
+.showroom > header .links {
+	display: flex;
+	align-items: center;
+}
+
+.showroom > header .links a {
+	margin-left: 1em;
+}
+
+.showroom > header .links a:first-child {
+	margin-left: 0;
+}
+
+@chassis media-query min medium {
+	.showroom > header {
+		padding-top: 2.36em;
+	}
+
+	.showroom > header .width-constraint {
+		display: flex;
+	}
+}
+
+/* End: Header */
+
+/* Component: Sidebar ------------------------------------------------------- */
+.showroom .sidebar {
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+
+	margin: 0;
+	@chassis hide;
+}
+
+.showroom .sidebar nav a {
+	display: block;
+	@chassis inline-layout no-margin;
+}
+
+.showroom .sidebar nav a:not(:first-child) {
+	box-shadow: 0 -1px 0 0 var(--grey-n02);
+}
+
+.showroom .sidebar nav a:hover {
+	background: var(--hover-button-bg-color, transparent);
+	box-shadow: none;
+
+	color: var(--white);
+	text-decoration: none;
+}
+
+.showroom .sidebar nav a:hover + a {
+	box-shadow: none;
+}
+
+.showroom .sidebar nav a:active {
+	background: var(--active-button-bg-color);
+}
+
+@chassis media-query min medium {
+	.showroom .sidebar {
+		flex: 1 0 25%;
+		@chassis show;
+		@chassis block-layout no-padding;
+	}
+}
+
+/* End: Sidebar */
+
+/* Component: Content ------------------------------------------------------- */
+.showroom .content > section h1 {
+	box-shadow: inset 0 -1px 0 0 var(--grey-n03);
+}
+
+@chassis media-query min medium {
+	.showroom .content {
+		padding: 0 0 0 3.82vw;
+	}
+}
+
+/* End: Content */
+
+/* Component: Footer -------------------------------------------------------- */
+.showroom > footer {
+	display: block;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	padding: 1em 0;
+
+	background: var(--white);
+	box-shadow: inset 0 1px 0 0 var(--grey-n05);
+
+	text-align: center;
+}
+
+.range {
+	@chassis hide;
+	font-weight: var(--bold);
+}
+
+@chassis media-query below tiny {
+	.below-min.range {
+		@chassis show inline;
+	}
+}
+
+@chassis media-query at tiny {
+	.tiny.range {
+		@chassis show inline;
+	}
+}
+
+@chassis media-query at small {
+	.small.range {
+		@chassis show inline;
+	}
+}
+
+@chassis media-query at medium {
+	.medium.range {
+		@chassis show inline;
+	}
+}
+
+@chassis media-query at large {
+	.large.range {
+		@chassis show inline;
+	}
+}
+
+@chassis media-query at huge {
+	.huge.range {
+		@chassis show inline;
+	}
+}
+
+@chassis media-query above huge {
+	.above-max.range {
+		@chassis show inline;
+	}
+}
+
+/* End: Footer */
+
+/* Component: Code Block ---------------------------------------------------- */
+pre.code {
+	@chassis block-layout;
+	background: #fafafa;
+	box-shadow: 0 0 0 1px var(--grey-n03);
+	border-radius: 0 var(--default-border-radius) var(--default-border-radius) 0;
+
+	font-family: Consolas, Courier New, monospace;
+
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+pre.code:before {
+	display: block;
+	color: var(--grey-n05);
+}
+
+pre.code.html:before {
+	content: 'HTML:';
+}
+
+pre.sass.code:before {
+	content: 'SASS:';
+}
+
+pre.javascript.code:before {
+	content: 'JavaScript:';
+}
+
+/* End: Code Block */
+
+/* Singletons --------------------------------------------------------------- */
+main {
+	padding-top: 2em;
+	@chassis constrain-width;
+}
+
+@chassis media-query min medium {
+	main {
+		display: flex;
+		align-items: flex-start;
+
+		padding-top: 3.82em;
+	}
 }

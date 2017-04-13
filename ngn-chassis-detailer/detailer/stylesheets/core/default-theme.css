@@ -11,9 +11,10 @@
 
 /* Global ------------------------------------------------------------------- */
 
---root-bg-color     : var(--white);
---text-color        : rgba(68,68,68,1);
---tile-gutter-color : transparent;
+--root-bg-color         : var(--white);
+--text-color            : rgba(68,68,68,1);
+--tile-gutter-color     : transparent;
+--default-border-radius : 0.240625em;
 
 
 /* Typography --------------------------------------------------------------- */
@@ -49,22 +50,29 @@
 --h5-weight        : var(--h4-weight);
 --h6-weight        : var(--h4-weight);
 
-/*
-// :: Buttons ------------------------------------------------------------------
---default-button-fonts                    : --font-family                !default;
---default-button-text-color               : rgb(255,255,255)            !default;
---default-button-font-weight              : --regular                    !default;
---default-button-font-style               : normal                      !default;
---default-button-font-variant             : normal                      !default;
---default-button-text-decoration          : none                        !default;
---default-button-text-transform           : none                        !default;
 
---default-button-bg-color                 : --blue                       !default;
+/* Buttons ------------------------------------------------------------------ */
+
+--button-bg-color           : var(--blue);
+--button-border-radius      : var(--default-border-radius);
+--button-text-color         : var(--white);
+
+--visited-button-text-color : var(--white);
+
+--hover-button-bg-color     : rgb(0,162,245);
+--hover-button-text-color   : var(--button-text-color);
+
+--active-button-bg-color    : rgb(0,145,220);
+--active-button-text-color  : var(--button-text-color);
+
+--disabled-button-opacity   : 0.382;
+/*
+
 
 --default-button-has-border               : false                       !default;
 --default-button-border-thickness         : 0px                         !default;
 --default-button-border-color             : transparent                 !default;
---default-button-border-radius            : --default-border-radius      !default;
+
 
 --default-button-box-shadow               : ()                          !default;
 // Example:
@@ -97,7 +105,7 @@
 --hover-default-button-text-decoration    : none                        !default;
 --hover-default-button-text-transform     : none                        !default;
 
---hover-default-button-bg-color           : lighten(--default-button-bg-color, 3%) !default;
+
 
 --hover-default-button-has-border         : false                       !default;
 --hover-default-button-border-thickness   : 0px                         !default;

@@ -7,26 +7,10 @@
 
     <title>NGN Chassis Showroom</title>
 
-    <!-- <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script> -->
-
-    <!-- <script src="lib/ajax.js"></script>
-    <script src="lib/ready.js"></script> -->
-
-    <!-- Keep the SVG in the head (not body) to prevent FOUC -->
-    <!-- <script src="lib/svg.js"></script> -->
-
-    <!-- <script src="https://cdn.jsdelivr.net/webcomponentsjs/latest/webcomponents.min.js"></script>
-
-    <script src="https://cdn.author.io/ngn/latest/chassis.min.js"></script>
-    <script src="https://cdn.author.io/chassis/components/latest/chassis-cycle.min.js"></script>
-    <script src="https://cdn.author.io/chassis/components/latest/chassis-overlay.min.js"></script> -->
-
     <link rel="stylesheet" href="css/showroom.css">
-
   </head>
 
   <body class="ngn chassis showroom">
-
 		<header>
       <div class="width-constraint">
         <h1>NGN Chassis Showroom</h1>
@@ -38,7 +22,36 @@
     </header>
 
 		<main>
-			<div class="content width-constraint">
+      <aside class="sidebar">
+        <nav>
+          <a href="#typography">
+            Typography
+          </a>
+          <a href="#buttons">
+            Buttons
+          </a>
+          <a href="#tags">
+            Tags
+          </a>
+          <a href="#toolbars">
+            Toolbars
+          </a>
+          <a href="#table">
+            Table
+          </a>
+          <a href="#flex_tiles">
+            Flex Tiles
+          </a>
+          <a href="#modals">
+            Modal Window
+          </a>
+          <a class="disabled" href="javascript:;">
+            A Disabled Link
+          </a>
+        </nav>
+      </aside>
+
+			<div class="content">
 
 				<section id="typography" class="typography">
           <h1>Chassis-PostCss</h1>
@@ -106,8 +119,123 @@
           </p>
         </section>
 
+        <section id="buttons" class="buttons">
+          <h1>Buttons</h1>
+
+          <section class="default buttons">
+            <a class="button" href="#">Default Button</a>
+            <!-- Disabled Button -->
+            <a class="disabled button" href="#">Disabled Button</a>
+            <pre class="html code">&lt;a class="button" href="/url">
+  Default Button
+&lt;/a>
+or
+&lt;button>
+  Default Button
+&lt;/button>
+</pre>
+
+            <!-- Create a button without default .button class -->
+            <a class="custom-button" href="#">Button with Custom Class</a>
+            <a class="disabled custom-button" href="#">Disabled Button with Custom Class</a>
+            <pre class="html code">&lt;a class="custom-class" href="/url">
+  Button with Custom Class
+&lt;/a></pre>
+            <pre class="sass code">.custom-class {
+  @extend %chassis-button;
+  // additional styles
+}</pre>
+          </section>
+
+          <section class="custom buttons">
+            <section>
+              <h2>Custom Buttons</h2>
+              <a class="outlined button" href="#">Outlined Button</a>
+              <a class="disabled outlined button" href="#">Outlined Button</a>
+              <pre class="html code">&lt;a class="outlined button" href="/url">
+  Outlined Button
+&lt;/a></pre>
+            <pre class="sass code">.outlined.button {
+  @include chassis-button((
+    default: (
+      bg-color: #FFF,
+      text-color: #77787C,
+      has-border: true,
+      border-thickness: 2px,
+      border-color: #D1D2D4
+    ),
+    hover: (
+      bg-color: #E2E3E5,
+      text-color: #77787C
+    ),
+    active: (
+      bg-color: #DADBDD,
+      text-color: #77787C
+    )
+  ));
+}</pre>
+            </section>
+
+            <section>
+              <h2>More Custom Buttons</h2>
+              <a class="button with-shadow" href="#">Button with Shadow</a>
+              <a class="disabled button with-shadow" href="#">Disabled Button with Shadow</a>
+
+              <br>
+              <!-- Button with custom modifier class -->
+              <a class="green button" href="#">Button with Modifier</a>
+              <a class="disabled green button" href="#">Disabled Button with Modifier</a>
+
+              <br>
+              <!-- Button with Gradient Bevel -->
+              <a class="beveled button" href="#">Beveled Button</a>
+              <a class="disabled beveled button" href="#">Disabled Beveled Button</a>
+
+              <!-- <div class="button-bar">
+                <a class="button" href="#">Button 1</a>
+                <a class="button" href="#">Button 2</a>
+                <a class="button" href="#">Button 3</a>
+              </div> -->
+            </section>
+          </section>
+        </section>
+
 			</div>
 		</main>
+
+    <footer>
+      <div class="width-constraint">
+        <span class="label">Viewport Width Range:</span>
+
+        <span class="below-min range">
+          Below min: <= 319px
+        </span>
+
+        <span class="tiny range">
+          Tiny: 320 - 511px
+        </span>
+
+        <span class="small range">
+          Small: 512 - 767px
+        </span>
+
+        <span class="medium range">
+          Medium: 768 - 1023px
+        </span>
+
+        <span class="large range">
+          Large: 1024 - 1199px
+        </span>
+
+        <span class="huge range">
+          Huge: 1200 - 1440px (Max)
+        </span>
+
+        <span class="above-max range">
+          Above max: >= 1441px
+        </span>
+      </div>
+    </footer>
 
 	</body>
 

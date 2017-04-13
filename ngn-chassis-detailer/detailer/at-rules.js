@@ -19,10 +19,6 @@ class DetailerAtRules {
 				atRule.replaceWith(mixins.include(args))
 				break
 
-			case 'init':
-        atRule.replaceWith(mixins.init())
-        break
-
 			default:
 				console.error(`Detailer At-Rules: At-Rule ${mixin} not found`)
 				atRule.remove()

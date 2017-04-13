@@ -59,6 +59,10 @@ class ChassisAtRules {
         atRule.replaceWith(mixins.constrainWidth())
         break
 
+      case 'disable-text-selection':
+        atRule.replaceWith(mixins.disableTextSelection())
+        break
+
       case 'end':
         root.walkAtRules('detailer', (atRule) => {
           ChassisUtils.printTree(atRule);

@@ -3,7 +3,7 @@ const ChassisUtils = require('../utilities')
 class ChassisPlugins {
 	constructor (project, plugins) {
 		this.project = project
-		this.plugins = plugins
+		this.plugins = plugins ? plugins.map(plugin => plugin.init(plugin.name, plugin.basePath, project, ChassisUtils)) : []
 	}
 
 	get (pluginName) {
@@ -11,7 +11,7 @@ class ChassisPlugins {
 	}
 
 	includes (pluginName) {
-		return this.plugins && this.plugins.some(plugin => plugin.name === pluginName)
+		return this.plugins.some(plugin => plugin.name === pluginName)
 	}
 }
 
