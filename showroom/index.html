@@ -142,8 +142,8 @@ or
   Button with Custom Class
 &lt;/a></pre>
             <pre class="sass code">.custom-class {
-  @extend %chassis-button;
-  // additional styles
+  @detailer extend button;
+  /* additional styles */
 }</pre>
           </section>
 
@@ -156,23 +156,23 @@ or
   Outlined Button
 &lt;/a></pre>
             <pre class="sass code">.outlined.button {
-  @include chassis-button((
-    default: (
+  @detailer extend button({
+    default: {
       bg-color: #FFF,
       text-color: #77787C,
       has-border: true,
       border-thickness: 2px,
       border-color: #D1D2D4
-    ),
-    hover: (
+    },
+    hover: {
       bg-color: #E2E3E5,
       text-color: #77787C
-    ),
-    active: (
+    },
+    active: {
       bg-color: #DADBDD,
       text-color: #77787C
-    )
-  ));
+    }
+  });
 }</pre>
             </section>
 
@@ -190,14 +190,224 @@ or
               <!-- Button with Gradient Bevel -->
               <a class="beveled button" href="#">Beveled Button</a>
               <a class="disabled beveled button" href="#">Disabled Beveled Button</a>
-
-              <!-- <div class="button-bar">
-                <a class="button" href="#">Button 1</a>
-                <a class="button" href="#">Button 2</a>
-                <a class="button" href="#">Button 3</a>
-              </div> -->
             </section>
           </section>
+        </section>
+
+        <section id="tags" class="tags">
+          <h1>Tags</h1>
+          <p>
+            Tags display inline with text: <span class="tag">Default Tag</span> They can be customized or extended as shown below. <span class="cool tag">Cool!</span>
+          </p>
+          <pre class="html code">&lt;span class="cool tag" href="/url">
+  Cool!
+&lt;/span></pre>
+        <pre class="css code">.cool.tag {
+  @detailer extend tag({
+    default: {
+      bg-color: var(--var-name)
+    }
+  });
+}</pre>
+        </section>
+
+        <section id="table" class="table">
+          <h1>Table</h1>
+          <p>
+            Basic Golden Ratio Typography-compliant table component. You can turn the default border styling off and style table cells manually if desired. Ellipsis will work on all table cells.
+          </p>
+          <p>
+            You can optionally use the <code>stack-below</code> mixin to cause the table layout to stack below a specified breakpoint. For example:
+          </p>
+          <pre class="sass code">table {
+  @detailer table stack-below small;
+}</pre>
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  Header 1 has ellipsis
+                </th>
+                <th>
+                  Header 2
+                </th>
+                <th>
+                  Header 3
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  Content 1
+                </td>
+                <td>
+                  Content 2
+                </td>
+                <td>
+                  Content 3
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Content 1
+                </td>
+                <td>
+                  Content 2
+                </td>
+                <td>
+                  Content 3
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Content 1
+                </td>
+                <td>
+                  Content 2 is longer, and will wrap
+                </td>
+                <td>
+                  Content 3
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Content 1
+                </td>
+                <td>
+                  Content 2
+                </td>
+                <td>
+                  Content 3
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Content 1
+                </td>
+                <td>
+                  Content 2
+                </td>
+                <td>
+                  Content 3
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3">
+                  Footer 1
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </section>
+
+        <section id="forms" class="forms">
+          <h1>Forms</h1>
+          <form>
+            <fieldset>
+              <legend>Fieldset Legend</legend>
+
+              <div class="text field">
+                <label for="textfield">Text Input</label>
+                <div class="input">
+                  <input id="textfield" type="text" name="textfield" value="" required>
+                </div>
+              </div>
+
+              <div class="textarea field">
+                <label for="textarea">Textarea</label>
+                <div class="input">
+                  <textarea id="textarea" name="textarea" rows="3" required></textarea>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="optional text field">
+                  <label for="numberfield">Number Input</label>
+                  <div class="input">
+                    <input id="numberfield" type="number" name="numberfield" value="">
+                  </div>
+                </div>
+                <div class="text field">
+                  <label for="datefield">Date Input</label>
+                  <div class="input">
+                    <input id="datefield" type="date" name="datefield" value="" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="group">
+                  <div class="checkbox field">
+                    <input id="checkbox_1" type="checkbox" required>
+                    <label for="checkbox_1">Checkbox</label>
+                  </div>
+                  <div class="checkbox field">
+                    <input id="checkbox_2" type="checkbox" required>
+                    <label for="checkbox_2">Checkbox</label>
+                  </div>
+                  <div class="checkbox field">
+                    <input id="checkbox_3" type="checkbox" required>
+                    <label for="checkbox_3">Checkbox</label>
+                  </div>
+                </div>
+                <div class="group">
+                  <div class="radio field">
+                    <input id="radio_1" type="radio" name="radios" required>
+                    <label for="radio_1">Radio Button</label>
+                  </div>
+                  <div class="radio field">
+                    <input id="radio_2" type="radio" name="radios" required>
+                    <label for="radio_2">Radio Button</label>
+                  </div>
+                  <div class="radio field">
+                    <input id="radio_3" type="radio" name="radios" required>
+                    <label for="radio_3">Radio Button</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text field">
+                <label for="browser">Input with Additional Tools</label>
+                <div class="input">
+                  <input id="browser" type="text" name="browser" value="" required>
+                  <a class="button" href="javascript:;">
+                    Add
+                  </a>
+                </div>
+              </div>
+
+              <div class="browser field">
+                <label for="browser_input">Browser Field</label>
+                <div class="input">
+                  <div class="browser">
+                    <input id="browser_input" type="text" placeholder="Enter a file name or click Browse&hellip;">
+                    <a class="button">
+                      Browse&hellip;
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="browser field">
+                <label for="browser_input">Browser Field with Multiple Inputs</label>
+                <div class="input">
+                  <div class="browser">
+                    <input id="browser_input_1" type="text" placeholder="Input 1">
+                    <input id="browser_input_2" type="text" placeholder="Input 2">
+                    <input id="browser_input_3" type="text" placeholder="Input 3">
+                    <a class="button">
+                      Browse&hellip;
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+            </fieldset>
+            <button type="submit">Submit</button>
+          </form>
         </section>
 
 			</div>

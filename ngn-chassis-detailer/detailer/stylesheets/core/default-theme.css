@@ -66,10 +66,8 @@
 --active-button-text-color  : var(--button-text-color);
 
 --disabled-button-opacity   : 0.382;
-/*
 
-
---default-button-has-border               : false                       !default;
+/*--default-button-has-border               : false                       !default;
 --default-button-border-thickness         : 0px                         !default;
 --default-button-border-color             : transparent                 !default;
 
@@ -79,79 +77,15 @@
 // --default-button-box-shadow : (
 // 	3px 3px 3px 3px black,
 // 	-3px -3px 3px 3px red
-// );
-
---visited-default-button-fonts            : --font-family                !default;
---visited-default-button-text-color       : --default-button-text-color  !default;
---visited-default-button-font-weight      : --regular                    !default;
---visited-default-button-font-style       : normal                      !default;
---visited-default-button-font-variant     : normal                      !default;
---visited-default-button-text-decoration  : none                        !default;
---visited-default-button-text-transform   : none                        !default;
-
---visited-default-button-bg-color         : --default-button-bg-color    !default;
-
---visited-default-button-has-border       : false                       !default;
---visited-default-button-border-thickness : 0px                         !default;
---visited-default-button-border-color     : transparent                 !default;
-
---visited-default-button-box-shadow       : ()                          !default;
-
---hover-default-button-fonts              : --font-family                !default;
---hover-default-button-text-color         : --default-button-text-color  !default;
---hover-default-button-font-weight        : --regular                    !default;
---hover-default-button-font-style         : normal                      !default;
---hover-default-button-font-variant       : normal                      !default;
---hover-default-button-text-decoration    : none                        !default;
---hover-default-button-text-transform     : none                        !default;
+// );*/
 
 
+/* Tags --------------------------------------------------------------------- */
+--tag-border-radius : var(--default-border-radius);
+--tag-bg-color      : var(--grey-n05);
+--tag-text-color    : var(--white);
 
---hover-default-button-has-border         : false                       !default;
---hover-default-button-border-thickness   : 0px                         !default;
---hover-default-button-border-color       : transparent                 !default;
-
---hover-default-button-box-shadow         : ()                          !default;
-
---active-default-button-fonts             : --font-family                !default;
---active-default-button-text-color        : --default-button-text-color  !default;
---active-default-button-font-weight       : --regular                    !default;
---active-default-button-font-style        : normal                      !default;
---active-default-button-font-variant      : normal                      !default;
---active-default-button-text-decoration   : none                        !default;
---active-default-button-text-transform    : none                        !default;
-
---active-default-button-bg-color          : darken(--default-button-bg-color, 2%) !default;
-
---active-default-button-has-border        : false                       !default;
---active-default-button-border-thickness  : 0px                         !default;
---active-default-button-border-color      : transparent                 !default;
-
---active-default-button-box-shadow        : ()                          !default;
-
---disabled-default-button-opacity         : .382                        !default;
-
-
-// :: Icons --------------------------------------------------------------------
---icon-color                              : --text-color                 !default;
---icon-size-multiplier                    : --type-scale-ratio           !default;
---icon-square-dimension                   : --icon-size-multiplier * 1em !default;
---icon-width                              : --icon-square-dimension      !default;
---icon-height                             : auto                        !default;
-
-
-// :: Tags ---------------------------------------------------------------------
---default-tag-fonts                       : --font-family                !default;
---default-tag-text-color                  : rgb(255,255,255)            !default;
---default-tag-font-weight                 : --regular                    !default;
---default-tag-font-style                  : normal                      !default;
---default-tag-font-variant                : normal                      !default;
---default-tag-text-decoration             : none                        !default;
---default-tag-text-transform              : none                        !default;
-
---default-tag-bg-color                    : --grey-n05                   !default;
-
---default-tag-has-border                  : false                       !default;
+/*--default-tag-has-border                  : false                       !default;
 --default-tag-border-thickness            : 0px                         !default;
 --default-tag-border-color                : transparent                 !default;
 --default-tag-border-radius               : --default-border-radius      !default;
@@ -161,29 +95,20 @@
 // --default-tag-box-shadow : (
 // 	3px 3px 3px 3px black,
 // 	-3px -3px 3px 3px red
-// );
+// );*/
 
-
-// :: Overlay ------------------------------------------------------------------
-
---overlay-bg-color                     : --black !default;
---overlay-bg-opacity                   : .8     !default;
---overlay-bg-image                     : none   !default;
---overlay-bg-blend-mode                : normal !default;
-
---overlay-content-vertical-alignment   : center !default;
---overlay-content-horizontal-alignment : center !default;
-
-
-// :: Modal --------------------------------------------------------------------
-
---modal-bg-color                       : --white !default;
---modal-vertical-alignment             : center !default;
-*/
 
 /* Forms -------------------------------------------------------------------- */
 
 --form-legend-weight : var(--h2-weight);
+
+/* Table -------------------------------------------------------------------- */
+--table-bg-color                : var(--root-bg-color);
+--table-caption-font-weight     : var(--bold);
+--table-border-color            : var(--grey-n02);
+
+--table-header-border-thickness : 3px;
+--table-footer-border-thickness : 3px;
 
 /*
 --form-layout-gutter               : 1.91vw           !default;

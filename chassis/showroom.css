@@ -5,6 +5,12 @@
 }
 
 @detailer include button;
+@detailer include form;
+@detailer include icon;
+@detailer include modal;
+@detailer include overlay;
+@detailer include table;
+@detailer include tag;
 
 .showroom {
 	/* Account for sticky footer */
@@ -106,6 +112,14 @@
 	}
 }
 
+.showroom .content > section.table table {
+	@detailer table stack-below small;
+}
+
+.showroom .content > section.table th {
+	@chassis ellipsis;
+}
+
 /* End: Content */
 
 /* Component: Footer -------------------------------------------------------- */
@@ -195,8 +209,8 @@ pre.code.html:before {
 	content: 'HTML:';
 }
 
-pre.sass.code:before {
-	content: 'SASS:';
+pre.css.code:before {
+	content: 'CSS:';
 }
 
 pre.javascript.code:before {

@@ -1,0 +1,8 @@
+.chassis .icon {
+	width: var(--icon-width, auto);
+	height: var(--icon-height, auto);
+	vertical-align: middle;
+
+	fill: var(--icon-color, var(--text-color), grey);
+	pointer-events: none;
+}
