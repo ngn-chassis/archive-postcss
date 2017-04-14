@@ -1,5 +1,5 @@
 font-family: var(--h3-fonts, inherit);
-font-weight: var(--h3-weight, inherit);
+font-weight: var(--h3-weight, bold);
 font-style: var(--h3-style, inherit);
 font-variant: var(--h3-variant, inherit);
 

@@ -1,6 +1,6 @@
-font-family: var(--font-family, inherit);
-font-weight: var(--font-weight, inherit);
-font-style: var(--font-style, inherit);
-font-variant: var(--font-variant, inherit);
+font-family: var(--font-family, Helvetica, Arial, sans-serif);
+font-weight: var(--font-weight, normal);
+font-style: var(--font-style, normal);
+font-variant: var(--font-variant, normal);
 
-color: var(--text-color, inherit);
+color: var(--text-color, rgba(68,68,68,1));

@@ -4,7 +4,7 @@
 	@chassis block-layout no-padding;
 	width: 100%;
 
-	background-color: var(--table-bg-color, --root-bg-color);
+	background-color: var(--table-bg-color, var(--white));
 
 	border: 0;
 	border-collapse: collapse;
@@ -22,7 +22,7 @@
 }
 
 .chassis table caption {
-	font-weight: var(--table-caption-font-weight, initial);
+	font-weight: var(--table-caption-font-weight, bold);
 	text-align: left;
 }
 
@@ -30,18 +30,18 @@
 	position: sticky;
 	top: 0;
 
-	background-color: var(--table-bg-color, --root-bg-color);
+	background-color: var(--table-bg-color, var(--white));
 
-	border-bottom: var(--table-header-border-thickness, 0) var(--table-border-style, solid) var(--table-border-color, grey);
-	box-shadow: 0 var(--table-header-border-thickness, 0) 0 0 var(--table-border-color, grey);
+	border-bottom: var(--table-header-border-thickness, 3px) var(--table-border-style, solid) var(--table-border-color, var(--grey-n02));
+	box-shadow: 0 var(--table-header-border-thickness, 3px) 0 0 var(--table-border-color, var(--grey-n02));
 }
 
 .chassis table tfoot {
-	border-top: var(--table-footer-border-thickness, 0) var(--table-border-style, solid) var(--table-border-color, grey);
+	border-top: var(--table-footer-border-thickness, 3px) var(--table-border-style, solid) var(--table-border-color, var(--grey-n02));
 }
 
 .chassis table tr td {
-	border-bottom: var(--table-cell-border-thickness, 1px) var(--table-border-style, solid) var(--table-border-color, grey);
+	border-bottom: var(--table-cell-border-thickness, 1px) var(--table-border-style, solid) var(--table-border-color, var(--grey-n02));
 }
 
 .chassis table tr:last-child td {

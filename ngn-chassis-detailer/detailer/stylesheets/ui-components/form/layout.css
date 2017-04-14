@@ -56,7 +56,7 @@
 	padding: 0;
 
 	border-radius: var(--form-fields-button-border-radius, --button-border-radius, 0);
-	background: var(--form-fields-button-bg-color, --button-bg-color, transparent);
+	background: var(--form-fields-button-bg-color, --button-bg-color, var(--blue));
 
 	/* Border Stuff */
 	/*box-shadow: $form-fields-box-shadow;*/

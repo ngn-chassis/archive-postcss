@@ -3,10 +3,10 @@
 
 	@chassis inline-layout;
 
-	background: var(--button-bg-color, transparent);
+	background: var(--button-bg-color, var(--blue));
 
 	border: none;
-	border-radius: var(--button-border-radius, 0);
+	border-radius: var(--button-border-radius, var(--default-border-radius));
 
 	outline: none;
 
@@ -15,15 +15,15 @@
 	vertical-align: middle;
 
 	font-family: var(--button-font-family, inherit);
-	font-weight: var(--button-font-weight, inherit);
-	font-style: var(--button-font-style, inherit);
-	font-variant: var(--button-font-variant, inherit);
+	font-weight: var(--button-font-weight, normal);
+	font-style: var(--button-font-style, normal);
+	font-variant: var(--button-font-variant, normal);
 
 	text-align: center;
-	text-decoration: var(--button-text-decoration, inherit);
-	text-transform: var(--button-text-transform, inherit);
+	text-decoration: var(--button-text-decoration, none);
+	text-transform: var(--button-text-transform, normal);
 
-	color: var(--button-text-color, inherit);
+	color: var(--button-text-color, var(--white));
 
 	cursor: pointer;
 
@@ -31,56 +31,59 @@
 }
 
 .chassis .button:visited {
-	background: var(--visited-button-bg-color, transparent);
+	background: var(--visited-button-bg-color, var(--blue));
 
 	/* --Border Stuff-- */
 
-	font-family: var(--visited-button-font-family, inherit);
-	font-weight: var(--visited-button-font-weight, inherit);
-	font-style: var(--visited-button-font-style, inherit);
-	font-variant: var(--visited-button-font-variant, inherit);
+	font-family: var(--button-font-family, inherit);
+	font-weight: var(--button-font-weight, normal);
+	font-style: var(--button-font-style, normal);
+	font-variant: var(--button-font-variant, normal);
 
-	text-decoration: var(--visited-button-text-decoration, inherit);
-	text-transform: var(--visited-button-text-transform, inherit);
+	text-align: center;
+	text-decoration: var(--button-text-decoration, none);
+	text-transform: var(--button-text-transform, normal);
 
-	color: var(--visited-button-text-color, inherit);
+	color: var(--button-text-color, var(--white));
 }
 
 .chassis .button:hover {
-	background: var(--hover-button-bg-color, transparent);
+	background: var(--hover-button-bg-color, rgb(0,162,245));
 
 	/* --Border Stuff-- */
 
-	font-family: var(--hover-button-font-family, inherit);
-	font-weight: var(--hover-button-font-weight, inherit);
-	font-style: var(--hover-button-font-style, inherit);
-	font-variant: var(--hover-button-font-variant, inherit);
+	font-family: var(--button-font-family, inherit);
+	font-weight: var(--button-font-weight, normal);
+	font-style: var(--button-font-style, normal);
+	font-variant: var(--button-font-variant, normal);
 
-	text-decoration: var(--hover-button-text-decoration, inherit);
-	text-transform: var(--hover-button-text-transform, inherit);
+	text-align: center;
+	text-decoration: var(--button-text-decoration, none);
+	text-transform: var(--button-text-transform, normal);
 
-	color: var(--hover-button-text-color, inherit);
+	color: var(--button-text-color, var(--white));
 }
 
 .chassis .button:active {
-	background: var(--active-button-bg-color, transparent);
+	background: var(--active-button-bg-color, rgb(0,145,220));
 
 	/* --Border Stuff-- */
 
-	font-family: var(--active-button-font-family, inherit);
-	font-weight: var(--active-button-font-weight, inherit);
-	font-style: var(--active-button-font-style, inherit);
-	font-variant: var(--active-button-font-variant, inherit);
+	font-family: var(--button-font-family, inherit);
+	font-weight: var(--button-font-weight, normal);
+	font-style: var(--button-font-style, normal);
+	font-variant: var(--button-font-variant, normal);
 
-	text-decoration: var(--active-button-text-decoration, inherit);
-	text-transform: var(--active-button-text-transform, inherit);
+	text-align: center;
+	text-decoration: var(--button-text-decoration, none);
+	text-transform: var(--button-text-transform, normal);
 
-	color: var(--active-button-text-color, inherit);
+	color: var(--button-text-color, var(--white));
 }
 
 .chassis .disabled.button {
 	opacity: var(--disabled-button-opacity, .382);
-	color: var(--button-text-color, inherit);
+	color: var(--button-text-color, var(--white));
 	pointer-events: none;
 }
 

@@ -10,5 +10,5 @@
 	max-width: calc(#{$ui-max-width} - #{$ui-gutter * 2});*/
 	max-height: 100vh;
 
-	background: var(--modal-bg-color, rgb(255,255,255));
+	background: var(--modal-bg-color, var(--white));
 }

@@ -19,9 +19,7 @@
 	min-height: 100vh;
 	max-height: 100vh;
 
-	background-color: var(--overlay-bg-color, rgb(0,0,0));
+	background-color: var(--overlay-bg-color, rgba(0,0,0,0.8));
 	background-image: var(--overlay-bg-image, none);
 	background-blend-mode: var(--overlay-bg-blend-mode, normal);
-
-	opacity: var(--overlay-opacity, 0.8);
 }

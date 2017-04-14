@@ -76,7 +76,7 @@
 }
 
 .showroom .sidebar nav a:hover {
-	background: var(--hover-button-bg-color, transparent);
+	background: var(--blue);
 	box-shadow: none;
 
 	color: var(--white);
@@ -88,7 +88,7 @@
 }
 
 .showroom .sidebar nav a:active {
-	background: var(--active-button-bg-color);
+	background: rgb(0,145,220);
 }
 
 @chassis media-query min medium {

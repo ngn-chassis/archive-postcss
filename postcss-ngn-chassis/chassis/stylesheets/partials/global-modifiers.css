@@ -22,9 +22,9 @@
 
 /* Font Variants */
 .normal-variant {
-	font-variant: normal;
+	font-variant: normal !important;
 }
 
 .small-caps-variant {
-	font-variant: small-caps;
+	font-variant: small-caps !important;
 }
