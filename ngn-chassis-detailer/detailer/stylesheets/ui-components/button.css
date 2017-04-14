@@ -80,6 +80,7 @@
 
 .chassis .disabled.button {
 	opacity: var(--disabled-button-opacity, .382);
+	color: var(--button-text-color, inherit);
 	pointer-events: none;
 }
 
