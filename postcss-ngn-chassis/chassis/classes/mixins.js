@@ -49,7 +49,7 @@ class ChassisMixins {
 			}
 		})
 
-		console.log(css);
+		console.log('TODO: Add media queries to block-layout mixin');
 		return css
   }
 
@@ -244,7 +244,7 @@ class ChassisMixins {
 			}
 		})
 
-		console.log(css);
+		console.log('TODO: Add media queries to inline-layout mixin');
 		return css
   }
 

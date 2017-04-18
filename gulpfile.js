@@ -27,9 +27,11 @@ gulp.task('css', function () {
     .pipe(postcss([
       // require('postcss-custom-properties'),
       // require('postcss-css-variables'),
+      // require('postcss-nesting'),
       chassis({
         plugins: [detailer]
       })
+      // require('postcss-nesting')
       // require('autoprefixer'),
       // require('postcss-partial-import'),
       // require('postcss-mixins'),
@@ -41,7 +43,6 @@ gulp.task('css', function () {
       // require('postcss-custom-media'),
       // require('postcss-media-minmax'),
       // require('postcss-color-function'),
-      // require('postcss-nesting'),
       // require('postcss-nested'),
       // require('postcss-custom-selectors'),
       // require('postcss-atroot'),

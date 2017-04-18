@@ -1,6 +1,9 @@
 require('ngn')
 require('ngn-data')
 
+const postcss = require('postcss')
+const nesting = require('postcss-nesting')
+
 const ChassisProject = require('./classes/project')
 const ChassisUtils = require('./utilities')
 const ChassisConstants = require('./constants')
@@ -35,6 +38,10 @@ class ChassisPostCss {
     this._validateSettings()
   }
 
+  _unnest (root) {
+    return postcss.parse(nesting.process(root))
+  }
+
   /**
    * @method _validateSettings
    * Validate project settings configuration
@@ -55,15 +62,19 @@ class ChassisPostCss {
     this._loadConfig()
 
     return (root, result) => {
-      root.walkAtRules('chassis', (atRule) => {
-        this.project.atRules.process(atRule, root)
+      let output = this._unnest(root)
+
+      output.walkAtRules('chassis', (atRule) => {
+        this.project.atRules.process(atRule, output)
       })
 
       if (this.project.plugins.includes('Detailer')) {
-        root.walkAtRules('detailer', (atRule) => {
-          this.project.plugins.get('Detailer').atRules.process(atRule, root)
+        output.walkAtRules('detailer', (atRule) => {
+          this.project.plugins.get('Detailer').atRules.process(atRule, output)
         })
       }
+
+      result.root = this._unnest(output)
     }
   }
 }

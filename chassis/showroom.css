@@ -15,44 +15,44 @@
 .showroom {
 	/* Account for sticky footer */
 	padding-bottom: 3.618em;
-}
 
-/* Component: Header -------------------------------------------------------- */
-.showroom > header {
-	padding: 1.46em 0 .90169942em;
-	border-bottom: 4px solid var(--grey-n00);
-}
+	/* Component: Header */
+	& > header {
+		padding: 1.46em 0 .90169942em;
+		border-bottom: 4px solid var(--grey-n00);
 
-.showroom > header h1 {
-	flex: 1;
-	margin: 0;
+		& h1 {
+			flex: 1;
+			margin: 0;
 
-	@chassis set-typography large;
-	color: var(--grey-n05);
-}
+			@chassis set-typography large;
+			color: var(--grey-n05);
+		}
 
-.showroom > header .links {
-	display: flex;
-	align-items: center;
-}
+		& .links {
+			display: flex;
+			align-items: center;
 
-.showroom > header .links a {
-	margin-left: 1em;
-}
+			& a {
+				margin-left: 1em;
 
-.showroom > header .links a:first-child {
-	margin-left: 0;
-}
+				&:first-child {
+					margin-left: 0;
+				}
+			}
+		}
 
-@chassis media-query min medium {
-	.showroom > header {
-		padding-top: 2.36em;
-	}
+		@chassis media-query min medium {
+			padding-top: 2.36em;
 
-	.showroom > header .width-constraint {
-		display: flex;
+			& .width-constraint {
+				display: flex;
+			}
+		}
 	}
 }
+
+
 
 /* End: Header */
 
