@@ -13,6 +13,8 @@ var sourcemaps = require('gulp-sourcemaps')
 var chassis = require('./postcss-ngn-chassis/index.js')
 var detailer = require('./ngn-chassis-detailer/index.js')
 
+var cleanCss = require('gulp-clean-css')
+
 // Paths ------------------------------------------------------------------
 var SOURCE = {
   CHASSIS: './chassis'
@@ -25,32 +27,14 @@ gulp.task('css', function () {
   return gulp.src(SOURCE.CHASSIS + '/**/*.css')
     .pipe(sourcemaps.init())
     .pipe(postcss([
-      // require('postcss-custom-properties'),
-      // require('postcss-css-variables'),
-      // require('postcss-nesting'),
       chassis({
         plugins: [detailer]
       })
-      // require('postcss-nesting')
-      // require('autoprefixer'),
+      // require('autoprefixer')
       // require('postcss-partial-import'),
-      // require('postcss-mixins'),
-      // require('postcss-functions')({
-      //   functions: CHASSIS_FUNCTIONS
-      // }),
-      // require('postcss-at-rules-variables'),
-      // require('postcss-advanced-variables'),
-      // require('postcss-custom-media'),
-      // require('postcss-media-minmax'),
-      // require('postcss-color-function'),
-      // require('postcss-nested'),
-      // require('postcss-custom-selectors'),
-      // require('postcss-atroot'),
-      // require('postcss-property-lookup'),
-      // require('postcss-extend'),
-      // require('postcss-selector-matches'),
-      // require('postcss-selector-not')
+      // require('postcss-color-function')
     ]))
+    .pipe(cleanCss())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(DEST + '/css'))
 })

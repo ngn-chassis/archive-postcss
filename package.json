@@ -18,15 +18,9 @@
     "ngn": "^0.3.29",
     "ngn-data": "0.0.50",
     "postcss": "^5.2.0",
-    "postcss-at-rules-variables": "0.0.25",
-    "postcss-conditionals": "^2.0.2",
-    "postcss-each": "^0.9.3",
-    "postcss-for": "^2.1.1",
-    "postcss-functions": "^2.1.0",
-    "postcss-import": "^8.1.2",
     "precss": "^1.4.0"
   },
   "devDependencies": {
-    "postcss-css-variables": "^0.7.0"
+    "gulp-clean-css": "^3.0.4"
   }
 }
