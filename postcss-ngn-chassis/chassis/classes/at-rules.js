@@ -113,11 +113,11 @@ class ChassisAtRules {
         break
 
       case 'show':
-        atRule.replaceWith(mixins.show(line, args))
+        atRule.replaceWith(mixins.show(args))
         break
 
       case 'z-index':
-        atRule.replaceWith(mixins.zIndex(line, args))
+        atRule.replaceWith(mixins.zIndex(args))
         break
 
       default:

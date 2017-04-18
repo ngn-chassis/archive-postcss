@@ -182,47 +182,51 @@
 			}
 		}
 	}
-	/* End: Range Indicator */
-
-	/* Component: Code Block ---------------------------------------------------- */
-	& pre.code {
-		@chassis block-layout;
-
-		background: #fafafa;
-		box-shadow: 0 0 0 1px var(--grey-n03);
-		border-radius: 0 var(--default-border-radius) var(--default-border-radius) 0;
-
-		font-family: Consolas, Courier New, monospace;
-
-		white-space: pre-wrap;
-		word-wrap: break-word;
-
-		&:before {
-			display: block;
-			color: var(--grey-n05);
-		}
-
-		&.html:before {
-			content: 'HTML:';
-		}
-
-		&.css:before {
-			content: 'CSS:';
-		}
-
-		&.javascript:before {
-			content: 'JavaScript:';
-		}
-	}
-	/* End: Code Block */
 }
+
+
+
+
+/* Component: Code Block ---------------------------------------------------- */
+pre.code {
+	@chassis block-layout;
+	background: #fafafa;
+	box-shadow: 0 0 0 1px var(--grey-n03);
+	border-radius: 0 var(--default-border-radius) var(--default-border-radius) 0;
+
+	font-family: Consolas, Courier New, monospace;
+
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+pre.code:before {
+	display: block;
+	color: var(--grey-n05);
+}
+
+pre.code.html:before {
+	content: 'HTML:';
+}
+
+pre.css.code:before {
+	content: 'CSS:';
+}
+
+pre.javascript.code:before {
+	content: 'JavaScript:';
+}
+
+/* End: Code Block */
 
 /* Singletons --------------------------------------------------------------- */
 main {
 	padding-top: 2em;
 	@chassis constrain-width;
+}
 
-	@chassis media-query min medium {
+@chassis media-query min medium {
+	main {
 		display: flex;
 		align-items: flex-start;
 

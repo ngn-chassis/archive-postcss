@@ -332,8 +332,8 @@ class ChassisMixins {
    * Accepts CSS box model property values
    * @return {decls}
    */
-  show (line, args) {
-    let boxModel = NGN.coalesce(args, 'block')
+  show (args) {
+    let boxModel = NGN.coalesce(args && args[0], 'block')
     // TODO: Handle invalid box-model values
 
     return [
@@ -345,13 +345,11 @@ class ChassisMixins {
 
   /**
    * @mixin z-index
-   * @param  {line} line
-   * line where mixin was called
    * @param  {array} args
    * arguments passed to mixin
    * @return {decl}
    */
-  zIndex (line, args) {
+  zIndex (args) {
     let index = this.project.settings.zIndex[args[0]]
 
     if (!index) {
