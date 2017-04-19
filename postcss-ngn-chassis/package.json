@@ -1,7 +1,7 @@
 {
   "name": "postcss-ngn-chassis",
-  "version": "0.0.0",
-  "description": "PostCSS plugin for NGN Chassis Typography-based layout system",
+  "version": "0.0.1",
+  "description": "NGN Chassis UI Framework",
   "keywords": [
     "postcss",
     "css",
@@ -22,12 +22,11 @@
     "postcss": "^5.2.0"
   },
   "devDependencies": {
-    "ava": "^0.16.0",
     "eslint": "^3.4.0",
     "eslint-config-postcss": "^2.0.2"
   },
   "scripts": {
-    "test": "ava && eslint *.js"
+    "test": "eslint *.js"
   },
   "eslintConfig": {
     "extends": "eslint-config-postcss/es5"

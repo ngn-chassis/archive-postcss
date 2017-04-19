@@ -38,6 +38,24 @@ class ChassisPostCss {
     this._validateSettings()
   }
 
+  _process () {
+    return (root, result) => {
+      let output = this._unnest(root)
+
+      output.walkAtRules('chassis', (atRule) => {
+        this.project.atRules.process(atRule, output)
+      })
+
+      if (this.project.plugins.includes('Detailer')) {
+        output.walkAtRules('detailer', (atRule) => {
+          this.project.plugins.get('Detailer').atRules.process(atRule, output)
+        })
+      }
+
+      result.root = this._unnest(output)
+    }
+  }
+
   _unnest (root) {
     return postcss.parse(nesting.process(root))
   }
@@ -60,22 +78,7 @@ class ChassisPostCss {
    */
   init () {
     this._loadConfig()
-
-    return (root, result) => {
-      let output = this._unnest(root)
-
-      output.walkAtRules('chassis', (atRule) => {
-        this.project.atRules.process(atRule, output)
-      })
-
-      if (this.project.plugins.includes('Detailer')) {
-        output.walkAtRules('detailer', (atRule) => {
-          this.project.plugins.get('Detailer').atRules.process(atRule, output)
-        })
-      }
-
-      result.root = this._unnest(output)
-    }
+    return this._process()
   }
 }
 

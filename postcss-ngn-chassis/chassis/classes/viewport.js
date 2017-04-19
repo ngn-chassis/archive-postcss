@@ -94,9 +94,8 @@ class ChassisViewport {
    * Viewport Width Range name
    * @return {at-rule}
    */
-  getMediaQuery (type, range, nodes, dimension) {
+  getMediaQuery (type, range, nodes, dimension = 'width') {
     nodes = NGN.coalesce(nodes || [])
-    dimension = NGN.coalesce(dimension, 'width')
 
     let mediaQuery = ChassisUtils.newAtRule({
       name: 'media',

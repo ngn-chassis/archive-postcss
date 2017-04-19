@@ -23,33 +23,46 @@ class ChassisMixins {
 			let fontSize = this.project.typography.getFontSize(alias, range.upperBound, true)
 			let lineHeight = this.project.typography.getLineHeight(alias, range.upperBound)
 
+			let margin = `0 0 ${lineHeight}em 0`
+			let padding = [(lineHeight / this.project.typography.typeScaleRatio) / 2, 1]
+
+			if (stripVerticalPadding) {
+				padding[0] = 0
+			}
+
+			if (stripHorizontalPadding) {
+				padding[1] = 0
+			}
+
 			if (index === 1) {
 				if (!stripMargin) {
-					css.push(ChassisUtils.newDecl('margin', `0 0 ${lineHeight}em 0`))
+					css.push(ChassisUtils.newDecl('margin', margin))
 				}
 
 				if (!stripPadding) {
-					let padding = [(lineHeight / this.project.typography.typeScaleRatio) / 2, 1]
-
-					if (stripVerticalPadding) {
-						padding[0] = 0
-					}
-
-					if (stripHorizontalPadding) {
-						padding[1] = 0
-					}
-
 					css.push(ChassisUtils.newDecl(
             'padding',
             this._listPropertyValues(padding)
           ))
 				}
 			} else {
-				// TODO: Add media queries
+				let nodes = []
+
+				if (!stripMargin) {
+					nodes.push(ChassisUtils.newDecl('margin', margin))
+				}
+
+				if (!stripPadding) {
+					nodes.push(ChassisUtils.newDecl(
+            'padding',
+            this._listPropertyValues(padding)
+          ))
+				}
+
+				css.push(this.project.viewport.getMediaQuery('min', range.name, nodes))
 			}
 		})
 
-		console.log('TODO: Add media queries to block-layout mixin');
 		return css
   }
 
@@ -183,6 +196,22 @@ class ChassisMixins {
 			let fontSize = this.project.typography.getFontSize(alias, range.upperBound, true)
       let baseLineHeight = this.project.typography.getLineHeight(alias, range.upperBound)
 
+			let margin = [0, baseLineHeight / 2, baseLineHeight, 0]
+
+			if (stripVerticalMargin) {
+				margin[2] = 0
+			}
+
+			if (stripHorizontalMargin) {
+				margin[1] = 0
+			}
+
+			let padding = [0, baseLineHeight / 2]
+
+			if (multiLine) {
+				padding[0] = ((baseLineHeight * this.project.typography.typeScaleRatio) - baseLineHeight) / 2
+			}
+
 			if (index === 1) {
 				if (setHeight) {
 					if (multiline) {
@@ -199,12 +228,6 @@ class ChassisMixins {
 				}
 
 				if (!stripPadding) {
-          let padding = [0, baseLineHeight / 2]
-
-          if (multiLine) {
-            padding[0] = ((baseLineHeight * this.project.typography.typeScaleRatio) - baseLineHeight) / 2
-          }
-
           css.push(ChassisUtils.newDecl(
             'padding',
             this._listPropertyValues(padding)
@@ -212,16 +235,6 @@ class ChassisMixins {
         }
 
 				if (!stripMargin) {
-          let margin = [0, baseLineHeight / 2, baseLineHeight, 0]
-
-          if (stripVerticalMargin) {
-            margin[2] = 0
-          }
-
-          if (stripHorizontalMargin) {
-            margin[1] = 0
-          }
-
           css.push(ChassisUtils.newDecl(
             'margin',
             this._listPropertyValues(margin)
@@ -240,11 +253,52 @@ class ChassisMixins {
           ))
         }
 			} else {
-				// TODO: Add media queries
+				let nodes = []
+
+				if (setHeight) {
+					if (multiline) {
+						nodes.push(ChassisUtils.newDecl(
+              'height',
+              `${baseLineHeight}em`
+            ))
+					} else {
+						nodes.push(ChassisUtils.newDecl(
+              'height',
+              `${baseLineHeight * this.project.typography.typeScaleRatio}em`
+            ))
+					}
+				}
+
+				if (!stripPadding) {
+          nodes.push(ChassisUtils.newDecl(
+            'padding',
+            this._listPropertyValues(padding)
+          ))
+        }
+
+				if (!stripMargin) {
+          nodes.push(ChassisUtils.newDecl(
+            'margin',
+            this._listPropertyValues(margin)
+          ))
+        }
+
+				if (multiLine) {
+          nodes.push(ChassisUtils.newDecl(
+            'line-height',
+            `${baseLineHeight}em`
+          ))
+        } else {
+          nodes.push(ChassisUtils.newDecl(
+            'line-height',
+            `${baseLineHeight * this.project.typography.typeScaleRatio}em`
+          ))
+        }
+
+				css.push(this.project.viewport.getMediaQuery('min', range.name, nodes))
 			}
 		})
 
-		console.log('TODO: Add media queries to inline-layout mixin');
 		return css
   }
 

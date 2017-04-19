@@ -10,10 +10,8 @@ var pkg = require('./package.json')
 var fs = require('fs')
 var sourcemaps = require('gulp-sourcemaps')
 
-var chassis = require('./postcss-ngn-chassis/index.js')
+var chassis = require('./gulp-chassis/index.js')
 var detailer = require('./ngn-chassis-detailer/index.js')
-
-var cleanCss = require('gulp-clean-css')
 
 // Paths ------------------------------------------------------------------
 var SOURCE = {
@@ -26,15 +24,9 @@ var DEST = './showroom'
 gulp.task('css', function () {
   return gulp.src(SOURCE.CHASSIS + '/**/*.css')
     .pipe(sourcemaps.init())
-    .pipe(postcss([
-      chassis({
-        plugins: [detailer]
-      })
-      // require('autoprefixer')
-      // require('postcss-partial-import'),
-      // require('postcss-color-function')
-    ]))
-    .pipe(cleanCss())
+    .pipe(chassis({
+      plugins: [detailer]
+    }))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(DEST + '/css'))
 })
