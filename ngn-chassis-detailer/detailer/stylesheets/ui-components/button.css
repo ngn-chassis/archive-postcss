@@ -1,18 +1,14 @@
 .chassis .button {
 	display: inline-block;
-
 	@chassis inline-layout;
+	vertical-align: middle;
 
 	background: var(--button-bg-color, var(--blue));
 
 	border: none;
 	border-radius: var(--button-border-radius, var(--default-border-radius));
-
 	outline: none;
-
-	/* --Border Stuff-- */
-
-	vertical-align: middle;
+	box-shadow: var(--button-box-shadow, 0);
 
 	font-family: var(--button-font-family, inherit);
 	font-weight: var(--button-font-weight, normal);
@@ -24,16 +20,12 @@
 	text-transform: var(--button-text-transform, normal);
 
 	color: var(--button-text-color, var(--white));
-
 	cursor: pointer;
-
 	@chassis disable-text-selection;
 }
 
 .chassis .button:visited {
 	background: var(--visited-button-bg-color, var(--blue));
-
-	/* --Border Stuff-- */
 
 	font-family: var(--button-font-family, inherit);
 	font-weight: var(--button-font-weight, normal);
@@ -50,8 +42,6 @@
 .chassis .button:hover {
 	background: var(--hover-button-bg-color, rgb(0,162,245));
 
-	/* --Border Stuff-- */
-
 	font-family: var(--button-font-family, inherit);
 	font-weight: var(--button-font-weight, normal);
 	font-style: var(--button-font-style, normal);
@@ -66,8 +56,6 @@
 
 .chassis .button:active {
 	background: var(--active-button-bg-color, rgb(0,145,220));
-
-	/* --Border Stuff-- */
 
 	font-family: var(--button-font-family, inherit);
 	font-weight: var(--button-font-weight, normal);

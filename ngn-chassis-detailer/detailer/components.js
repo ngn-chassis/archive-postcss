@@ -3,7 +3,7 @@ class DetailerComponents {
 		this.project = project
 	}
 
-	get (component) {
+	get (component, customProperties) {
 		let definition = this[component]
 		let styles
 
@@ -25,6 +25,13 @@ class DetailerComponents {
 				this.project.atRules.process(atRule, styles)
 			}
 		})
+
+		if (customProperties) {
+			console.log(customProperties);
+			styles.walkRules((rule) => {
+
+			})
+		}
 
 		return styles
 	}

@@ -15,6 +15,10 @@ class DetailerAtRules {
 		let css
 
 		switch (mixin) {
+			case 'extend':
+				atRule.parent.replaceWith(mixins.extend(args, atRule.parent, nodes))
+				break
+
 			case 'include':
 				atRule.replaceWith(mixins.include(args))
 				break

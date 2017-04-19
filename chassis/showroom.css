@@ -4,13 +4,7 @@
 	--font-family: 'Gotham', Helvetica, Arial, sans-serif;
 }
 
-@detailer include button;
-@detailer include form;
-@detailer include icon;
-@detailer include modal;
-@detailer include overlay;
-@detailer include table;
-@detailer include tag;
+@detailer include button form icon modal overlay table tag;
 
 .showroom {
 	/* Account for sticky footer */
@@ -101,9 +95,21 @@
 				box-shadow: inset 0 -1px 0 0 var(--grey-n03);
 			}
 
+			&.buttons {
+				& .outlined.button {
+					background: red;
+
+					@detailer extend button {
+						
+					}
+
+					border: 1px solid blue;
+				}
+			}
+
 			&.table {
 				& table {
-					@detailer table stack-below small;
+					@detailer stack-below small;
 				}
 
 				& th {

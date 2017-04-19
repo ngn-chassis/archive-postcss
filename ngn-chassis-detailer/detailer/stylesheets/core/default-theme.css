@@ -26,19 +26,6 @@
 --form-legend-weight : var(--h2-weight);
 
 
-/*--default-button-has-border               : false                       !default;
---default-button-border-thickness         : 0px                         !default;
---default-button-border-color             : transparent                 !default;
-
-
---default-button-box-shadow               : ()                          !default;
-// Example:
-// --default-button-box-shadow : (
-// 	3px 3px 3px 3px black,
-// 	-3px -3px 3px 3px red
-// );*/
-
-
 /*--default-tag-has-border                  : false                       !default;
 --default-tag-border-thickness            : 0px                         !default;
 --default-tag-border-color                : transparent                 !default;
