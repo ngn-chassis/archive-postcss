@@ -1,0 +1,7 @@
+/*{selector | .chassis .test}*/ {
+	background: /*{background | var(--test-bg-color, red)}*/;
+}
+
+/*{selector | .chassis .test}:hover*/ {
+	background: /*{background | var(--hover-test-bg-color, green)}*/;
+}

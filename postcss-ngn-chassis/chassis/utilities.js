@@ -35,6 +35,10 @@ class ChassisUtils {
 		return rule
 	}
 
+	static newRoot (nodes = []) {
+		return postcss.root({nodes})
+	}
+
 	/**
 	 * @method printTree
 	 * Print a prettified JSON respresentation of an object to console

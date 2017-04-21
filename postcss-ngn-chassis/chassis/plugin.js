@@ -3,6 +3,7 @@ require('ngn-data')
 
 const postcss = require('postcss')
 const nesting = require('postcss-nesting')
+const vars = require('postcss-advanced-variables')
 
 const ChassisProject = require('./classes/project')
 const ChassisUtils = require('./utilities')
@@ -51,6 +52,10 @@ class ChassisPostCss {
           this.project.plugins.get('Detailer').atRules.process(atRule, output)
         })
       }
+
+      // TODO: Process Variables
+
+      // TODO: Process inline functions
 
       result.root = this._unnest(output)
     }

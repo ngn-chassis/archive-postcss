@@ -1,71 +1,88 @@
+const TestComponent = require('./components/test')
+
 class DetailerComponents {
 	constructor (project) {
 		this.project = project
 	}
 
-	get (component, customProperties) {
-		let definition = this[component]
-		let styles
-
-		if (NGN.typeof(definition) === 'array') {
-			styles = this.project.utils.parseStylesheets(definition.map((stylesheet) => {
-				return `${this.project.basePath}${stylesheet}`
-			}))
-
-		} else {
-			styles = this.project.utils.parseStylesheet(`${this.project.basePath}${this[component]}`)
+	get (component, parent, nodes) {
+		let config = {
+			states: {}
 		}
 
-		styles.walkAtRules((atRule) => {
-			if (atRule.name === 'chassis') {
-				this.project.chassis.atRules.process(atRule, styles)
-			}
+		if (parent) {
+			config.selector = parent.selector
+		}
 
-			if (atRule.name === 'detailer') {
-				this.project.atRules.process(atRule, styles)
-			}
-		})
+		if (nodes) {
+			nodes.forEach(rule => {
+				config.states[rule.selector] = {}
 
-		if (customProperties) {
-			console.log(customProperties);
-			styles.walkRules((rule) => {
-
+				rule.nodes.forEach(node => {
+					config.states[rule.selector][node.prop] = node.value
+				})
 			})
 		}
 
-		return styles
+		return new this[component](this.project, config).styles
 	}
 
-	get button () {
-		return '/stylesheets/ui-components/button.css'
-	}
+	// get button () {
+	// 	return {
+	// 		definition: {
+	// 			selector: '.chassis .button'
+	// 		},
+	// 		template: '/stylesheets/ui-components/button.css'
+	// 	}
+	// }
+	//
+	// get form () {
+	// 	return {
+	// 		template: [
+	// 			'/stylesheets/ui-components/form/reset.css',
+	// 			'/stylesheets/ui-components/form/standalone-elements.css',
+	// 			'/stylesheets/ui-components/form/layout.css'
+	// 		]
+	// 	}
+	// }
+	//
+	// get icon () {
+	// 	return {
+	// 		definition: {},
+	// 		template: '/stylesheets/ui-components/icon.css'
+	// 	}
+	// }
+	//
+	// get modal () {
+	// 	return {
+	// 		definition: {},
+	// 		template: '/stylesheets/ui-components/modal.css'
+	// 	}
+	// }
+	//
+	// get overlay () {
+	// 	return {
+	// 		definition: {},
+	// 		template: '/stylesheets/ui-components/overlay.css'
+	// 	}
+	// }
+	//
+	// get tag () {
+	// 	return {
+	// 		definition: {},
+	// 		template: '/stylesheets/ui-components/tag.css'
+	// 	}
+	// }
+	//
+	// get table () {
+	// 	return {
+	// 		definition: {},
+	// 		template: '/stylesheets/ui-components/table.css'
+	// 	}
+	// }
 
-	get form () {
-		return [
-			'/stylesheets/ui-components/form/reset.css',
-			'/stylesheets/ui-components/form/standalone-elements.css',
-			'/stylesheets/ui-components/form/layout.css'
-		]
-	}
-
-	get icon () {
-		return '/stylesheets/ui-components/icon.css'
-	}
-
-	get modal () {
-		return '/stylesheets/ui-components/modal.css'
-	}
-
-	get overlay () {
-		return '/stylesheets/ui-components/overlay.css'
-	}
-
-	get tag () {
-		return '/stylesheets/ui-components/tag.css'
-	}
-
-	get table () {
-		return '/stylesheets/ui-components/table.css'
+	get test () {
+		return TestComponent
 	}
 }
 
