@@ -1,9 +1,17 @@
-const TestComponent = require('./components/test')
-const ButtonComponent = require('./components/button')
+const ExtensibleComponent = require('./component')
 
 class DetailerComponents {
 	constructor (project) {
 		this.project = project
+		
+		this.extensibleComponents = [
+			'button',
+			'overlay',
+			'modal',
+			'icon',
+			'tag',
+			'test'
+		]
 	}
 	
 	/**
@@ -18,61 +26,12 @@ class DetailerComponents {
 	 * @return {AST} component styles
 	 */
 	get (component, parent, nodes) {
-		return new this[component](this.project, parent, nodes).styles
+		if (this.extensibleComponents.includes(component)) {
+			return new ExtensibleComponent(this.project, component, nodes).styles
+		} else {
+			return this.project.utils.parseStylesheet(`../../ngn-chassis-detailer/detailer/stylesheets/ui-components/${component}.css`)
+		}
 	}
-
-	get button () {
-		return ButtonComponent
-	}
-	
-	get test () {
-		return TestComponent
-	}
-
-	// get form () {
-	// 	return {
-	// 		template: [
-	// 			'/stylesheets/ui-components/form/reset.css',
-	// 			'/stylesheets/ui-components/form/standalone-elements.css',
-	// 			'/stylesheets/ui-components/form/layout.css'
-	// 		]
-	// 	}
-	// }
-	//
-	// get icon () {
-	// 	return {
-	// 		definition: {},
-	// 		template: '/stylesheets/ui-components/icon.css'
-	// 	}
-	// }
-	//
-	// get modal () {
-	// 	return {
-	// 		definition: {},
-	// 		template: '/stylesheets/ui-components/modal.css'
-	// 	}
-	// }
-	//
-	// get overlay () {
-	// 	return {
-	// 		definition: {},
-	// 		template: '/stylesheets/ui-components/overlay.css'
-	// 	}
-	// }
-	//
-	// get tag () {
-	// 	return {
-	// 		definition: {},
-	// 		template: '/stylesheets/ui-components/tag.css'
-	// 	}
-	// }
-	//
-	// get table () {
-	// 	return {
-	// 		definition: {},
-	// 		template: '/stylesheets/ui-components/table.css'
-	// 	}
-	// }
 }
 
 module.exports = DetailerComponents

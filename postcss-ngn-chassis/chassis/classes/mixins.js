@@ -189,6 +189,8 @@ class ChassisMixins {
 
 		let multiLine = NGN.coalesce(args && args.includes('multi-line'), false)
 		let setHeight = NGN.coalesce(args && args.includes('set-height'), false)
+		
+		let stripLineHeight = NGN.coalesce(args && args.includes('no-line-height'), false)
 
 		let css = []
 
@@ -246,7 +248,7 @@ class ChassisMixins {
             'line-height',
             `${baseLineHeight}em`
           ))
-        } else {
+        } else if (!stripLineHeight) {
           css.push(ChassisUtils.newDecl(
             'line-height',
             `${baseLineHeight * this.project.typography.typeScaleRatio}em`
@@ -365,9 +367,9 @@ class ChassisMixins {
 				output[0].append(ChassisUtils.newDecl('margin-bottom', `${this.project.typography.getCalculatedMargin(alias, range.upperBound)}em`))
 			}
 
-			if (index === 1) {
+			if (index === 0) {
 				type = 'max'
-			} else if (index === this.project.viewport.widthRanges.length) {
+			} else if (index === this.project.viewport.widthRanges.length - 1) {
         type = 'min'
       }
 

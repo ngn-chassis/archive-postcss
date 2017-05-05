@@ -1,10 +1,7 @@
-class DetailerComponent {
-	constructor (project, spec, parent, customStates) {
+class ExtensibleComponent {
+	constructor (project, spec, customStates) {
 		this.project = project
-		
 		this.spec = project.utils.parseStylesheet(`../../ngn-chassis-detailer/detailer/stylesheets/ui-components/${spec}.spec.css`)
-		
-		this.parent = NGN.coalesce(parent, null)
 		
 		if (customStates) {
 			this._applyCustomStates(customStates)
@@ -64,4 +61,4 @@ class DetailerComponent {
 	}
 }
 
-module.exports = DetailerComponent
+module.exports = ExtensibleComponent

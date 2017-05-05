@@ -1,0 +1,10 @@
+.icon {
+	default {
+		width: var(--icon-width, auto);
+		height: var(--icon-height, 1.382em);
+		vertical-align: middle;
+
+		fill: var(--icon-color, rgba(68,68,68,1));
+		pointer-events: none;
+	}
+}
