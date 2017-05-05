@@ -34,7 +34,7 @@ class ChassisMixins {
 				padding[1] = 0
 			}
 
-			if (index === 1) {
+			if (index === 0) {
 				if (!stripMargin) {
 					css.push(ChassisUtils.newDecl('margin', margin))
 				}
@@ -116,9 +116,9 @@ class ChassisMixins {
 				ChassisUtils.newDeclObj('font-size', `${fontSize}px`)
 			])]
 
-			if (index === 1) {
+			if (index === 0) {
 				type = 'max'
-			} else if (index === this.project.viewport.widthRanges.length) {
+			} else if (index === this.project.viewport.widthRanges.length - 1) {
 				type = 'min'
 			}
 
@@ -214,7 +214,7 @@ class ChassisMixins {
 				padding[0] = ((baseLineHeight * this.project.typography.typeScaleRatio) - baseLineHeight) / 2
 			}
 
-			if (index === 1) {
+			if (index === 0) {
 				if (setHeight) {
 					if (multiline) {
 						css.push(ChassisUtils.newDecl(
@@ -315,9 +315,9 @@ class ChassisMixins {
 				ChassisUtils.newDeclObj('line-height', `${lineHeight}em`)
 			])]
 
-			if (index === 1) {
+			if (index === 0) {
 				type = 'max'
-			} else if (index === this.project.viewport.widthRanges.length) {
+			} else if (index === this.project.viewport.widthRanges.length - 1) {
 				type = 'min'
 			}
 
