@@ -40,18 +40,20 @@ class ChassisPostCss {
   }
 
   _process () {
+    let { atRules, plugins } = this.project;
+    
     return (root, result) => {
       let output = this._unnest(root)
-
-      output.walkAtRules('chassis', (atRule) => {
-        this.project.atRules.process(atRule, output)
-      })
-
-      if (this.project.plugins.includes('Detailer')) {
+      
+      if (plugins.includes('Detailer')) {
         output.walkAtRules('detailer', (atRule) => {
-          this.project.plugins.get('Detailer').atRules.process(atRule, output)
+          plugins.get('Detailer').atRules.process(atRule, output)
         })
       }
+
+      output.walkAtRules('chassis', (atRule) => {
+        atRules.process(atRule, output)
+      })
 
       // TODO: Process Variables
 

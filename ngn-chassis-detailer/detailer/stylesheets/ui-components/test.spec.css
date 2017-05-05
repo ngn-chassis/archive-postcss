@@ -1,0 +1,9 @@
+.test {
+	default {
+		background: red;
+	}
+
+	hover {
+		background: blue;
+	}
+}

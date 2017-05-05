@@ -1,11 +1,11 @@
 const DetailerComponent = require('../component')
 
-class TestComponent extends DetailerComponent {
+class ButtonComponent extends DetailerComponent {
 	constructor (project, parent, nodes) {
-		let spec = 'test'
+		let spec = 'button'
 		
 		super(project, spec, parent, nodes)
 	}
 }
 
-module.exports = TestComponent
+module.exports = ButtonComponent

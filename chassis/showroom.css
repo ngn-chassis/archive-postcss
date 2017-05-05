@@ -1,8 +1,8 @@
 @chassis init;
 
-@detailer include test;
+@detailer include button test;
 
-.custom.test {
+/*.custom.test {
 	@detailer extend test {
 		default {
 			background: green;
@@ -12,4 +12,4 @@
 			background: yellow;
 		}
 	};
-}
+}*/

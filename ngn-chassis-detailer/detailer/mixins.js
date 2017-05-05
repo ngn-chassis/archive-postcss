@@ -6,13 +6,8 @@ class DetailerMixins {
 	}
 
 	extend (componentName, parent, nodes) {
-		let { components, utils } = this.project
-
-		if (!nodes.length) {
-			return components.get(componentName, parent)
-		}
-
-		return components.get(componentName, parent, nodes)
+		nodes = nodes.length ? nodes : []
+		return this.project.components.get(componentName, parent, nodes)
 	}
 
 	include (components) {

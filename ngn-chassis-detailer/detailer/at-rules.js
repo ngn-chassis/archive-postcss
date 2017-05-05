@@ -6,17 +6,16 @@ class DetailerAtRules {
 	}
 
 	process (atRule, root) {
+		let { mixins } = this.project
+		
 		let params = atRule.params.split(' ')
 		let mixin = params[0]
 		let args = params.length > 1 ? params.slice(1) : null
 		let nodes = NGN.coalesce(atRule.nodes, [])
 
-		let { mixins } = this.project
-		let css
-
 		switch (mixin) {
 			case 'extend':
-				atRule.parent.replaceWith(mixins.extend(args, atRule.parent, nodes))
+				atRule.parent.replaceWith(mixins.extend(args[0], atRule.parent, nodes))
 				break
 
 			case 'include':

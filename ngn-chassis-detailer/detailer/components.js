@@ -1,41 +1,34 @@
 const TestComponent = require('./components/test')
+const ButtonComponent = require('./components/button')
 
 class DetailerComponents {
 	constructor (project) {
 		this.project = project
 	}
-
+	
+	/**
+	 * @method get
+	 * get an AST of UI component styles
+	 * @param  {string} @required component
+	 * Semantic name of UI component
+	 * @param  {Rule} parent
+	 * Parent rule to which to add extended styles
+	 * @param  {array} nodes
+	 * array of custom states used to configure extended component
+	 * @return {AST} component styles
+	 */
 	get (component, parent, nodes) {
-		let config = {
-			states: {}
-		}
-
-		if (parent) {
-			config.selector = parent.selector
-		}
-
-		if (nodes) {
-			nodes.forEach(rule => {
-				config.states[rule.selector] = {}
-
-				rule.nodes.forEach(node => {
-					config.states[rule.selector][node.prop] = node.value
-				})
-			})
-		}
-
-		return new this[component](this.project, config).styles
+		return new this[component](this.project, parent, nodes).styles
 	}
 
-	// get button () {
-	// 	return {
-	// 		definition: {
-	// 			selector: '.chassis .button'
-	// 		},
-	// 		template: '/stylesheets/ui-components/button.css'
-	// 	}
-	// }
-	//
+	get button () {
+		return ButtonComponent
+	}
+	
+	get test () {
+		return TestComponent
+	}
+
 	// get form () {
 	// 	return {
 	// 		template: [
@@ -80,10 +73,6 @@ class DetailerComponents {
 	// 		template: '/stylesheets/ui-components/table.css'
 	// 	}
 	// }
-
-	get test () {
-		return TestComponent
-	}
 }
 
 module.exports = DetailerComponents

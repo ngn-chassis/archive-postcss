@@ -1,58 +1,66 @@
 class DetailerComponent {
-	constructor (project, config) {
+	constructor (project, spec, parent, customStates) {
 		this.project = project
-		this.config = config || {}
+		
+		this.spec = project.utils.parseStylesheet(`../../ngn-chassis-detailer/detailer/stylesheets/ui-components/${spec}.spec.css`)
+		
+		this.parent = NGN.coalesce(parent, null)
+		
+		if (customStates) {
+			this._applyCustomStates(customStates)
+		} else {
+			this.selector = `.chassis ${this.spec.nodes[0].selector}`
+		}
+	}
+	
+	get styles () {
+		let { utils } = this.project
+		let states = this.spec.nodes[0].nodes
+		
+		let rules = states.map(rule => {
+			rule.selector = this._generateSelector(rule.selector)
+			return rule
+		})
+		
+		return utils.newRoot(rules)
+	}
+	
+	// Private Methods -----------------------------------------------------------
+	_applyCustomStates (customStates) {
+		console.log('apply custom states');
+		// let defaultStates = this.root.nodes[0].nodes
+		// let customStates = this.config
+		//
+		// return customStates.map(customState => {
+		// 	let defaultState = defaultStates.find(state => state.selector === customState.selector)
+		//
+		// 	if (defaultState) {
+		// 		customState.nodes.forEach(customDecl => {
+		// 			let defaultDecl = defaultState.nodes.find(node => node.prop === customDecl.prop)
+		//
+		// 			if (defaultDecl) {
+		// 				defaultDecl.value = customDecl.value
+		// 			}
+		// 		})
+		// 	}
+		//
+		// 	return defaultState
+		// })
 	}
 
-	_generateSelector (selector, state) {
+	_generateSelector (state) {
 		if (state === 'default') {
-			return selector
-		}
-
-		if (state === 'disabled') {
-			return `${selector}.disabled`
-		}
-
-		return `${selector}:${state}`
-	}
-
-	_mergeProps (defaults, custom) {
-		for (let state in custom.states) {
-			if (!defaults.states.hasOwnProperty(state)) {
-				defaults.states[state] = custom.states[state]
-			}
-
-			for (let property in custom.states[state]) {
-				defaults.states[state][property] = custom.states[state][property]
-			}
+			return this.selector
 		}
 		
-		return defaults
-	}
-
-	generateStyles (properties) {
-		let { config } = this
-
-		if (config) {
-			properties = this._mergeProps(properties, config)
+		// TODO: Check if state matches a CSS pseudo-class. If not, just append
+		// the state to the selector as a classname. If so, add as a pseudo-class.
+		
+		if (state === 'disabled') {
+			return `${this.selector}.disabled`
 		}
-
-		let { utils } = this.project
-		let root = utils.newRoot()
-
-		let { states } = properties
-
-		for (let state in states) {
-			let selector = NGN.coalesce(config.selector, `.chassis ${properties.selector}`)
-
-			let decls = Object.keys(states[state]).map((key) => {
-				return utils.newDeclObj(key, states[state][key])
-			})
-
-			root.nodes.push(utils.newRule(this._generateSelector(selector, state),	decls))
-		}
-
-		return root
+		
+		return `${this.selector}:${state}`
 	}
 }
 
