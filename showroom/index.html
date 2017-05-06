@@ -19,12 +19,12 @@
           <a href="https://github.com/ngnjs" target="_blank">Github</a>
         </aside>
       </div>
-      <div class="test">
+      <!-- <div class="test">
         DEFAULT TEST
       </div>
       <div class="custom test">
         CUSTOM TEST
-      </div>
+      </div> -->
     </header>
 
 		<main>
@@ -162,21 +162,20 @@ or
   Outlined Button
 &lt;/a></pre>
             <pre class="sass code">.outlined.button {
-  @detailer extend button({
-    default: {
-      bg-color: #FFF,
-      text-color: #77787C,
-      has-border: true,
-      border-thickness: 2px,
-      border-color: #D1D2D4
-    },
-    hover: {
-      bg-color: #E2E3E5,
-      text-color: #77787C
-    },
-    active: {
-      bg-color: #DADBDD,
-      text-color: #77787C
+  @detailer extend button {
+    default {
+      background: #FFF;
+      color: #77787C;
+    }
+
+    hover {
+      bg-color: #E2E3E5;
+      text-color: #77787C;
+    }
+
+    active {
+      bg-color: #DADBDD;
+      text-color: #77787C;
     }
   });
 }</pre>
@@ -186,11 +185,6 @@ or
               <h2>More Custom Buttons</h2>
               <a class="button with-shadow" href="#">Button with Shadow</a>
               <a class="disabled button with-shadow" href="#">Disabled Button with Shadow</a>
-
-              <br>
-              <!-- Button with custom modifier class -->
-              <a class="green button" href="#">Button with Modifier</a>
-              <a class="disabled green button" href="#">Disabled Button with Modifier</a>
 
               <br>
               <!-- Button with Gradient Bevel -->

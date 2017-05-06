@@ -25,54 +25,16 @@
 		@chassis disable-text-selection;
 	}
 
-	visited {
-		background: var(--visited-button-bg-color, var(--blue));
-
-		font-family: var(--button-font-family, inherit);
-		font-weight: var(--button-font-weight, normal);
-		font-style: var(--button-font-style, normal);
-		font-variant: var(--button-font-variant, normal);
-
-		text-align: center;
-		text-decoration: var(--button-text-decoration, none);
-		text-transform: var(--button-text-transform, normal);
-
-		color: var(--button-text-color, var(--white));
-	}
-
 	hover {
-		background: var(--hover-button-bg-color, rgb(0,162,245));
-
-		font-family: var(--button-font-family, inherit);
-		font-weight: var(--button-font-weight, normal);
-		font-style: var(--button-font-style, normal);
-		font-variant: var(--button-font-variant, normal);
-
-		text-align: center;
-		text-decoration: var(--button-text-decoration, none);
-		text-transform: var(--button-text-transform, normal);
-
-		color: var(--button-text-color, var(--white));
+		background: rgb(0,162,245);
 	}
 
 	active {
-		background: var(--active-button-bg-color, rgb(0,145,220));
-
-		font-family: var(--button-font-family, inherit);
-		font-weight: var(--button-font-weight, normal);
-		font-style: var(--button-font-style, normal);
-		font-variant: var(--button-font-variant, normal);
-
-		text-align: center;
-		text-decoration: var(--button-text-decoration, none);
-		text-transform: var(--button-text-transform, normal);
-
-		color: var(--button-text-color, var(--white));
+		background: rgb(0,145,220);
 	}
 
 	disabled {
 		opacity: var(--disabled-button-opacity, .382);
-		color: var(--button-text-color, var(--white));
 		pointer-events: none;
 	}
 

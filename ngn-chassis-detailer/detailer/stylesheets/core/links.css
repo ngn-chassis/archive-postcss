@@ -1,4 +1,4 @@
-.chassis a {
+.chassis a:not(.button) {
 	font-family: var(--link-fonts, inherit);
 	font-weight: var(--link-weight, normal);
 	font-style: var(--link-style, normal);
@@ -10,52 +10,15 @@
 	color: var(--link-color, var(--blue));
 }
 
-.chassis a:visited {
-	font-family: var(--visited-link-fonts, inherit);
-	font-weight: var(--visited-link-weight, normal);
-	font-style: var(--visited-link-style, normal);
-	font-variant: var(--visited-link-variant, normal);
-
-	text-decoration: var(--visited-link-decoration, none);
-	text-transform: var(--visited-link-transform, normal);
-
-	color: var(--visited-link-color, var(--blue));
+.chassis a:not(.button):hover {
+	text-decoration: underline;
 }
 
-.chassis a:hover {
-	font-family: var(--hover-link-fonts, inherit);
-	font-weight: var(--hover-link-weight, normal);
-	font-style: var(--hover-link-style, normal);
-	font-variant: var(--hover-link-variant, normal);
-
-	text-decoration: var(--hover-link-decoration, underline);
-	text-transform: var(--hover-link-transform, normal);
-
-	color: var(--hover-link-color, var(--blue));
+.chassis a:not(.button):active {
+	color: rgb(0,145,220);
 }
 
-.chassis a:active {
-	font-family: var(--active-link-fonts, inherit);
-	font-weight: var(--active-link-weight, normal);
-	font-style: var(--active-link-style, normal);
-	font-variant: var(--active-link-variant, normal);
-
-	text-decoration: var(--active-link-decoration, none);
-	text-transform: var(--active-link-transform, normal);
-
-	color: var(--active-link-color, var(--blue));
-}
-
-.chassis a.disabled {
-	font-family: var(--disabled-link-fonts, inherit);
-	font-weight: var(--disabled-link-weight, normal);
-	font-style: var(--disabled-link-style, normal);
-	font-variant: var(--disabled-link-variant, normal);
-
-	text-decoration: var(--disabled-link-decoration, none);
-	text-transform: var(--disabled-link-transform, normal);
-
+.chassis a:not(.button).disabled {
 	color: var(--disabled-link-color, var(--grey-n04));
-
 	pointer-events: none;
 }

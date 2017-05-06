@@ -28,8 +28,10 @@ class ExtensibleComponent {
 		this.selector = this.parent.selector
 
 		customStates.forEach(customState => {
+			let stateName = customState.selector
+
 			let stateToReplace = this.states.find(state => {
-				return state.selector === customState.selector
+				return state.selector === stateName
 			})
 
 			if (stateToReplace) {
@@ -62,7 +64,12 @@ class ExtensibleComponent {
 				return node.type === 'decl' && node.prop === decl.prop
 			})
 
-			declToReplace.replaceWith(decl)
+			if (declToReplace) {
+				declToReplace.replaceWith(decl)
+				return
+			}
+
+			spec.nodes.push(decl)
 		})
 	}
 
