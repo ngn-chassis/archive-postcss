@@ -4,11 +4,10 @@ class ExtensibleComponent {
 		this.spec = spec
 		this.states = spec.nodes[0].nodes
 		this.parent = NGN.coalesce(parent, null)
+		this.selector = `.chassis ${this.spec.nodes[0].selector}`
 
 		if (customStates) {
 			this._applyCustomStates(customStates)
-		} else {
-			this.selector = `.chassis ${this.spec.nodes[0].selector}`
 		}
 	}
 
@@ -63,7 +62,7 @@ class ExtensibleComponent {
 				return node.type === 'decl' && node.prop === decl.prop
 			})
 
-			declToReplace = decl
+			declToReplace.replaceWith(decl)
 		})
 	}
 
