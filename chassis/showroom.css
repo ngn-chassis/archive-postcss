@@ -1,8 +1,8 @@
 @chassis init;
 
-@detailer include button icon modal overlay table tag;
+@detailer include button icon form modal overlay table tag test;
 
-/*.custom.test {
+.custom.test {
 	@detailer extend test {
 		default {
 			background: green;
@@ -12,7 +12,7 @@
 			background: yellow;
 		}
 	};
-}*/
+}
 
 .showroom {
 	/* Account for sticky footer */

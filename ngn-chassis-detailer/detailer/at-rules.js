@@ -7,7 +7,7 @@ class DetailerAtRules {
 
 	process (atRule, root) {
 		let { mixins } = this.project
-		
+
 		let params = atRule.params.split(' ')
 		let mixin = params[0]
 		let args = params.length > 1 ? params.slice(1) : null

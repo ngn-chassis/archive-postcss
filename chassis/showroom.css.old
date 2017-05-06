@@ -1,15 +1,18 @@
 @chassis init;
 
-:root {
-	--font-family: 'Gotham', Helvetica, Arial, sans-serif;
-}
+@detailer include button icon form modal overlay table tag test;
 
-@detailer include test;
-/*@detailer include button form icon modal overlay table tag test;*/
+/*.custom.test {
+	@detailer extend test {
+		default {
+			background: green;
+		}
 
-.custom .test {
-	@detailer extend test;
-}
+		hover {
+			background: yellow;
+		}
+	};
+}*/
 
 .showroom {
 	/* Account for sticky footer */

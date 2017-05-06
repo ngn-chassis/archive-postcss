@@ -41,17 +41,17 @@ class ChassisPostCss {
 
   _process () {
     let { atRules, plugins } = this.project;
-    
+
     return (root, result) => {
       let output = this._unnest(root)
-      
+
       if (plugins.includes('Detailer')) {
         let Detailer = plugins.get('Detailer')
-        
+
         output.walkAtRules('detailer', (atRule) => {
           Detailer.atRules.process(atRule, output)
         })
-        
+
         // Run again to process any at-rules inside components
         // TODO: Possibly move this processing to component.js to avoid the
         // extra tree traversal

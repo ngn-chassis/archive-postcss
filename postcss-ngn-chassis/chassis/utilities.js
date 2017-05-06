@@ -103,6 +103,26 @@ class ChassisUtils {
 	  return data.input.slice(0, data.index)
 	}
 
+	static getAllFilesInDirectory (dirpath) {
+		dirpath = path.join(__dirname, dirpath)
+		return fs.readdirSync(dirpath)
+	}
+
+	static isDirectory (filepath) {
+		filepath = path.join(__dirname, filepath)
+
+		if (fs.existsSync(filepath)) {
+			return fs.lstatSync(filepath).isDirectory()
+		}
+
+		return false
+	}
+
+	static fileExists (filepath) {
+		filepath = path.join(__dirname, filepath)
+		return fs.existsSync(filepath)
+	}
+
 	/**
 	 * @method parseStylesheet
 	 * Parse a CSS stylesheet into a postcss AST
