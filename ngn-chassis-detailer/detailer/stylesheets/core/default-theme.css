@@ -26,19 +26,6 @@
 --form-legend-weight : var(--h2-weight);
 
 
-/*--default-tag-has-border                  : false                       !default;
---default-tag-border-thickness            : 0px                         !default;
---default-tag-border-color                : transparent                 !default;
---default-tag-border-radius               : --default-border-radius      !default;
-
---default-tag-box-shadow                  : ()                          !default;
-// Example:
-// --default-tag-box-shadow : (
-// 	3px 3px 3px 3px black,
-// 	-3px -3px 3px 3px red
-// );*/
-
-
 /*
 --form-layout-gutter               : 1.91vw           !default;
 --form-layout-mobile-breakpoint    : small            !default;
