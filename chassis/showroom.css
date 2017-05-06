@@ -1,6 +1,6 @@
 @chassis init;
 
-@detailer include button icon form modal overlay table tag test;
+@detailer include button icon form modal overlay table tag;
 
 .custom.test {
 	@detailer extend button {

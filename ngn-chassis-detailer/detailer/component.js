@@ -29,8 +29,9 @@ class ExtensibleComponent {
 		this.selector = this.parent.selector
 
 		customStates.forEach(customState => {
-			let stateName = customState.selector
-			let stateToReplace = this.states.find(state => state.selector === stateName)
+			let stateToReplace = this.states.find(state => {
+				return state.selector === customState.selector
+			})
 
 			if (stateToReplace) {
 				this._mergeProperties(stateToReplace, customState)
