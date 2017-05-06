@@ -3,8 +3,8 @@ const ExtensibleComponent = require('./component')
 class DetailerComponents {
 	constructor (project) {
 		this.project = project
-
 		this.basePath = '../../ngn-chassis-detailer/detailer/stylesheets/ui-components'
+		this.extensibleComponentsPath = `${this.basePath}/extensible`
 	}
 
 	/**
@@ -19,9 +19,16 @@ class DetailerComponents {
 	 * @return {AST} component styles
 	 */
 	extend (component, parent = null, nodes = null) {
-		console.log(`extending ${component} component`);
-		let output = new ExtensibleComponent(this.project, this.basePath, component, parent, nodes)
-		return output.isExtensible ? output.styles : ''
+		let { utils } = this.project
+		let path = `${this.extensibleComponentsPath}/${component}.spec.css`
+
+		if (utils.fileExists(path)) {
+			let spec = utils.parseStylesheet(path)
+			return new ExtensibleComponent(this.project, spec, parent, nodes).styles
+		}
+
+		console.error(`Detailer Component "${component}" does not exist.`)
+		return ''
 	}
 
 	/**
@@ -33,12 +40,10 @@ class DetailerComponents {
 	 */
 	get (component) {
 		let { utils } = this.project
-
 		let path = `${this.basePath}/${component}`
 
 		if (utils.isDirectory(path)) {
-			let files = utils.getAllFilesInDirectory(path).map(file => `${path}/${file}`)
-			return utils.parseStylesheets(files)
+			return utils.parseDirectory(path)
 		}
 
 		if (utils.fileExists(`${path}.css`)) {

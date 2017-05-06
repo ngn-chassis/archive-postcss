@@ -15,12 +15,10 @@ class DetailerMixins {
 			let styles = this.project.components.get(component)
 
 			if (index === 0) {
-				output = styles
-			} else {
-				output.append(styles)
+				return styles
 			}
 
-			return output
+			return output.append(styles)
 		}, components[0])
 	}
 }

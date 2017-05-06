@@ -1,15 +1,8 @@
 class ExtensibleComponent {
-	constructor (project, basePath, component, parent, customStates) {
+	constructor (project, spec, parent, customStates) {
 		this.project = project
-		this.filepath = `${basePath}/extensible/${component}.spec.css`
-		this.fileExists = this.project.utils.fileExists(this.filepath)
-
-		if (!this.fileExists) {
-			console.error(`Detailer Component "${component}" is not extensible.`)
-		}
-
-		this.name = component
-		this.spec = project.utils.parseStylesheet(this.filepath)
+		this.spec = spec
+		this.states = spec.nodes[0].nodes
 		this.parent = NGN.coalesce(parent, null)
 
 		if (customStates) {
@@ -19,45 +12,33 @@ class ExtensibleComponent {
 		}
 	}
 
-	get isExtensible () {
-		return this.fileExists
-	}
-
 	get styles () {
 		let { utils } = this.project
-		let states = this.spec.nodes[0].nodes
 
-		let rules = states.map(rule => {
+		let rules = this.states.map(rule => {
 			rule.selector = this._generateSelector(rule.selector)
 			return rule
 		})
 
 		let output = utils.newRoot(rules)
-
 		return this._processAtRules(output)
 	}
 
 	// Private Methods -----------------------------------------------------------
 	_applyCustomStates (customStates) {
-		console.log(`TODO: apply custom states to ${this.name} component`);
-		// let defaultStates = this.root.nodes[0].nodes
-		// let customStates = this.config
-		//
-		// return customStates.map(customState => {
-		// 	let defaultState = defaultStates.find(state => state.selector === customState.selector)
-		//
-		// 	if (defaultState) {
-		// 		customState.nodes.forEach(customDecl => {
-		// 			let defaultDecl = defaultState.nodes.find(node => node.prop === customDecl.prop)
-		//
-		// 			if (defaultDecl) {
-		// 				defaultDecl.value = customDecl.value
-		// 			}
-		// 		})
-		// 	}
-		//
-		// 	return defaultState
-		// })
+		this.selector = this.parent.selector
+
+		customStates.forEach(customState => {
+			let stateName = customState.selector
+			let stateToReplace = this.states.find(state => state.selector === stateName)
+
+			if (stateToReplace) {
+				this._mergeProperties(stateToReplace, customState)
+				return
+			}
+
+			this.states.push(customState)
+		})
 	}
 
 	_generateSelector (state) {
@@ -75,8 +56,18 @@ class ExtensibleComponent {
 		return `${this.selector}:${state}`
 	}
 
+	_mergeProperties (spec, custom) {
+		custom.walkDecls(decl => {
+			let declToReplace = spec.nodes.find(node => {
+				return node.type === 'decl' && node.prop === decl.prop
+			})
+
+			declToReplace = decl
+		})
+	}
+
 	_processAtRules (input) {
-		console.log(`TODO: Process ${this.name} component at-rules`);
+		console.log(`TODO: Process component at-rules`);
 		return input
 	}
 }

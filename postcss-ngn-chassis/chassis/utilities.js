@@ -4,6 +4,47 @@ const path = require('path')
 
 class ChassisUtils {
 	/**
+	 * @method fileExists
+	 * Determine whether or not a filepath points to an existing file
+	 * @param {string} filepath
+	 * @static
+	 */
+	static fileExists (filepath, relative = true) {
+		if (relative) {
+			filepath = this.resolvePath(filepath)
+		}
+
+		return fs.existsSync(filepath)
+	}
+
+	/**
+	 * @method getUnit
+	 * Get the units from a CSS Property value
+	 * @param {string} value with units
+	 * @return {string}
+	 * @static
+	 */
+	static getUnit (value) {
+	  return value.match(/\D+$/)[0]
+	}
+
+	/**
+	 * @method isDirectory
+	 * Determine whether or not a filepath points to a directory
+	 * @param {string} filepath
+	 * @static
+	 */
+	static isDirectory (filepath) {
+		filepath = path.join(__dirname, filepath)
+
+		if (fs.existsSync(filepath)) {
+			return fs.lstatSync(filepath).isDirectory()
+		}
+
+		return false
+	}
+
+	/**
 	 * @method newAtRule
 	 * Generate new postcss at-rule AST
 	 * @param {object} config
@@ -12,6 +53,48 @@ class ChassisUtils {
 	 */
 	static newAtRule (config) {
 	  return postcss.atRule(config)
+	}
+
+	/**
+	 * @method newDecl
+	 * Generate postcss decl AST
+	 * @param {string} key
+	 * CSS Property
+	 * @param {string} value
+	 * CSS Property value
+	 * @return {decl}
+	 * @static
+	 */
+	static newDecl (key, value) {
+		return postcss.decl(this.newDeclObj(key, value))
+	}
+
+	/**
+	 * @method newDeclObj
+	 * Utility method to reduce code repetition
+	 * Generate decl object
+	 * @param {string} key
+	 * CSS Property
+	 * @param {string} value
+	 * CSS Property value
+	 * @return {object} of shape {prop: {string}, value: {string}}
+	 * @static
+	 */
+	static newDeclObj (key, value) {
+	  return {
+	    prop: key,
+	    value
+	  }
+	}
+
+	/**
+	 * @method newRoot
+	 * @param {array} nodes
+	 * Nodes to populate new root element with
+	 * @static
+	 */
+	static newRoot (nodes = []) {
+		return postcss.root({nodes})
 	}
 
 	/**
@@ -35,8 +118,54 @@ class ChassisUtils {
 		return rule
 	}
 
-	static newRoot (nodes = []) {
-		return postcss.root({nodes})
+	/**
+	 * @method parseDirectory
+	 * Parse all stylesheets in a given directory
+	 * @param {string} dirpath
+	 * @param {boolean} relative
+	 * Whether or not dirpath is relative (false means absolute)
+	 * @static
+	 */
+	static parseDirectory (dirpath, relative = true) {
+		if (relative) {
+			dirpath = this.resolvePath(dirpath)
+		}
+
+		let files = fs.readdirSync(dirpath).map(file => `${dirpath}/${file}`)
+		return this.parseStylesheets(files, false)
+	}
+
+	/**
+	 * @method parseStylesheet
+	 * Parse a CSS stylesheet into a postcss AST
+	 * @param {string} filepath
+	 * @return {AST}
+	 * @static
+	 */
+	static parseStylesheet (filepath, relative = true) {
+		if (relative) {
+			filepath = this.resolvePath(filepath)
+		}
+
+	  return postcss.parse(fs.readFileSync(filepath))
+	}
+
+	/**
+	 * @method parseStylesheets
+	 * Parse an array of CSS stylesheets into a single postcss AST
+	 * @param {array} filepaths
+	 * @return {AST}
+	 * @static
+	 */
+	static parseStylesheets (filepaths, relative = true) {
+	  let output = this.parseStylesheet(filepaths[0], relative)
+	  let remainingFilepaths = filepaths.slice(1)
+
+	  remainingFilepaths.forEach(path => {
+	    output.append(this.parseStylesheet(path, relative))
+	  })
+
+	  return output
 	}
 
 	/**
@@ -48,46 +177,13 @@ class ChassisUtils {
 	}
 
 	/**
-	 * @method newDeclObj
-	 * Utility method to reduce code repetition
-	 * Generate decl object
-	 * @param {string} key
-	 * CSS Property
-	 * @param {string} value
-	 * CSS Property value
-	 * @return {object} of shape {prop: {string}, value: {string}}
+	 * @method resolvePath
+	 * Resolve a relative path
+	 * @param {string} filepath
 	 * @static
 	 */
-	static newDeclObj (key, value) {
-	  return {
-	    prop: key,
-	    value
-	  }
-	}
-
-	/**
-	 * @method newDecl
-	 * Generate postcss decl AST
-	 * @param {string} key
-	 * CSS Property
-	 * @param {string} value
-	 * CSS Property value
-	 * @return {decl}
-	 * @static
-	 */
-	static newDecl (key, value) {
-		return postcss.decl(this.newDeclObj(key, value))
-	}
-
-	/**
-	 * @method getUnit
-	 * Get the units from a CSS Property value
-	 * @param {string} value with units
-	 * @return {string}
-	 * @static
-	 */
-	static getUnit (value) {
-	  return value.match(/\D+$/)[0]
+	static resolvePath (filepath) {
+		return path.join(__dirname, filepath)
 	}
 
 	/**
@@ -99,59 +195,7 @@ class ChassisUtils {
 	 */
 	static stripUnits (value) {
 	  let data = value.match(/\D+$/)
-
 	  return data.input.slice(0, data.index)
-	}
-
-	static getAllFilesInDirectory (dirpath) {
-		dirpath = path.join(__dirname, dirpath)
-		return fs.readdirSync(dirpath)
-	}
-
-	static isDirectory (filepath) {
-		filepath = path.join(__dirname, filepath)
-
-		if (fs.existsSync(filepath)) {
-			return fs.lstatSync(filepath).isDirectory()
-		}
-
-		return false
-	}
-
-	static fileExists (filepath) {
-		filepath = path.join(__dirname, filepath)
-		return fs.existsSync(filepath)
-	}
-
-	/**
-	 * @method parseStylesheet
-	 * Parse a CSS stylesheet into a postcss AST
-	 * @param {string} filepath
-	 * @return {AST}
-	 * @static
-	 */
-	static parseStylesheet (filepath) {
-	  filepath = path.join(__dirname, filepath)
-	  let file = fs.readFileSync(filepath)
-	  return postcss.parse(file)
-	}
-
-	/**
-	 * @method parseStylesheets
-	 * Parse an array of CSS stylesheets into a single postcss AST
-	 * @param {array} filepaths
-	 * @return {AST}
-	 * @static
-	 */
-	static parseStylesheets (filepaths) {
-	  let output = this.parseStylesheet(filepaths[0])
-	  let remainingFilepaths = filepaths.slice(1)
-
-	  remainingFilepaths.forEach(path => {
-	    output.append(this.parseStylesheet(path))
-	  })
-
-	  return output
 	}
 }
 

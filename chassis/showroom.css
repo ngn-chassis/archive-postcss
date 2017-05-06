@@ -3,7 +3,7 @@
 @detailer include button icon form modal overlay table tag test;
 
 .custom.test {
-	@detailer extend test {
+	@detailer extend button {
 		default {
 			background: green;
 		}
