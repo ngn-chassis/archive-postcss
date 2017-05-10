@@ -71,26 +71,48 @@ class ChassisConstants {
 
 	static get goldenRatioTypographyRules () {
 		return [
+      // {
+      //   lowerBound: 0,
+      //   upperBound: 320,
+      //   fontSizes: {
+      //     root: 14,
+      //     small: 11,
+      //     large: 18,
+      //     larger: 23,
+      //     largest: 37
+      //   }
+      // },
+      // {
+      //   lowerBound: 320,
+      //   upperBound: 512,
+      //   fontSizes: {
+      //     root: 15,
+      //     small: 12,
+      //     large: 19,
+      //     larger: 24,
+      //     largest: 39
+      //   }
+      // },
       {
         lowerBound: 0,
         upperBound: 320,
         fontSizes: {
-          root: 14,
-          small: 11,
-          large: 18,
-          larger: 23,
-          largest: 37
+          root: 16,
+          small: 13,
+          large: 20,
+          larger: 26,
+          largest: 42
         }
       },
-      {
+			{
         lowerBound: 320,
         upperBound: 512,
         fontSizes: {
-          root: 15,
-          small: 12,
-          large: 19,
-          larger: 24,
-          largest: 39
+          root: 16,
+          small: 13,
+          large: 20,
+          larger: 26,
+          largest: 42
         }
       },
       {

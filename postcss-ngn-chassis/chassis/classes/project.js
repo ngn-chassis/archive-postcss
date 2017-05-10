@@ -18,9 +18,7 @@ class ChassisProject extends NGN.EventEmitter {
     this.settings = new SettingsModel()
 
     this.settings.once('load', () => {
-      this.settings.viewportWidthRanges.sort({
-        lowerBound: 'asc'
-      })
+      this.settings.viewportWidthRanges.sort({lowerBound: 'asc'})
 
       this.viewport = new ChassisViewport(this.settings.data.viewportWidthRanges)
       this.typography = new ChassisTypography(this.viewport, this.settings.data.typography)

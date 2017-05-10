@@ -15,6 +15,8 @@ class ChassisAtRules {
    * CSS Root node
    */
   process (atRule, root) {
+    let { layout, mixins } = this.project
+    
     let line = Object.keys(atRule.source.start).map(key => {
       return `${key}: ${atRule.source.start[key]}`
     }).join(', ')
@@ -24,39 +26,36 @@ class ChassisAtRules {
     let args = params.length > 1 ? params.slice(1) : null
     let nodes = NGN.coalesce(atRule.nodes, [])
 
-    let { mixins } = this.project
-
     switch (mixin) {
       case 'block-layout':
         // TODO: Add error handling
-
-        atRule.replaceWith(mixins.blockLayout(args))
+        atRule.replaceWith(mixins.layout.block(args))
         break
 
       case 'constrain-width':
         root.insertAfter(atRule.parent, ChassisUtils.newAtRule({
           name: 'media',
-          params: `screen and (max-width: ${this.project.layout.minWidth}px)`,
+          params: `screen and (max-width: ${layout.minWidth}px)`,
           nodes: [
             ChassisUtils.newRule(atRule.parent.selector, [
-              ChassisUtils.newDeclObj('padding-left', this.project.layout.getGutterLimit(this.project.layout.minWidth)),
-              ChassisUtils.newDeclObj('padding-right', this.project.layout.getGutterLimit(this.project.layout.minWidth))
+              ChassisUtils.newDeclObj('padding-left', layout.getGutterLimit(layout.minWidth)),
+              ChassisUtils.newDeclObj('padding-right', layout.getGutterLimit(layout.minWidth))
             ])
           ]
         }))
 
         root.insertAfter(atRule.parent, ChassisUtils.newAtRule({
           name: 'media',
-          params: `screen and (min-width: ${this.project.layout.maxWidth}px)`,
+          params: `screen and (min-width: ${layout.maxWidth}px)`,
           nodes: [
             ChassisUtils.newRule(atRule.parent.selector, [
-              ChassisUtils.newDeclObj('padding-left', this.project.layout.getGutterLimit(this.project.layout.maxWidth)),
-              ChassisUtils.newDeclObj('padding-right', this.project.layout.getGutterLimit(this.project.layout.maxWidth))
+              ChassisUtils.newDeclObj('padding-left', layout.getGutterLimit(layout.maxWidth)),
+              ChassisUtils.newDeclObj('padding-right', layout.getGutterLimit(layout.maxWidth))
             ])
           ]
         }))
 
-        atRule.replaceWith(mixins.constrainWidth())
+        atRule.replaceWith(mixins.layout.constrainWidth())
         break
 
       case 'disable-text-selection':
@@ -74,12 +73,12 @@ class ChassisAtRules {
         break
 
       case 'font-size':
-        root.insertAfter(atRule.parent, mixins.fontSize(atRule.parent.selector, args))
+        root.insertAfter(atRule.parent, mixins.typography.fontSize(atRule.parent.selector, args))
         atRule.remove()
         break
 
       case 'font-weight':
-        atRule.replaceWith(mixins.fontWeight(atRule, line, args))
+        atRule.replaceWith(mixins.typography.fontWeight(atRule, line, args))
         break
 
       case 'hide':
@@ -95,7 +94,7 @@ class ChassisAtRules {
         break
 
       case 'inline-layout':
-        atRule.replaceWith(mixins.inlineLayout(args))
+        atRule.replaceWith(mixins.layout.inline(args))
         break
 
       case 'line-height':
@@ -108,7 +107,7 @@ class ChassisAtRules {
         break
 
       case 'set-typography':
-        root.insertAfter(atRule.parent, mixins.setTypography(atRule.parent.selector, args))
+        root.insertAfter(atRule.parent, mixins.typography.define(atRule.parent.selector, args))
         atRule.remove()
         break
 

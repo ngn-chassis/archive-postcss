@@ -2,10 +2,7 @@ const ChassisUtils = require('../utilities')
 
 class ChassisLayout {
   constructor (viewport, typography, settings) {
-    this.project = {
-      viewport,
-      typography
-    }
+    this.project = { viewport, typography }
 
     for (let key in settings) {
       this[key] = settings[key]
@@ -22,6 +19,7 @@ class ChassisLayout {
    * Only applicable at min or max
    */
   getGutterLimit (width) {
+    let { typography } = this.project
     let unit = ChassisUtils.getUnit(this.gutter)
 
     switch (unit) {
@@ -42,13 +40,26 @@ class ChassisLayout {
         break
 
       case 'rem':
-        return `${parseFloat(this.gutter) * (this.project.typography.baseFontSize * this.project.typography.globalMultiplier)}px`
+        return `${parseFloat(this.gutter) * (typography.baseFontSize * typography.globalMultiplier)}px`
         break
 
       default:
         console.error(`"${unit}" units cannot be used for Layout Gutter. Please use vw, %, px or rem instead.`)
     }
   }
+  
+  /**
+   * @method getInlineHeight
+   * Algorithm which determines the final height of inline-block-like elements
+   * like buttons, form fields, etc
+   * @param  {number} base line-height in ems
+   * @return {number}
+   * final line-height in ems
+   */
+  getInlineHeight (base) {
+    let { typeScaleRatio } = this.project.typography
+		return base + (typeScaleRatio * (typeScaleRatio - 1))
+	}
 
   /**
    * @method getMargin
@@ -64,17 +75,19 @@ class ChassisLayout {
    * @return {number} in ems
    */
   getMargin (fontSizeAlias, upperBound, type) {
+    let { typography } = this.project
+    
     switch (type) {
       case 'container':
-        return this.project.typography.getLineHeight(fontSizeAlias, upperBound) * this.project.typography.typeScaleRatio
+        return typography.getLineHeight(fontSizeAlias, upperBound) * typography.typeScaleRatio
         break
 
       case 'block':
-        return this.project.typography.getLineHeight(fontSizeAlias, upperBound)
+        return typography.getLineHeight(fontSizeAlias, upperBound)
         break
 
       default:
-        return this.project.typography.getFontSize(fontSizeAlias, upperBound, true)
+        return typography.getFontSize(fontSizeAlias, upperBound, true)
     }
   }
 

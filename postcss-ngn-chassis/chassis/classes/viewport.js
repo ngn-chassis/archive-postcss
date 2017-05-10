@@ -45,17 +45,14 @@ class ChassisViewport {
    * @return {string}
    */
   getBound (type, rangeName) {
-    let index = 0
-
-    let range = this.widthRanges.find((vwr, i) => {
-      index = i
-      return rangeName === vwr.name
-    })
+    let range = this.widthRanges.find((vwr, i) => rangeName === vwr.name)
 
     if (!range) {
       console.warn(`Viewport Width Range ${rangeName} does not exist.`)
       return ''
     }
+    
+    let rangeIsMax = this.widthRanges.indexOf(range) === this.widthRanges.length - 1
 
     switch (type) {
       case 'below':
@@ -71,7 +68,7 @@ class ChassisViewport {
         break
 
       case 'at-max':
-        return index === this.widthRanges.length ? `${range.upperBound}px` : `${range.upperBound - 1}px`
+        return rangeIsMax ? `${range.upperBound}px` : `${range.upperBound - 1}px`
         break
 
       case 'min':

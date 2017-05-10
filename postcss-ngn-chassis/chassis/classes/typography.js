@@ -3,7 +3,7 @@ const ChassisConstants = require('../constants')
 
 class ChassisTypography {
   constructor (viewport, settings) {
-    this.project = {viewport}
+    this.project = { viewport }
 
     for (let key in settings) {
       this[key] = settings[key]
@@ -21,7 +21,7 @@ class ChassisTypography {
    * Upper bound of current viewport width range
    * @return {number}
    */
-  getFontSize (alias, upperBound, inEms = false) {
+  getFontSize (alias = 'root', upperBound, inEms = false) {
     let definition = this.definitions.filter(def => {
       return upperBound >= def.upperBound
     }).pop()
@@ -42,7 +42,7 @@ class ChassisTypography {
    * Font weight alias: thin, light, regular, semibold, bold, ultra
    * @return {number}
    */
-  getFontWeight (line, alias) {
+  getFontWeight (line, alias = 'regular') {
     // TODO: Add error handling
     return this.fontWeights[alias]
   }
@@ -57,7 +57,7 @@ class ChassisTypography {
    * Upper bound of current viewport width range
    * @return {number} of ems
    */
-  getLineHeight (fontSizeAlias, upperBound) {
+  getLineHeight (fontSizeAlias = 'root', upperBound) {
     let fontSize = this.getFontSize(fontSizeAlias, upperBound)
     let optimalLineHeight = this._getOptimalLineHeight(fontSize, upperBound)
 
@@ -76,11 +76,11 @@ class ChassisTypography {
    * Headings have slightly larger margins than other elements such as p tags
    * @return {number} in ems
    */
-  getMargin (fontSizeAlias, upperBound) {
+  getMargin (fontSizeAlias = 'root', upperBound) {
     let lineHeight = this.getLineHeight(fontSizeAlias, upperBound)
     let fontSize = this.getFontSize(fontSizeAlias, upperBound)
 
-    return (lineHeight / this.typeScaleRatio)
+    return lineHeight / this.typeScaleRatio
   }
 
   /**
@@ -89,7 +89,7 @@ class ChassisTypography {
    * @param {number} fontSize in pixels
    * @param {number} upperBound
    * Upper bound of the current viewport width range
-   * @return {number}
+   * @return {number} in pixels
    * @private
    */
   _getOptimalLineHeight (fontSize, upperBound) {

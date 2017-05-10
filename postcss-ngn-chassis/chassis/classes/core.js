@@ -14,19 +14,12 @@ class ChassisCore {
     let { typography, viewport } = this.project
 
     return viewport.widthRanges.map((range, index) => {
-      let mediaQuery
-
-      if ( index === viewport.widthRanges.length - 1 ) {
-        mediaQuery = viewport.getMediaQuery('min', range.name)
-      } else if ( index !== 0 ) {
-        mediaQuery = viewport.getMediaQuery('at', range.name)
-      } else {
-        return
-      }
-
-      if (!mediaQuery) {
-        return
-      }
+			if (index === 0) {
+				return
+			}
+			
+			let queryType = index === viewport.widthRanges.length - 1 ? 'min' : 'at'
+      let mediaQuery = viewport.getMediaQuery(queryType, range.name)
 
       let rule = ChassisUtils.newRule('.chassis', [
         ChassisUtils.newDeclObj(
@@ -38,34 +31,20 @@ class ChassisCore {
 					`${typography.getLineHeight('root', range.upperBound)}em`
 				)
       ])
+			
+			let headingStyles = []
+			
+			for (let i = 1; i <= 6; i++) {
+				headingStyles.push(ChassisUtils.newRule(
+					`.chassis h${i}`,
+					this._getDefaultHeadingProperties(i, range, true)
+				))
+			}
 
       mediaQuery.nodes = [
         ...mediaQuery.nodes,
         rule,
-				ChassisUtils.newRule(
-					'.chassis h1',
-					this._getDefaultHeadingProperties(1, range, true)
-				),
-				ChassisUtils.newRule(
-					'.chassis h2',
-					this._getDefaultHeadingProperties(2, range, true)
-				),
-				ChassisUtils.newRule(
-					'.chassis h3',
-					this._getDefaultHeadingProperties(3, range, true)
-				),
-				ChassisUtils.newRule(
-					'.chassis h4',
-					this._getDefaultHeadingProperties(4, range, true)
-				),
-				ChassisUtils.newRule(
-					'.chassis h5',
-					this._getDefaultHeadingProperties(5, range, true)
-				),
-				ChassisUtils.newRule(
-					'.chassis h6',
-					this._getDefaultHeadingProperties(6, range, true)
-				),
+				...headingStyles,
 				ChassisUtils.newRule(
 					'.chassis legend',
 					this._getDefaultFormLegendProperties(range, true)
@@ -92,8 +71,10 @@ class ChassisCore {
 	/**
    * @method _getDefaultBlockProperties
    * Get default decls for Block elements
-   * @param {string} range
-   * Current viewport width range
+   * @param {object} range
+   * Viewport width range from which to calculate property values
+	 * @param {boolean} raw
+	 * if true, return an array of simple objects, else return postcss decl object
    * @return {rule}
    * @private
    */
@@ -116,8 +97,10 @@ class ChassisCore {
 	/**
    * @method _getDefaultContainerProperties
    * Get default decls for Container elements
-   * @param {string} range
-   * Current viewport width range
+   * @param {object} range
+   * Viewport width range from which to calculate property values
+	 * @param {boolean} raw
+   * if true, return an array of simple objects, else return postcss decl object
    * @return {rule}
    * @private
    */
@@ -141,7 +124,9 @@ class ChassisCore {
    * @method _getDefaultFormLegendProperties
    * Get GR-Typography default settings for legend tags
    * @param {object} range
-   * Viewport Width Range
+   * Viewport width range from which to calculate property values
+	 * @param {boolean} raw
+   * if true, return an array of simple objects, else return postcss decl object
    * @return {rule}
    * @private
    */
@@ -171,6 +156,10 @@ class ChassisCore {
 	/**
    * @method _getDefaultHeadingProperties
    * Generate default styles for h1-h6
+   * @param {object} range
+   * Viewport width range from which to calculate property values
+	 * @param {boolean} raw
+   * if true, return an array of simple objects, else return postcss decl object
    * @private
    */
   _getDefaultHeadingProperties (level, range, raw = false) {
@@ -199,6 +188,10 @@ class ChassisCore {
 	/**
    * @method _getDefaultParagraphProperties
    * Get default styles for p tags
+   * @param {object} range
+   * Viewport width range from which to calculate property values
+	 * @param {boolean} raw
+   * if true, return an array of simple objects, else return postcss decl object
    * @private
    */
   _getDefaultParagraphProperties (range, raw = false) {
@@ -219,7 +212,7 @@ class ChassisCore {
 
 	generate () {
 		let { plugins } = this.project
-		let root = ChassisUtils.parseStylesheet('stylesheets/core.css')
+		let root = ChassisUtils.parseStylesheet('stylesheets/core.spec.css')
 
 		root.walkAtRules((atRule) => {
 			let params = atRule.params.split(' ')
@@ -272,7 +265,7 @@ class ChassisCore {
 
 				case 'width-constraint':
 					atRule.replaceWith([
-						ChassisUtils.newRule('.width-constraint', mixins.constrainWidth()),
+						ChassisUtils.newRule('.width-constraint', mixins.layout.constrainWidth()),
 						ChassisUtils.newAtRule({
 				      name: 'media',
 				      params: `screen and (max-width: ${layout.minWidth}px)`,

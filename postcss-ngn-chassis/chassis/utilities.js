@@ -3,6 +3,10 @@ const fs = require('fs')
 const path = require('path')
 
 class ChassisUtils {
+	static listPropertyValues (array) {
+    return array.map(value => value === 0 ? 0 : `${value}em`).join(' ')
+  }
+	
 	/**
 	 * @method fileExists
 	 * Determine whether or not a filepath points to an existing file
