@@ -1,18 +1,14 @@
 const gutil = require('gulp-util')
 const through = require('through2')
-
 const postcss = require('postcss')
 
 // TODO: update chassis filepath once it is available as a node-module
-const chassis = require('../postcss-ngn-chassis/index.js')
-// const chassis = require('./postcss-plugin/index.js')
+const chassis = require('../ngn-chassis/index.js')
 
 module.exports = function (cfg) {
 	cfg = cfg || {}
 
-  let proc = postcss([
-    chassis(cfg)
-  ])
+  let proc = postcss([chassis(cfg)])
 
 	return through.obj((file, enc, cb) => {
 		if (file.isNull()) {
