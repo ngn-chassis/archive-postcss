@@ -1,40 +1,32 @@
+const MustHave = require('musthave')
+
 class ChassisSettings extends NGN.EventEmitter {
 	constructor (chassis) {
 		super()
 		this.chassis = chassis
 		
-		return new NGN.DATA.Model({
-			relationships: {
-				viewportWidthRanges: [this.viewportWidthRangeModel],
-				layout: this.layoutModel,
-				typography: this.typographyModel
-			},
-
+		this.viewportWidthRangeModel = new NGN.DATA.Model({
 			fields: {
-				zIndex: {
-					type: Object,
-					default: {
-						min: -1000,
-						behind: -1,
-						default: 1,
-						front: 2,
-						max: 1000
-					},
-
-					validate (data) {
-						return Object.keys(data).every(key => {
-							return typeof data[key] === 'number'
-								&& data[key] > (-2147483648)
-								&& data[key] < 2147483647
-						})
+				name: {
+					type: String,
+					pattern: /^\S*$/gi
+				},
+				lowerBound: {
+					type: Number,
+					validate (value) {
+						return value < this.upperBound
+					}
+				},
+				upperBound: {
+					type: Number,
+					validate (value) {
+						return value > this.lowerBound
 					}
 				}
 			}
 		})
-	}
-	
-	get layoutModel () {
-		return new NGN.DATA.Model({
+		
+		this.layoutModel = new NGN.DATA.Model({
 			fields: {
 				gutter: {
 					type: String,
@@ -53,10 +45,8 @@ class ChassisSettings extends NGN.EventEmitter {
 				}
 			}
 		})
-	}
-	
-	get typographyModel () {
-		return new NGN.DATA.Model({
+		
+		this.typographyModel = new NGN.DATA.Model({
 			relationships: {
 				fontSizes: new NGN.DATA.Model({
 					fields: {
@@ -126,30 +116,35 @@ class ChassisSettings extends NGN.EventEmitter {
 				}
 			}
 		})
-	}
-	
-	get viewportWidthRangeModel () {
+		
 		return new NGN.DATA.Model({
+			relationships: {
+				viewportWidthRanges: [this.viewportWidthRangeModel],
+				layout: this.layoutModel,
+				typography: this.typographyModel
+			},
+
 			fields: {
-				name: {
-					type: String,
-					pattern: /^\S*$/gi
-				},
-				lowerBound: {
-					type: Number,
-					validate (value) {
-						return value < this.upperBound
-					}
-				},
-				upperBound: {
-					type: Number,
-					validate (value) {
-						return value > this.lowerBound
+				zIndex: {
+					type: Object,
+					default: {
+						min: -1000,
+						behind: -1,
+						default: 1,
+						front: 2,
+						max: 1000
+					},
+
+					validate (data) {
+						return Object.keys(data).every(key => {
+							return typeof data[key] === 'number'
+								&& data[key] > (-2147483648)
+								&& data[key] < 2147483647
+						})
 					}
 				}
 			}
 		})
-
 	}
 }
 
