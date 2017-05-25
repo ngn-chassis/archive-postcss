@@ -11,10 +11,10 @@ class ChassisStylesheet {
 		}
 	}
 	
-	processAtRules (tree) {
+	processAtRules (root) {
 		let { generator, importer, mixins } = this.chassis
 		
-		tree.walkAtRules((rule) => {
+		root.walkAtRules((rule) => {
 			let line = rule.source.start
 			let params = rule.params.split(' ')
 			
@@ -26,17 +26,17 @@ class ChassisStylesheet {
 				case 'import':
 					rule.replaceWith(importer.importStylesheet(`${this.basePath}/${args[0].replace(/\"/g, "")}`))
 					break
-					
+			
 				case 'generate':
-					rule.replaceWith(generator.generate(mixin, args, nodes, line))
+					generator.generate(rule, args, line)
 					break
-					
+			
 				default:
-					rule.replaceWith(mixins.process(mixin, args, nodes, line))
+					mixins.process(mixin, root, rule, line)
 			}
 		})
 		
-		return tree
+		return root
 	}
 }
 

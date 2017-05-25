@@ -4,7 +4,10 @@
 @chassis import "partials/global-modifiers.css";
 
 /*@chassis generate font-weight-classes;*/
-@chassis generate width-constraint;
+
+.width-constraint {
+	@chassis constrain-width;
+}
 
 /*.chassis {
 	@chassis generate root-container-styles;

@@ -7,17 +7,11 @@ class ChassisGenerator {
 		this.chassis = chassis
 	}
 	
-	generate (element, args, nodes, line) {
-		let { mixins, project } = this.chassis
+	generate (rule, args, line) {
+		let { mixins, project, utils } = this.chassis
+		let element = args[0]
 		
-		switch (element) {
-			case 'width-constraint':
-				return mixins.process('constrain-width', {})
-				break
-				
-			default:
-				return ''
-		}
+		
 	}
 }
 
