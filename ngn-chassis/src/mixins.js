@@ -3,12 +3,8 @@ class ChassisMixins {
 		this.chassis = chassis
 		
 		this.mappings = {
-			'constrain-width': this.constrainWidth
+			'constrain-width': this.constrainWidth.bind(this)
 		}
-	}
-	
-	get (mixin, data) {
-		return this.mappings[mixin](data)
 	}
 	
 	/**
@@ -19,39 +15,61 @@ class ChassisMixins {
    * Whether or not to add layout gutter to left and right
    * @return {array} of decls
    */
-  constrainWidth (hasPadding = true) {
+  constrainWidth (root, atRule, cfg) {
 		let { project, utils } = this.chassis
+		let { args, nodes } = cfg
+		let stripPadding = NGN.coalesce(args && args.includes('no-padding'), false)
+		let parent = atRule.parent
 		
-    // let decls = [
-    //   utils.newDecl('width', '100%'),
-    //   utils.newDecl('min-width', `${project.layout.minWidth}px`),
-    //   utils.newDecl('max-width', `${project.layout.maxWidth}px`),
-    //   utils.newDecl('margin', '0 auto')
-    // ]
-		//
-    // if (hasPadding) {
-    //   decls = [
-    //     ...decls,
-    //     utils.newDecl('padding-left', project.layout.gutter),
-    //     utils.newDecl('padding-right', project.layout.gutter)
-    //   ]
-    // }
-
-    // return decls
+		root.insertAfter(atRule.parent, utils.newAtRule({
+			name: 'media',
+			params: `screen and (max-width: 5px)`,
+			nodes: [
+				utils.newRule(atRule.parent.selector, [
+					utils.newDeclObj('padding-left', 320),
+					utils.newDeclObj('padding-right', 320)
+				])
+			]
+		}))
+		
+		root.insertAfter(atRule.parent, utils.newAtRule({
+			name: 'media',
+			params: `screen and (min-width: 500px)`,
+			nodes: [
+				utils.newRule(atRule.parent.selector, [
+					utils.newDeclObj('padding-left', 1440),
+					utils.newDeclObj('padding-right', 1440)
+				])
+			]
+		}))
+		
+		let decls = [
+      utils.newDecl('width', '100%'),
+      utils.newDecl('min-width', `320px`),
+      utils.newDecl('max-width', `1440px`),
+      utils.newDecl('margin', '0 auto')
+    ]
+		
+    if (!stripPadding) {
+      decls = [
+        ...decls,
+        utils.newDecl('padding-left', 320),
+        utils.newDecl('padding-right', 320)
+      ]
+    }
+		
+		atRule.replaceWith(decls)
   }
 	
-	process (mixin, rule, line) {
+	process (root, mixin, atRule, line, cfg) {
 		let { project, utils } = this.chassis
 		
-		switch (mixin) {
-			case 'constrain-width':
-				
-				rule.replaceWith(this.constrainWidth())
-				break
-		
-			default:
-				console.error(`Chassis stylesheet ${line}: Mixin "${mixin} not found."`)
+		if (this.mappings.hasOwnProperty(mixin)) {
+			this.mappings[mixin](root, atRule, cfg)
+			return
 		}
+		
+		console.error(`Chassis stylesheet ${data.line}: Mixin "${mixin} not found."`)
 	}
 }
 

@@ -1,10 +1,11 @@
 require('ngn')
 require('ngn-data')
 
+const ChassisConstants = require('./constants.js')
 const ChassisGenerator = require('./generator.js')
 const ChassisImporter = require('./importer.js')
 const ChassisMixins = require('./mixins.js')
-const ChassisProject = require('./project.js')
+const ChassisSettings = require('./settings.js')
 const ChassisStylesheet = require('./stylesheet.js')
 const ChassisUtilities = require('./utilities.js')
 
@@ -12,6 +13,10 @@ class ChassisPostCss {
 	constructor (cfg) {
 		this.cfg = NGN.coalesce(cfg, {})
 		return this.plugin
+	}
+	
+	get constants () {
+		return ChassisConstants
 	}
 	
 	get generator () {
@@ -32,20 +37,14 @@ class ChassisPostCss {
 	
 	get plugin () {
 		let core = new ChassisStylesheet(this, 'stylesheets/core.spec.css')
-		core.processAtRules()
 		
-		return (user, result) => {
-			// let output = new ChassisStylesheet(this, core.css.append(user))
-			//
-			// output.processAtRules()
-			// console.log(output.css);
-			
-			// result.root = output.css
+		return (root, result) => {
+			result.root = core.css.append(new ChassisStylesheet(this, root).css)
 		}
 	}
 	
-	get project () {
-		return new ChassisProject(this)
+	get settings () {
+		return new ChassisSettings(this)
 	}
 	
 	get utils () {
