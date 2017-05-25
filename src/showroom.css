@@ -1,4 +1,3 @@
 .showroom {
-	@chassis constrain-width;
 	background: red;
 }

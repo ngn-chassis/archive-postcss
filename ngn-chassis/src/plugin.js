@@ -4,6 +4,7 @@ require('ngn-data')
 const ChassisConstants = require('./constants.js')
 const ChassisGenerator = require('./generator.js')
 const ChassisImporter = require('./importer.js')
+const ChassisLayout = require('./layout.js')
 const ChassisMixins = require('./mixins.js')
 const ChassisSettings = require('./settings.js')
 const ChassisStylesheet = require('./stylesheet.js')
@@ -17,6 +18,7 @@ class ChassisPostCss {
 		this.constants = ChassisConstants
 		this.generator = new ChassisGenerator(this)
 		this.importer = new ChassisImporter(this)
+		this.layout = new ChassisLayout(this)
 		// this.mediaQueries = console.log('get media queries');
 		this.mixins = new ChassisMixins(this)
 		this.settings = new ChassisSettings(this)

@@ -16,45 +16,46 @@ class ChassisMixins {
 	 * @return {array} of decls
 	 */
 	constrainWidth (root, atRule, cfg) {
-		let { project, utils } = this.chassis
+		let { layout, settings, utils } = this.chassis
+		
 		let { args, nodes } = cfg
 		let stripPadding = NGN.coalesce(args && args.includes('no-padding'), false)
 		let parent = atRule.parent
 		
 		root.insertAfter(atRule.parent, utils.newAtRule({
 			name: 'media',
-			params: `screen and (max-width: 5px)`,
+			params: `screen and (max-width: ${settings.layout.minWidth}px)`,
 			nodes: [
 				utils.newRule(atRule.parent.selector, [
-					utils.newDeclObj('padding-left', 320),
-					utils.newDeclObj('padding-right', 320)
+					utils.newDeclObj('padding-left', layout.minGutterWidth),
+					utils.newDeclObj('padding-right', layout.minGutterWidth)
 				])
 			]
 		}))
 		
 		root.insertAfter(atRule.parent, utils.newAtRule({
 			name: 'media',
-			params: `screen and (min-width: 500px)`,
+			params: `screen and (min-width: ${settings.layout.maxWidth}px)`,
 			nodes: [
 				utils.newRule(atRule.parent.selector, [
-					utils.newDeclObj('padding-left', 1440),
-					utils.newDeclObj('padding-right', 1440)
+					utils.newDeclObj('padding-left', layout.maxGutterWidth),
+					utils.newDeclObj('padding-right', layout.maxGutterWidth)
 				])
 			]
 		}))
 		
 		let decls = [
 			utils.newDecl('width', '100%'),
-			utils.newDecl('min-width', `320px`),
-			utils.newDecl('max-width', `1440px`),
+			utils.newDecl('min-width', `${settings.layout.minWidth}px`),
+			utils.newDecl('max-width', `${settings.layout.maxWidth}px`),
 			utils.newDecl('margin', '0 auto')
 		]
 		
 		if (!stripPadding) {
 			decls = [
 				...decls,
-				utils.newDecl('padding-left', 320),
-				utils.newDecl('padding-right', 320)
+				utils.newDecl('padding-left', settings.layout.gutter),
+				utils.newDecl('padding-right', settings.layout.gutter)
 			]
 		}
 		
@@ -62,7 +63,7 @@ class ChassisMixins {
 	}
 	
 	process (root, mixin, atRule, line, cfg) {
-		let { project, utils } = this.chassis
+		let { settings, utils } = this.chassis
 		
 		if (this.mappings.hasOwnProperty(mixin)) {
 			this.mappings[mixin](root, atRule, cfg)
