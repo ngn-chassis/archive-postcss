@@ -23,15 +23,15 @@ ul {
 
 q,
 blockquote {
-  quotes: none;
+	quotes: none;
 }
 
 q:before,
 q:after,
 blockquote:before,
 blockquote:after {
-  content: "";
-  content: none;
+	content: "";
+	content: none;
 }
 
 a img {
@@ -59,5 +59,5 @@ summary {
 input,
 textarea,
 button {
-  font-size: inherit;
+	font-size: inherit;
 }

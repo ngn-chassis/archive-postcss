@@ -4,8 +4,8 @@ const path = require('path')
 
 class ChassisUtils {
 	static listPropertyValues (array) {
-    return array.map(value => value === 0 ? 0 : `${value}em`).join(' ')
-  }
+		return array.map(value => value === 0 ? 0 : `${value}em`).join(' ')
+	}
 	
 	/**
 	 * @method fileExists
@@ -33,7 +33,7 @@ class ChassisUtils {
 	 * @static
 	 */
 	static getUnit (value) {
-	  return value.match(/\D+$/)[0]
+		return value.match(/\D+$/)[0]
 	}
 
 	/**
@@ -60,7 +60,7 @@ class ChassisUtils {
 	 * @static
 	 */
 	static newAtRule (config) {
-	  return postcss.atRule(config)
+		return postcss.atRule(config)
 	}
 
 	/**
@@ -89,10 +89,10 @@ class ChassisUtils {
 	 * @static
 	 */
 	static newDeclObj (key, value) {
-	  return {
-	    prop: key,
-	    value
-	  }
+		return {
+			prop: key,
+			value
+		}
 	}
 
 	/**
@@ -120,7 +120,7 @@ class ChassisUtils {
 		let rule = postcss.rule({selector})
 
 		decls.forEach(decl => {
-	    rule.append(postcss.decl(this.newDeclObj(decl.prop, decl.value)))
+			rule.append(postcss.decl(this.newDeclObj(decl.prop, decl.value)))
 		})
 
 		return rule
@@ -155,7 +155,7 @@ class ChassisUtils {
 			filepath = this.resolvePath(filepath)
 		}
 
-	  return postcss.parse(fs.readFileSync(filepath))
+		return postcss.parse(fs.readFileSync(filepath))
 	}
 
 	/**
@@ -166,14 +166,14 @@ class ChassisUtils {
 	 * @static
 	 */
 	static parseStylesheets (filepaths, relative = true) {
-	  let output = this.parseStylesheet(filepaths[0], relative)
-	  let remainingFilepaths = filepaths.slice(1)
+		let output = this.parseStylesheet(filepaths[0], relative)
+		let remainingFilepaths = filepaths.slice(1)
 
-	  remainingFilepaths.forEach(path => {
-	    output.append(this.parseStylesheet(path, relative))
-	  })
+		remainingFilepaths.forEach(path => {
+			output.append(this.parseStylesheet(path, relative))
+		})
 
-	  return output
+		return output
 	}
 
 	/**
@@ -202,8 +202,8 @@ class ChassisUtils {
 	 * @static
 	 */
 	static stripUnits (value) {
-	  let data = value.match(/\D+$/)
-	  return data.input.slice(0, data.index)
+		let data = value.match(/\D+$/)
+		return data.input.slice(0, data.index)
 	}
 }
 

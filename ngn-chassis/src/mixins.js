@@ -8,14 +8,14 @@ class ChassisMixins {
 	}
 	
 	/**
-   * @mixin constrainWidth
-   * @param  {object}  line
-   * Line and column at which mixin was called
-   * @param  {Boolean} [hasPadding=true]
-   * Whether or not to add layout gutter to left and right
-   * @return {array} of decls
-   */
-  constrainWidth (root, atRule, cfg) {
+	 * @mixin constrainWidth
+	 * @param  {object}  line
+	 * Line and column at which mixin was called
+	 * @param  {Boolean} [hasPadding=true]
+	 * Whether or not to add layout gutter to left and right
+	 * @return {array} of decls
+	 */
+	constrainWidth (root, atRule, cfg) {
 		let { project, utils } = this.chassis
 		let { args, nodes } = cfg
 		let stripPadding = NGN.coalesce(args && args.includes('no-padding'), false)
@@ -44,22 +44,22 @@ class ChassisMixins {
 		}))
 		
 		let decls = [
-      utils.newDecl('width', '100%'),
-      utils.newDecl('min-width', `320px`),
-      utils.newDecl('max-width', `1440px`),
-      utils.newDecl('margin', '0 auto')
-    ]
+			utils.newDecl('width', '100%'),
+			utils.newDecl('min-width', `320px`),
+			utils.newDecl('max-width', `1440px`),
+			utils.newDecl('margin', '0 auto')
+		]
 		
-    if (!stripPadding) {
-      decls = [
-        ...decls,
-        utils.newDecl('padding-left', 320),
-        utils.newDecl('padding-right', 320)
-      ]
-    }
+		if (!stripPadding) {
+			decls = [
+				...decls,
+				utils.newDecl('padding-left', 320),
+				utils.newDecl('padding-right', 320)
+			]
+		}
 		
 		atRule.replaceWith(decls)
-  }
+	}
 	
 	process (root, mixin, atRule, line, cfg) {
 		let { project, utils } = this.chassis

@@ -55,19 +55,19 @@ class ChassisPostCss {
 	
 	init () {
 		if (this.plugins) {
-      delete this.cfg.plugins
-    }
+			delete this.cfg.plugins
+		}
 
-    if (!this.cfg.hasOwnProperty('viewportWidthRanges')) {
-      this.cfg.viewportWidthRanges = this.constants.defaultViewportWidthRanges
-    }
+		if (!this.cfg.hasOwnProperty('viewportWidthRanges')) {
+			this.cfg.viewportWidthRanges = this.constants.defaultViewportWidthRanges
+		}
 		
-    this.settings.load(this.cfg)
-    
+		this.settings.load(this.cfg)
+		
 		if (!this.settings.valid) {
-      console.error('[ERROR] Chassis Configuration: Invalid fields:')
-      console.error(this.settings.invalidDataAttributes.join(', '))
-    }
+			console.error('[ERROR] Chassis Configuration: Invalid fields:')
+			console.error(this.settings.invalidDataAttributes.join(', '))
+		}
 		
 		return this.plugin
 	}
