@@ -12,7 +12,9 @@ const ChassisUtilities = require('./utilities.js')
 class ChassisPostCss {
 	constructor (cfg) {
 		this.cfg = NGN.coalesce(cfg, {})
-		return this.plugin
+		this.plugins = cfg.hasOwnProperty('plugins') ? cfg.plugins : null
+		
+		return this.init()
 	}
 	
 	get constants () {
@@ -49,6 +51,25 @@ class ChassisPostCss {
 	
 	get utils () {
 		return ChassisUtilities
+	}
+	
+	init () {
+		if (this.plugins) {
+      delete this.cfg.plugins
+    }
+
+    if (!this.cfg.hasOwnProperty('viewportWidthRanges')) {
+      this.cfg.viewportWidthRanges = this.constants.defaultViewportWidthRanges
+    }
+		
+    this.settings.load(this.cfg)
+    
+		if (!this.settings.valid) {
+      console.error('[ERROR] Chassis Configuration: Invalid fields:')
+      console.error(this.settings.invalidDataAttributes.join(', '))
+    }
+		
+		return this.plugin
 	}
 }
 
