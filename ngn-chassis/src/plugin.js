@@ -14,27 +14,15 @@ class ChassisPostCss {
 		this.cfg = NGN.coalesce(cfg, {})
 		this.plugins = cfg.hasOwnProperty('plugins') ? cfg.plugins : null
 		
+		this.constants = ChassisConstants
+		this.generator = new ChassisGenerator(this)
+		this.importer = new ChassisImporter(this)
+		// this.mediaQueries = console.log('get media queries');
+		this.mixins = new ChassisMixins(this)
+		this.settings = new ChassisSettings(this)
+		this.utils = ChassisUtilities
+		
 		return this.init()
-	}
-	
-	get constants () {
-		return ChassisConstants
-	}
-	
-	get generator () {
-		return new ChassisGenerator(this)
-	}
-	
-	get importer () {
-		return new ChassisImporter(this)
-	}
-	
-	get mediaQueries () {
-		console.log('get media queries');
-	}
-	
-	get mixins () {
-		return new ChassisMixins(this)
 	}
 	
 	get plugin () {
@@ -45,19 +33,11 @@ class ChassisPostCss {
 		}
 	}
 	
-	get settings () {
-		return new ChassisSettings(this)
-	}
-	
-	get utils () {
-		return ChassisUtilities
-	}
-	
 	init () {
 		if (this.plugins) {
 			delete this.cfg.plugins
 		}
-
+		
 		if (!this.cfg.hasOwnProperty('viewportWidthRanges')) {
 			this.cfg.viewportWidthRanges = this.constants.defaultViewportWidthRanges
 		}

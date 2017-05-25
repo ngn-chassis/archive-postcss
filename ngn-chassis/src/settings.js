@@ -144,7 +144,7 @@ class ChassisSettings extends NGN.EventEmitter {
 					}
 				}
 			}
-		})
+		})()
 	}
 }
 
