@@ -1,20 +1,19 @@
 class ChassisStylesheet {
-	constructor (chassis, specPath = null) {
+	constructor (chassis, source) {
 		this.chassis = chassis
-		this.basePath = NGN.coalesce(chassis.utils.getFilePath(specPath), '')
 		
-		if (specPath) {
-			let parsedSpec = chassis.utils.parseStylesheet(specPath)
-			this.css = this.processAtRules(parsedSpec)
+		if (NGN.typeof(source) === 'string') {
+			this.basePath = NGN.coalesce(chassis.utils.getFilePath(source), '')
+			this.css = chassis.utils.parseStylesheet(source)
 		} else {
-			this.css = chassis.utils.newRoot([])
+			this.css = source
 		}
 	}
 	
-	processAtRules (root) {
+	processAtRules () {
 		let { generator, importer, mixins } = this.chassis
 		
-		root.walkAtRules((rule) => {
+		this.css.walkAtRules((rule) => {
 			let line = rule.source.start
 			let params = rule.params.split(' ')
 			
@@ -32,11 +31,9 @@ class ChassisStylesheet {
 					break
 			
 				default:
-					mixins.process(mixin, root, rule, line)
+					mixins.process(mixin, rule, line)
 			}
 		})
-		
-		return root
 	}
 }
 

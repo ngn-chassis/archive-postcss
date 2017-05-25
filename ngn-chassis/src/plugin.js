@@ -32,11 +32,15 @@ class ChassisPostCss {
 	
 	get plugin () {
 		let core = new ChassisStylesheet(this, 'stylesheets/core.spec.css')
+		core.processAtRules()
 		
-		return (input, output) => {
-			// TODO: Process user stylesheet
+		return (user, result) => {
+			// let output = new ChassisStylesheet(this, core.css.append(user))
+			//
+			// output.processAtRules()
+			// console.log(output.css);
 			
-			output.root = core.css.append(input)
+			// result.root = output.css
 		}
 	}
 	

@@ -6,7 +6,8 @@
 /*@chassis generate font-weight-classes;*/
 
 .width-constraint {
-	@chassis constrain-width;
+	width: 100%;
+	margin: 0 auto;
 }
 
 /*.chassis {

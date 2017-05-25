@@ -22,37 +22,31 @@ class ChassisMixins {
   constrainWidth (hasPadding = true) {
 		let { project, utils } = this.chassis
 		
-    let decls = [
-      utils.newDecl('width', '100%'),
-      utils.newDecl('min-width', `${project.layout.minWidth}px`),
-      utils.newDecl('max-width', `${project.layout.maxWidth}px`),
-      utils.newDecl('margin', '0 auto')
-    ]
+    // let decls = [
+    //   utils.newDecl('width', '100%'),
+    //   utils.newDecl('min-width', `${project.layout.minWidth}px`),
+    //   utils.newDecl('max-width', `${project.layout.maxWidth}px`),
+    //   utils.newDecl('margin', '0 auto')
+    // ]
+		//
+    // if (hasPadding) {
+    //   decls = [
+    //     ...decls,
+    //     utils.newDecl('padding-left', project.layout.gutter),
+    //     utils.newDecl('padding-right', project.layout.gutter)
+    //   ]
+    // }
 
-    if (hasPadding) {
-      decls = [
-        ...decls,
-        utils.newDecl('padding-left', project.layout.gutter),
-        utils.newDecl('padding-right', project.layout.gutter)
-      ]
-    }
-
-    return decls
+    // return decls
   }
 	
-	process (mixin, root, rule, line) {
+	process (mixin, rule, line) {
 		let { project, utils } = this.chassis
 		
 		switch (mixin) {
 			case 'constrain-width':
-				root.insertAfter(rule.parent, utils.newAtRule({
-					name: 'media'
-				}))
-				// root.insertAfter(rule.parent, utils.newAtRule({
-				// 	name: 'media',
-        //   params: `screen and (max-width: 5px)`,
-        //   nodes: []
-				// }))
+				
+				rule.replaceWith(this.constrainWidth())
 				break
 		
 			default:
