@@ -1,7 +1,27 @@
 class ChassisLayout {
 	constructor (chassis) {
 		this.chassis = chassis
+		
+		this.gutter = chassis.settings.layout.gutter
+		this.maxWidth = chassis.settings.layout.maxWidth
+		this.minWidth = chassis.settings.layout.minWidth
 	}
+	
+	/**
+   * @property maxGutterWidth
+   * Gutter width, in pixels, at max viewport width range.
+   */
+  get maxGutterWidth () {
+		return this.getGutterLimit(this.maxWidth)
+  }
+	
+	/**
+   * @property minGutterWidth
+   * Gutter width, in pixels, at min viewport width range.
+   */
+  get minGutterWidth () {
+		return this.getGutterLimit(this.minWidth)
+  }
 	
 	/**
    * @method getGutterLimit
@@ -14,29 +34,29 @@ class ChassisLayout {
    */
 	getGutterLimit (width) {
 		let { utils } = this.chassis
-		let { layout, typography } = this.chassis.settings
+		let { typography } = this.chassis.settings
 		
-		let unit = utils.getUnit(layout.gutter)
+		let unit = utils.getUnit(this.gutter)
 
     switch (unit) {
       case 'vw':
-        return `calc(${width}px * ${parseFloat(layout.gutter)} / 100)`
+        return `calc(${width}px * ${parseFloat(this.gutter)} / 100)`
         break
 		
       case '%':
-        return `calc(${width}px * ${parseFloat(layout.gutter)} / 100)`
+        return `calc(${width}px * ${parseFloat(this.gutter)} / 100)`
         break
 		
       case 'px':
-        return layout.gutter
+        return this.gutter
         break
 		
       case 'em':
-        return layout.gutter
+        return this.gutter
         break
 		
       case 'rem':
-        return `${parseFloat(layout.gutter) * (typography.baseFontSize * typography.globalMultiplier)}px`
+        return `${parseFloat(this.gutter) * (typography.baseFontSize * typography.globalMultiplier)}px`
         break
 		
       default:
@@ -45,19 +65,32 @@ class ChassisLayout {
 	}
 	
 	/**
-   * @property maxGutterWidth
-   * Gutter width, in pixels, at max viewport width range.
+   * @method getMargin
+   * Get calculated GR-Typography margin-bottom value
+   * @param {string} fontSizeAlias
+   * font size alias to use as a base for calculation
+   * Accepts root, small, large, larger, largest
+   * @param {number} upperBound
+   * Upper bound of current viewport width range
+   * @param {string} type
+   * container type: "outer", "inner" or null
+   * @return {number} in ems
    */
-  get maxGutterWidth () {
-		return this.getGutterLimit(this.chassis.settings.layout.maxWidth)
-  }
-	
-	/**
-   * @property minGutterWidth
-   * Gutter width, in pixels, at min viewport width range.
-   */
-  get minGutterWidth () {
-		return this.getGutterLimit(this.chassis.settings.layout.minWidth)
+  getMargin (fontSizeAlias, upperBound, type = null) {
+    let { typography } = this.chassis
+    
+    switch (type) {
+      case 'outer':
+        return typography.getLineHeight(fontSizeAlias, upperBound) * typography.typeScaleRatio
+        break
+
+      case 'inner':
+        return typography.getLineHeight(fontSizeAlias, upperBound)
+        break
+
+      default:
+        return typography.getFontSize(fontSizeAlias, upperBound, true)
+    }
   }
 }
 

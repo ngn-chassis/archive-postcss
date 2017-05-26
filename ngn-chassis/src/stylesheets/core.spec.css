@@ -1,6 +1,4 @@
 @chassis import "partials/reset.css";
-
-/*@detailer import html;*/
 @chassis import "partials/global-modifiers.css";
 
 /*@chassis generate font-weight-classes;*/
@@ -9,70 +7,82 @@
 	@chassis constrain-width;
 }
 
-/*.chassis {
-	@chassis generate root-container-styles;
-	@detailer import root-container;
-}*/
+@chassis generate root-element-rule;
 
-/*@detailer import links;*/
+@chassis generate heading-rule 1;
+@chassis generate heading-rule 2;
+@chassis generate heading-rule 3;
+@chassis generate heading-rule 4;
+@chassis generate heading-rule 5;
+@chassis generate heading-rule 6;
 
-/*.chassis h1 {
-	@chassis generate default-h1-styles;
-	@detailer import h1;
-}*/
+@chassis generate form-legend-rule;
 
-/*.chassis h2 {
-	@chassis generate default-h2-styles;
-	@detailer import h2;
-}*/
+.chassis {
+	& section,
+	& nav,
+	& form {
+		@chassis generate container-decls outer;
+	}
+}
 
-/*.chassis h3 {
-	@chassis generate default-h3-styles;
-	@detailer import h3;
-}*/
+.chassis {
+	& nav section,
+	& section nav,
+	& nav nav,
+	& article,
+	& fieldset,
+	& figure,
+	& pre,
+	& blockquote,
+	& table,
+	& canvas,
+	& embed {
+		@chassis generate container-decls inner;
+	}
+}
 
-/*.chassis h4 {
-	@chassis generate default-h4-styles;
-	@detailer import h4;
-}*/
+.chassis p {
+	@chassis generate container-decls;
+}
 
-/*.chassis h5 {
-	@chassis generate default-h5-styles;
-	@detailer import h5;
-}*/
+@chassis generate default-media-queries {
+	@chassis generate root-element-rule;
 
-/*.chassis h6 {
-	@chassis generate default-h6-styles;
-	@detailer import h6;
-}*/
+	@chassis generate heading-rule 1;
+	@chassis generate heading-rule 2;
+	@chassis generate heading-rule 3;
+	@chassis generate heading-rule 4;
+	@chassis generate heading-rule 5;
+	@chassis generate heading-rule 6;
 
-/*.chassis legend {
-	@chassis generate default-form-legend-styles;
-	@detailer import form-legend;
-}*/
+	@chassis generate form-legend-rule;
 
-/*.chassis section,
-.chassis nav,
-.chassis form {
-	@chassis generate default-container-styles;
-}*/
+	.chassis {
+		& section,
+		& nav,
+		& form {
+			@chassis generate container-decls outer;
+		}
+	}
 
-/*.chassis nav section,
-.chassis section nav,
-.chassis nav nav,
-.chassis article,
-.chassis fieldset,
-.chassis figure,
-.chassis pre,
-.chassis blockquote,
-.chassis table,
-.chassis canvas,
-.chassis embed {
-	@chassis generate default-block-styles;
-}*/
+	.chassis {
+		& nav section,
+		& section nav,
+		& nav nav,
+		& article,
+		& fieldset,
+		& figure,
+		& pre,
+		& blockquote,
+		& table,
+		& canvas,
+		& embed {
+			@chassis generate container-decls inner;
+		}
+	}
 
-/*.chassis p {
-	@chassis generate default-paragraph-styles;
-}*/
-
-/*@chassis generate default-media-queries;*/
+	.chassis p {
+		@chassis generate container-decls;
+	}
+};

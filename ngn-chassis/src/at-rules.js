@@ -1,8 +1,8 @@
-class ChassisMixins {
+class ChassisAtRules {
 	constructor (chassis) {
 		this.chassis = chassis
 		
-		this.mappings = {
+		this.mixins = {
 			'constrain-width': this.constrainWidth.bind(this)
 		}
 	}
@@ -63,15 +63,13 @@ class ChassisMixins {
 	}
 	
 	process (root, mixin, atRule, line, cfg) {
-		let { settings, utils } = this.chassis
-		
-		if (this.mappings.hasOwnProperty(mixin)) {
-			this.mappings[mixin](root, atRule, cfg)
+		if (this.mixins.hasOwnProperty(mixin)) {
+			this.mixins[mixin](root, atRule, cfg)
 			return
 		}
 		
-		console.error(`Chassis stylesheet ${data.line}: Mixin "${mixin} not found."`)
+		console.error(`Chassis stylesheet line ${line.line}, column ${line.column}: Mixin "${mixin}" not found.`)
 	}
 }
 
-module.exports = ChassisMixins
+module.exports = ChassisAtRules
