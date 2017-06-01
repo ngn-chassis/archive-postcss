@@ -1,6 +1,7 @@
 require('ngn')
 require('ngn-data')
 
+const AutoTypography = require('./auto-typography.js')
 const ChassisAtRules = require('./at-rules.js')
 const ChassisConstants = require('./constants.js')
 const ChassisGenerator = require('./generator.js')
@@ -30,6 +31,8 @@ class ChassisPostCss {
 		this.viewport = new ChassisViewport(this)
 		
 		this.atRules = new ChassisAtRules(this)
+		
+		this.autoTypography = new AutoTypography(this)
 		
 		return this.init()
 	}
