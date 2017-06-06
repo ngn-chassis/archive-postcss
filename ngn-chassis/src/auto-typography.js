@@ -4,51 +4,20 @@ class AutoTypography {
 		
 		// TODO: Get these values from config object / settings
 		this.cpl = 67
-		this.typeScaleRatio = 1.618
+		this.typeScaleRatio = 1.61803398875
 		this.rootFontSize = 16 // Root for the whole project
 		
-		// TODO: decide whether these should be constants or should match
-		// user-specified breakpoints
-		this.viewportWidthRanges = [
-			{
-				lowerBound: 512,
-				upperBound: 768
-			},
-			{
-				lowerBound: 768,
-				upperBound: 1024
-			},
-			{
-				lowerBound: 1024,
-				upperBound: 1200
-			},
-			{
-				lowerBound: 1200,
-				upperBound: 1440
-			},
-			{
-				lowerBound: 1440,
-				upperBound: 1600
-			},
-			{
-				lowerBound: 1600,
-				upperBound: 1920
-			},
-			{
-				lowerBound: 1920,
-				upperBound: 2048
-			}
-		]
+		this.breakpoints = [320,512,768,1024,1366,1600,1920,2048,2560]
 		
-		console.log(this.getCalculatedSizes());
+		console.log(JSON.stringify(this.viewportWidthRanges, null, 2));
 	}
 	
-	calculateFontSize (alias, root = this.rootFontSize, multiplier = 1) {
+	getFontSize (alias, root = this.rootFontSize, multiplier = 1) {
 		switch (alias) {
 			case 'small':
 				return (root * (1 / Math.sqrt(this.typeScaleRatio))) * multiplier
 				break
-			
+				
 			case 'large':
 				return (root * Math.sqrt(this.typeScaleRatio)) * multiplier
 				break
@@ -66,24 +35,55 @@ class AutoTypography {
 		}
 	}
 
-	getCalculatedLineHeight (width, fontSize) {
-		return Math.sqrt(width) / fontSize
+	getLineHeight (fontSize, upperBound, ratio = this.typeScaleRatio) {
+		let optimalLineWidth = this.getOptimalLineWidth(fontSize)
+		
+		return (ratio - ((1 / (2 * ratio)) * (1 - (upperBound / optimalLineWidth)))) * fontSize
 	}
 
-	getCalculatedLineWidth (lineHeight) {
+	getOptimalLineWidth (fontSize, ratio = this.typeScaleRatio) {
+		let optimalLineHeight = fontSize * ratio
+		
 		return Math.pow(optimalLineHeight, 2)
 	}
 	
-	getCalculatedSizes () {
-		return this.viewportWidthRanges.map((vwr, index) => {
+	get viewportWidthRanges () {
+		return this.breakpoints.map((breakpoint, index) => {
 			let root = this.rootFontSize + index
 			
+			let small = this.getFontSize('small', root)
+			let large = this.getFontSize('large', root)
+			let larger = this.getFontSize('larger', root)
+			let largest = this.getFontSize('largest', root)
+			
+			let lower = breakpoint
+			let upper = this.breakpoints[index + 1] || breakpoint + 320
+			let average = (lower + upper) / 2
+			
 			return {
-				root,
-				small: this.calculateFontSize('small', root),
-				large: this.calculateFontSize('large', root),
-				larger: this.calculateFontSize('larger', root),
-				largest: this.calculateFontSize('largest', root)
+				bounds: {lower, upper},
+				typography: {
+					root: {
+						size: root / root,
+						lineHeight: this.getLineHeight(root, average) / root
+					},
+					small: {
+						size: small / root,
+						lineHeight: this.getLineHeight(small, upper) / root
+					},
+					large: {
+						size: large / root,
+						lineHeight: this.getLineHeight(large, upper) / root
+					},
+					larger: {
+						size: larger / root,
+						lineHeight: this.getLineHeight(larger, upper) / root
+					},
+					largest: {
+						size: largest / root,
+						lineHeight: this.getLineHeight(largest, upper) / root
+					}
+				}
 			}
 		})
 	}
