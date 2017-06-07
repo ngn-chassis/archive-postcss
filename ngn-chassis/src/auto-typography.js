@@ -1,92 +1,114 @@
-class AutoTypography {
+class ChassisAutoTypography {
 	constructor (chassis) {
 		this.chassis = chassis
 		
-		// TODO: Get these values from config object / settings
-		this.cpl = 67
-		this.typeScaleRatio = 1.61803398875
-		this.rootFontSize = 16 // Root for the whole project
+		let { settings, constants } = chassis
 		
-		this.breakpoints = [320,512,768,1024,1366,1600,1920,2048,2560]
+		// this.cpl = 67
+		this.scale = settings.typography.typeScaleRatio
+		this.root = settings.typography.rootFontSize
+		this.breakpoints = constants.typographyBreakpoints.filter((breakpoint) => {
+			return breakpoint <= settings.layout.maxWidth
+		})
+		this.typeScalePoint = constants.typeScalePoint
 		
-		console.log(JSON.stringify(this.viewportWidthRanges, null, 2));
+		// console.log(JSON.stringify(this.ranges, null, 2));
 	}
 	
-	getFontSize (alias, root = this.rootFontSize, multiplier = 1) {
+	getFontSize (alias, root = this.root) {
 		switch (alias) {
-			case 'small':
-				return (root * (1 / Math.sqrt(this.typeScaleRatio))) * multiplier
+			case '-1':
+				return (root * (1 / Math.sqrt(this.scale)))
 				break
 				
-			case 'large':
-				return (root * Math.sqrt(this.typeScaleRatio)) * multiplier
+			case 'root':
+				return root
 				break
 				
-			case 'larger':
-				return (root * this.typeScaleRatio) * multiplier
+			case '+1':
+				return (root * Math.sqrt(this.scale))
 				break
 				
-			case 'largest':
-				return (root * Math.pow(this.typeScaleRatio, 2)) * multiplier
+			case '+2':
+				return (root * this.scale)
+				break
+				
+			case '+3':
+				return (root * Math.pow(this.scale, 2))
 				break
 				
 			default:
+				console.error(`[ERROR] Chassis Typography: Font Size Class "${alias}" not found. Defaulting to "root"`)
 				return root
 		}
 	}
 
-	getLineHeight (fontSize, upperBound, ratio = this.typeScaleRatio) {
-		let optimalLineWidth = this.getOptimalLineWidth(fontSize)
-		
-		return (ratio - ((1 / (2 * ratio)) * (1 - (upperBound / optimalLineWidth)))) * fontSize
+	getLineHeight (fontSize, viewportWidth, ratio = this.scale) {
+		return (ratio - ((1 / (2 * ratio)) * (1 - (viewportWidth / this.getOptimalLineWidth(fontSize))))) * fontSize
 	}
 
-	getOptimalLineWidth (fontSize, ratio = this.typeScaleRatio) {
-		let optimalLineHeight = fontSize * ratio
-		
-		return Math.pow(optimalLineHeight, 2)
+	getOptimalLineWidth (fontSize, ratio = this.scale) {
+		return Math.pow(fontSize * ratio, 2)
 	}
 	
-	get viewportWidthRanges () {
+	getTypographyRules (vwr) {
+		let averageViewportWidth = (vwr.bounds.lower + vwr.bounds.upper) / 2
+		
+		let fontSizes = {
+			'-1': this.getFontSize('-1', vwr.rootFontSize),
+			'root': vwr.rootFontSize,
+			'+1': this.getFontSize('+1', vwr.rootFontSize),
+			'+2': this.getFontSize('+2', vwr.rootFontSize),
+			'+3': this.getFontSize('+3', vwr.rootFontSize)
+		}
+		
+		return {
+			'-1': {
+				size: fontSizes['-1'],
+				lineHeight: this.getLineHeight(fontSizes['-1'], averageViewportWidth)
+			},
+			'root': {
+				size: fontSizes['root'],
+				lineHeight: this.getLineHeight(fontSizes['root'], averageViewportWidth)
+			},
+			'+1': {
+				size: fontSizes['+1'],
+				lineHeight: this.getLineHeight(fontSizes['+1'], averageViewportWidth)
+			},
+			'+2': {
+				size: fontSizes['+2'],
+				lineHeight: this.getLineHeight(fontSizes['+2'], averageViewportWidth)
+			},
+			'+3': {
+				size: fontSizes['+3'],
+				lineHeight: this.getLineHeight(fontSizes['+3'], averageViewportWidth)
+			}
+		}
+	}
+	
+	get ranges () {
+		let rootFontSize = this.root
+		
 		return this.breakpoints.map((breakpoint, index) => {
-			let root = this.rootFontSize + index
+			if (index === this.breakpoints.length - 1) {
+				return
+			}
 			
-			let small = this.getFontSize('small', root)
-			let large = this.getFontSize('large', root)
-			let larger = this.getFontSize('larger', root)
-			let largest = this.getFontSize('largest', root)
+			let bounds = {
+				lower: breakpoint,
+				upper: this.breakpoints[index + 1]
+			}
 			
-			let lower = breakpoint
-			let upper = this.breakpoints[index + 1] || breakpoint + 320
-			let average = (lower + upper) / 2
+			if (bounds.lower >= this.typeScalePoint) {
+				rootFontSize++
+			}
 			
 			return {
-				bounds: {lower, upper},
-				typography: {
-					root: {
-						size: root / root,
-						lineHeight: this.getLineHeight(root, average) / root
-					},
-					small: {
-						size: small / root,
-						lineHeight: this.getLineHeight(small, upper) / root
-					},
-					large: {
-						size: large / root,
-						lineHeight: this.getLineHeight(large, upper) / root
-					},
-					larger: {
-						size: larger / root,
-						lineHeight: this.getLineHeight(larger, upper) / root
-					},
-					largest: {
-						size: largest / root,
-						lineHeight: this.getLineHeight(largest, upper) / root
-					}
-				}
+				bounds,
+				typography: this.getTypographyRules({bounds, rootFontSize})
 			}
-		})
+		}).filter((vwr) => vwr !== undefined)
 	}
 }
 
-module.exports = AutoTypography
+module.exports = ChassisAutoTypography

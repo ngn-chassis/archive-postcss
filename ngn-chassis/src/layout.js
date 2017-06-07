@@ -56,7 +56,7 @@ class ChassisLayout {
         break
 		
       case 'rem':
-        return `${parseFloat(this.gutter) * (typography.baseFontSize * typography.globalMultiplier)}px`
+        return `${parseFloat(this.gutter) * typography.rootFontSize}px`
         break
 		
       default:

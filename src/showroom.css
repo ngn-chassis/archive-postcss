@@ -1,15 +1,3 @@
 .showroom {
-	
-}
-
-main {
-	padding-top: 2em;
-	@chassis constrain-width;
-
-	/*@chassis media-query min medium {
-		display: flex;
-		align-items: flex-start;
-
-		padding-top: 3.82em;
-	}*/
+	background: green;
 }

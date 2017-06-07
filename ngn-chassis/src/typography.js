@@ -1,10 +1,7 @@
 class ChassisTypography {
 	constructor (chassis) {
 		this.chassis = chassis
-		this.definitions = chassis.constants.goldenRatioTypographyRules
-		
-		this.fontSizes = chassis.settings.typography.fontSizes
-		this.globalMultiplier = chassis.settings.typography.globalMultiplier
+		this.definitions = chassis.settings.typography.ranges
 		this.typeScaleRatio = chassis.settings.typography.typeScaleRatio
 	}
 	
@@ -18,17 +15,21 @@ class ChassisTypography {
    * @return {number}
    */
   getFontSize (alias = 'root', upperBound, inEms = false) {
-    let definition = this.definitions.filter(def => {
-      return upperBound >= def.upperBound
-    }).pop()
+    this.definitions.addFilter((def) => {
+      return upperBound <= def.bounds.upper
+    })
+		
+		let definition = this.definitions.first
+		
+		this.definitions.clearFilters()
 
     if (!definition) {
-      console.error(`[ERROR] Chassis Typography: Font Size "${type}" not found`)
+      console.error(`[ERROR] Chassis Typography: Font Size "${alias}" not found`)
     }
 
-    let fontSize = definition.fontSizes[alias] * this.globalMultiplier
+    let fontSize = definition.typography[alias].size
 
-    return inEms ? fontSize / definition.fontSizes.root : fontSize
+    return inEms ? fontSize / definition.typography['root'].size : fontSize
   }
 	
 	/**

@@ -22,7 +22,7 @@ gulp.task('css', () => {
   return gulp.src(SRC + '/**/*.css')
     .pipe(sourcemaps.init())
     .pipe(chassis({
-      plugins: []
+      breakpoints: [512,1024,1440]
     }))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(DEST + '/css'))

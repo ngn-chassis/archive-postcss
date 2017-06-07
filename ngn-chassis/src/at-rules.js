@@ -9,35 +9,31 @@ class ChassisAtRules {
 	
 	/**
 	 * @mixin constrainWidth
-	 * @param  {object}  line
-	 * Line and column at which mixin was called
-	 * @param  {Boolean} [hasPadding=true]
-	 * Whether or not to add layout gutter to left and right
 	 * @return {array} of decls
 	 */
-	constrainWidth (root, atRule, cfg) {
+	constrainWidth () {
 		let { layout, settings, utils } = this.chassis
 		
-		let { args, nodes } = cfg
+		let { args, nodes } = this.cfg
 		let stripPadding = NGN.coalesce(args && args.includes('no-padding'), false)
-		let parent = atRule.parent
+		let parent = this.atRule.parent
 		
-		root.insertAfter(atRule.parent, utils.newAtRule({
+		root.insertAfter(this.atRule.parent, utils.newAtRule({
 			name: 'media',
 			params: `screen and (max-width: ${settings.layout.minWidth}px)`,
 			nodes: [
-				utils.newRule(atRule.parent.selector, [
+				utils.newRule(this.atRule.parent.selector, [
 					utils.newDeclObj('padding-left', layout.minGutterWidth),
 					utils.newDeclObj('padding-right', layout.minGutterWidth)
 				])
 			]
 		}))
 		
-		root.insertAfter(atRule.parent, utils.newAtRule({
+		root.insertAfter(this.atRule.parent, utils.newAtRule({
 			name: 'media',
 			params: `screen and (min-width: ${settings.layout.maxWidth}px)`,
 			nodes: [
-				utils.newRule(atRule.parent.selector, [
+				utils.newRule(this.atRule.parent.selector, [
 					utils.newDeclObj('padding-left', layout.maxGutterWidth),
 					utils.newDeclObj('padding-right', layout.maxGutterWidth)
 				])
@@ -59,16 +55,20 @@ class ChassisAtRules {
 			]
 		}
 		
-		atRule.replaceWith(decls)
+		this.atRule.replaceWith(decls)
 	}
 	
-	process (root, mixin, atRule, line, cfg) {
-		if (this.mixins.hasOwnProperty(mixin)) {
-			this.mixins[mixin](root, atRule, cfg)
+	process (root, atRule, data) {
+		this.root = root
+		this.atRule = atRule
+		this.cfg = data.cfg
+		
+		if (this.mixins.hasOwnProperty(data.mixin)) {
+			this.mixins[data.mixin]()
 			return
 		}
 		
-		console.error(`Chassis stylesheet line ${line.line}, column ${line.column}: Mixin "${mixin}" not found.`)
+		console.error(`Chassis stylesheet line ${data.source.line}, column ${data.source.column}: Mixin "${data.mixin}" not found.`)
 	}
 }
 

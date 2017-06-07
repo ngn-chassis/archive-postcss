@@ -1,0 +1,21 @@
+// Media Query Types
+
+@chassis viewport-width < small {
+	
+}
+
+@chassis viewport-width <= small {
+	
+}
+
+@chassis viewport-width = small {
+	
+}
+
+@chassis viewport-width >= small {
+	
+}
+
+@chassis viewport-width > small {
+	
+}

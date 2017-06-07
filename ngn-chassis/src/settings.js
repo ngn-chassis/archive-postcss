@@ -35,12 +35,12 @@ class ChassisSettings extends NGN.EventEmitter {
 				},
 				minWidth: {
 					type: Number,
-					default: this.chassis.constants.defaultMinWidth,
+					default: 320,
 					min: 0
 				},
 				maxWidth: {
 					type: Number,
-					default: this.chassis.constants.defaultMaxWidth,
+					default: 1440,
 					min: 0
 				}
 			}
@@ -53,12 +53,12 @@ class ChassisSettings extends NGN.EventEmitter {
 						headings: {
 							type: Object,
 							default: {
-								'1': 'larger',
-								'2': 'large',
+								'1': '+2',
+								'2': '+1',
 								'3': 'root',
-								'4': 'small',
-								'5': 'small',
-								'6': 'small'
+								'4': '-1',
+								'5': '-1',
+								'6': '-1'
 							},
 							validate (data) {
 								let mh = new MustHave()
@@ -74,14 +74,29 @@ class ChassisSettings extends NGN.EventEmitter {
 						},
 						formLegend: {
 							type: String,
-							default: 'large'
+							default: '+1'
 						}
 					}
-				})
+				}),
+				ranges: [new NGN.DATA.Model({
+					fields: {
+						bounds: {
+							type: Object,
+							validate (data) {
+								// TODO: Add validation
+								
+								return true
+							}
+						},
+						typography: {
+							type: Object
+						}
+					}
+				})]
 			},
 
 			fields: {
-				baseFontSize: {
+				rootFontSize: {
 					type: Number,
 					default: 16,
 					min: 1
@@ -89,11 +104,6 @@ class ChassisSettings extends NGN.EventEmitter {
 				typeScaleRatio: {
 					type: Number,
 					default: this.chassis.constants.goldenRatio,
-					min: 0
-				},
-				globalMultiplier: {
-					type: Number,
-					default: 1,
 					min: 0
 				},
 				fontWeights: {
