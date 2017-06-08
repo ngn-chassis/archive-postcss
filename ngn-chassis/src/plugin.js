@@ -33,7 +33,7 @@ class ChassisPostCss {
 		// this.typography = new ChassisTypography(this)
 		// this.viewport = new ChassisViewport(this)
 		
-		this.atRules = new ChassisAtRules(this)
+		// this.atRules = new ChassisAtRules(this)
 		this.core = new ChassisCore(this)
 		
 		return this.init()
@@ -58,7 +58,7 @@ class ChassisPostCss {
 		// this.settings.load(this.cfg)
 		
 		// Populate auto-typography values
-		this.settings.typography.ranges.load(this.autoTypography.ranges)
+		// this.settings.typography.ranges.load(this.autoTypography.ranges)
 		
 		if (!this.settings.valid) {
 			console.error('[ERROR] Chassis Configuration: Invalid fields:')

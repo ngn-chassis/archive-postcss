@@ -5,49 +5,72 @@ class ChassisAutoTypography {
 		let { settings, constants } = chassis
 		
 		// this.cpl = 67
-		this.scale = settings.typography.typeScaleRatio
+		this.scaleRatio = settings.typography.typeScaleRatio
 		this.root = settings.typography.rootFontSize
 		this.breakpoints = constants.typographyBreakpoints.filter((breakpoint) => {
 			return breakpoint <= settings.layout.maxWidth
 		})
 		this.typeScalePoint = constants.typeScalePoint
 		
-		// console.log(JSON.stringify(this.ranges, null, 2));
+		// console.log(`-2: ${this.getFontSize('-2')}`);
+		// console.log(`-1: ${this.getFontSize('-1')}`);
+		// console.log(`root: ${this.getFontSize('root')}`);
+		// console.log(`1: ${this.getFontSize('+1')}`);
+		// console.log(`1: ${this.getFontSize('+2')}`);
+		// console.log(`1: ${this.getFontSize('+3')}`);
+		// console.log(`1: ${this.getFontSize('+4')}`);
+		console.log(this.getFontSize('+3'))
 	}
 	
 	getFontSize (alias, root = this.root) {
-		switch (alias) {
-			case '-1':
-				return (root * (1 / Math.sqrt(this.scale)))
-				break
-				
-			case 'root':
-				return root
-				break
-				
-			case '+1':
-				return (root * Math.sqrt(this.scale))
-				break
-				
-			case '+2':
-				return (root * this.scale)
-				break
-				
-			case '+3':
-				return (root * Math.pow(this.scale, 2))
-				break
-				
-			default:
-				console.error(`[ERROR] Chassis Typography: Font Size Class "${alias}" not found. Defaulting to "root"`)
-				return root
+		if (alias === 'root') {
+			return root
 		}
+		
+		let params = alias.split('')
+		
+		let operator = params[0]
+		let scale = parseInt(params[1])
+		
+		// TODO: Add error handling
+		
+		if (scale === 0) {
+			return root
+		}
+		
+		if (operator === '-') {
+			return root * ((1 / Math.sqrt(params[1])) / Math.sqrt(this.scaleRatio))
+		}
+		
+		if (operator === '+') {
+			switch (scale) {
+				case 1:
+					return root * Math.sqrt(this.scaleRatio)
+					break
+					
+				case 2:
+					return root * this.scaleRatio
+					break
+					
+				case 3:
+					return root * Math.pow(this.scaleRatio, 2)
+					break
+					
+				default:
+					console.error(`[ERROR] Chassis Auto-Typography: Font scale "${alias}" not found. Defaulting to root font size.`)
+					return root
+			}
+		}
+		
+		console.error(`[ERROR] Chassis Auto-Typography: Font scale "${alias}" not found. Defaulting to root font size.`)
+		return root
 	}
 
-	getLineHeight (fontSize, viewportWidth, ratio = this.scale) {
+	getLineHeight (fontSize, viewportWidth, ratio = this.scaleRatio) {
 		return (ratio - ((1 / (2 * ratio)) * (1 - (viewportWidth / this.getOptimalLineWidth(fontSize))))) * fontSize
 	}
 
-	getOptimalLineWidth (fontSize, ratio = this.scale) {
+	getOptimalLineWidth (fontSize, ratio = this.scaleRatio) {
 		return Math.pow(fontSize * ratio, 2)
 	}
 	
@@ -63,26 +86,26 @@ class ChassisAutoTypography {
 		}
 		
 		return {
-			'-1': {
-				size: fontSizes['-1'],
-				lineHeight: this.getLineHeight(fontSizes['-1'], averageViewportWidth)
-			},
+			// '-1': {
+			// 	size: fontSizes['-1'],
+			// 	lineHeight: this.getLineHeight(fontSizes['-1'], averageViewportWidth)
+			// },
 			'root': {
 				size: fontSizes['root'],
 				lineHeight: this.getLineHeight(fontSizes['root'], averageViewportWidth)
-			},
-			'+1': {
-				size: fontSizes['+1'],
-				lineHeight: this.getLineHeight(fontSizes['+1'], averageViewportWidth)
-			},
-			'+2': {
-				size: fontSizes['+2'],
-				lineHeight: this.getLineHeight(fontSizes['+2'], averageViewportWidth)
-			},
-			'+3': {
-				size: fontSizes['+3'],
-				lineHeight: this.getLineHeight(fontSizes['+3'], averageViewportWidth)
 			}
+			// '+1': {
+			// 	size: fontSizes['+1'],
+			// 	lineHeight: this.getLineHeight(fontSizes['+1'], averageViewportWidth)
+			// },
+			// '+2': {
+			// 	size: fontSizes['+2'],
+			// 	lineHeight: this.getLineHeight(fontSizes['+2'], averageViewportWidth)
+			// },
+			// '+3': {
+			// 	size: fontSizes['+3'],
+			// 	lineHeight: this.getLineHeight(fontSizes['+3'], averageViewportWidth)
+			// }
 		}
 	}
 	
