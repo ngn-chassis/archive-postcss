@@ -35,12 +35,12 @@ class ChassisSettings extends NGN.EventEmitter {
 				},
 				minWidth: {
 					type: Number,
-					default: 320,
+					default: chassis.constants.maxViewportWidth,
 					min: 0
 				},
 				maxWidth: {
 					type: Number,
-					default: 1440,
+					default: chassis.constants.maxViewportWidth,
 					min: 0
 				}
 			}
@@ -74,7 +74,7 @@ class ChassisSettings extends NGN.EventEmitter {
 						},
 						formLegend: {
 							type: String,
-							default: '+1'
+							default: 'large'
 						}
 					}
 				}),

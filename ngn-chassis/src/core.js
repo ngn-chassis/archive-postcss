@@ -5,17 +5,30 @@ class ChassisCore {
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
 		
 		this.css = chassis.utils.newRoot([
+			this.reset,
+			this.modifiers,
 			this.rootHtml,
 			this.rootHeadings,
+			this.outerContainers,
+			this.innerContainers,
+			this.paragraph,
 			this.typographyRanges
 		])
+	}
+	
+	get reset () {
+		return this.chassis.utils.parseStylesheet('stylesheets/reset.css')
+	}
+	
+	get modifiers () {
+		return this.chassis.utils.parseStylesheet('stylesheets/global-modifiers.css')
 	}
 	
 	get rootHtml () {
 		let { constants, settings, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
 		
-		return utils.newRule('html', [
+		return utils.newRule('html.chassis', [
 			utils.newDeclObj('font-size', `${fontSize}px`),
 			utils.newDeclObj('line-height', `${utils.toEms(lineHeight, fontSize)}em`)
 		])
@@ -26,10 +39,11 @@ class ChassisCore {
 		let { root } = this.baseTypography
 		
 		let headingSizeAliases = settings.typography.fontSizes.headings
+		let formLegendAlias = settings.typography.fontSizes.formLegend
 		let rules = utils.newRoot([])
 		
 		for (let i = 1; i <= 6; i++) {
-			rules.append(utils.newRule(`h${i}`, [
+			rules.append(utils.newRule(`.chassis h${i}`, [
 				utils.newDeclObj(
 					'font-size',
 					`${utils.toEms(this.baseTypography[headingSizeAliases[i]].fontSize, root.fontSize)}rem`
@@ -37,15 +51,34 @@ class ChassisCore {
 				utils.newDeclObj(
 					'line-height',
 					`${utils.toEms(this.baseTypography[headingSizeAliases[i]].lineHeight, this.baseTypography[headingSizeAliases[i]].fontSize)}em`
+				),
+				utils.newDeclObj(
+					'margin-bottom',
+					`${utils.toEms(typography.calculateMarginBottom(this.baseTypography[headingSizeAliases[i]].lineHeight), this.baseTypography[headingSizeAliases[i]].fontSize)}em`
 				)
 			]))
 		}
+		
+		rules.append(utils.newRule('.chassis legend', [
+			utils.newDeclObj(
+				'font-size',
+				`${utils.toEms(this.baseTypography[formLegendAlias].fontSize, root.fontSize)}rem`
+			),
+			utils.newDeclObj(
+				'line-height',
+				`${utils.toEms(this.baseTypography[formLegendAlias].lineHeight, this.baseTypography[formLegendAlias].fontSize)}em`
+			),
+			utils.newDeclObj(
+				'margin-bottom',
+				`${utils.toEms(typography.calculateMarginBottom(this.baseTypography[formLegendAlias].lineHeight), this.baseTypography[formLegendAlias].fontSize)}em`
+			)
+		]))
 		
 		return rules
 	}
 	
 	get typographyRanges () {
-		let { settings, utils } = this.chassis
+		let { settings, typography, utils } = this.chassis
 		
 		let { ranges } = settings.typography
 		let mediaQueries = utils.newRoot([])
@@ -60,9 +93,9 @@ class ChassisCore {
 				nodes: []
 			})
 			
-			let htmlRule = utils.newRule('html', [])
+			let htmlRule = utils.newRule('html.chassis', [])
 			
-			if (fontSize !== this.baseTypography.fontSize) {
+			if (fontSize !== this.baseTypography.root.fontSize) {
 				htmlRule.append(utils.newDecl('font-size', `${fontSize}px`))
 			}
 			
@@ -71,20 +104,55 @@ class ChassisCore {
 			mediaQuery.nodes.push(htmlRule)
 			
 			let headingSizeAliases = settings.typography.fontSizes.headings
+			let formLegendAlias = settings.typography.fontSizes.formLegend
 			
 			for (let i = 1; i <= 6; i++) {
-				mediaQuery.nodes.push(utils.newRule(`h${i}`, [
+				mediaQuery.nodes.push(utils.newRule(`.chassis h${i}`, [
 					utils.newDeclObj(
 						'line-height',
 						`${utils.toEms(range.typography[headingSizeAliases[i]].lineHeight, range.typography[headingSizeAliases[i]].fontSize)}em`
+					),
+					utils.newDeclObj(
+						'margin-bottom',
+						`${utils.toEms(typography.calculateMarginBottom(range.typography[headingSizeAliases[i]].lineHeight), range.typography[headingSizeAliases[i]].fontSize)}em`
 					)
 				]))
 			}
+			
+			mediaQuery.nodes.push(utils.newRule('.chassis legend', [
+				utils.newDeclObj(
+					'line-height',
+					`${utils.toEms(range.typography[formLegendAlias].lineHeight, range.typography[formLegendAlias].fontSize)}em`
+				),
+				utils.newDeclObj(
+					'margin-bottom',
+					`${utils.toEms(typography.calculateMarginBottom(range.typography[formLegendAlias].lineHeight), range.typography[formLegendAlias].fontSize)}em`
+				)
+			]))
 			
 			mediaQueries.append(mediaQuery)
 		}
 		
 		return mediaQueries
+	}
+	
+	get outerContainers () {
+		let { settings, utils } = this.chassis
+		return utils.newRoot([])
+	}
+	
+	get innerContainers () {
+		let { settings, utils } = this.chassis
+		return utils.newRoot([])
+	}
+	
+	get paragraph () {
+		let { typography, utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
+		
+		return utils.newRule('.chassis p', [
+			utils.newDeclObj('margin-bottom', '1em')
+		])
 	}
 }
 

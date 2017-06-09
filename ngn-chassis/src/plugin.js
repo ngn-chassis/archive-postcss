@@ -38,7 +38,7 @@ class ChassisPostCss {
 		// 	this.cfg.viewportWidthRanges = this.constants.defaultViewportWidthRanges
 		// }
 		//
-		// this.settings.load(this.cfg)
+		this.settings.load(this.cfg)
 		
 		// Populate auto-typography values
 		this.settings.typography.ranges.load(this.typography.ranges)
