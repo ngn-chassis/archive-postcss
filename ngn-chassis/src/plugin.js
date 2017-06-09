@@ -3,6 +3,7 @@ require('ngn-data')
 
 const ChassisConstants = require('./constants.js')
 const ChassisCore = require('./core.js')
+const ChassisLayout = require('./layout.js')
 const ChassisSettings = require('./settings.js')
 const ChassisStylesheet = require('./stylesheet.js')
 const ChassisTypography = require('./typography.js')
@@ -18,6 +19,7 @@ class ChassisPostCss {
 		
 		this.settings = new ChassisSettings(this)
 		this.typography = new ChassisTypography(this)
+		this.layout = new ChassisLayout(this)
 		
 		return this.init()
 	}

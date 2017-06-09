@@ -4,6 +4,11 @@ class ChassisCore {
 		
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
 		
+		this.selectors = {
+			outerContainers: '.chassis section, .chassis nav, .chassis form',
+			innerContainers: '.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed'
+		}
+		
 		this.css = chassis.utils.newRoot([
 			this.reset,
 			this.modifiers,
@@ -78,7 +83,7 @@ class ChassisCore {
 	}
 	
 	get typographyRanges () {
-		let { settings, typography, utils } = this.chassis
+		let { layout, settings, typography, utils } = this.chassis
 		
 		let { ranges } = settings.typography
 		let mediaQueries = utils.newRoot([])
@@ -130,6 +135,20 @@ class ChassisCore {
 				)
 			]))
 			
+			mediaQuery.nodes.push(utils.newRule(this.selectors.outerContainers, [
+				utils.newDeclObj(
+					'margin-bottom',
+					`${utils.toEms(layout.calculateMarginBottom(range.typography.root.lineHeight, 'outer'), range.typography.root.fontSize)}em`
+				)
+			]))
+			
+			mediaQuery.nodes.push(utils.newRule(this.selectors.innerContainers, [
+				utils.newDeclObj(
+					'margin-bottom',
+					`${utils.toEms(layout.calculateMarginBottom(range.typography.root.lineHeight, 'inner'), range.typography.root.fontSize)}em`
+				)
+			]))
+			
 			mediaQueries.append(mediaQuery)
 		}
 		
@@ -137,13 +156,27 @@ class ChassisCore {
 	}
 	
 	get outerContainers () {
-		let { settings, utils } = this.chassis
-		return utils.newRoot([])
+		let { layout, utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
+		
+		return utils.newRule(this.selectors.outerContainers, [
+			utils.newDeclObj(
+				'margin-bottom',
+				`${utils.toEms(layout.calculateMarginBottom(lineHeight, 'outer'), fontSize)}em`
+			)
+		])
 	}
 	
 	get innerContainers () {
-		let { settings, utils } = this.chassis
-		return utils.newRoot([])
+		let { layout, utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
+		
+		return utils.newRule(this.selectors.innerContainers, [
+			utils.newDeclObj(
+				'margin-bottom',
+				`${utils.toEms(layout.calculateMarginBottom(lineHeight, 'inner'), fontSize)}em`
+			)
+		])
 	}
 	
 	get paragraph () {
