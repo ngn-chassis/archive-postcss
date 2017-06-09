@@ -35,10 +35,6 @@ class ChassisUtils {
 	static getUnit (value) {
 		return value.match(/\D+$/)[0]
 	}
-	
-	static toEms (pxValue, root) {
-		return pxValue / root
-	}
 
 	/**
 	 * @method isDirectory

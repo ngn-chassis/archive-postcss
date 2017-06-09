@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <title>NGN Chassis Showroom</title>
+    
+    <!-- <link rel="stylesheet" href="css/core-template.css"> -->
+    <link rel="stylesheet" href="css/showroom.css">
+  </head>
+
+  <body class="ngn chassis showroom">
+		<header>
+      <div class="width-constraint">
+        <h1>NGN Chassis Showroom</h1>
+        <aside class="links">
+          <a href="javascript:;">Documentation</a>
+          <a href="https://github.com/ngnjs" target="_blank">Github</a>
+        </aside>
+      </div>
+      <!-- <div class="test">
+        DEFAULT TEST
+      </div>
+      <div class="custom test">
+        CUSTOM TEST
+      </div> -->
+    </header>
+
+		<main>
+      <aside class="sidebar">
+        <nav>
+          <a href="#typography">
+            Typography
+          </a>
+          <a href="#buttons">
+            Buttons
+          </a>
+          <a href="#tags">
+            Tags
+          </a>
+          <a href="#toolbars">
+            Toolbars
+          </a>
+          <a href="#table">
+            Table
+          </a>
+          <a href="#flex_tiles">
+            Flex Tiles
+          </a>
+          <a href="#modals">
+            Modal Window
+          </a>
+          <a class="disabled" href="javascript:;">
+            A Disabled Link
+          </a>
+        </nav>
+      </aside>
+
+			<div class="content">
+
+				<section id="typography" class="typography">
+          <h1>Chassis-PostCss</h1>
+          <section>
+            <p>
+              Chassis is a PostCss-based CSS framework for building fluid, responsive websites that are consistent in design throughout. "Who cares?" you ask. Well, Chassis has a few key differences from other CSS frameworks:
+            </p>
+          </section>
+          <section>
+            <h2>Typography is automatically optimized to your custom breakpoints</h2>
+            <p>
+              Chassis has good typography built-in. It automatically calculates optimal font-size and line-height for every viewport size, using its default set of breakpoints or your own custom set.
+            </p>
+          </section>
+          <section>
+            <h2>Every element of your web page adheres to these typography rules</h2>
+            <p>
+              Chassis is the only CSS framework in the world that bases the layout of all elements on typography rules. This means that not only will your typography automatically adjust to any screen size, <span class="bold">so will every other element on the page.</span>
+            </p>
+            <p>
+              Try it. Go ahead and shrink this window and watch how every element on the page scales appropriately. This all happens automatically, with no messy CSS or JavaScript.
+            </p>
+          </section>
+          <section>
+            <h2>Golden Ratio Typography</h2>
+            <p>
+              The typography rules inherent in Chassis weren't chosen arbitrarily; They are based on time-tested Golden Ratio Typography, optimized for the web. Not only that, but you can also specify different type scales if you choose.
+            </p>
+            <p>
+              In the event that you need more fine-grained control over individual pieces of typography, you can still specify font-sizes and line-heights as you normally would.
+            </p>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>Get all the UI elements you need with Chassis Detailer</h1>
+            <p>
+              You can use Chassis's typography-based layout system by itself if you'd like, but if you need UI elements to work with, it is as simple as adding Chassis Detailer.
+            </p>
+            <p>
+              Chassis Detailer contains a suite of UI components, all of which work seamlessly with the Chassis typography-based layout system.
+            </p>
+          </section>
+          <section>
+            <h2>Simple, straightforward customization</h2>
+            <p>
+              All Detailer UI components are fully themable and can be extended with custom properties. It is easy to make many different versions of each component to suit your needs while maintaining automatic responsive behavior.
+            </p>
+          </section>
+          <section>
+            <h2>Only load the components you need</h2>
+            <p>
+              Chassis Detailer allows you to import exactly what you need, and nothing you don't, keeping CSS file size to a minimum.
+            </p>
+          </section>
+        </section>
+        <section>
+          <h1>The most semantic framework</h1>
+          <p>
+            Chassis applies the principles of <a href="https://github.com/gbdrummer/symbiocss" target="_blank">SymbioCSS</a> to provide the cleanest, most semantic HTML/CSS development experience possible. There are no cryptic class names to decipher, no proprietary HTML attributes, and every CSS selector reads like a short English phrase.
+          </p>
+          <p>
+            In addition, Chassis is totally self-contained. You are free to use any style of HTML or CSS in your own stylesheets without having to worry about scoping conflicts.
+          </p>
+        </section>
+
+        <section id="buttons" class="buttons">
+          <h1>Buttons</h1>
+
+          <section class="default buttons">
+            <a class="button" href="#">Default Button</a>
+            <!-- Disabled Button -->
+            <a class="disabled button" href="#">Disabled Button</a>
+            <pre class="html code">&lt;a class="button" href="/url">
+  Default Button
+&lt;/a>
+or
+&lt;button>
+  Default Button
+&lt;/button>
+</pre>
+
+            <!-- Create a button without default .button class -->
+            <a class="custom-button" href="#">Button with Custom Class</a>
+            <a class="disabled custom-button" href="#">Disabled Button with Custom Class</a>
+            <pre class="html code">&lt;a class="custom-class" href="/url">
+  Button with Custom Class
+&lt;/a></pre>
+            <pre class="sass code">.custom-class {
+  @detailer extend button;
+  /* additional styles */
+}</pre>
+          </section>
+
+          <section class="custom buttons">
+            <section>
+              <h2>Custom Buttons</h2>
+              <a class="outlined button" href="#">Outlined Button</a>
+              <a class="disabled outlined button" href="#">Outlined Button</a>
+              <pre class="html code">&lt;a class="outlined button" href="/url">
+  Outlined Button
+&lt;/a></pre>
+            <pre class="sass code">.outlined.button {
+  @detailer extend button {
+    default {
+      background: #FFF;
+      color: #77787C;
+    }
+
+    hover {
+      bg-color: #E2E3E5;
+      text-color: #77787C;
+    }
+
+    active {
+      bg-color: #DADBDD;
+      text-color: #77787C;
+    }
+  });
+}</pre>
+            </section>
+
+            <section>
+              <h2>More Custom Buttons</h2>
+              <a class="button with-shadow" href="#">Button with Shadow</a>
+              <a class="disabled button with-shadow" href="#">Disabled Button with Shadow</a>
+
+              <br>
+              <!-- Button with Gradient Bevel -->
+              <a class="beveled button" href="#">Beveled Button</a>
+              <a class="disabled beveled button" href="#">Disabled Beveled Button</a>
+            </section>
+          </section>
+        </section>
+
+        <section id="tags" class="tags">
+          <h1>Tags</h1>
+          <p>
+            Tags display inline with text: <span class="tag">Default Tag</span> They can be customized or extended as shown below. <span class="cool tag">Cool!</span>
+          </p>
+          <pre class="html code">&lt;span class="cool tag" href="/url">
+  Cool!
+&lt;/span></pre>
+        <pre class="css code">.cool.tag {
+  @detailer extend tag({
+    default: {
+      bg-color: var(--var-name)
+    }
+  });
+}</pre>
+        </section>
+
+        <section id="table" class="table">
+          <h1>Table</h1>
+          <p>
+            Basic Golden Ratio Typography-compliant table component. You can turn the default border styling off and style table cells manually if desired. Ellipsis will work on all table cells.
+          </p>
+          <p>
+            You can optionally use the <code>stack-below</code> mixin to cause the table layout to stack below a specified breakpoint. For example:
+          </p>
+          <pre class="sass code">table {
+  @detailer table stack-below small;
+}</pre>
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  Header 1 has ellipsis
+                </th>
+                <th>
+                  Header 2
+                </th>
+                <th>
+                  Header 3
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  Content 1
+                </td>
+                <td>
+                  Content 2
+                </td>
+                <td>
+                  Content 3
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Content 1
+                </td>
+                <td>
+                  Content 2
+                </td>
+                <td>
+                  Content 3
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Content 1
+                </td>
+                <td>
+                  Content 2 is longer, and will wrap
+                </td>
+                <td>
+                  Content 3
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Content 1
+                </td>
+                <td>
+                  Content 2
+                </td>
+                <td>
+                  Content 3
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Content 1
+                </td>
+                <td>
+                  Content 2
+                </td>
+                <td>
+                  Content 3
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3">
+                  Footer 1
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </section>
+
+        <section id="forms" class="forms">
+          <h1>Forms</h1>
+          <form>
+            <fieldset>
+              <legend>Fieldset Legend</legend>
+
+              <div class="text field">
+                <label for="textfield">Text Input</label>
+                <div class="input">
+                  <input id="textfield" type="text" name="textfield" value="" required>
+                </div>
+              </div>
+
+              <div class="textarea field">
+                <label for="textarea">Textarea</label>
+                <div class="input">
+                  <textarea id="textarea" name="textarea" rows="3" required></textarea>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="optional text field">
+                  <label for="numberfield">Number Input</label>
+                  <div class="input">
+                    <input id="numberfield" type="number" name="numberfield" value="">
+                  </div>
+                </div>
+                <div class="text field">
+                  <label for="datefield">Date Input</label>
+                  <div class="input">
+                    <input id="datefield" type="date" name="datefield" value="" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="group">
+                  <div class="checkbox field">
+                    <input id="checkbox_1" type="checkbox" required>
+                    <label for="checkbox_1">Checkbox</label>
+                  </div>
+                  <div class="checkbox field">
+                    <input id="checkbox_2" type="checkbox" required>
+                    <label for="checkbox_2">Checkbox</label>
+                  </div>
+                  <div class="checkbox field">
+                    <input id="checkbox_3" type="checkbox" required>
+                    <label for="checkbox_3">Checkbox</label>
+                  </div>
+                </div>
+                <div class="group">
+                  <div class="radio field">
+                    <input id="radio_1" type="radio" name="radios" required>
+                    <label for="radio_1">Radio Button</label>
+                  </div>
+                  <div class="radio field">
+                    <input id="radio_2" type="radio" name="radios" required>
+                    <label for="radio_2">Radio Button</label>
+                  </div>
+                  <div class="radio field">
+                    <input id="radio_3" type="radio" name="radios" required>
+                    <label for="radio_3">Radio Button</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text field">
+                <label for="browser">Input with Additional Tools</label>
+                <div class="input">
+                  <input id="browser" type="text" name="browser" value="" required>
+                  <a class="button" href="javascript:;">
+                    Add
+                  </a>
+                </div>
+              </div>
+
+              <div class="browser field">
+                <label for="browser_input">Browser Field</label>
+                <div class="input">
+                  <div class="browser">
+                    <input id="browser_input" type="text" placeholder="Enter a file name or click Browse&hellip;">
+                    <a class="button">
+                      Browse&hellip;
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="browser field">
+                <label for="browser_input">Browser Field with Multiple Inputs</label>
+                <div class="input">
+                  <div class="browser">
+                    <input id="browser_input_1" type="text" placeholder="Input 1">
+                    <input id="browser_input_2" type="text" placeholder="Input 2">
+                    <input id="browser_input_3" type="text" placeholder="Input 3">
+                    <a class="button">
+                      Browse&hellip;
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+            </fieldset>
+            <button type="submit">Submit</button>
+          </form>
+        </section>
+
+			</div>
+		</main>
+
+    <footer>
+      <div class="width-constraint">
+        <span class="label">Viewport Width Range:</span>
+
+        <span class="below-min range">
+          Below min: <= 319px
+        </span>
+
+        <span class="tiny range">
+          Tiny: 320 - 511px
+        </span>
+
+        <span class="small range">
+          Small: 512 - 767px
+        </span>
+
+        <span class="medium range">
+          Medium: 768 - 1023px
+        </span>
+
+        <span class="large range">
+          Large: 1024 - 1199px
+        </span>
+
+        <span class="huge range">
+          Huge: 1200 - 1440px (Max)
+        </span>
+
+        <span class="above-max range">
+          Above max: >= 1441px
+        </span>
+      </div>
+    </footer>
+
+	</body>
+
+</html>

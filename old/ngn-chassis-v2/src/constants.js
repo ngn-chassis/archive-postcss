@@ -32,7 +32,7 @@ class ChassisConstants {
 	}
 	
 	// The viewport width above which font size should start to grow above root
-	static get typeScaleThreshold () {
+	static get typeScalePoint () {
 		return 640
 	}
 	
@@ -46,10 +46,6 @@ class ChassisConstants {
 	
 	static get viewportWidthIncrement () {
 		return 320
-	}
-	
-	static get fontSizeAliases () {
-		return ['small', 'root', 'large', 'larger', 'largest']
 	}
 	
 	static get typographyBreakpoints () {

@@ -11,7 +11,7 @@ const fs = require('fs')
 const sourcemaps = require('gulp-sourcemaps')
 
 const chassis = require('./gulp-chassis/index.js')
-const detailer = require('./ngn-chassis-detailer/index.js')
+// const detailer = require('./ngn-chassis-detailer/index.js')
 
 // Paths ------------------------------------------------------------------
 const SRC = './src'

@@ -53,12 +53,12 @@ class ChassisSettings extends NGN.EventEmitter {
 						headings: {
 							type: Object,
 							default: {
-								'1': 'larger',
-								'2': 'large',
+								'1': '+2',
+								'2': '+1',
 								'3': 'root',
-								'4': 'small',
-								'5': 'small',
-								'6': 'small'
+								'4': '-1',
+								'5': '-1',
+								'6': '-1'
 							},
 							validate (data) {
 								let mh = new MustHave()

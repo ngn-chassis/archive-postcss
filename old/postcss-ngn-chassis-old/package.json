@@ -1,0 +1,34 @@
+{
+  "name": "postcss-ngn-chassis",
+  "version": "0.0.1",
+  "description": "NGN Chassis UI Framework",
+  "keywords": [
+    "postcss",
+    "css",
+    "postcss-plugin",
+    "ngn",
+    "ngnjs",
+    "chassis",
+    "framework"
+  ],
+  "author": "Graham Butler <graham@edlio.com>",
+  "license": "MIT",
+  "repository": "gbdrummer/postcss-ngn-chassis",
+  "bugs": {
+    "url": "https://github.com/gbdrummer/postcss-ngn-chassis/issues"
+  },
+  "homepage": "https://github.com/gbdrummer/postcss-ngn-chassis",
+  "dependencies": {
+    "postcss": "^5.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.4.0",
+    "eslint-config-postcss": "^2.0.2"
+  },
+  "scripts": {
+    "test": "eslint *.js"
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-postcss/es5"
+  }
+}

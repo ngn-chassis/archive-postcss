@@ -1,114 +1,101 @@
 class ChassisTypography {
 	constructor (chassis) {
 		this.chassis = chassis
-		this.definitions = chassis.settings.typography.ranges
-		this.typeScaleRatio = chassis.settings.typography.typeScaleRatio
+		
+		let { settings, constants } = chassis
+		
+		this.root = settings.typography.rootFontSize
+		this.fontSizeAliases = constants.fontSizeAliases
+		
+		this.breakpoints = constants.typographyBreakpoints.filter((breakpoint) => {
+			return breakpoint <= settings.layout.maxWidth
+		})
+		
+		this.scale = {
+			threshold: constants.typeScaleThreshold,
+			ratio: settings.typography.typeScaleRatio
+		}
 	}
 	
-	/**
-   * @method getFontSize
-   * Get GR-Typography font size by type at the specified viewport width
-   * @param {string} alias
-   * GR-Typography font-size alias: root, small, large, larger, largest
-   * @param {number} upperBound
-   * Upper bound of current viewport width range
-   * @return {number}
-   */
-  getFontSize (alias = 'root', upperBound, inEms = false) {
-    this.definitions.addFilter((def) => {
-      return upperBound <= def.bounds.upper
-    })
+	calculateFontSize (alias, root = this.root) {
+		if (alias === 'root') {
+			return root
+		}
 		
-		let definition = this.definitions.first
+		let multiplier = 1
 		
-		this.definitions.clearFilters()
+		switch (alias) {
+			case 'small':
+				multiplier = 1 / Math.sqrt(this.scale.ratio)
+				break
+			
+			case 'large':
+				multiplier = Math.sqrt(this.scale.ratio)
+				break
+				
+			case 'larger':
+				multiplier = this.scale.ratio
+				break
+				
+			case 'largest':
+				multiplier = Math.pow(this.scale.ratio, 2)
+				break
+				
+			default:
+				console.error(`[ERROR] Chassis Auto-Typography: Font scale "${alias}" not found. Defaulting to root.`)
+		}
+		
+		return root * multiplier
+	}
 
-    if (!definition) {
-      console.error(`[ERROR] Chassis Typography: Font Size "${alias}" not found`)
-    }
+	calculateLineHeight (fontSize, viewportWidth, ratio = this.scale.ratio) {
+		// return (ratio - ((1 / (2 * ratio)) * (1 - (viewportWidth / this.calculateOptimalLineWidth(fontSize))))) * fontSize
+		return (ratio - ((1 / (2 * ratio)) * (1 - viewportWidth / this.calculateOptimalLineWidth(fontSize)))) * fontSize
+	}
 
-    let fontSize = definition.typography[alias].size
-
-    return inEms ? fontSize / definition.typography['root'].size : fontSize
-  }
+	calculateOptimalLineWidth (fontSize, ratio = this.scale.ratio) {
+		return Math.pow(fontSize * ratio, 2)
+	}
 	
-	/**
-   * @method getFontWeight
-   * Get GR-Typography font size by type at the specified viewport width
-   * @param {string} alias
-   * Font weight alias: thin, light, regular, semibold, bold, ultra
-   * @return {number}
-   */
-  getFontWeight (line, alias = 'regular') {
-    // TODO: Add error handling
-    return this.fontWeights[alias]
-  }
+	getViewportSettings (vwr) {
+		let averageViewportWidth = (vwr.bounds.lower + vwr.bounds.upper) / 2
+		let rules = {}
+		
+		this.fontSizeAliases.forEach((alias) => {
+			let fontSize = this.calculateFontSize(alias, vwr.rootFontSize)
+			
+			rules[alias] = {
+				fontSize,
+				lineHeight: this.calculateLineHeight(fontSize, averageViewportWidth)
+			}
+		})
+		
+		return rules
+	}
 	
-	/**
-   * @method getLineHeight
-   * Get GR-Typography calculated line-height by type at the specified viewport
-   * width
-   * @param {string} fontSizeAlias
-   * GR-Typography font-size alias: root, small, large, larger, largest
-   * @param {number} upperBound
-   * Upper bound of current viewport width range
-   * @return {number} of ems
-   */
-  getLineHeight (fontSizeAlias = 'root', upperBound) {
-    let fontSize = this.getFontSize(fontSizeAlias, upperBound)
-    let optimalLineHeight = this._getOptimalLineHeight(fontSize, upperBound)
-
-    return optimalLineHeight / fontSize
-  }
+	get ranges () {
+		let rootFontSize = this.root
 	
-	/**
-   * @method getMargin
-   * Get calculated GR-Typography margin-bottom values for typography elements
-   * @param {string} fontSizeAlias
-   * GR-Typography font-size alias
-   * @param {number} upperBound
-   * Upper bound of current viewport width range
-   * @param {string} type
-   * Options: 'heading'
-   * Headings have slightly larger margins than other elements such as p tags
-   * @return {number} in ems
-   */
-  getMargin (fontSizeAlias = 'root', upperBound) {
-    let lineHeight = this.getLineHeight(fontSizeAlias, upperBound)
-    let fontSize = this.getFontSize(fontSizeAlias, upperBound)
-
-    return lineHeight / this.typeScaleRatio
-  }
+		return this.breakpoints.map((breakpoint, index) => {
+			if (index === this.breakpoints.length - 1) {
+				return
+			}
 	
-	/**
-   * @method _getOptimalLineHeight
-   * Calculate optimal line height for the given font size
-   * @param {number} fontSize in pixels
-   * @param {number} upperBound
-   * Upper bound of the current viewport width range
-   * @return {number} in pixels
-   * @private
-   */
-  _getOptimalLineHeight (fontSize, upperBound) {
-    let optimalLineWidth = this._getOptimalLineWidth(fontSize)
-
-    return Math.round((this.typeScaleRatio - ((1 / (2 * this.typeScaleRatio)) * (1 - (upperBound / optimalLineWidth)))) * fontSize)
-  }
+			let bounds = {
+				lower: breakpoint,
+				upper: this.breakpoints[index + 1]
+			}
 	
-	/**
-   * @method _getOptimalLineWidth
-   * Calculate optimal line width for the given font size
-   * @param {number} fontSize in pixels
-   * @param {number} ratio
-   * Type scale ratio
-   * @return {number}
-   * @private
-   */
-  _getOptimalLineWidth (fontSize, ratio = this.typeScaleRatio) {
-    let lineHeight = fontSize * ratio
-
-    return Math.pow(lineHeight, 2)
-  }
+			if (bounds.lower >= this.scale.threshold) {
+				rootFontSize++
+			}
+	
+			return {
+				bounds,
+				typography: this.getViewportSettings({bounds, rootFontSize})
+			}
+		}).filter((vwr) => vwr !== undefined)
+	}
 }
 
 module.exports = ChassisTypography
