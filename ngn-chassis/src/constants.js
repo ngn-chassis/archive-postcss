@@ -12,14 +12,14 @@ class ChassisConstants {
 			})(),
 			scale: {
 				ratios: {
-					minorSecond: 1.067,
-					majorSecond: 1.125,
-					minorThird: 1.2,
-					majorThird: 1.25,
-					perfectFourth: 4 / 3,
-					tritone: 1.414,
-					perfectFifth: 1.5,
-					goldenRatio: 1.61803398875
+					'minor second': 1.067,
+					'major second': 1.125,
+					'minor third': 1.2,
+					'major third': 1.25,
+					'perfect fourth': 4 / 3,
+					'tritone': 1.414,
+					'perfect fifth': 1.5,
+					'golden ratio': 1.61803398875
 				},
 				threshold: 640 // The viewport width above which font size should start to increment from base
 			},

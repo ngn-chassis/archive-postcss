@@ -103,8 +103,13 @@ class ChassisSettings extends NGN.EventEmitter {
 				},
 				scaleRatio: {
 					type: Number,
-					default: chassis.constants.typography.scale.ratios.goldenRatio,
-					min: 0
+					// TODO: Validate this against the values in constants so that the
+					// the value of this property can just be 'golden ratio'
+					default: chassis.constants.typography.scale.ratios['golden ratio'],
+					min: 0,
+					validate (data) {
+						console.log(data);
+					}
 				},
 				fontWeights: {
 					type: Object,
