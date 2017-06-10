@@ -23,6 +23,23 @@ class ChassisLayout {
 		return this.getGutterLimit(this.minWidth)
   }
 
+	calculateMarginBottom (lineHeight, type = null) {
+		let { typography } = this.chassis.settings
+
+		switch (type) {
+      case 'outer':
+        return lineHeight * typography.scaleRatio
+        break
+
+      case 'inner':
+        return lineHeight
+        break
+
+      default:
+        return '1em'
+    }
+	}
+
 	/**
    * @method getGutterLimit
    * Get a pixel-value for gutter width at min or max viewport width ranges
@@ -61,21 +78,35 @@ class ChassisLayout {
     }
 	}
 
-	calculateMarginBottom (lineHeight, type = null) {
-		let { typography } = this.chassis.settings
+	getMediaQueryParams (dimension, operator, value) {
+		let query
 
-		switch (type) {
-      case 'outer':
-        return lineHeight * typography.scaleRatio
-        break
+		switch (operator) {
+			case '<':
+				query = `(max-${dimension}: ${value - 1}px)`
+				break
 
-      case 'inner':
-        return lineHeight
-        break
+			case '<=':
+				query = `(max-${dimension}: ${value}px)`
+				break
 
-      default:
-        return '1em'
-    }
+			case '=':
+				query = `(${dimension}: ${value}px)`
+				break
+
+			case '>':
+				query = `(min-${dimension}: ${value + 1}px)`
+				break
+
+			case '>=':
+				query = `(min-${dimension}: ${value}px)`
+				break
+
+			default:
+				console.error(`[ERROR] Chassis Media Query: Unknown operator "${operator}". Please use "<", "<=", "=", ">", or ">=".`)
+		}
+
+		return `screen and ${query}`
 	}
 }
 

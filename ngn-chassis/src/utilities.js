@@ -6,7 +6,7 @@ class ChassisUtils {
 	static listPropertyValues (array) {
 		return array.map(value => value === 0 ? 0 : `${value}em`).join(' ')
 	}
-	
+
 	/**
 	 * @method fileExists
 	 * Determine whether or not a filepath points to an existing file
@@ -20,7 +20,7 @@ class ChassisUtils {
 
 		return fs.existsSync(filepath)
 	}
-	
+
 	static getFilePath (filepath) {
 		return filepath.substring(0, filepath.lastIndexOf("/"))
 	}
@@ -35,7 +35,7 @@ class ChassisUtils {
 	static getUnit (value) {
 		return value.match(/\D+$/)[0]
 	}
-	
+
 	static toEms (pxValue, root) {
 		return pxValue / root
 	}
@@ -128,6 +128,10 @@ class ChassisUtils {
 		})
 
 		return rule
+	}
+
+	static newMediaQuery (params, nodes) {
+		return this.newAtRule({name: 'media', params, nodes})
 	}
 
 	/**

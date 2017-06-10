@@ -6,23 +6,32 @@ class ChassisStylesheet {
 		this.chassis = chassis
 		this.css = this.unnest(tree)
 
-		// this.css.walkAtRules('chassis', (atRule) => {
-		// 	this.processAtRule(atRule)
-		// })
+		this.css.walkAtRules('chassis', (atRule) => {
+			this.processAtRule(atRule, this.getAtRuleData(atRule))
+		})
 	}
 
-	processAtRule (atRule) {
-		let { atRules, generator, importer } = this.chassis
-		let params = atRule.params.split(' ')
-		let line = atRule.source.start
+	getAtRuleData (raw, range = null) {
+		let params = raw.params.split(' ')
 
-		let mixin = params[0]
 		let cfg = {
-			args: params.length > 1 ? params.slice(1) : null,
-			nodes: NGN.coalesce(atRule.nodes, [])
+			args: params.length > 1 ? params.slice(1) : null
 		}
 
-		atRules.process(this.css, mixin, atRule, line, cfg)
+		if (range) {
+			cfg.range = range
+		}
+
+		return {
+			source: raw.source.start,
+			mixin: params[0],
+			cfg,
+			nodes: raw.nodes || []
+		}
+	}
+
+	processAtRule (atRule, data) {
+		this.chassis.atRules.process(this.css, atRule, data)
 	}
 
 	unnest (stylesheet) {

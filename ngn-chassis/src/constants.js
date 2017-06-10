@@ -1,65 +1,43 @@
 class ChassisConstants {
-	static get minorSecond () {
-		return 1.067
-	}
+	static get typography () {
+		return {
+			breakpoints: (() => {
+				let breakpoints = []
 
-	static get majorSecond () {
-		return 1.125
-	}
+				for (let width = this.layout.viewport.minWidth; width <= this.layout.viewport.maxWidth; width += this.layout.viewport.widthIncrement) {
+					breakpoints.push(width)
+				}
 
-	static get minorThird () {
-		return 1.2
-	}
-
-	static get majorThird () {
-		return 1.25
-	}
-
-	static get perfectFourth () {
-		return 4 / 3
-	}
-
-	static get tritone () {
-		return 1.414
-	}
-
-	static get perfectFifth () {
-		return 1.5
-	}
-
-	static get goldenRatio () {
-		return 1.61803398875
-	}
-	
-	// The viewport width above which font size should start to grow above root
-	static get typeScaleThreshold () {
-		return 640
-	}
-	
-	static get minViewportWidth () {
-		return 0
-	}
-	
-	static get maxViewportWidth () {
-		return 7680 // Up to 8k displays supported
-	}
-	
-	static get viewportWidthIncrement () {
-		return 320
-	}
-	
-	static get fontSizeAliases () {
-		return ['small', 'root', 'large', 'larger', 'largest']
-	}
-	
-	static get typographyBreakpoints () {
-		let breakpoints = []
-		
-		for (let width = this.minViewportWidth; width <= this.maxViewportWidth; width += this.viewportWidthIncrement) {
-			breakpoints.push(width)
+				return breakpoints
+			})(),
+			scale: {
+				ratios: {
+					minorSecond: 1.067,
+					majorSecond: 1.125,
+					minorThird: 1.2,
+					majorThird: 1.25,
+					perfectFourth: 4 / 3,
+					tritone: 1.414,
+					perfectFifth: 1.5,
+					goldenRatio: 1.61803398875
+				},
+				threshold: 640 // The viewport width above which font size should start to increment from base
+			},
+			sizeAliases: ['small', 'root', 'large', 'larger', 'largest']
 		}
-		
-		return breakpoints
+	}
+
+	static get layout () {
+		return {
+			viewport: {
+				minWidth: 0,
+				maxWidth: 7680, // Up to 8k displays supported
+				widthIncrement: 320
+			},
+			mediaQueries: {
+				operators: ['<', '<=', '=', '>=', '>']
+			}
+		}
 	}
 }
 

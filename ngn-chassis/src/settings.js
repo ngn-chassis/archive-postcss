@@ -35,12 +35,12 @@ class ChassisSettings extends NGN.EventEmitter {
 				},
 				minWidth: {
 					type: Number,
-					default: chassis.constants.minViewportWidth,
+					default: chassis.constants.layout.viewport.minWidth,
 					min: 0
 				},
 				maxWidth: {
 					type: Number,
-					default: chassis.constants.maxViewportWidth,
+					default: chassis.constants.layout.viewport.maxWidth,
 					min: 0
 				}
 			}
@@ -103,7 +103,7 @@ class ChassisSettings extends NGN.EventEmitter {
 				},
 				scaleRatio: {
 					type: Number,
-					default: this.chassis.constants.goldenRatio,
+					default: chassis.constants.typography.scale.ratios.goldenRatio,
 					min: 0
 				},
 				fontWeights: {

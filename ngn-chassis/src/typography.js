@@ -5,10 +5,10 @@ class ChassisTypography {
 		let { settings, constants } = chassis
 
 		this.root = settings.typography.baseFontSize
-		this.fontSizeAliases = constants.fontSizeAliases
+		this.fontSizeAliases = constants.typography.sizeAliases
 
 		this.scale = {
-			threshold: constants.typeScaleThreshold,
+			threshold: constants.typography.scale.threshold,
 			ratio: settings.typography.scaleRatio
 		}
 	}
@@ -17,7 +17,7 @@ class ChassisTypography {
 		let { constants, settings } = this.chassis
 		let rootFontSize = this.root
 
-		let breakpoints = constants.typographyBreakpoints.filter((breakpoint) => {
+		let breakpoints = constants.typography.breakpoints.filter((breakpoint) => {
 			return breakpoint <= settings.layout.maxWidth
 		})
 

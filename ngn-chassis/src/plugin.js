@@ -1,8 +1,10 @@
 require('ngn')
 require('ngn-data')
 
+const ChassisAtRules = require('./at-rules.js')
 const ChassisConstants = require('./constants.js')
 const ChassisCore = require('./core.js')
+const ChassisErrors = require('./errors.js')
 const ChassisLayout = require('./layout.js')
 const ChassisSettings = require('./settings.js')
 const ChassisStylesheet = require('./stylesheet.js')
@@ -19,8 +21,10 @@ class ChassisPostCss {
 
 		this._initSettings(cfg)
 		this._initTypography()
-		this._initLayout()
-		this._initCoreStylesheet()
+
+		this.layout = new ChassisLayout(this)
+		this.atRules = new ChassisAtRules(this)
+		this.core = new ChassisCore(this)
 
 		return this.plugin
 	}
@@ -29,14 +33,6 @@ class ChassisPostCss {
 		return (root, result) => {
 			result.root = this.core.css.append(new ChassisStylesheet(this, root).css)
 		}
-	}
-
-	_initCoreStylesheet () {
-		this.core = new ChassisCore(this)
-	}
-
-	_initLayout () {
-		this.layout = new ChassisLayout(this)
 	}
 
 	_initSettings (cfg) {

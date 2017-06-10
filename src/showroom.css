@@ -1,3 +1,15 @@
 .showroom {
-	
+	background: green;
+}
+
+@chassis viewport-height < 512 {
+	.showroom {
+		background: blue;
+	}
+}
+
+@chassis viewport-width < 512 {
+	.showroom {
+		background: red;
+	}
 }
