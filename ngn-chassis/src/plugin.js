@@ -11,48 +11,47 @@ const ChassisUtilities = require('./utilities.js')
 
 class ChassisPostCss {
 	constructor (cfg) {
-		this.cfg = NGN.coalesce(cfg, {})
-		this.plugins = cfg.hasOwnProperty('plugins') ? cfg.plugins : null
-			
+		cfg = NGN.coalesce(cfg, {})
+
 		this.utils = ChassisUtilities
 		this.constants = ChassisConstants
-		
-		this.settings = new ChassisSettings(this)
-		this.typography = new ChassisTypography(this)
-		this.layout = new ChassisLayout(this)
-		
-		return this.init()
+		this.plugins = cfg.hasOwnProperty('plugins') ? cfg.plugins : null
+
+		this._initSettings(cfg)
+		this._initTypography()
+		this._initLayout()
+		this._initCoreStylesheet()
+
+		return this.plugin
 	}
-	
+
 	get plugin () {
 		return (root, result) => {
-			// result.root = this.core.css.append(new ChassisStylesheet(this, root).css)
-			result.root = this.core.css.append(root)
+			result.root = this.core.css.append(new ChassisStylesheet(this, root).css)
 		}
 	}
-	
-	init () {
-		// if (this.plugins) {
-		// 	delete this.cfg.plugins
-		// }
-		
-		// if (!this.cfg.hasOwnProperty('breakpoints')) {
-		// 	this.cfg.viewportWidthRanges = this.constants.defaultViewportWidthRanges
-		// }
-		//
-		this.settings.load(this.cfg)
-		
-		// Populate auto-typography values
-		this.settings.typography.ranges.load(this.typography.ranges)
-		
+
+	_initCoreStylesheet () {
 		this.core = new ChassisCore(this)
-		
+	}
+
+	_initLayout () {
+		this.layout = new ChassisLayout(this)
+	}
+
+	_initSettings (cfg) {
+		this.settings = new ChassisSettings(this)
+		this.settings.load(cfg)
+
 		if (!this.settings.valid) {
 			console.error('[ERROR] Chassis Configuration: Invalid fields:')
 			console.error(this.settings.invalidDataAttributes.join(', '))
 		}
-		
-		return this.plugin
+	}
+
+	_initTypography () {
+		this.typography = new ChassisTypography(this)
+		this.settings.typography.ranges.load(this.typography.ranges)
 	}
 }
 

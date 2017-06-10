@@ -22,8 +22,9 @@ gulp.task('css', () => {
   return gulp.src(SRC + '/**/*.css')
     .pipe(sourcemaps.init())
     .pipe(chassis({
-      typography: {
-        typeScaleRatio: .8 
+      layout: {
+        minWidth: 320,
+        maxWidth: 1440
       }
     }))
     .pipe(sourcemaps.write('.'))

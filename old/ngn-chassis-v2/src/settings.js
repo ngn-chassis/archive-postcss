@@ -4,7 +4,7 @@ class ChassisSettings extends NGN.EventEmitter {
 	constructor (chassis) {
 		super()
 		this.chassis = chassis
-		
+
 		this.viewportWidthRangeModel = new NGN.DATA.Model({
 			fields: {
 				name: {
@@ -25,7 +25,7 @@ class ChassisSettings extends NGN.EventEmitter {
 				}
 			}
 		})
-		
+
 		this.layoutModel = new NGN.DATA.Model({
 			fields: {
 				gutter: {
@@ -45,7 +45,7 @@ class ChassisSettings extends NGN.EventEmitter {
 				}
 			}
 		})
-		
+
 		this.typographyModel = new NGN.DATA.Model({
 			relationships: {
 				fontSizes: new NGN.DATA.Model({
@@ -84,7 +84,7 @@ class ChassisSettings extends NGN.EventEmitter {
 							type: Object,
 							validate (data) {
 								// TODO: Add validation
-								
+
 								return true
 							}
 						},
@@ -126,7 +126,7 @@ class ChassisSettings extends NGN.EventEmitter {
 				}
 			}
 		})
-		
+
 		return new NGN.DATA.Model({
 			relationships: {
 				viewportWidthRanges: [this.viewportWidthRangeModel],
