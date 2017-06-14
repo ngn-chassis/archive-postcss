@@ -82,7 +82,7 @@ class ChassisTypography {
 	}
 
 	calculateMarginBottom (lineHeight, ratio = this.scale.ratio) {
-    return lineHeight / ratio
+		return lineHeight / ratio
 	}
 
 	getViewportSettings (vwr) {

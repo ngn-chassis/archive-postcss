@@ -79,32 +79,32 @@ class ChassisAtRules {
 	/**
 	 * @mixin ellipsis
 	 */
-  ellipsis () {
+	ellipsis () {
 		let { utils } = this.chassis
 
 		this.atRule.replaceWith([
-      utils.css.newDecl('white-space', 'nowrap'),
-      utils.css.newDecl('overflow', 'hidden'),
-      utils.css.newDecl('text-overflow', 'ellipsis')
-    ])
-  }
+			utils.css.newDecl('white-space', 'nowrap'),
+			utils.css.newDecl('overflow', 'hidden'),
+			utils.css.newDecl('text-overflow', 'ellipsis')
+		])
+	}
 
 	/**
-   * @mixin ieOnly
-   * TODO: Implement version support
-   */
-  ieOnly () {
+	 * @mixin ieOnly
+	 * TODO: Implement version support
+	 */
+	ieOnly () {
 		let { utils } = this.chassis
 
 		this.atRule.replaceWith(utils.css.newAtRule({
-      name: 'media',
-      params: 'all and (-ms-high-contrast: none)',
-      nodes: this.nodes.map((rule) => {
-        rule.selector = `*::-ms-backdrop, ${rule.selector}`
-        return rule
-      })
-    }))
-  }
+			name: 'media',
+			params: 'all and (-ms-high-contrast: none)',
+			nodes: this.nodes.map((rule) => {
+				rule.selector = `*::-ms-backdrop, ${rule.selector}`
+				return rule
+			})
+		}))
+	}
 	
 	// TODO: A refactor of this would be nice
 	viewportWidth () {
@@ -203,19 +203,19 @@ class ChassisAtRules {
 	}
 
 	/**
-   * @mixin zIndex
-   * Get calculated z-index value from project settings
-   */
-  zIndex () {
+	 * @mixin zIndex
+	 * Get calculated z-index value from project settings
+	 */
+	zIndex () {
 		let { settings, utils } = this.chassis
-    let index = settings.zIndex[this.cfg.args[0]]
+		let index = settings.zIndex[this.cfg.args[0]]
 
-    if (!index) {
-      console.error(`[ERROR] Line ${this.source.line}: Invalid z-index alias. Accepted values: ${utils.string.listValues(settings.zIndex)}`)
-    }
+		if (!index) {
+			console.error(`[ERROR] Line ${this.source.line}: Invalid z-index alias. Accepted values: ${utils.string.listValues(settings.zIndex)}`)
+		}
 
-    this.atRule.replaceWith(utils.css.newDecl('z-index', index))
-  }
+		this.atRule.replaceWith(utils.css.newDecl('z-index', index))
+	}
 
 	process (root, atRule, data) {
 		this.root = root
