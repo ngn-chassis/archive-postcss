@@ -77,37 +77,6 @@ class ChassisLayout {
         console.error(`"${unit}" units cannot be used for Layout Gutter. Please use vw, %, px, em or rem instead.`)
     }
 	}
-
-	getMediaQueryParams (dimension, operator, value) {
-		let query
-
-		switch (operator) {
-			case '<':
-				query = `(max-${dimension}: ${value - 1}px)`
-				break
-
-			case '<=':
-				query = `(max-${dimension}: ${value}px)`
-				break
-
-			case '=':
-				query = `(${dimension}: ${value}px)`
-				break
-
-			case '>':
-				query = `(min-${dimension}: ${value + 1}px)`
-				break
-
-			case '>=':
-				query = `(min-${dimension}: ${value}px)`
-				break
-
-			default:
-				console.error(`[ERROR] Chassis Media Query: Unknown operator "${operator}". Please use "<", "<=", "=", ">", or ">=".`)
-		}
-
-		return `screen and ${query}`
-	}
 }
 
 module.exports = ChassisLayout

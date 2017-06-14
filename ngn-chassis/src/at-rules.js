@@ -31,6 +31,8 @@ class ChassisAtRules {
 					maxWidth = utils.string.stripParentheses(arg.replace('max', ''))
 				} else if (arg.startsWith('gutter')) {
 					gutter = utils.string.stripParentheses(arg.replace('gutter', ''))
+				} else {
+					console.warn(`[WARNING] Line ${this.source.line}: Unkown argument "${arg}". Skipping...`)
 				}
 			})
 		}
@@ -124,27 +126,42 @@ class ChassisAtRules {
   }
 
 	viewportWidth () {
-		let { layout, settings, utils } = this.chassis
+		let { settings, utils, viewport } = this.chassis
 
 		let operator = this.cfg.args[0]
 		let width = parseInt(this.cfg.args[1])
+		
+		if (isNaN(width)) {
+			let name = this.cfg.args[1]
+			
+			width = settings.viewportWidthRanges.find({name})[0]
+			
+			if (!width) {
+				console.error(`[ERROR] Line ${this.source.line}: Viewport Width Range "${name}" not found.`)
+				this.atRule.remove()
+				return
+			}
+		}
 
 		let mediaQuery = utils.css.newMediaQuery(
-			layout.getMediaQueryParams('width', operator, width),
+			viewport.getMediaQueryParams('width', operator, width),
 			this.nodes
 		)
-
+		
 		this.atRule.replaceWith(mediaQuery)
+		return
+		
+		// this.atRule.remove()
 	}
 
 	viewportHeight () {
-		let { layout, settings, utils } = this.chassis
+		let { settings, utils, viewport } = this.chassis
 
 		let operator = this.cfg.args[0]
 		let height = parseInt(this.cfg.args[1])
 
 		let mediaQuery = utils.css.newMediaQuery(
-			layout.getMediaQueryParams('height', operator, height),
+			viewport.getMediaQueryParams('height', operator, height),
 			this.nodes
 		)
 
@@ -160,7 +177,7 @@ class ChassisAtRules {
     let index = settings.zIndex[this.cfg.args[0]]
 
     if (!index) {
-      console.error(`[ERROR] Chassis z-index: Invalid identifier. Accepted values: ${Object.keys(settings.zIndex).join(', ')}`)
+      console.error(`[ERROR] Line ${this.source.line}: Invalid z-index alias. Accepted values: ${Object.keys(settings.zIndex).join(', ')}`)
     }
 
     this.atRule.replaceWith(utils.css.newDecl('z-index', index))
@@ -179,7 +196,7 @@ class ChassisAtRules {
 			return
 		}
 
-		console.error(`Chassis stylesheet line ${data.source.line}, column ${data.source.column}: Mixin "${data.mixin}" not found.`)
+		console.error(`[ERROR] Line ${data.source.line}: Mixin "${data.mixin}" not found.`)
 	}
 }
 

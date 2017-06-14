@@ -3,6 +3,47 @@ class ChassisViewport {
 		this.chassis = chassis
 	}
 	
+	getMediaQueryParams (dimension, operator, value) {
+		let { settings } = this.chassis
+		let query
+		
+		let isRange = typeof value === 'object'
+		let rangeIsMax = value === settings.viewportWidthRanges.last
+		
+		switch (operator) {
+			case '<':
+				query = `(max-${dimension}: ${isRange ? value.lowerBound - 1 : value - 1}px)`
+				break
+
+			case '<=':
+				query = `(max-${dimension}: ${isRange ? value.upperBound : value}px)`
+				break
+
+			case '=':
+				if (isRange) {
+					query = `(min-${dimension}: ${value.lowerBound}px) and (max-${dimension}: ${rangeIsMax ? value.upperBound - 1 : value.upperBound}px)`
+				} else {
+					query = `(${dimension}: ${value}px)`
+				}
+				break
+				
+			case '>=':
+				query = `(min-${dimension}: ${isRange ? value.lowerBound: value}px)`
+				break
+
+			case '>':
+				query = `(min-${dimension}: ${isRange ? value.upperBound + 1 : value + 1}px)`
+				break
+
+			default:
+				console.error(`[ERROR] Chassis Media Query: Unknown operator "${operator}". Please use "<", "<=", "=", ">", or ">=".`)
+		}
+		
+		console.log(query);
+
+		return `screen and ${query}`
+	}
+	
 	getWidthRanges (string) {
 		let { settings } = this.chassis
 		
