@@ -105,7 +105,8 @@ class ChassisAtRules {
       })
     }))
   }
-
+	
+	// TODO: A refactor of this would be nice
 	viewportWidth () {
 		let { settings, utils, viewport } = this.chassis
 
@@ -210,7 +211,7 @@ class ChassisAtRules {
     let index = settings.zIndex[this.cfg.args[0]]
 
     if (!index) {
-      console.error(`[ERROR] Line ${this.source.line}: Invalid z-index alias. Accepted values: ${Object.keys(settings.zIndex).join(', ')}`)
+      console.error(`[ERROR] Line ${this.source.line}: Invalid z-index alias. Accepted values: ${utils.string.listValues(settings.zIndex)}`)
     }
 
     this.atRule.replaceWith(utils.css.newDecl('z-index', index))

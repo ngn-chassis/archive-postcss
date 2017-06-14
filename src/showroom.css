@@ -1,9 +1,3 @@
 .showroom {
-	background: green;
-}
-
-@chassis viewport-width from small {
-	.showroom {
-		background: blue;
-	}
+	
 }

@@ -20,7 +20,8 @@ class ChassisViewport {
 			case '<':
 				query = `(max-${dimension}: ${isRange ? value.lowerBound - 1 : value - 1}px)`
 				break
-				
+			
+			case 'to':
 			case '<=':
 				query = `(max-${dimension}: ${isRange ? value.upperBound : value}px)`
 				break
@@ -44,9 +45,8 @@ class ChassisViewport {
 
 			default:
 				console.error(`[ERROR] Chassis Media Query: Unknown operator "${operator}". Please use "<", "<=", "=", ">", or ">=".`)
+				return ''
 		}
-		
-		console.log(query);
 
 		return `screen and ${query}`
 	}

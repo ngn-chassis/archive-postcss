@@ -10,8 +10,17 @@ class ChassisStringUtils {
 		return value.match(/\D+$/)[0]
 	}
 	
-	static listPropertyValues (array) {
-		return array.map(value => value === 0 ? 0 : `${value}em`).join(' ')
+	
+	static listValues (values) {
+		let array = values
+		
+		if (typeof values === 'object') {
+			array = Object.keys(values)
+		}
+		
+		return array.map((value, index) => {
+			return index === array.length - 1 ? `or "${value}"` : `"${value}"`
+		}).join(', ')
 	}
 	
 	/**
