@@ -23,8 +23,9 @@ gulp.task('css', () => {
     .pipe(sourcemaps.init())
     .pipe(chassis({
       layout: {
+        breakpoints: '320 small 512 medium 768 large 1024 huge 1440',
         minWidth: 320,
-        maxWidth: 1440
+        maxWidth: 1920
       }
     }))
     .pipe(sourcemaps.write('.'))

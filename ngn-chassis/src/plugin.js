@@ -10,6 +10,7 @@ const ChassisSettings = require('./settings.js')
 const ChassisStylesheet = require('./stylesheet.js')
 const ChassisTypography = require('./typography.js')
 const ChassisUtilities = require('./utilities.js')
+const ChassisViewport = require('./viewport.js')
 
 class ChassisPostCss {
 	constructor (cfg) {
@@ -18,9 +19,17 @@ class ChassisPostCss {
 		this.utils = ChassisUtilities
 		this.constants = ChassisConstants
 		this.plugins = cfg.hasOwnProperty('plugins') ? cfg.plugins : null
+		
+		let breakpoints = null
+		
+		if (cfg.layout.hasOwnProperty('breakpoints')) {
+			breakpoints = cfg.layout.breakpoints
+			delete cfg.layout.breakpoints
+		}
 
 		this._initSettings(cfg)
 		this._initTypography()
+		this._initViewport(breakpoints)
 
 		this.layout = new ChassisLayout(this)
 		this.atRules = new ChassisAtRules(this)
@@ -30,6 +39,7 @@ class ChassisPostCss {
 	}
 
 	get plugin () {
+		// console.log(this.utils.console.printTree(this.settings.data));
 		return (root, result) => {
 			result.root = this.core.css.append(new ChassisStylesheet(this, root).css)
 		}
@@ -48,6 +58,14 @@ class ChassisPostCss {
 	_initTypography () {
 		this.typography = new ChassisTypography(this)
 		this.settings.typography.ranges.load(this.typography.ranges)
+	}
+	
+	_initViewport (breakpoints) {
+		this.viewport = new ChassisViewport(this)
+		
+		if (breakpoints) {
+			this.settings.viewportWidthRanges.load(this.viewport.getWidthRanges(breakpoints))
+		}
 	}
 }
 

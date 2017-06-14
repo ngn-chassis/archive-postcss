@@ -53,7 +53,7 @@ class ChassisLayout {
 		let { utils } = this.chassis
 		let { typography } = this.chassis.settings
 
-		let unit = utils.getUnit(this.gutter)
+		let unit = utils.string.getUnit(this.gutter)
 
     switch (unit) {
       case 'vw':

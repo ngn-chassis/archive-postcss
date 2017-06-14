@@ -12,55 +12,66 @@ class ChassisAtRules {
 			'z-index': this.zIndex.bind(this)
 		}
 	}
-
+	
 	/**
 	 * @mixin constrainWidth
 	 * @return {array} of decls
 	 */
 	constrainWidth () {
 		let { layout, settings, utils } = this.chassis
-
+		let { minWidth, maxWidth, gutter } = settings.layout
 		let { args } = this.cfg
-		let stripPadding = NGN.coalesce(args && args.includes('no-padding'), false)
 		let parent = this.atRule.parent
-
-		this.root.insertAfter(this.atRule.parent, utils.newAtRule({
-			name: 'media',
-			params: `screen and (max-width: ${settings.layout.minWidth}px)`,
-			nodes: [
-				utils.newRule(this.atRule.parent.selector, [
-					utils.newDeclObj('padding-left', layout.minGutterWidth),
-					utils.newDeclObj('padding-right', layout.minGutterWidth)
-				])
-			]
-		}))
-
-		this.root.insertAfter(this.atRule.parent, utils.newAtRule({
-			name: 'media',
-			params: `screen and (min-width: ${settings.layout.maxWidth}px)`,
-			nodes: [
-				utils.newRule(this.atRule.parent.selector, [
-					utils.newDeclObj('padding-left', layout.maxGutterWidth),
-					utils.newDeclObj('padding-right', layout.maxGutterWidth)
-				])
-			]
-		}))
-
+		
+		if (args && args.length > 0) {
+			args.forEach((arg) => {
+				if (arg.startsWith('min')) {
+					minWidth = utils.string.stripParentheses(arg.replace('min', ''))
+				} else if (arg.startsWith('max')) {
+					maxWidth = utils.string.stripParentheses(arg.replace('max', ''))
+				} else if (arg.startsWith('gutter')) {
+					gutter = utils.string.stripParentheses(arg.replace('gutter', ''))
+				}
+			})
+		}
+		
 		let decls = [
-			utils.newDecl('width', '100%'),
-			utils.newDecl('min-width', `${settings.layout.minWidth}px`),
-			utils.newDecl('max-width', `${settings.layout.maxWidth}px`),
-			utils.newDecl('margin', '0 auto')
+			utils.css.newDecl('width', '100%'),
+			utils.css.newDecl('min-width', `${minWidth}px`),
+			utils.css.newDecl('max-width', `${maxWidth}px`),
+			utils.css.newDecl('margin', '0 auto')
 		]
-
-		if (!stripPadding) {
+		
+		if (parseInt(gutter) !== 0) {
 			decls = [
 				...decls,
-				utils.newDecl('padding-left', settings.layout.gutter),
-				utils.newDecl('padding-right', settings.layout.gutter)
+				utils.css.newDecl('padding-left', gutter),
+				utils.css.newDecl('padding-right', gutter)
 			]
+		
+			this.root.insertAfter(this.atRule.parent, utils.css.newAtRule({
+				name: 'media',
+				params: `screen and (max-width: ${minWidth}px)`,
+				nodes: [
+					utils.css.newRule(this.atRule.parent.selector, [
+						utils.css.newDeclObj('padding-left', layout.getGutterLimit(minWidth)),
+						utils.css.newDeclObj('padding-right', layout.getGutterLimit(minWidth))
+					])
+				]
+			}))
+		
+			this.root.insertAfter(this.atRule.parent, utils.css.newAtRule({
+				name: 'media',
+				params: `screen and (min-width: ${maxWidth}px)`,
+				nodes: [
+					utils.css.newRule(this.atRule.parent.selector, [
+						utils.css.newDeclObj('padding-left', layout.getGutterLimit(maxWidth)),
+						utils.css.newDeclObj('padding-right', layout.getGutterLimit(maxWidth))
+					])
+				]
+			}))
 		}
-
+		
 		this.atRule.replaceWith(decls)
 	}
 
@@ -72,13 +83,13 @@ class ChassisAtRules {
 		let { utils } = this.chassis
 
 		this.atRule.replaceWith([
-      utils.newDecl('-webkit-touch-callout', 'none'),
-      utils.newDecl('-webkit-user-select', 'none'),
-      utils.newDecl('-khtml-user-select', 'none'),
-			utils.newDecl('-moz-user-select', 'none'),
-      utils.newDecl('-ms-user-select', 'none'),
-      utils.newDecl('-o-user-select', 'none'),
-			utils.newDecl('user-select', 'none')
+      utils.css.newDecl('-webkit-touch-callout', 'none'),
+      utils.css.newDecl('-webkit-user-select', 'none'),
+      utils.css.newDecl('-khtml-user-select', 'none'),
+			utils.css.newDecl('-moz-user-select', 'none'),
+      utils.css.newDecl('-ms-user-select', 'none'),
+      utils.css.newDecl('-o-user-select', 'none'),
+			utils.css.newDecl('user-select', 'none')
     ])
 	}
 
@@ -89,9 +100,9 @@ class ChassisAtRules {
 		let { utils } = this.chassis
 
 		this.atRule.replaceWith([
-      utils.newDecl('white-space', 'nowrap'),
-      utils.newDecl('overflow', 'hidden'),
-      utils.newDecl('text-overflow', 'ellipsis')
+      utils.css.newDecl('white-space', 'nowrap'),
+      utils.css.newDecl('overflow', 'hidden'),
+      utils.css.newDecl('text-overflow', 'ellipsis')
     ])
   }
 
@@ -102,7 +113,7 @@ class ChassisAtRules {
   ieOnly () {
 		let { utils } = this.chassis
 
-		this.atRule.replaceWith(utils.newAtRule({
+		this.atRule.replaceWith(utils.css.newAtRule({
       name: 'media',
       params: 'all and (-ms-high-contrast: none)',
       nodes: this.nodes.map((rule) => {
@@ -118,7 +129,7 @@ class ChassisAtRules {
 		let operator = this.cfg.args[0]
 		let width = parseInt(this.cfg.args[1])
 
-		let mediaQuery = utils.newMediaQuery(
+		let mediaQuery = utils.css.newMediaQuery(
 			layout.getMediaQueryParams('width', operator, width),
 			this.nodes
 		)
@@ -132,7 +143,7 @@ class ChassisAtRules {
 		let operator = this.cfg.args[0]
 		let height = parseInt(this.cfg.args[1])
 
-		let mediaQuery = utils.newMediaQuery(
+		let mediaQuery = utils.css.newMediaQuery(
 			layout.getMediaQueryParams('height', operator, height),
 			this.nodes
 		)
@@ -152,7 +163,7 @@ class ChassisAtRules {
       console.error(`[ERROR] Chassis z-index: Invalid identifier. Accepted values: ${Object.keys(settings.zIndex).join(', ')}`)
     }
 
-    this.atRule.replaceWith(utils.newDecl('z-index', index))
+    this.atRule.replaceWith(utils.css.newDecl('z-index', index))
   }
 
 	process (root, atRule, data) {
