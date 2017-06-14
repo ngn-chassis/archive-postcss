@@ -1,6 +1,12 @@
 class ChassisViewport {
 	constructor (chassis) {
 		this.chassis = chassis
+		
+		this.validOperators = ['<', '<=', '=', '>=', '>', 'from', 'to']
+	}
+	
+	operatorIsValid (operator) {
+		return this.validOperators.includes(operator)
 	}
 	
 	getMediaQueryParams (dimension, operator, value) {
@@ -14,11 +20,11 @@ class ChassisViewport {
 			case '<':
 				query = `(max-${dimension}: ${isRange ? value.lowerBound - 1 : value - 1}px)`
 				break
-
+				
 			case '<=':
 				query = `(max-${dimension}: ${isRange ? value.upperBound : value}px)`
 				break
-
+			
 			case '=':
 				if (isRange) {
 					query = `(min-${dimension}: ${value.lowerBound}px) and (max-${dimension}: ${rangeIsMax ? value.upperBound - 1 : value.upperBound}px)`
@@ -26,7 +32,8 @@ class ChassisViewport {
 					query = `(${dimension}: ${value}px)`
 				}
 				break
-				
+			
+			case 'from':
 			case '>=':
 				query = `(min-${dimension}: ${isRange ? value.lowerBound: value}px)`
 				break

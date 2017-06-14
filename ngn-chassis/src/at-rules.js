@@ -4,7 +4,6 @@ class ChassisAtRules {
 
 		this.mixins = {
 			'constrain-width': this.constrainWidth.bind(this),
-			'disable-text-selection': this.disableTextSelection.bind(this),
 			'ellipsis': this.ellipsis.bind(this),
 			'ie-only': this.ieOnly.bind(this),
 			'viewport-width': this.viewportWidth.bind(this),
@@ -78,24 +77,6 @@ class ChassisAtRules {
 	}
 
 	/**
-	 * @mixin disableTextSelection
-	 * Disable users' ability to select a text node
-	 */
-	disableTextSelection () {
-		let { utils } = this.chassis
-
-		this.atRule.replaceWith([
-      utils.css.newDecl('-webkit-touch-callout', 'none'),
-      utils.css.newDecl('-webkit-user-select', 'none'),
-      utils.css.newDecl('-khtml-user-select', 'none'),
-			utils.css.newDecl('-moz-user-select', 'none'),
-      utils.css.newDecl('-ms-user-select', 'none'),
-      utils.css.newDecl('-o-user-select', 'none'),
-			utils.css.newDecl('user-select', 'none')
-    ])
-	}
-
-	/**
 	 * @mixin ellipsis
 	 */
   ellipsis () {
@@ -129,7 +110,15 @@ class ChassisAtRules {
 		let { settings, utils, viewport } = this.chassis
 
 		let operator = this.cfg.args[0]
+			
+		if (!viewport.operatorIsValid(operator)) {
+			console.error(`[ERROR] Line ${this.source.line}: Invalid media query operator "${operator}".`)
+			this.atRule.remove()
+			return
+		}
+		
 		let width = parseInt(this.cfg.args[1])
+		let isRange = false
 		
 		if (isNaN(width)) {
 			let name = this.cfg.args[1]
@@ -137,9 +126,50 @@ class ChassisAtRules {
 			width = settings.viewportWidthRanges.find({name})[0]
 			
 			if (!width) {
-				console.error(`[ERROR] Line ${this.source.line}: Viewport Width Range "${name}" not found.`)
+				console.error(`[ERROR] Line ${this.source.line}: Viewport Width Range "${this.cfg.args[1]}" not found.`)
 				this.atRule.remove()
 				return
+			}
+			
+			isRange = true
+		}
+		
+		if (operator === 'from') {
+			let secondOperator = this.cfg.args[2]
+			
+			if (secondOperator !== undefined) {
+				if (secondOperator !== 'to') {
+					console.error(`[ERROR] Line ${this.source.line}: Invalid second media query operator "${secondOperator}". Please use "to" instead.`)
+					this.atRule.remove()
+					return
+				}
+				
+				operator = '='
+				
+				let secondWidthValue = this.cfg.args[3]
+				let secondWidthValueIsRange = false
+				
+				if (isNaN(secondWidthValue)) {
+					secondWidthValue = settings.viewportWidthRanges.find({
+						name: secondWidthValue
+					})[0]
+					
+					if (!secondWidthValue) {
+						console.error(`[ERROR] Line ${this.source.line}: Viewport Width Range "${this.cfg.args[3]}" not found.`)
+						this.atRule.remove()
+						return
+					}
+					
+					secondWidthValueIsRange = true
+				}
+				
+				if (secondWidthValue) {
+					width = {
+						name: 'custom',
+						lowerBound: isRange ? width.lowerBound : width,
+						upperBound: secondWidthValueIsRange ? secondWidthValue.upperBound : secondWidthValue
+					}
+				}
 			}
 		}
 
@@ -149,9 +179,6 @@ class ChassisAtRules {
 		)
 		
 		this.atRule.replaceWith(mediaQuery)
-		return
-		
-		// this.atRule.remove()
 	}
 
 	viewportHeight () {
@@ -159,6 +186,12 @@ class ChassisAtRules {
 
 		let operator = this.cfg.args[0]
 		let height = parseInt(this.cfg.args[1])
+		
+		if (isNaN(height)) {
+			console.error(`[ERROR] Line ${this.source.line}: Invalid viewport height value "${this.cfg.args[1]}".`)
+			this.atRule.remove()
+			return
+		}
 
 		let mediaQuery = utils.css.newMediaQuery(
 			viewport.getMediaQueryParams('height', operator, height),
