@@ -18,24 +18,17 @@ class ChassisPostCss {
 		this.utils = ChassisUtilities
 		this.constants = ChassisConstants
 		
-		if (cfg.hasOwnProperty('plugins')) {
-			this.plugins = cfg.plugins
-			delete cfg.plugins
-		} else {
-			this.plugins = null
-		}
+		this.settings = new ChassisSettings(this)
+		this.settings.load(cfg)
 		
-		let breakpoints = null
+		this._validateSettings()
 		
-		if (cfg.layout.hasOwnProperty('breakpoints')) {
-			breakpoints = cfg.layout.breakpoints
-			delete cfg.layout.breakpoints
-		}
-
-		this._initSettings(cfg)
-		this._initTypography()
-		this._initViewport(breakpoints)
-
+		this.typography = new ChassisTypography(this)
+		this.settings.typography.ranges.load(this.typography.ranges)
+		
+		this.viewport = new ChassisViewport(this)
+		this.settings.viewportWidthRanges.load(this.viewport.getWidthRanges(this.settings.layout.breakpoints))
+		
 		this.layout = new ChassisLayout(this)
 		this.atRules = new ChassisAtRules(this)
 		this.core = new ChassisCore(this)
@@ -50,26 +43,13 @@ class ChassisPostCss {
 		}
 	}
 
-	_initSettings (cfg) {
-		this.settings = new ChassisSettings(this)
-		this.settings.load(cfg)
-
+	_validateSettings () {
+		console.log(this.settings.theme.typography['font-size']);
+		console.log(this.settings.theme.typography.valid);
+		
 		if (!this.settings.valid) {
 			console.error('[ERROR] Chassis Configuration: Invalid fields:')
 			console.error(this.settings.invalidDataAttributes.join(', '))
-		}
-	}
-
-	_initTypography () {
-		this.typography = new ChassisTypography(this)
-		this.settings.typography.ranges.load(this.typography.ranges)
-	}
-	
-	_initViewport (breakpoints) {
-		this.viewport = new ChassisViewport(this)
-		
-		if (breakpoints) {
-			this.settings.viewportWidthRanges.load(this.viewport.getWidthRanges(breakpoints))
 		}
 	}
 }

@@ -8,7 +8,7 @@
 
 		& h1 {
 			flex: 1;
-			margin: 0;
+			margin: 0 1em 0 0;
 
 			@chassis font-size large;
 			/*color: var(--grey-n05);*/
@@ -33,45 +33,6 @@
 			& .width-constraint {
 				display: flex;
 			}
-		}
-	}
-	
-	& .sidebar {
-		position: sticky;
-		top: 0;
-
-		margin: 0;
-		display: none;
-
-		& nav a {
-			display: block;
-			/*@chassis inline-layout no-margin;*/
-
-			&:not(:first-child) {
-				box-shadow: 0 -1px 0 0 var(--grey-n02, grey);
-			}
-
-			&:hover {
-				background: var(--blue, blue);
-				box-shadow: none;
-
-				color: var(--white, white);
-				text-decoration: none;
-
-				& + a {
-					box-shadow: none;
-				}
-			}
-
-			&:active {
-				background: rgb(0,145,220);
-			}
-		}
-
-		@chassis viewport-width from medium {
-			flex: 1 0 25%;
-			display: block;
-			/*@chassis block-layout no-padding;*/
 		}
 	}
 }

@@ -148,7 +148,7 @@ class ChassisAtRules {
 		
 		let decl = utils.css.newDecl(
 			'font-size',
-			`${utils.units.toEms(typography.calculateFontSize(alias, multiplier), typography.calculateFontSize('root'))}em`
+			`${utils.units.toEms(typography.calculateFontSize(alias, multiplier), typography.calculateFontSize('root'))}rem`
 		)
 		
 		this.atRule.replaceWith(decl)

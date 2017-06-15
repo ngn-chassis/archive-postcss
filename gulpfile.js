@@ -24,9 +24,13 @@ gulp.task('css', () => {
     .pipe(sourcemaps.init())
     .pipe(chassis({
       layout: {
-        breakpoints: '320 small 512 medium 768 large 1024 huge 1440',
         minWidth: 320,
-        maxWidth: 1920
+        maxWidth: 1440
+      },
+      theme: {
+        typography: {
+          'font-family': 767
+        }
       }
     }))
     .pipe(postcss([perfectionist]))
