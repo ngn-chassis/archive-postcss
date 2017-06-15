@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "autoprefixer": "^6.4.1",
+    "clean-css": "^4.1.4",
+    "cssnano": "^3.10.0",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-postcss": "^6.2.0",
@@ -17,10 +19,12 @@
     "musthave": "^1.0.2",
     "ngn": "^0.3.29",
     "ngn-data": "0.0.50",
+    "perfectionist": "^2.4.0",
     "postcss": "^5.2.0",
     "precss": "^1.4.0"
   },
   "devDependencies": {
+    "perfectionist": "^2.4.0",
     "gulp-clean-css": "^3.0.4",
     "postcss-advanced-variables": "^1.2.2"
   }

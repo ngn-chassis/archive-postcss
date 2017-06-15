@@ -1,6 +1,6 @@
 const postcss = require('postcss')
 
-class ChassisCssUtils {
+class ChassisCssUtils {	
 	/**
 	 * @method newAtRule
 	 * Generate new postcss at-rule AST

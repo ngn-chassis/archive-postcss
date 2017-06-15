@@ -17,7 +17,13 @@ class ChassisPostCss {
 
 		this.utils = ChassisUtilities
 		this.constants = ChassisConstants
-		this.plugins = cfg.hasOwnProperty('plugins') ? cfg.plugins : null
+		
+		if (cfg.hasOwnProperty('plugins')) {
+			this.plugins = cfg.plugins
+			delete cfg.plugins
+		} else {
+			this.plugins = null
+		}
 		
 		let breakpoints = null
 		

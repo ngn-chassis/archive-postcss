@@ -1,3 +1,38 @@
 .showroom {
-	
+	/* Account for sticky footer */
+	padding-bottom: 3.618em;
+
+	& > header {
+		padding: 1.46em 0 .90169942em;
+		/*border-bottom: 4px solid var(--grey-n00);*/
+
+		& h1 {
+			flex: 1;
+			margin: 0;
+
+			@chassis font-size large;
+			/*color: var(--grey-n05);*/
+		}
+
+		& .links {
+			display: flex;
+			align-items: center;
+
+			& a {
+				margin-left: 1em;
+
+				&:first-child {
+					margin-left: 0;
+				}
+			}
+		}
+
+		/*@chassis media-query min medium {
+			padding-top: 2.36em;
+
+			& .width-constraint {
+				display: flex;
+			}
+		}*/
+	}
 }

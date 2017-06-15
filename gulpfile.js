@@ -9,6 +9,7 @@ const path = require('path')
 const pkg = require('./package.json')
 const fs = require('fs')
 const sourcemaps = require('gulp-sourcemaps')
+const perfectionist = require('perfectionist')
 
 const chassis = require('./gulp-chassis/index.js')
 // const detailer = require('./ngn-chassis-detailer/index.js')

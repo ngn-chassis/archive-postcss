@@ -6,6 +6,7 @@ class ChassisAtRules {
 			'constrain-width': this.constrainWidth.bind(this),
 			'ellipsis': this.ellipsis.bind(this),
 			'ie-only': this.ieOnly.bind(this),
+			'font-size': this.fontSize.bind(this),
 			'viewport-width': this.viewportWidth.bind(this),
 			'viewport-height': this.viewportHeight.bind(this),
 			'z-index': this.zIndex.bind(this)
@@ -36,6 +37,11 @@ class ChassisAtRules {
 			})
 		}
 		
+		this.atRule.remove()
+		
+		let css = utils.css.newRoot([])
+		let parentClone = parent.clone()
+		
 		let decls = [
 			utils.css.newDecl('width', '100%'),
 			utils.css.newDecl('min-width', `${minWidth}px`),
@@ -49,31 +55,35 @@ class ChassisAtRules {
 				utils.css.newDecl('padding-left', gutter),
 				utils.css.newDecl('padding-right', gutter)
 			]
-		
-			this.root.insertAfter(this.atRule.parent, utils.css.newAtRule({
-				name: 'media',
-				params: `screen and (max-width: ${minWidth}px)`,
-				nodes: [
-					utils.css.newRule(this.atRule.parent.selector, [
-						utils.css.newDeclObj('padding-left', layout.getGutterLimit(minWidth)),
-						utils.css.newDeclObj('padding-right', layout.getGutterLimit(minWidth))
-					])
-				]
-			}))
-		
-			this.root.insertAfter(this.atRule.parent, utils.css.newAtRule({
-				name: 'media',
-				params: `screen and (min-width: ${maxWidth}px)`,
-				nodes: [
-					utils.css.newRule(this.atRule.parent.selector, [
-						utils.css.newDeclObj('padding-left', layout.getGutterLimit(maxWidth)),
-						utils.css.newDeclObj('padding-right', layout.getGutterLimit(maxWidth))
-					])
-				]
-			}))
+			
+			css.append([
+				utils.css.newAtRule({
+					name: 'media',
+					params: `screen and (max-width: ${minWidth}px)`,
+					nodes: [
+						utils.css.newRule(parent.selector, [
+							utils.css.newDeclObj('padding-left', layout.getGutterLimit(minWidth)),
+							utils.css.newDeclObj('padding-right', layout.getGutterLimit(minWidth))
+						])
+					]
+				}),
+				utils.css.newAtRule({
+					name: 'media',
+					params: `screen and (min-width: ${maxWidth}px)`,
+					nodes: [
+						utils.css.newRule(parent.selector, [
+							utils.css.newDeclObj('padding-left', layout.getGutterLimit(maxWidth)),
+							utils.css.newDeclObj('padding-right', layout.getGutterLimit(maxWidth))
+						])
+					]
+				})
+			])
 		}
 		
-		this.atRule.replaceWith(decls)
+		parentClone.append(decls)
+		css.prepend(parentClone)
+		
+		parent.replaceWith(css)
 	}
 
 	/**
@@ -106,9 +116,54 @@ class ChassisAtRules {
 		}))
 	}
 	
+	fontSize () {
+		let { constants, settings, typography, utils } = this.chassis
+		let { args } = this.cfg
+		
+		let alias = args[0]
+		let multiplier = 1
+		let addMargin = false
+		
+		if (!constants.typography.sizeAliases.includes(alias)) {
+			console.log(`[ERROR] Line ${this.source.line}: Font size alias "${alias}" not found.  Accepted values: ${utils.string.listValues(constants.typography.sizeAliases)}`);
+			this.atRule.remove()
+			return
+		}
+		
+		if (args.length > 0) {
+			for (let i = 1; i < args.length; i++) {
+				if (args[i].startsWith('mult')) {
+					multiplier = parseFloat(utils.string.stripParentheses(args[i].replace('mult', '')))
+				} else if (args[i] === 'add-margin') {
+					addMargin = true
+				} else {
+					console.warn(`[WARNING] Line ${this.source.line}: Unkown argument "${arg}". Skipping...`)
+				}
+			}
+		}
+		
+		if (isNaN(multiplier)) {
+			console.warn(`[WARNING] Line ${this.source.line}: mult() value must be a valid decimal. Ignoring...`)
+		}
+		
+		let decl = utils.css.newDecl(
+			'font-size',
+			`${utils.units.toEms(typography.calculateFontSize(alias, multiplier), typography.calculateFontSize('root'))}em`
+		)
+		
+		this.atRule.replaceWith(decl)
+  }
+	
 	// TODO: A refactor of this would be nice
 	viewportWidth () {
 		let { settings, utils, viewport } = this.chassis
+		
+		if (this.atRule.parent.type !== 'root') {
+			// TODO: Handle nested media queries
+			console.log(`[TODO] Line ${this.source.line}: Handle nested media query!`);
+			this.atRule.remove()
+			return
+		}
 
 		let operator = this.cfg.args[0]
 			

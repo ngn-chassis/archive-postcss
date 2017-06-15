@@ -42,35 +42,35 @@ class ChassisTypography {
 		}).filter((vwr) => vwr !== undefined)
 	}
 
-	calculateFontSize (alias, root = this.root) {
+	calculateFontSize (alias, multiplier = 1, root = this.root) {
 		if (alias === 'root') {
 			return root
 		}
 
-		let multiplier = 1
+		let modifier = 1
 
 		switch (alias) {
 			case 'small':
-				multiplier = 1 / Math.sqrt(this.scale.ratio)
+				modifier = 1 / Math.sqrt(this.scale.ratio)
 				break
 
 			case 'large':
-				multiplier = Math.sqrt(this.scale.ratio)
+				modifier = Math.sqrt(this.scale.ratio)
 				break
 
 			case 'larger':
-				multiplier = this.scale.ratio
+				modifier = this.scale.ratio
 				break
 
 			case 'largest':
-				multiplier = Math.pow(this.scale.ratio, 2)
+				modifier = Math.pow(this.scale.ratio, 2)
 				break
 
 			default:
 				console.error(`[ERROR] Chassis Auto-Typography: Font scale "${alias}" not found. Defaulting to root.`)
 		}
 
-		return root * multiplier
+		return root * modifier * multiplier
 	}
 
 	calculateLineHeight (fontSize, viewportWidth, ratio = this.scale.ratio) {
@@ -90,7 +90,7 @@ class ChassisTypography {
 		let rules = {}
 
 		this.fontSizeAliases.forEach((alias) => {
-			let fontSize = this.calculateFontSize(alias, vwr.rootFontSize)
+			let fontSize = this.calculateFontSize(alias, 1, vwr.rootFontSize)
 
 			rules[alias] = {
 				fontSize,
