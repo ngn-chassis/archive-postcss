@@ -80,9 +80,11 @@ class ChassisCore {
 
 	get body () {
 		let { constants, settings, utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
 
 		return utils.css.newRule('.chassis body', [
-			utils.css.newDeclObj('min-width', `${settings.layout.minWidth}px`)
+			utils.css.newDeclObj('min-width', `${settings.layout.minWidth}px`),
+			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`)
 		])
 	}
 
@@ -154,6 +156,12 @@ class ChassisCore {
 			htmlRule.append(utils.css.newDecl('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`))
 
 			mediaQuery.nodes.push(htmlRule)
+			
+			let bodyRule = utils.css.newRule('.chassis body', [
+				utils.css.newDecl('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`)
+			])
+			
+			mediaQuery.nodes.push(bodyRule)
 
 			let headingSizeAliases = settings.typography.fontSizes.headings
 			let formLegendAlias = settings.typography.fontSizes.formLegend

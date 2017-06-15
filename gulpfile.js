@@ -29,6 +29,7 @@ gulp.task('css', () => {
         maxWidth: 1920
       }
     }))
+    .pipe(postcss([perfectionist]))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(DEST + '/css'))
 })
