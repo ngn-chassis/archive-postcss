@@ -26,13 +26,52 @@
 				}
 			}
 		}
-
-		/*@chassis media-query min medium {
+		
+		@chassis viewport-width from medium {
 			padding-top: 2.36em;
 
 			& .width-constraint {
 				display: flex;
 			}
-		}*/
+		}
+	}
+	
+	& .sidebar {
+		position: sticky;
+		top: 0;
+
+		margin: 0;
+		display: none;
+
+		& nav a {
+			display: block;
+			/*@chassis inline-layout no-margin;*/
+
+			&:not(:first-child) {
+				box-shadow: 0 -1px 0 0 var(--grey-n02, grey);
+			}
+
+			&:hover {
+				background: var(--blue, blue);
+				box-shadow: none;
+
+				color: var(--white, white);
+				text-decoration: none;
+
+				& + a {
+					box-shadow: none;
+				}
+			}
+
+			&:active {
+				background: rgb(0,145,220);
+			}
+		}
+
+		@chassis viewport-width from medium {
+			flex: 1 0 25%;
+			display: block;
+			/*@chassis block-layout no-padding;*/
+		}
 	}
 }

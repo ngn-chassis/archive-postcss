@@ -158,12 +158,12 @@ class ChassisAtRules {
 	viewportWidth () {
 		let { settings, utils, viewport } = this.chassis
 		
-		if (this.atRule.parent.type !== 'root') {
-			// TODO: Handle nested media queries
-			console.log(`[TODO] Line ${this.source.line}: Handle nested media query!`);
-			this.atRule.remove()
-			return
-		}
+		// if (this.atRule.parent.type !== 'root') {
+		// 	// TODO: Handle nested media queries
+		// 	console.log(`[TODO] Line ${this.source.line}: Handle nested media query!`);
+		// 	this.atRule.remove()
+		// 	return
+		// }
 
 		let operator = this.cfg.args[0]
 			

@@ -4,11 +4,12 @@ const nesting = require('postcss-nesting')
 class ChassisStylesheet {
 	constructor (chassis, tree) {
 		this.chassis = chassis
-		this.css = this.unnest(tree)
 
-		this.css.walkAtRules('chassis', (atRule) => {
+		tree.walkAtRules('chassis', (atRule) => {
 			this.processAtRule(atRule, this.getAtRuleData(atRule))
 		})
+		
+		this.css = this.unnest(tree)
 	}
 
 	getAtRuleData (raw, range = null) {
