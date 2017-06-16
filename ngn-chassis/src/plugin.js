@@ -21,13 +21,13 @@ class ChassisPostCss {
 		this.settings = new ChassisSettings(this)
 		this.settings.load(cfg)
 		
-		this._validateSettings()
-		
 		this.typography = new ChassisTypography(this)
 		this.settings.typography.ranges.load(this.typography.ranges)
 		
 		this.viewport = new ChassisViewport(this)
 		this.settings.viewportWidthRanges.load(this.viewport.getWidthRanges(this.settings.layout.breakpoints))
+		
+		this._validateSettings()
 		
 		this.layout = new ChassisLayout(this)
 		this.atRules = new ChassisAtRules(this)
