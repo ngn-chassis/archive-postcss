@@ -17,18 +17,18 @@ class ChassisPostCss {
 
 		this.utils = ChassisUtilities
 		this.constants = ChassisConstants
-		
+
 		this.settings = new ChassisSettings(this)
 		this.settings.load(cfg)
-		
+
 		this.typography = new ChassisTypography(this)
 		this.settings.typography.ranges.load(this.typography.ranges)
-		
+
 		this.viewport = new ChassisViewport(this)
 		this.settings.viewportWidthRanges.load(this.viewport.getWidthRanges(this.settings.layout.breakpoints))
-		
+
 		this._validateSettings()
-		
+
 		this.layout = new ChassisLayout(this)
 		this.atRules = new ChassisAtRules(this)
 		this.core = new ChassisCore(this)
@@ -44,9 +44,8 @@ class ChassisPostCss {
 	}
 
 	_validateSettings () {
-		console.log(this.settings.theme.typography['font-size']);
-		console.log(this.settings.theme.typography.valid);
-		
+		console.log(this.settings.theme.typography.validate('font-family'));
+
 		if (!this.settings.valid) {
 			console.error('[ERROR] Chassis Configuration: Invalid fields:')
 			console.error(this.settings.invalidDataAttributes.join(', '))

@@ -2,6 +2,8 @@
 'use strict'
 
 // Dependencies ----------------------------------------------------------------
+require('ngn')
+
 const gulp = require('gulp')
 const postcss = require('gulp-postcss')
 const del = require('del')
@@ -10,16 +12,21 @@ const pkg = require('./package.json')
 const fs = require('fs')
 const sourcemaps = require('gulp-sourcemaps')
 const perfectionist = require('perfectionist')
-
-const chassis = require('./gulp-chassis/index.js')
+const unrequire = require('clear-require')
+let chassis = require('./gulp-chassis/index.js')
 // const detailer = require('./ngn-chassis-detailer/index.js')
 
 // Paths ------------------------------------------------------------------
-const SRC = './src'
+const SRC = './ngn-chassis/src'
 const DEST = './showroom'
 
 // CSS ------------------------------------------------------------------------
 gulp.task('css', () => {
+
+  unrequire('./gulp-chassis/index.js')
+
+  chassis = require('./gulp-chassis/index.js')
+
   return gulp.src(SRC + '/**/*.css')
     .pipe(sourcemaps.init())
     .pipe(chassis({
@@ -29,7 +36,7 @@ gulp.task('css', () => {
       },
       theme: {
         typography: {
-          'font-family': 767
+          'font-family': 'Arial'
         }
       }
     }))
@@ -51,7 +58,8 @@ gulp.task('build', ['clean', 'css'])
 
 // Watch -----------------------------------------------------------------------
 gulp.task('watch', () => {
-  gulp.watch(path.resolve(SRC + '/**/*.css'), ['clean', 'css'])
+  gulp.watch(path.resolve(`${process.cwd()}/${SRC}/**/*.css`), ['build'])
+  gulp.watch(path.resolve(`${process.cwd()}/${SRC}/**/*.js`), ['build'])
 })
 
 // Dev -------------------------------------------------------------------------

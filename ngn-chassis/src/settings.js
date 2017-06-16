@@ -1,7 +1,7 @@
 class ChassisSettings extends NGN.EventEmitter {
 	constructor (chassis) {
 		super()
-		
+
 		let viewportWidthRangeModel = new NGN.DATA.Model({
 			fields: {
 				name: {
@@ -22,7 +22,7 @@ class ChassisSettings extends NGN.EventEmitter {
 				}
 			}
 		})
-		
+
 		let layoutModel = new NGN.DATA.Model({
 			fields: {
 				breakpoints: {
@@ -46,67 +46,76 @@ class ChassisSettings extends NGN.EventEmitter {
 				}
 			}
 		})
-		
-		let themeModel = new NGN.DATA.Model({
-			relationships: {
-				typography: new NGN.DATA.Model({
-					fields: {
-						'font-family': {
-							type: String,
-							default: 'Helvetica, Arial, sans-serif'
-						}
+
+		let fontModel = new NGN.DATA.Model({
+			fields: {
+				'font-family': {
+					type: String,
+					default: 'Helvetica, Arial, sans-serif',
+					validate: function (value) {
+						return true
 					}
-				})
+				}
 			}
 		})
-		
+
+		let themeModel = new NGN.DATA.Model({
+			relationships: {
+				typography: fontModel
+			}
+		})
+
+		let fontSizeModel = new NGN.DATA.Model({
+			fields: {
+				headings: {
+					type: Object,
+					default: {
+						'1': 'larger',
+						'2': 'large',
+						'3': 'root',
+						'4': 'small',
+						'5': 'small',
+						'6': 'small'
+					},
+					validate (data) {
+						let mh = new MustHave()
+
+						if (!mh.hasExactly(data, '1', '2', '3', '4', '5', '6')) {
+							return false
+						}
+
+						return Object.keys(data).every(key => {
+							return typeof data[key] === 'string'
+						})
+					}
+				},
+				formLegend: {
+					type: String,
+					default: 'large'
+				}
+			}
+		})
+
+		let rangeModel = new NGN.DATA.Model({
+			fields: {
+				bounds: {
+					type: Object,
+					validate (data) {
+						// TODO: Add validation
+
+						return true
+					}
+				},
+				typography: {
+					type: Object
+				}
+			}
+		})
+
 		let typographyModel = new NGN.DATA.Model({
 			relationships: {
-				fontSizes: new NGN.DATA.Model({
-					fields: {
-						headings: {
-							type: Object,
-							default: {
-								'1': 'larger',
-								'2': 'large',
-								'3': 'root',
-								'4': 'small',
-								'5': 'small',
-								'6': 'small'
-							},
-							validate (data) {
-								let mh = new MustHave()
-
-								if (!mh.hasExactly(data, '1', '2', '3', '4', '5', '6')) {
-									return false
-								}
-
-								return Object.keys(data).every(key => {
-									return typeof data[key] === 'string'
-								})
-							}
-						},
-						formLegend: {
-							type: String,
-							default: 'large'
-						}
-					}
-				}),
-				ranges: [new NGN.DATA.Model({
-					fields: {
-						bounds: {
-							type: Object,
-							validate (data) {
-								// TODO: Add validation
-
-								return true
-							}
-						},
-						typography: {
-							type: Object
-						}
-					}
-				})]
+				fontSizes: fontSizeModel,
+				ranges: [rangeModel]
 			},
 
 			fields: {
@@ -146,12 +155,12 @@ class ChassisSettings extends NGN.EventEmitter {
 				}
 			}
 		})
-		
-		this.model = new NGN.DATA.Model({
+
+		let settingsModel = new NGN.DATA.Model({
 			relationships: {
 				viewportWidthRanges: [viewportWidthRangeModel],
-				layout: layoutModel, 
-				theme: themeModel, 
+				layout: layoutModel,
+				theme: themeModel,
 				typography: typographyModel
 			},
 
@@ -160,7 +169,7 @@ class ChassisSettings extends NGN.EventEmitter {
 					type: Array,
 					default: []
 				},
-				
+
 				zIndex: {
 					type: Object,
 					default: {
@@ -181,8 +190,8 @@ class ChassisSettings extends NGN.EventEmitter {
 				}
 			}
 		})
-		
-		return this.model()
+
+		return new settingsModel()
 	}
 }
 
