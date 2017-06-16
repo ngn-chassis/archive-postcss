@@ -12,7 +12,6 @@ const pkg = require('./package.json')
 const fs = require('fs')
 const sourcemaps = require('gulp-sourcemaps')
 const perfectionist = require('perfectionist')
-const unrequire = require('clear-require')
 let chassis = require('./gulp-chassis/index.js')
 // const detailer = require('./ngn-chassis-detailer/index.js')
 
@@ -22,11 +21,6 @@ const DEST = './showroom'
 
 // CSS ------------------------------------------------------------------------
 gulp.task('css', () => {
-
-  unrequire('./gulp-chassis/index.js')
-
-  chassis = require('./gulp-chassis/index.js')
-
   return gulp.src(SRC + '/**/*.css')
     .pipe(sourcemaps.init())
     .pipe(chassis({
@@ -36,7 +30,7 @@ gulp.task('css', () => {
       },
       theme: {
         typography: {
-          'font-family': 'Arial'
+          'font-family': 767
         }
       }
     }))
