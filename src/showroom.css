@@ -4,7 +4,7 @@
 
 	& > header {
 		padding: 1.46em 0 .90169942em;
-		border-bottom: 4px solid var(--grey-n00, grey);
+		/*border-bottom: 4px solid var(--grey-n00, grey);*/
 
 		& h1 {
 			flex: 1;
@@ -26,7 +26,7 @@
 				}
 			}
 		}
-		
+
 		@chassis viewport-width from medium {
 			padding-top: 2.36em;
 

@@ -44,7 +44,9 @@ class ChassisPostCss {
 	}
 
 	_validateSettings () {
-		console.log(this.settings.theme.typography.validate('font-family'));
+		if (!this.settings.theme.typography.validate('font-family')) {
+			console.error(`[ERROR] Invalid font-family "${this.settings.theme.typography['font-family']}"`)
+		}
 
 		if (!this.settings.valid) {
 			console.error('[ERROR] Chassis Configuration: Invalid fields:')

@@ -12,11 +12,12 @@ const pkg = require('./package.json')
 const fs = require('fs')
 const sourcemaps = require('gulp-sourcemaps')
 const perfectionist = require('perfectionist')
+
 let chassis = require('./gulp-chassis/index.js')
 // const detailer = require('./ngn-chassis-detailer/index.js')
 
 // Paths ------------------------------------------------------------------
-const SRC = './ngn-chassis/src'
+const SRC = './src'
 const DEST = './showroom'
 
 // CSS ------------------------------------------------------------------------
@@ -30,7 +31,7 @@ gulp.task('css', () => {
       },
       theme: {
         typography: {
-          'font-family': 767
+
         }
       }
     }))
@@ -52,8 +53,7 @@ gulp.task('build', ['clean', 'css'])
 
 // Watch -----------------------------------------------------------------------
 gulp.task('watch', () => {
-  gulp.watch(path.resolve(`${process.cwd()}/${SRC}/**/*.css`), ['build'])
-  gulp.watch(path.resolve(`${process.cwd()}/${SRC}/**/*.js`), ['build'])
+  gulp.watch(path.resolve(SRC), ['build'])
 })
 
 // Dev -------------------------------------------------------------------------
