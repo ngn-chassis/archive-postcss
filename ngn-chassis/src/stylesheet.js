@@ -1,43 +1,50 @@
 const postcss = require('postcss')
+const customProperties = require('postcss-custom-properties')
 const nesting = require('postcss-nesting')
 
 class ChassisStylesheet {
 	constructor (chassis, tree) {
 		this.chassis = chassis
 		this.tree = tree
+	}
 
-		tree.walkAtRules('chassis', (atRule) => {
-			this.processAtRule(atRule, this.getAtRuleData(atRule))
+	get css () {
+		this.tree.walkAtRules('chassis', (atRule) => {
+			this.processAtRule(atRule)
 		})
 
-		this.css = this.unnest(tree)
+		this.unnest()
+		this.resolveVariables()
+
+		return postcss.parse(this.tree)
 	}
 
-	getAtRuleData (raw, range = null) {
-		let params = raw.params.split(' ')
-
-		let cfg = {
-			args: params.length > 1 ? params.slice(1) : null
-		}
-
-		if (range) {
-			cfg.range = range
-		}
+	getAtRuleProperties (atRule) {
+		let params = atRule.params.split(' ')
 
 		return {
-			source: raw.source.start,
+			source: atRule.source.start,
 			mixin: params[0],
-			cfg,
-			nodes: raw.nodes || []
+			args: params.length > 1 ? params.slice(1) : null,
+			nodes: atRule.nodes || []
 		}
 	}
 
-	processAtRule (atRule, data) {
-		this.chassis.atRules.process(this.tree, atRule, data)
+	processAtRule (atRule) {
+		let data = {
+			root: this.tree,
+			atRule
+		}
+
+		this.chassis.atRules.process(Object.assign(data, this.getAtRuleProperties(atRule)))
 	}
 
-	unnest (stylesheet) {
-		return postcss.parse(nesting.process(stylesheet))
+	unnest () {
+		this.tree = nesting.process(this.tree)
+	}
+
+	resolveVariables () {
+		this.tree = customProperties.process(this.tree)
 	}
 }
 

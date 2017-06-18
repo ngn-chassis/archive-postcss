@@ -3,47 +3,49 @@ class ChassisViewportMixins {
     this.chassis = chassis
   }
 
-  height (root, atRule, data) {
+  height () {
 		let { settings, utils, viewport } = this.chassis
+    let { atRule, args, nodes, source } = arguments[0]
 
-		let operator = data.cfg.args[0]
-		let height = parseInt(data.cfg.args[1])
+		let operator = args[0]
+		let height = parseInt(args[1])
 
 		if (isNaN(height)) {
-			console.error(`[ERROR] Line ${data.source.line}: Invalid viewport height value "${this.cfg.args[1]}".`)
+			console.error(`[ERROR] Line ${source.line}: Invalid viewport height value "${args[1]}".`)
 			atRule.remove()
 			return
 		}
 
 		let mediaQuery = utils.css.newMediaQuery(
 			viewport.getMediaQueryParams('height', operator, height),
-			data.nodes
+			nodes
 		)
 
 		atRule.replaceWith(mediaQuery)
 	}
 
-  width (root, atRule, data) {
+  width () {
     let { settings, utils, viewport } = this.chassis
+    let { atRule, args, nodes, source } = arguments[0]
 
-		let operator = data.cfg.args[0]
+		let operator = args[0]
 
 		if (!viewport.operatorIsValid(operator)) {
-			console.error(`[ERROR] Line ${data.source.line}: Invalid media query operator "${operator}".`)
+			console.error(`[ERROR] Line ${source.line}: Invalid media query operator "${operator}".`)
 			atRule.remove()
 			return
 		}
 
-		let width = parseInt(data.cfg.args[1])
+		let width = parseInt(args[1])
 		let isRange = false
 
 		if (isNaN(width)) {
-			let name = data.cfg.args[1]
+			let name = args[1]
 
 			width = settings.viewportWidthRanges.find({name})[0]
 
 			if (!width) {
-				console.error(`[ERROR] Line ${data.source.line}: Viewport Width Range "${this.cfg.args[1]}" not found.`)
+				console.error(`[ERROR] Line ${source.line}: Viewport Width Range "${args[1]}" not found.`)
 				atRule.remove()
 				return
 			}
@@ -52,18 +54,18 @@ class ChassisViewportMixins {
 		}
 
 		if (operator === 'from') {
-			let secondOperator = data.cfg.args[2]
+			let secondOperator = args[2]
 
 			if (secondOperator !== undefined) {
 				if (secondOperator !== 'to') {
-					console.error(`[ERROR] Line ${data.source.line}: Invalid second media query operator "${secondOperator}". Please use "to" instead.`)
+					console.error(`[ERROR] Line ${source.line}: Invalid second media query operator "${secondOperator}". Please use "to" instead.`)
 					atRule.remove()
 					return
 				}
 
 				operator = '='
 
-				let secondWidthValue = data.cfg.args[3]
+				let secondWidthValue = args[3]
 				let secondWidthValueIsRange = false
 
 				if (isNaN(secondWidthValue)) {
@@ -72,7 +74,7 @@ class ChassisViewportMixins {
 					})[0]
 
 					if (!secondWidthValue) {
-						console.error(`[ERROR] Line ${data.source.line}: Viewport Width Range "${this.cfg.args[3]}" not found.`)
+						console.error(`[ERROR] Line ${source.line}: Viewport Width Range "${args[3]}" not found.`)
 						atRule.remove()
 						return
 					}
@@ -92,7 +94,7 @@ class ChassisViewportMixins {
 
 		let mediaQuery = utils.css.newMediaQuery(
 			viewport.getMediaQueryParams('width', operator, width),
-			data.nodes
+			nodes
 		)
 
 		atRule.replaceWith(mediaQuery)

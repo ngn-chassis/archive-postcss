@@ -1,8 +1,6 @@
 const gutil = require('gulp-util')
 const through = require('through2')
 const postcss = require('postcss')
-const perfectionist = require('perfectionist')
-const cssnano = require('cssnano')
 
 // TODO: update chassis filepath once it is available as a node-module
 const chassis = require('../ngn-chassis/index.js')

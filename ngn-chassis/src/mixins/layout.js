@@ -53,6 +53,21 @@ class ChassisLayoutMixins {
 
  		atRule.replaceWith(decls)
  	}
+
+  /**
+	 * @mixin zIndex
+	 * Get calculated z-index value from project settings
+	 */
+	zIndex (root, atRule, data) {
+		let { settings, utils } = this.chassis
+		let index = settings.zIndex[data.cfg.args[0]]
+
+		if (!index) {
+			console.error(`[ERROR] Line ${data.source.line}: Invalid z-index alias. Accepted values: ${utils.string.listValues(settings.zIndex)}`)
+		}
+
+		atRule.replaceWith(utils.css.newDecl('z-index', index))
+	}
 }
 
 module.exports = ChassisLayoutMixins

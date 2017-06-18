@@ -1,10 +1,15 @@
+:root {
+	--grey-n00: rgb(232,232,232);
+}
+
 .showroom {
 	/* Account for sticky footer */
 	padding-bottom: 3.618em;
 
 	& > header {
+		margin-bottom: 1.618em;
 		padding: 1.46em 0 .90169942em;
-		/*border-bottom: 4px solid var(--grey-n00, grey);*/
+		border-bottom: 4px solid var(--grey-n00, grey);
 
 		& h1 {
 			flex: 1;

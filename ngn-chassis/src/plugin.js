@@ -1,6 +1,10 @@
 require('ngn')
 require('ngn-data')
 
+const postcss = require('postcss')
+const cssnano = require('cssnano')
+const perfectionist = require('perfectionist')
+
 const ChassisAtRules = require('./at-rules.js')
 const ChassisConstants = require('./constants.js')
 const ChassisCore = require('./core.js')
@@ -39,7 +43,10 @@ class ChassisPostCss {
 	get plugin () {
 		// console.log(this.utils.console.printTree(this.settings.data));
 		return (root, result) => {
-			result.root = this.core.css.append(new ChassisStylesheet(this, root).css)
+			let output = this.core.css.append(new ChassisStylesheet(this, root).css)
+			let beautifiedOutput = postcss.parse(perfectionist.process(output.toString()))
+
+			result.root = beautifiedOutput
 		}
 	}
 
