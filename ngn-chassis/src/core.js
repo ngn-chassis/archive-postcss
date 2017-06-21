@@ -8,8 +8,10 @@ class ChassisCore {
 			outerContainers: '.chassis section, .chassis nav, .chassis form',
 			innerContainers: '.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed'
 		}
-
-		this.css = chassis.utils.css.newRoot([
+	}
+	
+	get css () {
+		return this.chassis.utils.css.newRoot([
 			this.reset,
 			this.modifiers,
 			this.widthConstraint,
@@ -205,6 +207,10 @@ class ChassisCore {
 					'margin-bottom',
 					`${utils.units.toEms(layout.calculateMarginBottom(range.typography.root.lineHeight, 'inner'), range.typography.root.fontSize)}em`
 				)
+			]))
+			
+			mediaQuery.nodes.push(utils.css.newRule('.chassis p', [
+				utils.css.newDecl('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`)
 			]))
 
 			mediaQueries.append(mediaQuery)

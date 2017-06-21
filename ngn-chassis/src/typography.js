@@ -76,6 +76,10 @@ class ChassisTypography {
 	calculateLineHeight (fontSize, viewportWidth, ratio = this.scale.ratio) {
 		return (ratio - 1 / (2 * ratio) * (1 - viewportWidth / this.calculateOptimalLineWidth(fontSize))) * fontSize
 	}
+	
+  calculateInlineHeight (baseLineHeight, ratio = this.scale.ratio) {
+		return baseLineHeight + Math.sqrt(ratio)
+	}
 
 	calculateOptimalLineWidth (fontSize, ratio = this.scale.ratio) {
 		return Math.pow(fontSize * ratio, 2)

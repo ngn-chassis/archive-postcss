@@ -1,4 +1,5 @@
 const ChassisBrowserMixins = require('./mixins/browser.js')
+const ChassisComponentMixins = require('./mixins/component.js')
 const ChassisLayoutMixins = require('./mixins/layout.js')
 const ChassisTypographyMixins = require('./mixins/typography.js')
 const ChassisViewportMixins = require('./mixins/viewport.js')
@@ -6,39 +7,44 @@ const ChassisViewportMixins = require('./mixins/viewport.js')
 class ChassisAtRules {
 	constructor (chassis) {
 		this.chassis = chassis
-
-		this.layoutMixins = new ChassisLayoutMixins(chassis)
+		
 		this.browserMixins = new ChassisBrowserMixins(chassis)
+		this.componentMixins = new ChassisComponentMixins(chassis)
+		this.layoutMixins = new ChassisLayoutMixins(chassis)
 		this.typographyMixins = new ChassisTypographyMixins(chassis)
 		this.viewportMixins = new ChassisViewportMixins(chassis)
 	}
 
 	get 'constrain-width' () {
-		return this.layoutMixins.constrainWidth.bind(this)
+		return (data) => this.layoutMixins.constrainWidth(data)
 	}
-
+	
 	get 'ellipsis' () {
-		return this.typographyMixins.ellipsis.bind(this)
+		return (data) => this.typographyMixins.ellipsis(data)
 	}
-
+	
 	get 'ie-only' () {
-		return this.browserMixins.ieOnly.bind(this)
+		return (data) => this.browserMixins.ieOnly(data)
 	}
-
+	
+	get 'include' () {
+		return (data) => this.componentMixins.include(data)
+	}
+	
 	get 'font-size' () {
-		return this.typographyMixins.fontSize.bind(this)
+		return (data) => this.typographyMixins.fontSize(data)
 	}
-
+	
 	get 'viewport-height' () {
-		return this.viewportMixins.height.bind(this)
+		return (data) => this.viewportMixins.height(data)
 	}
-
+	
 	get 'viewport-width' () {
-		return this.viewportMixins.width.bind(this)
+		return (data) => this.viewportMixins.width(data)
 	}
-
+	
 	get 'z-index' () {
-		return this.layoutMixins.zIndex.bind(this)
+		return (data) => this.layoutMixins.zIndex(data)
 	}
 
 	process (data) {
