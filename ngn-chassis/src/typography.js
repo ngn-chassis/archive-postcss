@@ -72,13 +72,26 @@ class ChassisTypography {
 
 		return root * modifier * multiplier
 	}
+	
+	calculateInlineHeight (baseLineHeight, ratio = this.scale.ratio) {
+		return baseLineHeight + Math.sqrt(ratio)
+	}
+	
+	calculateInlineMarginY (baseLineHeight, ratio = this.scale.ratio) {
+		return 1 // 1em seems to be a better value than the line height
+		// return baseLineHeight
+	}
+	
+	calculateInlineMarginX (baseLineHeight, ratio = this.scale.ratio) {
+		return Math.sin(baseLineHeight)
+	}
+	
+	calculateInlinePaddingX (baseLineHeight, ratio = this.scale.ratio) {
+		return Math.sin(baseLineHeight)
+	}
 
 	calculateLineHeight (fontSize, viewportWidth, ratio = this.scale.ratio) {
 		return (ratio - 1 / (2 * ratio) * (1 - viewportWidth / this.calculateOptimalLineWidth(fontSize))) * fontSize
-	}
-	
-  calculateInlineHeight (baseLineHeight, ratio = this.scale.ratio) {
-		return baseLineHeight + Math.sqrt(ratio)
 	}
 
 	calculateOptimalLineWidth (fontSize, ratio = this.scale.ratio) {

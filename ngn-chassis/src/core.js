@@ -77,7 +77,8 @@ class ChassisCore {
 		return utils.css.newRule('html.chassis', [
 			// utils.css.newDeclObj('background', `${settings.theme['root-bg-color']}`),
 			utils.css.newDeclObj('font-size', `${fontSize}px`),
-			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`)
+			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`),
+			utils.css.newDeclObj('color', `${settings.theme.typography['color']}`)
 		])
 	}
 

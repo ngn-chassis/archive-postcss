@@ -6,8 +6,8 @@ class ChassisComponentMixins {
     this.chassis = chassis
 		
 		this.specs = {
-			button: ChassisButtonComponent//,
-			// link: 'compon'
+			button: ChassisButtonComponent,
+			link: ChassisLinkComponent
 		}
   }
 	

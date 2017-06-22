@@ -4,6 +4,14 @@ class ChassisButtonComponent {
 		this.cfg = cfg || null
 		
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
+		
+		this.states = [
+			'visited',
+			'hover',
+			'active',
+			'disabled',
+			'focus'
+		]
 	}
 	
 	// TODO: Add reset for <button> elements,
@@ -24,18 +32,22 @@ class ChassisButtonComponent {
 		let { fontSize, lineHeight } = this.baseTypography.root
 		
 		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
-		let adjustedLineHeight = typography.calculateInlineHeight(lineHeightInEms)
 		
 		return utils.css.newRoot([
 			utils.css.newRule('.chassis .button, .chassis button', [
 				utils.css.newDeclObj('display', 'inline-flex'),
 				utils.css.newDeclObj('justify-content', 'center'),
 				utils.css.newDeclObj('align-items', 'center'),
-				utils.css.newDeclObj('margin', `0 ${Math.sin(lineHeightInEms)}em 1em 0`),
-				utils.css.newDeclObj('padding', `0 ${Math.sin(lineHeightInEms)}em`),
-				utils.css.newDeclObj('line-height', `${adjustedLineHeight}em`),
+				utils.css.newDeclObj('margin', `0 ${typography.calculateInlineMarginX(lineHeightInEms)}em ${typography.calculateInlineMarginY(lineHeightInEms)}em 0`),
+				utils.css.newDeclObj('padding', `0 ${typography.calculateInlinePaddingX(lineHeightInEms)}em`),
+				utils.css.newDeclObj('line-height', `${typography.calculateInlineHeight(lineHeightInEms)}em`),
 				utils.css.newDeclObj('vertical-align', 'baseline'),
-				utils.css.newDeclObj('text-align', 'center')
+				utils.css.newDeclObj('text-align', 'center'),
+				utils.css.newDeclObj('cursor', 'pointer'),
+				utils.css.newDeclObj('user-select', 'none')
+			]),
+			utils.css.newRule('.chassis .disabled.button, .chassis button.disabled', [
+				utils.css.newDeclObj('pointer-events', 'none'),
 			])
 		])
 	}

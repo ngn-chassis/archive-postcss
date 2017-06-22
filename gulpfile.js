@@ -13,6 +13,7 @@ const fs = require('fs')
 const sourcemaps = require('gulp-sourcemaps')
 
 let chassis = require('./gulp-chassis/index.js')
+let chassisCfg = require('./chassis-cfg.js')
 // const detailer = require('./ngn-chassis-detailer/index.js')
 
 // Paths ------------------------------------------------------------------
@@ -23,17 +24,7 @@ const DEST = './showroom'
 gulp.task('css', () => {
   return gulp.src(SRC + '/**/*.css')
     // .pipe(sourcemaps.init())
-    .pipe(chassis({
-      layout: {
-        minWidth: 320,
-        maxWidth: 1440
-      },
-      theme: {
-        typography: {
-          
-        }
-      }
-    }))
+    .pipe(chassis(chassisCfg))
     // .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(DEST + '/css'))
 })
