@@ -11,6 +11,7 @@ const ChassisCore = require('./core.js')
 const ChassisLayout = require('./layout.js')
 const ChassisSettings = require('./settings.js')
 const ChassisStylesheet = require('./stylesheet.js')
+const ChassisTheme = require('./theme.js')
 const ChassisTypography = require('./typography.js')
 const ChassisUtilities = require('./utilities.js')
 const ChassisViewport = require('./viewport.js')
@@ -30,6 +31,8 @@ class ChassisPostCss {
 
 		this.viewport = new ChassisViewport(this)
 		this.settings.viewportWidthRanges.load(this.viewport.getWidthRanges(this.settings.layout.breakpoints))
+		
+		this.theme = new ChassisTheme(this)
 
 		this._validateSettings()
 
@@ -51,10 +54,6 @@ class ChassisPostCss {
 	}
 
 	_validateSettings () {
-		if (!this.settings.theme.typography.validate('font-family')) {
-			console.error(`[ERROR] Invalid font-family "${this.settings.theme.typography['font-family']}"`)
-		}
-
 		if (!this.settings.valid) {
 			console.error('[ERROR] Chassis Configuration: Invalid fields:')
 			console.error(this.settings.invalidDataAttributes.join(', '))

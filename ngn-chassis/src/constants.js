@@ -2,9 +2,10 @@ class ChassisConstants {
 	static get typography () {
 		return {
 			breakpoints: (() => {
+				let { viewport } = this.layout
 				let breakpoints = []
 
-				for (let width = this.layout.viewport.minWidth; width <= this.layout.viewport.maxWidth; width += this.layout.viewport.widthIncrement) {
+				for (let width = viewport.minWidth; width <= viewport.maxWidth; width += viewport.widthIncrement) {
 					breakpoints.push(width)
 				}
 

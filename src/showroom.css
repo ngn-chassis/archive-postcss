@@ -3,13 +3,6 @@
 .showroom {
 	/* Account for sticky footer */
 	padding-bottom: 3.618em;
-	
-	& .button {
-		background: #009cff;
-		color: white;
-		text-decoration: none;
-		border-radius: .236em;
-	}
 
 	& > header {
 		margin-bottom: 1.618em;

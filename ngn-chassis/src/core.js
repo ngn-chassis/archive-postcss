@@ -71,27 +71,27 @@ class ChassisCore {
 	}
 
 	get html () {
-		let { constants, settings, utils } = this.chassis
+		let { constants, settings, theme, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
-
-		return utils.css.newRule('html.chassis', [
-			// utils.css.newDeclObj('background', `${settings.theme['root-bg-color']}`),
+		
+		let decls = [
 			utils.css.newDeclObj('font-size', `${fontSize}px`),
 			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`),
-			utils.css.newDeclObj('color', `${settings.theme.typography['color']}`)
-		])
+		]
+
+		return utils.css.newRule('html.chassis', [...decls, ...this._getThemeDecls('html')])
 	}
 
 	get body () {
 		let { constants, settings, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
-
-		return utils.css.newRule('.chassis body', [
+		
+		let decls = [
 			utils.css.newDeclObj('min-width', `${settings.layout.minWidth}px`),
-			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`),
-			utils.css.newDeclObj('font-family', `${settings.theme.typography['font-family']}`),
-			// utils.css.newDeclObj('color', `${settings.theme['text-color']}`)
-		])
+			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`)
+		]
+
+		return utils.css.newRule('.chassis body', [...decls,  ...this._getThemeDecls('body')])
 	}
 
 	get rootHeadings () {
@@ -251,6 +251,17 @@ class ChassisCore {
 		return utils.css.newRule('.chassis p', [
 			utils.css.newDeclObj('margin-bottom', '1em')
 		])
+	}
+	
+	_getThemeDecls (component) {
+		let { theme, utils } = this.chassis
+		let decls = theme.getComponentProperties(component)
+		
+		if (decls) {
+			return Object.keys(decls).map((decl) => utils.css.newDeclObj(decl, decls[decl]))
+		}
+		
+		return []
 	}
 }
 

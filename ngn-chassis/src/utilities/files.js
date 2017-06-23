@@ -21,6 +21,10 @@ class ChassisFileUtils {
 		return filepath.substring(0, filepath.lastIndexOf("/"))
 	}
 	
+	static getFileName (filepath) {
+		return path.basename(filepath)
+	}
+	
 	/**
 	 * @method isDirectory
 	 * Determine whether or not a filepath points to a directory
@@ -85,6 +89,10 @@ class ChassisFileUtils {
 		})
 
 		return output
+	}
+	
+	static pathIsAbsolute (filepath) {
+		return path.isAbsolute(filepath)
 	}
 	
 	/**

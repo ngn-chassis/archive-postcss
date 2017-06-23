@@ -1,6 +1,5 @@
 const ChassisViewportWidthRangeModel = require('./models/viewport-width-range.js')
 const ChassisLayoutModel = require('./models/layout.js')
-const ChassisThemeModel = require('./models/theme.js')
 const ChassisTypographyModel = require('./models/typography.js')
 
 class ChassisSettings extends NGN.EventEmitter {
@@ -11,11 +10,15 @@ class ChassisSettings extends NGN.EventEmitter {
 			relationships: {
 				viewportWidthRanges: [new ChassisViewportWidthRangeModel(chassis)],
 				layout: new ChassisLayoutModel(chassis),
-				theme: new ChassisThemeModel(chassis),
 				typography: new ChassisTypographyModel(chassis)
 			},
 
 			fields: {
+				theme: {
+					type: String,
+					default: '../stylesheets/default-theme.css'
+				},
+				
 				plugins: {
 					type: Array,
 					default: []
