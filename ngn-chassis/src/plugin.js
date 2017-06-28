@@ -25,6 +25,8 @@ class ChassisPostCss {
 
 		this.settings = new ChassisSettings(this)
 		this.settings.load(cfg)
+		
+		this._validateSettings()
 
 		this.typography = new ChassisTypography(this)
 		this.settings.typography.ranges.load(this.typography.ranges)
@@ -33,9 +35,6 @@ class ChassisPostCss {
 		this.settings.viewportWidthRanges.load(this.viewport.getWidthRanges(this.settings.layout.breakpoints))
 		
 		this.theme = new ChassisTheme(this)
-
-		this._validateSettings()
-
 		this.layout = new ChassisLayout(this)
 		this.atRules = new ChassisAtRules(this)
 		this.core = new ChassisCore(this)
@@ -44,7 +43,7 @@ class ChassisPostCss {
 	}
 
 	get plugin () {
-		// console.log(this.utils.console.printTree(this.settings.data));
+		console.log(this.utils.console.printTree(this.theme.asJson));
 		return (root, result) => {
 			let output = this.core.css.append(new ChassisStylesheet(this, root).css)
 			let beautifiedOutput = postcss.parse(perfectionist.process(output.toString()))
@@ -57,6 +56,11 @@ class ChassisPostCss {
 		if (!this.settings.valid) {
 			console.error('[ERROR] Chassis Configuration: Invalid fields:')
 			console.error(this.settings.invalidDataAttributes.join(', '))
+			
+			if (this.settings.invalidDataAttributes.includes('theme')) {
+				console.error(`[ERROR] "${this.settings.theme}" is not a valid theme file. Chassis themes must have a ".css" or ".js" extension. Reverting to default theme...`)
+				this.settings.theme = this.constants.theme.defaultFilePath
+			}
 		}
 	}
 }

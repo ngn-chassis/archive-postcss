@@ -115,7 +115,8 @@ class ChassisCore {
 				utils.css.newDeclObj(
 					'margin-bottom',
 					`${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[headingSizeAliases[i]].lineHeight), this.baseTypography[headingSizeAliases[i]].fontSize)}em`
-				)
+				),
+				...this._getThemeDecls(`h${i}`)
 			]))
 		}
 
@@ -131,7 +132,8 @@ class ChassisCore {
 			utils.css.newDeclObj(
 				'margin-bottom',
 				`${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[formLegendAlias].lineHeight), this.baseTypography[formLegendAlias].fontSize)}em`
-			)
+			),
+			...this._getThemeDecls('legend')
 		]))
 
 		return rules
@@ -211,7 +213,14 @@ class ChassisCore {
 			]))
 			
 			mediaQuery.nodes.push(utils.css.newRule('.chassis p', [
-				utils.css.newDecl('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`)
+				utils.css.newDeclObj(
+					'margin-bottom',
+					`${utils.units.toEms(range.typography.root.lineHeight, range.typography.root.fontSize)}em`
+				),
+				utils.css.newDecl(
+					'line-height',
+					`${utils.units.toEms(lineHeight, fontSize)}em`
+				)
 			]))
 
 			mediaQueries.append(mediaQuery)
@@ -243,13 +252,16 @@ class ChassisCore {
 			)
 		])
 	}
-
+	
 	get paragraph () {
-		let { typography, utils } = this.chassis
+		let { layout, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
 
 		return utils.css.newRule('.chassis p', [
-			utils.css.newDeclObj('margin-bottom', '1em')
+			utils.css.newDeclObj(
+				'margin-bottom',
+				`${utils.units.toEms(lineHeight, fontSize)}em`
+			)
 		])
 	}
 	

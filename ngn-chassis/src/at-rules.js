@@ -46,6 +46,10 @@ class ChassisAtRules {
 	get 'z-index' () {
 		return (data) => this.layoutMixins.zIndex(data)
 	}
+	
+	runMixin (mixin) {
+		return this[mixin]()
+	}
 
 	process (data) {
 		if (data.mixin in this) {

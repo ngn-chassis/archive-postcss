@@ -1,3 +1,46 @@
-html {
-	background: green;
+body {
+	font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', Avenir, Helvetica, Arial, sans-serif;
+	color: rgb(68,68,68);
+}
+
+h1 {
+	font-weight: 700;
+}
+
+h2 {
+	font-weight: 700;
+}
+
+h3 {
+	font-weight: 700;
+}
+
+h4 {
+	font-weight: 700;
+}
+
+h5 {
+	font-weight: 700;
+}
+
+h6 {
+	font-weight: 700;
+}
+
+button {
+	background: hsl(200,100%,45%);
+	border-radius: .236em;
+	color: white;
+		
+	active {
+		background: hsl(200,100%,40%);
+	}
+	
+	hover {
+		background: hsl(200,100%,50%);
+	}
+	
+	disabled {
+		opacity: .382;
+	}
 }

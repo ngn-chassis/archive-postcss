@@ -5,9 +5,8 @@ class ChassisTheme {
 		
 		this.filename = chassis.utils.files.getFileName(chassis.settings.theme)
 		
-		// TODO: Check if file extension is .css, and throw error if not
-		
 		let pathIsAbsolute = chassis.utils.files.pathIsAbsolute(chassis.settings.theme)
+		
 		this.tree = chassis.utils.files.parseStylesheet(chassis.settings.theme, !pathIsAbsolute)
 		
 		this.tree.walkRules((rule) => {
@@ -25,6 +24,11 @@ class ChassisTheme {
 		let json = {}
 		
 		this.tree.nodes.forEach((rule) => {
+			if (rule.selector.includes(',')) {
+				console.warn(`[WARNING]: ${this.filename} line ${rule.source.start.line}: Chassis Themes do not support comma-separated rule selectors. Discarding...`)
+				return
+			}
+			
 			json[rule.selector] = {}
 			
 			rule.nodes.forEach((node) => {
@@ -58,12 +62,37 @@ class ChassisTheme {
 	
 	getComponentProperties(component) {
 		let json = this.asJson
+		let state = 'default'
 		
-		if (json.hasOwnProperty(component)) {
-			return json[component]
+		if (component.includes('.')) {
+			let arr = component.split('.')
+			component = arr[0]
+			state = arr[1]
 		}
 		
-		console.warn(`[WARNING] ${this.filename} does not contain theming information for "${component}" component.`)
+		if (!json.hasOwnProperty(component)) {
+			return null
+		}
+		
+		let props = json[component]
+		
+		if (state === 'default') {
+			let defaults = {}
+			
+			Object.keys(props).forEach((prop) => {
+				if (typeof props[prop] === 'string') {
+					defaults[prop] = props[prop]
+				}
+			})
+			
+			return defaults
+		}
+		
+		if (props.hasOwnProperty(state)) {
+			return json[component][state]
+		}
+		
+		// console.info(`[INFO] ${this.filename} does not contain theming information for "${component}" component. Using default styles...`)
 		return null
 	}
 }

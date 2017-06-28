@@ -12,8 +12,12 @@ class ChassisBrowserMixins {
 
     let params = 'all and (-ms-high-contrast: none)'
     let mediaQuery = utils.css.newMediaQuery(params, nodes)
-
-    atRule.replaceWith(mediaQuery)
+    
+    if (atRule) {
+      atRule.replaceWith(mediaQuery)
+    }
+    
+    return mediaQuery
 	}
 }
 

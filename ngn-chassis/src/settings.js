@@ -14,14 +14,23 @@ class ChassisSettings extends NGN.EventEmitter {
 			},
 
 			fields: {
-				theme: {
-					type: String,
-					default: '../stylesheets/default-theme.css'
+				supportIe: {
+					type: Boolean,
+					default: true
 				},
 				
 				plugins: {
 					type: Array,
 					default: []
+				},
+				
+				theme: {
+					type: String,
+					default: chassis.constants.theme.defaultFilePath,
+					validate (filepath) {
+						let filename = chassis.utils.files.getFileName(filepath)
+						return chassis.utils.files.getFileExtension(filename) === '.css'
+					}
 				},
 
 				zIndex: {

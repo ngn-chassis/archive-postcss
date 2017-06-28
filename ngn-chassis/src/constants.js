@@ -40,6 +40,12 @@ class ChassisConstants {
 			}
 		}
 	}
+	
+	static get theme () {
+		return {
+			defaultFilePath: '../stylesheets/default-theme.css'
+		}
+	}
 }
 
 module.exports = ChassisConstants

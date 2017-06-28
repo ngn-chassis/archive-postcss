@@ -25,6 +25,10 @@ class ChassisFileUtils {
 		return path.basename(filepath)
 	}
 	
+	static getFileExtension (filepath) {
+		return path.extname(filepath)
+	}
+	
 	/**
 	 * @method isDirectory
 	 * Determine whether or not a filepath points to a directory
