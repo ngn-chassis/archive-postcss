@@ -66,18 +66,22 @@ class ChassisViewport {
 			spec = [0, 'min', ...spec]
 		}
 
-		if (typeof lastEntry === 'number') {
+		if (typeof lastEntry === 'number' && lastEntry > settings.layout.maxWidth) {
 			spec.push('max')
 		}
 
 		let vwrs = []
 
 		for (let i = 0; i < spec.length; i += 2) {
-			vwrs.push({
-				name: spec[i + 1],
-				lowerBound: spec[i],
-				upperBound: spec[i + 2] || settings.layout.maxWidth
-			})
+			let lowerBound = spec[i]
+
+			if (lowerBound < settings.layout.maxWidth) {
+				vwrs.push({
+					name: spec[i + 1],
+					lowerBound,
+					upperBound: spec[i + 2] || settings.layout.maxWidth
+				})
+			}
 		}
 
 		return vwrs

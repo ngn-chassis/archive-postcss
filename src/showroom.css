@@ -1,4 +1,4 @@
-@chassis include button;
+@chassis include link button;
 
 .showroom {
 	/* Account for sticky footer */

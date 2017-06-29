@@ -27,19 +27,37 @@ h6 {
 	font-weight: 700;
 }
 
+a {
+	color: hsl(200,100%,45%);
+
+	hover {
+		color: hsl(200,100%,50%);
+		text-decoration: underline;
+	}
+
+	active {
+		color: hsl(200,100%,40%);
+	}
+
+	disabled {
+		color: rgb(192,192,192);
+		text-decoration: none;
+	}
+}
+
 button {
 	background: hsl(200,100%,45%);
 	border-radius: .236em;
 	color: white;
-		
+
 	active {
 		background: hsl(200,100%,40%);
 	}
-	
+
 	hover {
 		background: hsl(200,100%,50%);
 	}
-	
+
 	disabled {
 		opacity: .382;
 	}

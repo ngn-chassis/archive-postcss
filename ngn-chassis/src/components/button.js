@@ -3,26 +3,18 @@ const ChassisComponent = require('../component')
 class ChassisButtonComponent extends ChassisComponent {
 	constructor	(chassis, cfg) {
 		super(chassis)
-		
+
 		this.chassis = chassis
 		this.cfg = cfg || null // TODO: use this for extending components
-		
+
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
-		
-		this.states = [
-			'visited',
-			'hover',
-			'active',
-			'disabled',
-			'focus'
-		]
 	}
-	
+
 	// TODO: figure out what to do about multi-line buttons
-	
+
 	get css () {
 		let { atRules, settings, utils } = this.chassis
-		
+
 		let rules = [
 			...this.default,
 			...this.visited,
@@ -31,7 +23,7 @@ class ChassisButtonComponent extends ChassisComponent {
 			...this.disabled,
 			...this.focus
 		]
-		
+
 		if (settings.supportIe) {
 			rules.push(atRules.browserMixins.ieOnly({
 				nodes: [
@@ -47,18 +39,18 @@ class ChassisButtonComponent extends ChassisComponent {
 				]
 			}))
 		}
-		
-		settings.componentSelectors.push('.button, button')
-		
+
+		settings.componentResetSelectors.push('.button, button')
+
 		return utils.css.newRoot(rules)
 	}
-	
+
 	get default () {
 		let { typography, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
-		
+
 		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
-		
+
 		return [
 			utils.css.newRule('.button, button', [
 				utils.css.newDeclObj('display', 'inline-flex'),
@@ -75,40 +67,40 @@ class ChassisButtonComponent extends ChassisComponent {
 			])
 		]
 	}
-	
+
 	get visited () {
 		let { utils } = this.chassis
-		
+
 		return [
 			utils.css.newRule('.button:visited, button:visited', [
 				...super._getThemeDecls('button.visited')
 			])
 		]
 	}
-	
+
 	get hover () {
 		let { utils } = this.chassis
-		
+
 		return [
 			utils.css.newRule('.button:hover, button:hover', [
 				...super._getThemeDecls('button.hover')
 			])
 		]
 	}
-	
+
 	get active () {
 		let { utils } = this.chassis
-		
+
 		return [
 			utils.css.newRule('.button:active, button:active', [
 				...super._getThemeDecls('button.active')
 			])
 		]
 	}
-	
+
 	get disabled () {
 		let { utils } = this.chassis
-		
+
 		return [
 			utils.css.newRule('.button[disabled], button[disabled], .disabled.button, button.disabled', [
 				utils.css.newDeclObj('pointer-events', 'none'),
@@ -116,10 +108,10 @@ class ChassisButtonComponent extends ChassisComponent {
 			])
 		]
 	}
-	
+
 	get focus () {
 		let { utils } = this.chassis
-		
+
 		return [
 			utils.css.newRule('.button:focus, button:focus', [
 				...super._getThemeDecls('button.focus')

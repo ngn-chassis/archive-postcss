@@ -1,3 +1,12 @@
+// TODO:
+// - Figure out what to do about components with multiple element types,
+// ie buttons (.button vs. <button>)
+//
+// - Split component reset into types (inline, block, etc)
+//
+// - Check viewport width range system - "max" range is being added when it
+// shouldn't be
+
 require('ngn')
 require('ngn-data')
 
@@ -25,7 +34,7 @@ class ChassisPostCss {
 
 		this.settings = new ChassisSettings(this)
 		this.settings.load(cfg)
-		
+
 		this._validateSettings()
 
 		this.typography = new ChassisTypography(this)
@@ -33,7 +42,7 @@ class ChassisPostCss {
 
 		this.viewport = new ChassisViewport(this)
 		this.settings.viewportWidthRanges.load(this.viewport.getWidthRanges(this.settings.layout.breakpoints))
-		
+
 		this.theme = new ChassisTheme(this)
 		this.layout = new ChassisLayout(this)
 		this.atRules = new ChassisAtRules(this)
@@ -43,32 +52,32 @@ class ChassisPostCss {
 	}
 
 	get plugin () {
-		// this.utils.console.printTree(this.settings.data)
+		this.utils.console.printTree(this.settings.data)
 		return (root, result) => {
 			let output = this.core.css.append(new ChassisStylesheet(this, root).css)
-			
+
 			output.walkAtRules('chassis-post', (atRule) => {
 				switch (atRule.params) {
 					case 'component-reset':
-						output.insertBefore(atRule, this.utils.css.newRule(this.settings.componentSelectorList, atRule.nodes))
+						output.insertBefore(atRule, this.utils.css.newRule(this.settings.componentResetSelectorList, atRule.nodes))
 						output.removeChild(atRule)
 						break
 				}
 			})
-			
+
 			let beautifiedOutput = postcss.parse(perfectionist.process(output.toString()))
 
 			result.root = beautifiedOutput
 		}
 	}
-	
+
 	_cleanseCfg (cfg) {
 		let cleansedCfg = cfg
-		
-		if (cleansedCfg.hasOwnProperty('componentSelectors')) {
-			delete cleansedCfg.componentSelectors
+
+		if (cleansedCfg.hasOwnProperty('componentResetSelectors')) {
+			delete cleansedCfg.componentResetSelectors
 		}
-		
+
 		return cleansedCfg
 	}
 
@@ -76,7 +85,7 @@ class ChassisPostCss {
 		if (!this.settings.valid) {
 			console.error('[ERROR] Chassis Configuration: Invalid fields:')
 			console.error(this.settings.invalidDataAttributes.join(', '))
-			
+
 			if (this.settings.invalidDataAttributes.includes('theme')) {
 				console.error(`[ERROR] "${this.settings.theme}" is not a valid theme file. Chassis themes must have a ".css" or ".js" extension. Reverting to default theme...`)
 				this.settings.theme = this.constants.theme.defaultFilePath
