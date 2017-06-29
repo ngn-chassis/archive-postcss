@@ -4,6 +4,7 @@
 // Dependencies ----------------------------------------------------------------
 require('ngn')
 
+const autoprefixer = require('gulp-autoprefixer')
 const gulp = require('gulp')
 const postcss = require('gulp-postcss')
 const del = require('del')
@@ -22,7 +23,7 @@ const DEST = './showroom'
 // CSS ------------------------------------------------------------------------
 gulp.task('css', () => {
   return gulp.src(SRC + '/**/*.css')
-    // .pipe(sourcemaps.init())
+    .pipe(sourcemaps.init())
     .pipe(chassis({
       // supportIe: false,
     	theme: path.resolve('./theme.css'),
@@ -31,7 +32,11 @@ gulp.task('css', () => {
     		maxWidth: 1600
     	}
     }))
-    // .pipe(sourcemaps.write('.'))
+    // .pipe(autoprefixer({
+    //   browsers: ['> 5%'],
+    //   cascade: false
+    // }))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(DEST + '/css'))
 })
 

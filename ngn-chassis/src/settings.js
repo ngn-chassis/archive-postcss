@@ -14,9 +14,9 @@ class ChassisSettings extends NGN.EventEmitter {
 			},
 
 			fields: {
-				supportIe: {
-					type: Boolean,
-					default: true
+				componentSelectors: {
+					type: Array,
+					default: []
 				},
 				
 				plugins: {
@@ -31,6 +31,11 @@ class ChassisSettings extends NGN.EventEmitter {
 						let filename = chassis.utils.files.getFileName(filepath)
 						return chassis.utils.files.getFileExtension(filename) === '.css'
 					}
+				},
+				
+				supportIe: {
+					type: Boolean,
+					default: true
 				},
 
 				zIndex: {
@@ -51,7 +56,23 @@ class ChassisSettings extends NGN.EventEmitter {
 						})
 					}
 				}
-			}
+			},
+			
+			virtuals: {
+				componentSelectorList () {
+					let selectors = this.componentSelectors.map((selectorString) => {
+						selectorString = `.chassis ${selectorString.trim()}`
+						
+						if (selectorString.includes(',')) {
+							return selectorString.split(',').map((selector) => selector.trim()).join(', .chassis ')
+						}
+						
+						return selectorString
+					})
+					
+					return selectors.join(', ')
+				}
+ 			}
 		})
 
 		return new model()

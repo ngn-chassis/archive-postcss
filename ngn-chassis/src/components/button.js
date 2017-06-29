@@ -48,6 +48,8 @@ class ChassisButtonComponent extends ChassisComponent {
 			}))
 		}
 		
+		settings.componentSelectors.push('.button, button')
+		
 		return utils.css.newRoot(rules)
 	}
 	
@@ -57,13 +59,8 @@ class ChassisButtonComponent extends ChassisComponent {
 		
 		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
 		
-		// TODO: all: unset causes bad behavior on iOS Chrome
-		// A manual reset may be necessary
-		// If so, it may make sense to create a standard reset mixin and diff it
-		// against the theme styles
 		return [
 			utils.css.newRule('.button, button', [
-				utils.css.newDeclObj('all', 'unset'),
 				utils.css.newDeclObj('display', 'inline-flex'),
 				utils.css.newDeclObj('justify-content', 'center'),
 				utils.css.newDeclObj('align-items', 'center'),

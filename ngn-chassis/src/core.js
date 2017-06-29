@@ -21,16 +21,31 @@ class ChassisCore {
 			this.outerContainers,
 			this.innerContainers,
 			this.paragraph,
-			this.typographyRanges
+			this.typographyRanges,
+			this.componentReset
 		])
+	}
+	
+	get componentReset () {
+		let { utils } = this.chassis
+		
+		return utils.css.newAtRule({
+			name: 'chassis-post',
+			params: 'component-reset',
+			nodes: utils.files.parseStylesheet('../stylesheets/component-reset.css').nodes
+		})
 	}
 
 	get reset () {
-		return this.chassis.utils.files.parseStylesheet('../stylesheets/reset.css')
+		let { utils } = this.chassis
+		
+		return utils.files.parseStylesheet('../stylesheets/reset.css')
 	}
 
 	get modifiers () {
-		return this.chassis.utils.files.parseStylesheet('../stylesheets/global-modifiers.css')
+		let { utils } = this.chassis
+		
+		return utils.files.parseStylesheet('../stylesheets/global-modifiers.css')
 	}
 
 	get widthConstraint () {

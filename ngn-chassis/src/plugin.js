@@ -18,7 +18,7 @@ const ChassisViewport = require('./viewport.js')
 
 class ChassisPostCss {
 	constructor (cfg) {
-		cfg = NGN.coalesce(cfg, {})
+		cfg = this._cleanseCfg(NGN.coalesce(cfg, {}))
 
 		this.utils = ChassisUtilities
 		this.constants = ChassisConstants
@@ -43,13 +43,33 @@ class ChassisPostCss {
 	}
 
 	get plugin () {
-		console.log(this.utils.console.printTree(this.theme.asJson));
+		// this.utils.console.printTree(this.settings.data)
 		return (root, result) => {
 			let output = this.core.css.append(new ChassisStylesheet(this, root).css)
+			
+			output.walkAtRules('chassis-post', (atRule) => {
+				switch (atRule.params) {
+					case 'component-reset':
+						output.insertBefore(atRule, this.utils.css.newRule(this.settings.componentSelectorList, atRule.nodes))
+						output.removeChild(atRule)
+						break
+				}
+			})
+			
 			let beautifiedOutput = postcss.parse(perfectionist.process(output.toString()))
 
 			result.root = beautifiedOutput
 		}
+	}
+	
+	_cleanseCfg (cfg) {
+		let cleansedCfg = cfg
+		
+		if (cleansedCfg.hasOwnProperty('componentSelectors')) {
+			delete cleansedCfg.componentSelectors
+		}
+		
+		return cleansedCfg
 	}
 
 	_validateSettings () {

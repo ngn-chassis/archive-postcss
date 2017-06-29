@@ -15,6 +15,7 @@ class ChassisBrowserMixins {
     
     if (atRule) {
       atRule.replaceWith(mediaQuery)
+      return
     }
     
     return mediaQuery
