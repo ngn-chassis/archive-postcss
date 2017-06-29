@@ -30,7 +30,7 @@ class ChassisTagComponent extends ChassisComponent {
 			utils.css.newDeclObj('justify-content', 'center'),
 			utils.css.newDeclObj('align-items', 'center'),
 			utils.css.newDeclObj('margin', '0'),
-			utils.css.newDeclObj('padding', `0 ${lineHeightInEms / 2}em`),
+			utils.css.newDeclObj('padding', `0 ${Math.log(lineHeightInEms)}em`),
 			utils.css.newDeclObj('font-size', `${utils.units.toEms(fontSize, this.baseTypography.root.fontSize)}em`),
 			utils.css.newDeclObj('line-height', `${lineHeightInEms}em`),
 			utils.css.newDeclObj('vertical-align', 'baseline'),

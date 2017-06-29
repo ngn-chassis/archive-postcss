@@ -68,3 +68,11 @@ tag {
 	border-radius: .236em;
 	color: white;
 }
+
+overlay {
+	background: black;
+}
+
+modal {
+	background: white;
+}

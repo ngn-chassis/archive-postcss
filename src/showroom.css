@@ -1,4 +1,4 @@
-@chassis include link button tag;
+@chassis include link button modal overlay tag;
 
 .showroom {
 	/* Account for sticky footer */
