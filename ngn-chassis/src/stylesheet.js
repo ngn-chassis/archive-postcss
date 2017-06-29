@@ -11,7 +11,7 @@ class ChassisStylesheet {
 	get css () {
 		this.tree.walkAtRules('chassis', (atRule) => this.processAtRule(atRule))
 		this.unnest()
-		this.resolveVariables()
+		this.resolveCustomProperties()
 			
 		let output = postcss.parse(this.tree)
 		output.walkRules((rule) => {
@@ -49,7 +49,7 @@ class ChassisStylesheet {
 		this.tree = nesting.process(this.tree)
 	}
 
-	resolveVariables () {
+	resolveCustomProperties () {
 		this.tree = customProperties.process(this.tree)
 	}
 }

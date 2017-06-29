@@ -78,8 +78,7 @@ class ChassisTypography {
 	}
 	
 	calculateInlineMarginY (baseLineHeight, ratio = this.scale.ratio) {
-		return 1 // 1em seems to be a better value than the line height
-		// return baseLineHeight
+		return 1
 	}
 	
 	calculateInlineMarginX (baseLineHeight, ratio = this.scale.ratio) {

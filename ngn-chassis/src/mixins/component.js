@@ -1,5 +1,6 @@
 const ChassisButtonComponent = require('../components/button.js')
 const ChassisLinkComponent = require('../components/link.js')
+const ChassisTagComponent = require('../components/tag.js')
 
 class ChassisComponentMixins {
 	constructor (chassis) {
@@ -7,7 +8,8 @@ class ChassisComponentMixins {
 		
 		this.specs = {
 			button: ChassisButtonComponent,
-			link: ChassisLinkComponent
+			link: ChassisLinkComponent,
+			tag: ChassisTagComponent
 		}
   }
 	

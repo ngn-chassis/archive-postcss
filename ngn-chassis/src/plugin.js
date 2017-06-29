@@ -52,7 +52,7 @@ class ChassisPostCss {
 	}
 
 	get plugin () {
-		this.utils.console.printTree(this.settings.data)
+		// this.utils.console.printTree(this.settings.data)
 		return (root, result) => {
 			let output = this.core.css.append(new ChassisStylesheet(this, root).css)
 

@@ -7,20 +7,19 @@ class ChassisLinkComponent extends ChassisComponent {
 		this.chassis = chassis
 		this.cfg = cfg || null
 
-		this.theme = chassis.settings.theme.links
+		this.states = [
+			'default',
+			'visited',
+			'hover',
+			'active',
+			'disabled',
+			'focus'
+		]
 	}
 
 	get css () {
 		let { settings, utils } = this.chassis
-
-		let rules = [
-			...this.default,
-			...this.visited,
-			...this.hover,
-			...this.active,
-			...this.disabled,
-			...this.focus
-		]
+		let { rules } = this
 
 		settings.componentResetSelectors.push('a')
 
@@ -30,63 +29,51 @@ class ChassisLinkComponent extends ChassisComponent {
 	get default () {
 		let { utils } = this.chassis
 
-		return [
-			utils.css.newRule('a:not(.button)', [
-				...super._getThemeDecls('a')
-			])
-		]
+		return utils.css.newRule('a:not(.button)', [
+			...this._getThemeDecls('a')
+		])
 	}
 
 	get visited () {
 		let { utils } = this.chassis
 
-		return [
-			utils.css.newRule('a:visited:not(.button)', [
-				...super._getThemeDecls('a.visited')
-			])
-		]
+		return utils.css.newRule('a:visited:not(.button)', [
+			...this._getThemeDecls('a.visited')
+		])
 	}
 
 	get hover () {
 		let { utils } = this.chassis
 
-		return [
-			utils.css.newRule('a:hover:not(.button)', [
-				...super._getThemeDecls('a.hover')
-			])
-		]
+		return utils.css.newRule('a:hover:not(.button)', [
+			...this._getThemeDecls('a.hover')
+		])
 	}
 
 	get active () {
 		let { utils } = this.chassis
 
-		return [
-			utils.css.newRule('a:active:not(.button)', [
-				...super._getThemeDecls('a.active')
-			])
-		]
+		return utils.css.newRule('a:active:not(.button)', [
+			...this._getThemeDecls('a.active')
+		])
 	}
 
 	get disabled () {
 		let { utils } = this.chassis
 
-		return [
-			utils.css.newRule('a[disabled]:not(.button), a.disabled:not(.button)', [
-				utils.css.newDeclObj('cursor', 'default'),
-				utils.css.newDeclObj('pointer-events', 'none'),
-				...super._getThemeDecls('a.disabled')
-			])
-		]
+		return utils.css.newRule('a[disabled]:not(.button), a.disabled:not(.button)', [
+			utils.css.newDeclObj('cursor', 'default'),
+			utils.css.newDeclObj('pointer-events', 'none'),
+			...this._getThemeDecls('a.disabled')
+		])
 	}
 
 	get focus () {
 		let { utils } = this.chassis
 
-		return [
-			utils.css.newRule('a:focus:not(.button)', [
-				...super._getThemeDecls('a.focus')
-			])
-		]
+		return utils.css.newRule('a:focus:not(.button)', [
+			...this._getThemeDecls('a.focus')
+		])
 	}
 }
 
