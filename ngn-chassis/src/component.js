@@ -1,3 +1,6 @@
+// TODO:
+// - Handle component variants as component extensions
+
 class ChassisComponent {
 	constructor (chassis) {
 		this.chassis = chassis
@@ -17,7 +20,7 @@ class ChassisComponent {
 		return this.default && this.default.nodes.length > 0 ? [this.default] : null
 	}
 	
-	_getThemeDecls (state) {
+	getThemeDecls (state) {
 		let { theme, utils } = this.chassis
 		let decls = theme.getComponentProperties(state)
 		

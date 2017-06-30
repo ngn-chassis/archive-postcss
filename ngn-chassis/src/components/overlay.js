@@ -19,7 +19,7 @@ class ChassisOverlayComponent extends ChassisComponent {
 		let { utils } = this.chassis
 
 		return utils.css.newRule('chassis-overlay', [
-			...this._getThemeDecls('overlay')
+			...this.getThemeDecls('overlay')
 		])
 	}
 }

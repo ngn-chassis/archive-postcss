@@ -30,7 +30,7 @@ class ChassisLinkComponent extends ChassisComponent {
 		let { utils } = this.chassis
 
 		return utils.css.newRule('a:not(.button)', [
-			...this._getThemeDecls('a')
+			...this.getThemeDecls('a')
 		])
 	}
 
@@ -38,7 +38,7 @@ class ChassisLinkComponent extends ChassisComponent {
 		let { utils } = this.chassis
 
 		return utils.css.newRule('a:visited:not(.button)', [
-			...this._getThemeDecls('a.visited')
+			...this.getThemeDecls('a.visited')
 		])
 	}
 
@@ -46,7 +46,7 @@ class ChassisLinkComponent extends ChassisComponent {
 		let { utils } = this.chassis
 
 		return utils.css.newRule('a:hover:not(.button)', [
-			...this._getThemeDecls('a.hover')
+			...this.getThemeDecls('a.hover')
 		])
 	}
 
@@ -54,7 +54,7 @@ class ChassisLinkComponent extends ChassisComponent {
 		let { utils } = this.chassis
 
 		return utils.css.newRule('a:active:not(.button)', [
-			...this._getThemeDecls('a.active')
+			...this.getThemeDecls('a.active')
 		])
 	}
 
@@ -64,7 +64,7 @@ class ChassisLinkComponent extends ChassisComponent {
 		return utils.css.newRule('a[disabled]:not(.button), a.disabled:not(.button)', [
 			utils.css.newDeclObj('cursor', 'default'),
 			utils.css.newDeclObj('pointer-events', 'none'),
-			...this._getThemeDecls('a.disabled')
+			...this.getThemeDecls('a.disabled')
 		])
 	}
 
@@ -72,7 +72,7 @@ class ChassisLinkComponent extends ChassisComponent {
 		let { utils } = this.chassis
 
 		return utils.css.newRule('a:focus:not(.button)', [
-			...this._getThemeDecls('a.focus')
+			...this.getThemeDecls('a.focus')
 		])
 	}
 }

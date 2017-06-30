@@ -30,7 +30,7 @@ class ChassisSvgIconComponent extends ChassisComponent {
 			utils.css.newDeclObj('height', `${lineHeightInEms}em`),
 			utils.css.newDeclObj('vertical-align', 'middle'),
 			utils.css.newDeclObj('pointer-events', 'none'),
-			...this._getThemeDecls('icon')
+			...this.getThemeDecls('icon')
 		])
 	}
 }

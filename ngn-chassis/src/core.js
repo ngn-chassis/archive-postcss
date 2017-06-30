@@ -95,7 +95,7 @@ class ChassisCore {
 			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`),
 		]
 
-		return utils.css.newRule('html.chassis', [...decls, ...this._getThemeDecls('html')])
+		return utils.css.newRule('html.chassis', [...decls, ...this.getThemeDecls('html')])
 	}
 
 	get body () {
@@ -107,7 +107,7 @@ class ChassisCore {
 			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`)
 		]
 
-		return utils.css.newRule('.chassis body', [...decls,  ...this._getThemeDecls('body')])
+		return utils.css.newRule('.chassis body', [...decls,  ...this.getThemeDecls('body')])
 	}
 
 	get rootHeadings () {
@@ -132,7 +132,7 @@ class ChassisCore {
 					'margin-bottom',
 					`${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[headingSizeAliases[i]].lineHeight), this.baseTypography[headingSizeAliases[i]].fontSize)}em`
 				),
-				...this._getThemeDecls(`h${i}`)
+				...this.getThemeDecls(`h${i}`)
 			]))
 		}
 
@@ -149,7 +149,7 @@ class ChassisCore {
 				'margin-bottom',
 				`${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[formLegendAlias].lineHeight), this.baseTypography[formLegendAlias].fontSize)}em`
 			),
-			...this._getThemeDecls('legend')
+			...this.getThemeDecls('legend')
 		]))
 
 		return rules
@@ -291,7 +291,7 @@ class ChassisCore {
 		})
 	}
 	
-	_getThemeDecls (component) {
+	getThemeDecls (component) {
 		let { theme, utils } = this.chassis
 		let decls = theme.getComponentProperties(component)
 		

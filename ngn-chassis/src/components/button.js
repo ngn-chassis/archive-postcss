@@ -18,13 +18,18 @@ class ChassisButtonComponent extends ChassisComponent {
 			'focus',
 			'icon'
 		]
+		
+		this.variants = {
+			'class': '.button',
+			'tag': 'button'
+		}
 	}
 
 	// TODO:
 	// - figure out what to do about multi-line buttons
 
 	get css () {
-		let { atRules, settings, utils } = this.chassis
+		let { atRules, settings, theme, utils } = this.chassis
 		let { rules } = this
 
 		if (settings.supportIe) {
@@ -66,7 +71,7 @@ class ChassisButtonComponent extends ChassisComponent {
 			utils.css.newDeclObj('text-align', 'center'),
 			utils.css.newDeclObj('cursor', 'pointer'),
 			utils.css.newDeclObj('user-select', 'none'),
-			...this._getThemeDecls('button')
+			...this.getThemeDecls('button')
 		])
 	}
 
@@ -74,7 +79,7 @@ class ChassisButtonComponent extends ChassisComponent {
 		let { utils } = this.chassis
 
 		return utils.css.newRule('.button:visited, button:visited', [
-			...this._getThemeDecls('button.visited')
+			...this.getThemeDecls('button.visited')
 		])
 	}
 
@@ -82,7 +87,7 @@ class ChassisButtonComponent extends ChassisComponent {
 		let { utils } = this.chassis
 
 		return utils.css.newRule('.button:hover, button:hover', [
-			...this._getThemeDecls('button.hover')
+			...this.getThemeDecls('button.hover')
 		])
 	}
 
@@ -90,7 +95,7 @@ class ChassisButtonComponent extends ChassisComponent {
 		let { utils } = this.chassis
 
 		return utils.css.newRule('.button:active, button:active', [
-			...this._getThemeDecls('button.active')
+			...this.getThemeDecls('button.active')
 		])
 	}
 
@@ -99,7 +104,7 @@ class ChassisButtonComponent extends ChassisComponent {
 
 		return utils.css.newRule('.button[disabled], button[disabled], .disabled.button, button.disabled', [
 			utils.css.newDeclObj('pointer-events', 'none'),
-			...this._getThemeDecls('button.disabled')
+			...this.getThemeDecls('button.disabled')
 		])
 	}
 
@@ -107,7 +112,7 @@ class ChassisButtonComponent extends ChassisComponent {
 		let { utils } = this.chassis
 
 		return utils.css.newRule('.button:focus, button:focus', [
-			...this._getThemeDecls('button.focus')
+			...this.getThemeDecls('button.focus')
 		])
 	}
 	
@@ -117,11 +122,9 @@ class ChassisButtonComponent extends ChassisComponent {
 
 		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
 
-		return utils.css.newRoot([
-			utils.css.newRule('.button svg.icon, button svg.icon', [
-				utils.css.newDeclObj('transform', `translateX(-${Math.log(lineHeightInEms)}em)`),
-				...this._getThemeDecls('button.icon')
-			])
+		return utils.css.newRule('.button svg.icon, button svg.icon', [
+			utils.css.newDeclObj('transform', `translateX(-${Math.log(lineHeightInEms)}em)`),
+			...this.getThemeDecls('button.icon')
 		])
 	}
 }

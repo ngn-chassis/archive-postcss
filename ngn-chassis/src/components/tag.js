@@ -34,7 +34,7 @@ class ChassisTagComponent extends ChassisComponent {
 			utils.css.newDeclObj('font-size', `${utils.units.toEms(fontSize, this.baseTypography.root.fontSize)}em`),
 			utils.css.newDeclObj('line-height', `${lineHeightInEms}em`),
 			utils.css.newDeclObj('vertical-align', 'baseline'),
-			...this._getThemeDecls('tag')
+			...this.getThemeDecls('tag')
 		])
 	}
 }

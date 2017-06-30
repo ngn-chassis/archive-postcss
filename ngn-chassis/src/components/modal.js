@@ -19,7 +19,7 @@ class ChassisModalComponent extends ChassisComponent {
 		let { utils } = this.chassis
 
 		return utils.css.newRule('chassis-modal', [
-			...this._getThemeDecls('modal')
+			...this.getThemeDecls('modal')
 		])
 	}
 }

@@ -49,10 +49,6 @@ button {
 	background: hsl(200,100%,45%);
 	border-radius: .236em;
 	color: white;
-	
-	visited {
-		background: red;
-	}
 
 	hover {
 		background: hsl(200,100%,50%);
@@ -68,6 +64,16 @@ button {
 	
 	icon {
 		stroke: white;
+	}
+	
+	variants {
+		tag {
+			border: 2px solid green;
+		}
+		
+		class {
+			border: 2px solid yellow;
+		}
 	}
 }
 
