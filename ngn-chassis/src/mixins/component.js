@@ -1,4 +1,5 @@
 const ChassisButtonComponent = require('../components/button.js')
+const ChassisSvgIconComponent = require('../components/svg-icon.js')
 const ChassisLinkComponent = require('../components/link.js')
 const ChassisModalComponent = require('../components/modal.js')
 const ChassisOverlayComponent = require('../components/overlay.js')
@@ -9,11 +10,12 @@ class ChassisComponentMixins {
     this.chassis = chassis
 		
 		this.specs = {
-			button: ChassisButtonComponent,
-			link: ChassisLinkComponent,
-			modal: ChassisModalComponent,
-			overlay: ChassisOverlayComponent,
-			tag: ChassisTagComponent
+			'button': ChassisButtonComponent,
+			'link': ChassisLinkComponent,
+			'modal': ChassisModalComponent,
+			'overlay': ChassisOverlayComponent,
+			'svg-icon': ChassisSvgIconComponent,
+			'tag': ChassisTagComponent
 		}
   }
 	

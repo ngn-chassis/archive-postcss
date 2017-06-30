@@ -4,7 +4,7 @@ class ChassisLayoutModel {
 			fields: {
 				breakpoints: {
 					type: String,
-					default: '0 tiny 320 small 512 medium 768 large 1024 huge 1440 massive 1600'
+					default: '320 tiny 512 small 768 medium 1024 large 1200 huge 1440 massive 1600'
 				},
 				gutter: {
 					type: String,

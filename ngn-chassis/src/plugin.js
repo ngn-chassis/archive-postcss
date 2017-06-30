@@ -3,9 +3,6 @@
 // ie buttons (.button vs. <button>)
 //
 // - Split component reset into types (inline, block, etc)
-//
-// - Check viewport width range system - "max" range is being added when it
-// shouldn't be
 
 require('ngn')
 require('ngn-data')

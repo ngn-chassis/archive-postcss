@@ -23,14 +23,43 @@
     </header>
 
 		<main>
-      <section>
-        <div class="width-constraint">
-          <section>
-            <a class="button" href="#">Unthemed Button Link</a>
-            <button><span>Unthemed Button</span></button>
-          </section>
+      <aside class="sidebar">
+        <nav>
+          <a href="#typography">
+            Typography
+          </a>
+          <a href="#buttons">
+            Buttons
+          </a>
+          <a href="#tags">
+            Tags
+          </a>
+          <a href="#toolbars">
+            Toolbars
+          </a>
+          <a href="#table">
+            Table
+          </a>
+          <a href="#flex_tiles">
+            Flex Tiles
+          </a>
+          <a href="#modals">
+            Modal Window
+          </a>
+          <a class="disabled" href="#">
+            A Disabled Link
+          </a>
+        </nav>
+      </aside>
+      
+      <div class="content">
+        <section>
           <h1>Heading 1</h1>
           <p>
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="7"></circle>
+              <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+            </svg>
             Body <span class="tag">text</span> in paragraph tag. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
           </p>
           <p>
@@ -44,10 +73,8 @@
           <p>
             Body text in paragraph tag. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
           </p>
-        </div>
-      </section>
-      <section>
-        <div class="width-constraint">
+        </section>
+        <section>
           <h4>Heading 4</h4>
           <p>
             Body text in paragraph tag. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -60,12 +87,46 @@
           <p>
             Body text in paragraph tag. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
           </p>
-        </div>
-      </section>
+        </section>
+      </div>
 		</main>
 
     <footer>
+      <div class="width-constraint">
+        <span class="label">Viewport Width Range:</span>
 
+        <span class="below-min range">
+          Below min: <= 319px
+        </span>
+
+        <span class="tiny range">
+          Tiny: 320 - 511px
+        </span>
+
+        <span class="small range">
+          Small: 512 - 767px
+        </span>
+
+        <span class="medium range">
+          Medium: 768 - 1023px
+        </span>
+
+        <span class="large range">
+          Large: 1024 - 1199px
+        </span>
+
+        <span class="huge range">
+          Huge: 1200 - 1439px
+        </span>
+        
+        <span class="massive range">
+          Massive: 1440 - 1600px
+        </span>
+
+        <span class="above-max range">
+          Above max: > 1600px
+        </span>
+      </div>
     </footer>
 
 	</body>

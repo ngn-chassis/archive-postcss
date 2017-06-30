@@ -15,13 +15,13 @@ class ChassisButtonComponent extends ChassisComponent {
 			'hover',
 			'active',
 			'disabled',
-			'focus'
+			'focus',
+			'icon'
 		]
 	}
 
 	// TODO:
 	// - figure out what to do about multi-line buttons
-	// - figure out how to handle .button and <button> separately
 
 	get css () {
 		let { atRules, settings, utils } = this.chassis
@@ -58,10 +58,11 @@ class ChassisButtonComponent extends ChassisComponent {
 			utils.css.newDeclObj('display', 'inline-flex'),
 			utils.css.newDeclObj('justify-content', 'center'),
 			utils.css.newDeclObj('align-items', 'center'),
+			utils.css.newDeclObj('display', 'inline-flex'),
 			utils.css.newDeclObj('margin', `0 ${typography.calculateInlineMarginX(lineHeightInEms)}em ${typography.calculateInlineMarginY(lineHeightInEms)}em 0`),
 			utils.css.newDeclObj('padding', `0 ${typography.calculateInlinePaddingX(lineHeightInEms)}em`),
 			utils.css.newDeclObj('line-height', `${typography.calculateInlineHeight(lineHeightInEms)}em`),
-			utils.css.newDeclObj('vertical-align', 'baseline'),
+			utils.css.newDeclObj('vertical-align', 'middle'),
 			utils.css.newDeclObj('text-align', 'center'),
 			utils.css.newDeclObj('cursor', 'pointer'),
 			utils.css.newDeclObj('user-select', 'none'),
@@ -107,6 +108,20 @@ class ChassisButtonComponent extends ChassisComponent {
 
 		return utils.css.newRule('.button:focus, button:focus', [
 			...this._getThemeDecls('button.focus')
+		])
+	}
+	
+	get icon () {
+		let { utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
+
+		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
+
+		return utils.css.newRoot([
+			utils.css.newRule('.button svg.icon, button svg.icon', [
+				utils.css.newDeclObj('transform', `translateX(-${Math.log(lineHeightInEms)}em)`),
+				...this._getThemeDecls('button.icon')
+			])
 		])
 	}
 }

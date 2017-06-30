@@ -13,6 +13,7 @@ class ChassisCore {
 	get css () {
 		return this.chassis.utils.css.newRoot([
 			this.reset,
+			this.customProperties,
 			this.modifiers,
 			this.widthConstraint,
 			this.html,
@@ -25,21 +26,21 @@ class ChassisCore {
 			this.componentReset
 		])
 	}
-	
-	get componentReset () {
-		let { utils } = this.chassis
-		
-		return utils.css.newAtRule({
-			name: 'chassis-post',
-			params: 'component-reset',
-			nodes: utils.files.parseStylesheet('../stylesheets/component-reset.css').nodes
-		})
-	}
 
 	get reset () {
 		let { utils } = this.chassis
 		
 		return utils.files.parseStylesheet('../stylesheets/reset.css')
+	}
+	
+	get customProperties () {
+		let { settings, utils } = this.chassis
+		
+		return utils.css.newRule(':root', [
+			utils.css.newDeclObj('--ui-min-width', `${settings.layout.minWidth}px`),
+			utils.css.newDeclObj('--ui-max-width', `${settings.layout.maxWidth}px`),
+			utils.css.newDeclObj('--ui-gutter', `${settings.layout.gutter}`)
+		])
 	}
 
 	get modifiers () {
@@ -278,6 +279,16 @@ class ChassisCore {
 				`${utils.units.toEms(lineHeight, fontSize)}em`
 			)
 		])
+	}
+	
+	get componentReset () {
+		let { utils } = this.chassis
+		
+		return utils.css.newAtRule({
+			name: 'chassis-post',
+			params: 'component-reset',
+			nodes: utils.files.parseStylesheet('../stylesheets/component-reset.css').nodes
+		})
 	}
 	
 	_getThemeDecls (component) {

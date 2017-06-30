@@ -82,7 +82,7 @@ class ChassisTypography {
 	}
 	
 	calculateInlineMarginX (baseLineHeight, ratio = this.scale.ratio) {
-		return Math.sin(baseLineHeight)
+		return Math.log(baseLineHeight)
 	}
 	
 	calculateInlinePaddingX (baseLineHeight, ratio = this.scale.ratio) {

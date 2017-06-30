@@ -49,17 +49,25 @@ button {
 	background: hsl(200,100%,45%);
 	border-radius: .236em;
 	color: white;
-
-	active {
-		background: hsl(200,100%,40%);
+	
+	visited {
+		background: red;
 	}
 
 	hover {
 		background: hsl(200,100%,50%);
 	}
+	
+	active {
+		background: hsl(200,100%,40%);
+	}
 
 	disabled {
 		opacity: .382;
+	}
+	
+	icon {
+		stroke: white;
 	}
 }
 
