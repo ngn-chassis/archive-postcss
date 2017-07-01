@@ -6,9 +6,9 @@ class ChassisButtonComponent extends ChassisComponent {
 
 		this.chassis = chassis
 		this.cfg = cfg || null // TODO: use this for extending components
-		
+
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
-		
+
 		this.states = [
 			'default',
 			'visited',
@@ -16,9 +16,10 @@ class ChassisButtonComponent extends ChassisComponent {
 			'active',
 			'disabled',
 			'focus',
-			'icon'
+			'icon',
+			'pill'
 		]
-		
+
 		this.variants = {
 			'class': '.button',
 			'tag': 'button'
@@ -115,16 +116,30 @@ class ChassisButtonComponent extends ChassisComponent {
 			...this.getThemeDecls('button.focus')
 		])
 	}
-	
+
 	get icon () {
-		let { utils } = this.chassis
+		let { settings, typography, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
 
 		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
 
 		return utils.css.newRule('.button svg.icon, button svg.icon', [
-			utils.css.newDeclObj('transform', `translateX(-${Math.log(lineHeightInEms)}em)`),
+			utils.css.newDeclObj('transform', `translateX(calc(-${typography.calculateInlinePaddingX(lineHeightInEms) / 2}em + 1px))`),
 			...this.getThemeDecls('button.icon')
+		])
+	}
+
+	get pill () {
+		let { settings, typography, utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
+
+		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
+
+		return utils.css.newRule('.pill.button , button.pill', [
+			utils.css.newDeclObj('padding-left', `${settings.typography.scaleRatio}em`),
+			utils.css.newDeclObj('padding-right', `${settings.typography.scaleRatio}em`),
+			utils.css.newDeclObj('border-radius', `${lineHeightInEms}em`),
+			...this.getThemeDecls('button.pill')
 		])
 	}
 }

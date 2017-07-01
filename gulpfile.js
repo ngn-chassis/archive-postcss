@@ -25,6 +25,7 @@ gulp.task('css', () => {
   return gulp.src(SRC + '/**/*.css')
     .pipe(sourcemaps.init())
     .pipe(chassis({
+      // basePath: path.resolve('../')
       // supportIe: false,
     	theme: path.resolve('./theme.css'),
     	layout: {
