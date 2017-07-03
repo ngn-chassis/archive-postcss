@@ -122,9 +122,10 @@ class ChassisButtonComponent extends ChassisComponent {
 		let { fontSize, lineHeight } = this.baseTypography.root
 
 		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
+		let offset = `-${(typography.calculateInlinePaddingX(lineHeightInEms) / 2) - utils.units.toEms(fontSize / (settings.typography.scaleRatio * 10), fontSize)}em`
 
 		return utils.css.newRule('.button svg.icon, button svg.icon', [
-			utils.css.newDeclObj('transform', `translateX(calc(-${typography.calculateInlinePaddingX(lineHeightInEms) / 2}em + 1px))`),
+			utils.css.newDeclObj('transform', `translateX(${offset})`),
 			...this.getThemeDecls('button.icon')
 		])
 	}
