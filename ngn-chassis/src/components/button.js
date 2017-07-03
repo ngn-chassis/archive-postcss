@@ -17,7 +17,8 @@ class ChassisButtonComponent extends ChassisComponent {
 			'disabled',
 			'focus',
 			'icon',
-			'pill'
+			'pill',
+			'multi-line'
 		]
 
 		this.variants = {
@@ -70,6 +71,7 @@ class ChassisButtonComponent extends ChassisComponent {
 			utils.css.newDeclObj('line-height', `${typography.calculateInlineHeight(lineHeightInEms)}em`),
 			utils.css.newDeclObj('vertical-align', 'middle'),
 			utils.css.newDeclObj('text-align', 'center'),
+			utils.css.newDeclObj('white-space', 'nowrap'),
 			utils.css.newDeclObj('cursor', 'pointer'),
 			utils.css.newDeclObj('user-select', 'none'),
 			...this.getThemeDecls('button')
@@ -141,6 +143,24 @@ class ChassisButtonComponent extends ChassisComponent {
 			utils.css.newDeclObj('padding-right', `${settings.typography.scaleRatio}em`),
 			utils.css.newDeclObj('border-radius', `${lineHeightInEms}em`),
 			...this.getThemeDecls('button.pill')
+		])
+	}
+
+	get 'multi-line' () {
+		let { settings, typography, utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
+
+		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
+		let inlineHeight = typography.calculateInlineHeight(lineHeightInEms)
+
+		let padding = (inlineHeight - lineHeightInEms) / 2
+
+		return utils.css.newRule('.multi-line.button , button.multi-line', [
+			utils.css.newDeclObj('padding-top', `${padding}em`),
+			utils.css.newDeclObj('padding-bottom', `${padding}em`),
+			utils.css.newDeclObj('line-height', `${lineHeightInEms}em`),
+			utils.css.newDeclObj('white-space', 'normal'),
+			...this.getThemeDecls('button.multi-line')
 		])
 	}
 }

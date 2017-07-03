@@ -15,6 +15,11 @@ class ChassisStylesheet {
 
 		let output = postcss.parse(this.tree)
 		output.walkRules((rule) => {
+			if (rule.nodes.length === 0) {
+				rule.remove()
+				return
+			}
+
 			rule.selector = rule.selector === 'html' ? rule.selector.trim() : `.chassis ${rule.selector.trim()}`
 
 			if (rule.selector.includes(',')) {

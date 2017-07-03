@@ -9,6 +9,10 @@
 .showroom {
 	padding-bottom: 3.618em;
 
+	& .test {
+		@chassis layout inline-block;
+	}
+
 	& > header {
 		margin-bottom: 3.82em;
 		padding: 1.46em 0 .90169942em;
@@ -42,7 +46,7 @@
 			}
 		}
 	}
-	
+
 	& .sidebar {
     position: sticky;
     top: 0;
@@ -67,31 +71,31 @@
         }
       }
     }
-		
+
 		@chassis viewport-width from medium {
 			flex: 1 0 25%;
       display: block;
     }
   }
-	
-	& .content {
-		@chassis viewport-width from medium {
-      padding: 0 0 0 var(--ui-gutter);
-    }
+
+	@chassis viewport-width from medium {
+		& .content {
+			padding: 0 0 0 var(--ui-gutter);
+		}
 	}
-	
+
 	& > footer {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-	
+
 		display: block;
     padding: 1em 0;
 
     background: white;
     box-shadow: inset 0 1px 0 0 var(--footer-border-color);
-	
+
 		@chassis font-size small;
     text-align: center;
 
@@ -107,7 +111,7 @@
           display: inline;
         }
       }
-		
+
       @chassis viewport-width = tiny {
         &.tiny {
           display: inline;
@@ -137,7 +141,7 @@
           display: inline;
         }
       }
-			
+
 			@chassis viewport-width = massive {
         &.massive {
           display: inline;

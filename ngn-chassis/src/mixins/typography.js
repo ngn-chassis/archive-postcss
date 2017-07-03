@@ -1,6 +1,7 @@
 class ChassisTypographyMixins {
   constructor (chassis) {
     this.chassis = chassis
+    this.baseTypography = chassis.settings.typography.ranges.first.typography
   }
 
   /**
@@ -53,6 +54,23 @@ class ChassisTypographyMixins {
 		)
 
 		atRule.replaceWith(decl)
+  }
+
+  layout () {
+    let { settings, typography, utils } = this.chassis
+    let { args, atRule, source } = arguments[0]
+    let { fontSize, lineHeight } = this.baseTypography.root
+
+    let model = args[0]
+    let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
+
+    let decls = [
+      utils.css.newDecl('margin', `0 ${typography.calculateInlineMarginX(lineHeightInEms)}em ${typography.calculateInlineMarginY(lineHeightInEms)}em 0`),
+			utils.css.newDecl('padding', `0 ${typography.calculateInlinePaddingX(lineHeightInEms)}em`),
+			utils.css.newDecl('line-height', `${typography.calculateInlineHeight(lineHeightInEms)}em`)
+    ]
+
+    atRule.replaceWith(decls)
   }
 }
 
