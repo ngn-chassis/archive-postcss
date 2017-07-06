@@ -8,6 +8,32 @@
 
 .showroom {
 	padding-bottom: 3.618em;
+	
+	& .nowrap {
+		white-space: nowrap;
+	}
+	
+	& h2 {
+		border-bottom: 1px solid var(--header-border-color);
+		@chassis font-size larger;
+	}
+	
+	& h3 {
+		@chassis font-size large;
+	}
+	
+	& code {
+		background: rgb(240,240,240);
+		border-radius: .236em;
+		font-family: monospace;
+		color: rgb(96,96,96);
+		
+		&:before,
+		&:after {
+			letter-spacing: -0.2em;
+    	content: "\00a0";
+		}
+	}
 
 	& > header {
 		margin-bottom: 3.82em;
@@ -73,11 +99,30 @@
 		@chassis viewport-width from medium {
 			flex: 1 0 23.6%;
       display: block;
+			min-width: 220px;
     }
   }
 	
 	& .content {
 		flex: 0 0 76.4%;
+		
+		& > section {
+			& section header {
+				margin-bottom: 1em;
+				
+				& code.example {
+					display: block;
+					background: rgb(244,244,244);
+					border: 1px solid rgb(224,224,224);
+					@chassis inline-block-layout multi-line no-margin-right;
+					
+					&:before,
+					&:after {
+						content: "";
+					}
+				}
+			}
+		}
 		
 		@chassis viewport-width from medium {
 			padding: 0 0 0 var(--ui-gutter);

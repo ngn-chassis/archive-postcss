@@ -28,56 +28,193 @@
           <a href="#typography">
             Typography
           </a>
-          <a href="#buttons">
-            Buttons
+          <a href="#layout">
+            Layout
           </a>
-          <a href="#tags">
-            Tags
-          </a>
-          <a href="#toolbars">
-            Toolbars
-          </a>
-          <a href="#table">
-            Table
-          </a>
-          <a href="#flex_tiles">
-            Flex Tiles
-          </a>
-          <a href="#modals">
-            Modal Window
-          </a>
-          <a class="disabled" href="#">
-            A Disabled Link
+          <a href="#components">
+            Components
           </a>
         </nav>
       </aside>
 
       <div class="content">
         <section id="typography">
-          
+          <header>
+            <h2>Typography</h2>
+          </header>
+          <section class="mixins">
+            <section class="font-size">
+              <header>
+                <h3>font-size</h3>
+                <code class="example">@chassis font-size [alias] [mult(int)];</code>
+              </header>
+              <p>
+                Use the font-size mixin to apply a calculated font size to any element. If you would like to set a font-size between any two of the pre-calculated values, you can use the <code>mult()</code> function. It accepts any decimal number and will multiply the resulting calculated font-size against this decimal.
+              </p>
+            </section>
+            <section class="ellipsis">
+              <header>
+                <h3>ellipsis</h3>
+                <code class="example">@chassis ellipsis;</code>
+              </header>
+              <p>
+                Apply an ellipsis to the targeted element. NOTE: Ellipsis does not work on <code>inline</code> elements.
+              </p>
+            </section>
+          </section>
         </section>
         
-        <!-- <section id="buttons">
-          <a class="button" href="#">
-            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="7"></circle>
-              <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-            </svg>
-            Button Class
-          </a>
-          <a class="pill button" href="#">
-            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="7"></circle>
-              <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-            </svg>
-            Pill Button
-          </a>
-          <button>Button Tag</button>
-          <br>
-          <a class="multi-line button" href="#">
-            "multi-line" class allows button text to wrap
-          </a>
-        </section> -->
+        <section id="layout">
+          <header>
+            <h2>Layout</h2>
+          </header>
+          <section class="mixins">
+            <section class="constrain-width">
+              <header>
+                <h3>constrain-width</h3>
+                <code class="example">@chassis constrain-width [min(int)] [max(int)] [gutter()];</code>
+              </header>
+              <p>
+                Constrain the width of an element to min and max values. <code>gutter</code> will apply padding to the left and right sides of the element. By default, <code>constrain-width</code> uses you min and max layout width values as well as your layout gutter. This allows you to create full-width container elements and constrain the width of the content inside.
+              </p>
+              <p>
+                Class <code>.width-constraint</code> applies <code>constrain-width</code> with the default values.
+              </p>
+            </section>
+            <section class="inline-block-layout">
+              <header>
+                <h3>inline-block-layout</h3>
+                <code class="example">@chassis inline-block-layout <span class="nowrap">[no-margin</span>[-right[-bottom]]] <span class="nowrap">[no-padding</span>[-top[-right[-bottom[-left]]]]] <span class="nowrap">[no-line-height]</span> <span class="nowrap">[multi-line]</span>;</code>
+              </header>
+              <p>
+                Apply calculated margin, padding and line-height matching Chassis' built-in inline-block elements, like buttons and form fields.
+              </p>
+            </section>
+            <section class="z-index">
+              <header>
+                <h3>z-index</h3>
+                <code class="example">@chassis z-index [value or component name];</code>
+              </header>
+              <p>
+                Chassis include the following default z-index values:
+              </p>
+              <table>
+                <tbody>
+                  <tr>
+                    <td>min</td>
+                    <td>-1000</td>
+                  </tr>
+                  <tr>
+                    <td>behind</td>
+                    <td>-1</td>
+                  </tr>
+                  <tr>
+                    <td>default</td>
+                    <td>0</td>
+                  </tr>
+                  <tr>
+                    <td>front</td>
+                    <td>1</td>
+                  </tr>
+                  <tr>
+                    <td>max</td>
+                    <td>1000</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                It also maintains a stack of components. You can insert components into this stack to have their default z-index automatically calculated. This relieves you of having to manage z-index manually.
+              </p>
+            </section>
+          </section>
+        </section>
+        
+        <section id="components">
+          <header>
+            <h2>UI Component Mixins</h2>
+            <p>
+              Chassis UI components are totally modular and completely themeable. They are built to work seamlessly with Chassis' Auto-Typography engine, so they are always proportioned correctly based on your core typography rules. Chassis provides a series of mixins for working with components:
+            </p>
+          </header>
+          <section class="mixins">
+            <section class="include">
+              <header>
+                <h3>include</h3>
+                <code class="example">@chassis include [component name[ additional components separated by spaces]];</code>
+              </header>
+              <p>
+                To avoid unused CSS, Chassis will not load a UI component's styles unless it is first included. Components can have additional styles passed in through a theme file, or at the point of inclusion via CSS declarations. See <code>extend</code> for more information.
+              </p>
+            </section>
+            <section class="extend">
+              <header>
+                <h3>extend</h3>
+                <code class="example">@chassis extend [component name] {...};</code>
+              </header>
+              <p>
+                Chassis components can be extended with custom properties. This provides a way to create different versions of components on-the-fly.
+              </p>
+              <p>
+                <code>extend</code> uses a special syntax which is the same as that used in theme files.
+              </p>
+            </section>
+          </section>
+        </section>
+        <section class="components">
+          <h2>Built-in UI Components</h2>
+          <section class="links">
+            <header>
+              <h3>Link</h3>
+              <p>
+                Chassis links fully reset the default browser styles and are themeable.
+              </p>
+            </header>
+            <p>
+              <a href="#">Here's a link</a>
+            </p>
+          </section>
+          <section class="buttons">
+            <header>
+              <h3>Button</h3>
+              <p>
+                Chassis' default button component has calculated margin, padding, line-height values by default, so its proportions will be correct to your base typography rules.
+              </p>
+            </header>
+            <a class="button" href="#">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="7"></circle>
+                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+              </svg>
+              Button Class
+            </a>
+            <a class="pill button" href="#">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="7"></circle>
+                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+              </svg>
+              Pill Button
+            </a>
+            <button>Button Tag</button>
+            <br>
+            <a class="multi-line button" href="#">
+              "multi-line" class allows button text to wrap
+            </a>
+          </section>
+          <section class="tags">
+            <header>
+              <h3>Tag</h3>
+            </header>
+            <p>
+              <span class="tag" href="#">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="8" r="7"></circle>
+                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                </svg>
+                Tags
+              </span> display inline with text and can have icons placed in them. They come in regular and <span class="pill tag">Pill-shaped</span> varieties.
+            </p>
+          </section>
+        </section>
       </div>
 		</main>
 

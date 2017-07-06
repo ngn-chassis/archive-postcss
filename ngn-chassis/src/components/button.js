@@ -138,7 +138,7 @@ class ChassisButtonComponent extends ChassisComponent {
 
 		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
 
-		return utils.css.newRule('.pill.button , button.pill', [
+		return utils.css.newRule('.pill.button, button.pill', [
 			utils.css.newDeclObj('padding-left', `${settings.typography.scaleRatio}em`),
 			utils.css.newDeclObj('padding-right', `${settings.typography.scaleRatio}em`),
 			utils.css.newDeclObj('border-radius', `${lineHeightMultiplier}em`),

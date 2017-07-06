@@ -1,1 +1,10 @@
 - Add ability to declare color and other variables in theme file
+
+- maybe allow extension of component states as well as full components:
+@chassis extend button.pill {
+	...
+}
+
+- make separate component reset blocks for different box-models. This will
+minimize the amount of incompatible style rules on different types of elements
+versus using a shared component reset.

@@ -67,7 +67,7 @@ button {
 	}
 
 	icon {
-		stroke: white;
+		stroke: currentColor;
 	}
 
 	variants {
@@ -91,6 +91,10 @@ tag {
 	background: hsl(89,82%,40%);
 	border-radius: .236em;
 	color: white;
+	
+	icon {
+		stroke: currentColor;
+	}
 }
 
 overlay {

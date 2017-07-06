@@ -1,7 +1,8 @@
 /* Chassis Global Modifiers ------------------------------------------------- */
 
 /* Hide element */
-.chassis .hidden {
+.chassis .hidden,
+.chassis [hidden] {
 	display: none !important;
 	visibility: hidden !important;
 	opacity: 0 !important;
