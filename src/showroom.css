@@ -9,10 +9,6 @@
 .showroom {
 	padding-bottom: 3.618em;
 
-	& .test {
-		@chassis layout inline-block;
-	}
-
 	& > header {
 		margin-bottom: 3.82em;
 		padding: 1.46em 0 .90169942em;
@@ -56,12 +52,14 @@
 
     & nav a {
       display: block;
+			@chassis inline-block-layout no-margin multi-line;
 
       &:not(:first-child) {
         box-shadow: 0 -1px 0 0 var(--sidebar-link-border-color);
       }
 
       &:hover {
+				background: hsl(200,100%,45%);
         box-shadow: none;
         color: white;
         text-decoration: none;
@@ -73,17 +71,19 @@
     }
 
 		@chassis viewport-width from medium {
-			flex: 1 0 25%;
+			flex: 1 0 23.6%;
       display: block;
     }
   }
-
-	@chassis viewport-width from medium {
-		& .content {
+	
+	& .content {
+		flex: 0 0 76.4%;
+		
+		@chassis viewport-width from medium {
 			padding: 0 0 0 var(--ui-gutter);
 		}
 	}
-
+	
 	& > footer {
     position: fixed;
     bottom: 0;

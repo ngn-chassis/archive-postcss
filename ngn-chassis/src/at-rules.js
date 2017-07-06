@@ -35,8 +35,8 @@ class ChassisAtRules {
 		return (data) => this.typographyMixins.fontSize(data)
 	}
 
-	get 'layout' () {
-		return (data) => this.typographyMixins.layout(data)
+	get 'inline-block-layout' () {
+		return (data) => this.typographyMixins.inlineBlockLayout(data)
 	}
 
 	get 'viewport-height' () {

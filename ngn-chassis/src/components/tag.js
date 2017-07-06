@@ -23,16 +23,16 @@ class ChassisTagComponent extends ChassisComponent {
 		let { typography, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.small
 		
-		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
+		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
 
 		return utils.css.newRule('.tag', [
 			utils.css.newDeclObj('display', 'inline-flex'),
 			utils.css.newDeclObj('justify-content', 'center'),
 			utils.css.newDeclObj('align-items', 'center'),
 			utils.css.newDeclObj('margin', '0'),
-			utils.css.newDeclObj('padding', `0 ${Math.log(lineHeightInEms)}em`),
+			utils.css.newDeclObj('padding', `0 ${Math.log(lineHeightMultiplier)}em`),
 			utils.css.newDeclObj('font-size', `${utils.units.toEms(fontSize, this.baseTypography.root.fontSize)}em`),
-			utils.css.newDeclObj('line-height', `${lineHeightInEms}em`),
+			utils.css.newDeclObj('line-height', `${lineHeightMultiplier}`),
 			utils.css.newDeclObj('vertical-align', 'baseline'),
 			...this.getThemeDecls('tag')
 		])

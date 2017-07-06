@@ -28,9 +28,51 @@ class ChassisCore {
 	}
 
 	get reset () {
-		let { utils } = this.chassis
+		let { typography, utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
+		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
 		
-		return utils.files.parseStylesheet('../stylesheets/reset.css')
+		return utils.css.newRoot([
+			utils.css.newAtRule({
+				name: 'charset',
+				params: '"UTF-8"'
+			}),
+			utils.css.newRule('*, *:before, *:after', [
+				utils.css.newDeclObj('box-sizing', 'border-box')
+			]),
+			utils.css.newRule('html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video', [
+				utils.css.newDeclObj('margin', '0'),
+				utils.css.newDeclObj('padding', '0'),
+				utils.css.newDeclObj('border', '0'),
+				utils.css.newDeclObj('font', 'inherit'),
+				utils.css.newDeclObj('font-size', '100%'),
+				utils.css.newDeclObj('line-height', `${lineHeightMultiplier}`),
+				utils.css.newDeclObj('vertical-align', 'baseline')
+			]),
+			utils.css.newRule('ol, ul', [
+				utils.css.newDeclObj('list-style', 'none')
+			]),
+			utils.css.newRule('q, blockquote', [
+				utils.css.newDeclObj('quotes', 'none')
+			]),
+			utils.css.newRule('q:before, q:after, blockquote:before, blockquote:after', [
+				utils.css.newDeclObj('content', '""'),
+				utils.css.newDeclObj('content', 'none')
+			]),
+			utils.css.newRule('q, blockquote', [
+				utils.css.newDeclObj('quotes', 'none')
+			]),
+			utils.css.newRule('a img', [
+				utils.css.newDeclObj('border', 'none')
+			]),
+			utils.css.newRule('article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary', [
+				utils.css.newDeclObj('display', 'block')
+			]),
+			utils.css.newRule('input, textarea, button', [
+				utils.css.newDeclObj('font-size', 'inherit'),
+				utils.css.newDeclObj('line-height', 'inherit')
+			])
+		])
 	}
 	
 	get customProperties () {
@@ -92,7 +134,7 @@ class ChassisCore {
 		
 		let decls = [
 			utils.css.newDeclObj('font-size', `${fontSize}px`),
-			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`),
+			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}`),
 		]
 
 		return utils.css.newRule('html.chassis', [...decls, ...this.getThemeDecls('html')])
@@ -104,7 +146,7 @@ class ChassisCore {
 		
 		let decls = [
 			utils.css.newDeclObj('min-width', `${settings.layout.minWidth}px`),
-			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`)
+			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}`)
 		]
 
 		return utils.css.newRule('.chassis body', [...decls,  ...this.getThemeDecls('body')])
@@ -126,7 +168,7 @@ class ChassisCore {
 				),
 				utils.css.newDeclObj(
 					'line-height',
-					`${utils.units.toEms(this.baseTypography[headingSizeAliases[i]].lineHeight, this.baseTypography[headingSizeAliases[i]].fontSize)}em`
+					`${utils.units.toEms(this.baseTypography[headingSizeAliases[i]].lineHeight, this.baseTypography[headingSizeAliases[i]].fontSize)}`
 				),
 				utils.css.newDeclObj(
 					'margin-bottom',
@@ -143,7 +185,7 @@ class ChassisCore {
 			),
 			utils.css.newDeclObj(
 				'line-height',
-				`${utils.units.toEms(this.baseTypography[formLegendAlias].lineHeight, this.baseTypography[formLegendAlias].fontSize)}em`
+				`${utils.units.toEms(this.baseTypography[formLegendAlias].lineHeight, this.baseTypography[formLegendAlias].fontSize)}`
 			),
 			utils.css.newDeclObj(
 				'margin-bottom',
@@ -177,12 +219,12 @@ class ChassisCore {
 				htmlRule.append(utils.css.newDecl('font-size', `${fontSize}px`))
 			}
 
-			htmlRule.append(utils.css.newDecl('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`))
+			htmlRule.append(utils.css.newDecl('line-height', `${utils.units.toEms(lineHeight, fontSize)}`))
 
 			mediaQuery.nodes.push(htmlRule)
 			
 			let bodyRule = utils.css.newRule('.chassis body', [
-				utils.css.newDecl('line-height', `${utils.units.toEms(lineHeight, fontSize)}em`)
+				utils.css.newDecl('line-height', `${utils.units.toEms(lineHeight, fontSize)}`)
 			])
 			
 			mediaQuery.nodes.push(bodyRule)
@@ -194,7 +236,7 @@ class ChassisCore {
 				mediaQuery.nodes.push(utils.css.newRule(`.chassis h${i}`, [
 					utils.css.newDeclObj(
 						'line-height',
-						`${utils.units.toEms(range.typography[headingSizeAliases[i]].lineHeight, range.typography[headingSizeAliases[i]].fontSize)}em`
+						`${utils.units.toEms(range.typography[headingSizeAliases[i]].lineHeight, range.typography[headingSizeAliases[i]].fontSize)}`
 					),
 					utils.css.newDeclObj(
 						'margin-bottom',
@@ -206,7 +248,7 @@ class ChassisCore {
 			mediaQuery.nodes.push(utils.css.newRule('.chassis legend', [
 				utils.css.newDeclObj(
 					'line-height',
-					`${utils.units.toEms(range.typography[formLegendAlias].lineHeight, range.typography[formLegendAlias].fontSize)}em`
+					`${utils.units.toEms(range.typography[formLegendAlias].lineHeight, range.typography[formLegendAlias].fontSize)}`
 				),
 				utils.css.newDeclObj(
 					'margin-bottom',
@@ -235,7 +277,7 @@ class ChassisCore {
 				),
 				utils.css.newDecl(
 					'line-height',
-					`${utils.units.toEms(lineHeight, fontSize)}em`
+					`${utils.units.toEms(lineHeight, fontSize)}`
 				)
 			]))
 

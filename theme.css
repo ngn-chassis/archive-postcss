@@ -1,3 +1,7 @@
+:root {
+	--blue: hsl(200,100%,45%);
+}
+
 body {
 	font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', Avenir, Helvetica, Arial, sans-serif;
 	color: rgb(68,68,68);

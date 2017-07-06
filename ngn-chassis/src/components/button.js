@@ -59,16 +59,16 @@ class ChassisButtonComponent extends ChassisComponent {
 		let { typography, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
 
-		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
+		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
 
 		return utils.css.newRule('.button, button', [
 			utils.css.newDeclObj('display', 'inline-flex'),
 			utils.css.newDeclObj('justify-content', 'center'),
 			utils.css.newDeclObj('align-items', 'center'),
 			utils.css.newDeclObj('display', 'inline-flex'),
-			utils.css.newDeclObj('margin', `0 ${typography.calculateInlineMarginX(lineHeightInEms)}em ${typography.calculateInlineMarginY(lineHeightInEms)}em 0`),
-			utils.css.newDeclObj('padding', `0 ${typography.calculateInlinePaddingX(lineHeightInEms)}em`),
-			utils.css.newDeclObj('line-height', `${typography.calculateInlineHeight(lineHeightInEms)}em`),
+			utils.css.newDeclObj('margin', `0 ${typography.calculateInlineMarginX(lineHeightMultiplier)}em ${typography.calculateInlineMarginY(lineHeightMultiplier)}em 0`),
+			utils.css.newDeclObj('padding', `0 ${typography.calculateInlinePaddingX(lineHeightMultiplier)}em`),
+			utils.css.newDeclObj('line-height', `${typography.calculateInlineHeight(lineHeightMultiplier)}`),
 			utils.css.newDeclObj('vertical-align', 'middle'),
 			utils.css.newDeclObj('text-align', 'center'),
 			utils.css.newDeclObj('white-space', 'nowrap'),
@@ -123,8 +123,8 @@ class ChassisButtonComponent extends ChassisComponent {
 		let { settings, typography, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
 
-		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
-		let offset = `-${(typography.calculateInlinePaddingX(lineHeightInEms) / 2) - utils.units.toEms(fontSize / (settings.typography.scaleRatio * 10), fontSize)}em`
+		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
+		let offset = `-${(typography.calculateInlinePaddingX(lineHeightMultiplier) / 2) - utils.units.toEms(fontSize / (settings.typography.scaleRatio * 10), fontSize)}em`
 
 		return utils.css.newRule('.button svg.icon, button svg.icon', [
 			utils.css.newDeclObj('transform', `translateX(${offset})`),
@@ -136,12 +136,12 @@ class ChassisButtonComponent extends ChassisComponent {
 		let { settings, typography, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
 
-		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
+		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
 
 		return utils.css.newRule('.pill.button , button.pill', [
 			utils.css.newDeclObj('padding-left', `${settings.typography.scaleRatio}em`),
 			utils.css.newDeclObj('padding-right', `${settings.typography.scaleRatio}em`),
-			utils.css.newDeclObj('border-radius', `${lineHeightInEms}em`),
+			utils.css.newDeclObj('border-radius', `${lineHeightMultiplier}em`),
 			...this.getThemeDecls('button.pill')
 		])
 	}
@@ -150,15 +150,15 @@ class ChassisButtonComponent extends ChassisComponent {
 		let { settings, typography, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
 
-		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
-		let inlineHeight = typography.calculateInlineHeight(lineHeightInEms)
+		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
+		let inlineHeight = typography.calculateInlineHeight(lineHeightMultiplier)
 
-		let padding = (inlineHeight - lineHeightInEms) / 2
+		let padding = (inlineHeight - lineHeightMultiplier) / 2
 
 		return utils.css.newRule('.multi-line.button , button.multi-line', [
 			utils.css.newDeclObj('padding-top', `${padding}em`),
 			utils.css.newDeclObj('padding-bottom', `${padding}em`),
-			utils.css.newDeclObj('line-height', `${lineHeightInEms}em`),
+			utils.css.newDeclObj('line-height', `${lineHeightMultiplier}`),
 			utils.css.newDeclObj('white-space', 'normal'),
 			...this.getThemeDecls('button.multi-line')
 		])
