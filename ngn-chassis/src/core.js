@@ -81,7 +81,8 @@ class ChassisCore {
 		return utils.css.newRule(':root', [
 			utils.css.newDeclObj('--ui-min-width', `${settings.layout.minWidth}px`),
 			utils.css.newDeclObj('--ui-max-width', `${settings.layout.maxWidth}px`),
-			utils.css.newDeclObj('--ui-gutter', `${settings.layout.gutter}`)
+			utils.css.newDeclObj('--ui-gutter', `${settings.layout.gutter}`),
+			...this.getThemeDecls('custom-properties')
 		])
 	}
 

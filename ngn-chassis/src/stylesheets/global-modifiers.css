@@ -1,31 +1,56 @@
-/* Chassis Global Modifiers ------------------------------------------------- */
-
-/* Hide element */
+/* Element visibility modifiers */
 .chassis .hidden,
 .chassis [hidden] {
 	display: none !important;
+}
+
+.chassis .invisible {
 	visibility: hidden !important;
+}
+
+.chassis .transparent {
 	opacity: 0 !important;
 }
 
-/* Font Styles */
-.chassis .normal-style {
+/* Type Modifiers */
+.chassis .text-normal {
 	font-style: normal !important;
+	font-variant: normal !important;
+	text-transform: none !important;
 }
 
-.chassis .italic-style {
+.chassis .text-italic {
 	font-style: italic !important;
 }
 
-.chassis .oblique-style {
+.chassis .text-oblique {
 	font-style: oblique !important;
 }
 
-/* Font Variants */
-.chassis .normal-variant {
-	font-variant: normal !important;
+.chassis .text-capitalize {
+	text-transform: capitalize !important;
 }
 
-.chassis .small-caps-variant {
+.chassis .text-small-caps {
 	font-variant: small-caps !important;
+}
+
+.chassis .text-uppercase {
+	text-transform: uppercase !important;
+}
+
+.chassis .text-lowercase {
+	text-transform: lowercase !important;
+}
+
+.chassis .text-underline {
+	text-decoration: underline !important;
+}
+
+.chassis .text-strikethrough {
+	text-decoration: line-through !important;
+}
+
+.chassis .text-nowrap {
+	white-space: nowrap !important;
 }

@@ -1,5 +1,9 @@
-:root {
-	--blue: hsl(200,100%,45%);
+custom-properties {
+	--black: rgb(0,0,0);
+	--white: rgb(255,255,255);
+	--red: hsl(11,74%,54%);
+	--green: hsl(89,82%,40%);
+	--blue: hsl(200,100%,47%);
 }
 
 body {
@@ -9,6 +13,7 @@ body {
 
 h1 {
 	font-weight: 700;
+	color: var(--blue);
 }
 
 h2 {
@@ -32,7 +37,7 @@ h6 {
 }
 
 a {
-	color: hsl(200,100%,45%);
+	color: var(--blue);
 
 	hover {
 		color: hsl(200,100%,50%);
@@ -50,7 +55,7 @@ a {
 }
 
 button {
-	background: hsl(200,100%,45%);
+	background: var(--blue);
 	border-radius: .236em;
 	color: white;
 
@@ -59,7 +64,7 @@ button {
 	}
 
 	active {
-		background: hsl(200,100%,40%);
+		background: hsl(200,100%,44%);
 	}
 
 	disabled {
@@ -88,7 +93,7 @@ button {
 }
 
 tag {
-	background: hsl(89,82%,40%);
+	background: var(--green);
 	border-radius: .236em;
 	color: white;
 	

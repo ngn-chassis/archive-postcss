@@ -8,3 +8,9 @@
 - make separate component reset blocks for different box-models. This will
 minimize the amount of incompatible style rules on different types of elements
 versus using a shared component reset.
+
+- image replacement mixin
+- maybe some flexbox mixins if they can be done elegantly
+- maybe some helper mixins for responsive embeds
+- screenreader helpers
+- add disabled states to all form controls
