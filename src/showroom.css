@@ -8,22 +8,22 @@
 
 .showroom {
 	padding-bottom: 3.618em;
-	
+
 	& h2 {
 		border-bottom: 1px solid var(--header-border-color);
 		@chassis font-size larger;
 	}
-	
+
 	& h3 {
 		@chassis font-size large;
 	}
-	
+
 	& code {
 		background: var(--grey-n00);
 		border-radius: .236em;
 		font-family: monospace;
 		color: var(--grey-n08);
-		
+
 		&:before,
 		&:after {
 			letter-spacing: -0.2em;
@@ -32,7 +32,6 @@
 	}
 
 	& > header {
-		margin-bottom: 3.82em;
 		padding: 1.46em 0 .90169942em;
 		border-bottom: 4px solid var(--header-border-color);
 
@@ -98,21 +97,21 @@
 			min-width: 220px;
     }
   }
-	
+
 	& .content {
 		flex: 0 0 76.4%;
-		
+
 		& > section {
 			& section header {
 				margin-bottom: 1em;
-				
+
 				& code.example {
 					display: block;
 					@chassis inline-block-layout multi-line no-margin-right;
-					
+
 					background: var(--grey-n00);
 					border: 1px solid var(--grey-n01);
-					
+
 					&:before,
 					&:after {
 						content: "";
@@ -120,12 +119,12 @@
 				}
 			}
 		}
-		
+
 		@chassis viewport-width from medium {
-			padding: 0 0 0 var(--ui-gutter);
+			padding-left: var(--ui-gutter);
 		}
 	}
-	
+
 	& > footer {
     position: fixed;
     bottom: 0;
@@ -203,6 +202,11 @@
 
 main {
   @chassis constrain-width;
+
+	& .sidebar,
+	& .content {
+		padding-top: 3.82em;
+	}
 
   @chassis viewport-width from medium {
     display: flex;
