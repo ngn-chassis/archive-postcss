@@ -4,7 +4,7 @@
 //
 // - Split component reset into types (inline, block, etc)
 //
-// - Add copic grey vars back in
+// - Generate custom properties from theme values for each component
 
 require('ngn')
 require('ngn-data')
