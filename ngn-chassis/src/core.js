@@ -1,3 +1,6 @@
+const postcss = require('postcss')
+const customProperties = require('postcss-custom-properties')
+
 class ChassisCore {
 	constructor (chassis) {
 		this.chassis = chassis
@@ -79,6 +82,7 @@ class ChassisCore {
 		let { settings, utils } = this.chassis
 		
 		return utils.css.newRule(':root', [
+			...utils.files.parseStylesheet('../stylesheets/copic-greys.css').nodes,
 			utils.css.newDeclObj('--ui-min-width', `${settings.layout.minWidth}px`),
 			utils.css.newDeclObj('--ui-max-width', `${settings.layout.maxWidth}px`),
 			utils.css.newDeclObj('--ui-gutter', `${settings.layout.gutter}`),

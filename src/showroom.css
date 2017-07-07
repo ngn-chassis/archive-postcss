@@ -1,17 +1,13 @@
-@chassis include button link modal overlay svg-icon tag;
-
 :root {
 	--header-border-color: rgb(237,237,237);
 	--footer-border-color: var(--header-border-color);
 	--sidebar-link-border-color: var(--header-border-color);
 }
 
+@chassis include button link modal overlay svg-icon tag;
+
 .showroom {
 	padding-bottom: 3.618em;
-	
-	& .nowrap {
-		white-space: nowrap;
-	}
 	
 	& h2 {
 		border-bottom: 1px solid var(--header-border-color);
@@ -85,7 +81,7 @@
       }
 
       &:hover {
-				background: hsl(200,100%,45%);
+				background: var(--blue);
         box-shadow: none;
         color: white;
         text-decoration: none;

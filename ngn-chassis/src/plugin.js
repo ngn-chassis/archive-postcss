@@ -3,12 +3,15 @@
 // ie buttons (.button vs. <button>)
 //
 // - Split component reset into types (inline, block, etc)
+//
+// - Add copic grey vars back in
 
 require('ngn')
 require('ngn-data')
 
 const postcss = require('postcss')
 const cssnano = require('cssnano')
+const customProperties = require('postcss-custom-properties')
 const perfectionist = require('perfectionist')
 
 const ChassisAtRules = require('./at-rules.js')
@@ -53,7 +56,7 @@ class ChassisPostCss {
 		// this.utils.console.printTree(this.theme.json)
 		return (root, result) => {
 			let output = this.core.css.append(new ChassisStylesheet(this, root).css)
-
+			
 			output.walkAtRules('chassis-post', (atRule) => {
 				switch (atRule.params) {
 					case 'component-reset':
@@ -62,10 +65,11 @@ class ChassisPostCss {
 						break
 				}
 			})
-
-			let beautifiedOutput = postcss.parse(perfectionist.process(output.toString()))
-
-			result.root = beautifiedOutput
+			
+ 			output = perfectionist.process(output.toString())
+			output = customProperties.process(output)
+			
+			result.root = postcss.parse(output)
 		}
 	}
 
