@@ -12,7 +12,7 @@ class ChassisCore {
 			innerContainers: '.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed'
 		}
 	}
-	
+
 	get css () {
 		return this.chassis.utils.css.newRoot([
 			this.reset,
@@ -34,7 +34,7 @@ class ChassisCore {
 		let { typography, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
 		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
-		
+
 		return utils.css.newRoot([
 			utils.css.newAtRule({
 				name: 'charset',
@@ -77,10 +77,10 @@ class ChassisCore {
 			])
 		])
 	}
-	
+
 	get customProperties () {
 		let { settings, utils } = this.chassis
-		
+
 		return utils.css.newRule(':root', [
 			...utils.files.parseStylesheet('../stylesheets/copic-greys.css').nodes,
 			utils.css.newDeclObj('--ui-min-width', `${settings.layout.minWidth}px`),
@@ -92,7 +92,7 @@ class ChassisCore {
 
 	get modifiers () {
 		let { utils } = this.chassis
-		
+
 		return utils.files.parseStylesheet('../stylesheets/global-modifiers.css')
 	}
 
@@ -136,25 +136,21 @@ class ChassisCore {
 	get html () {
 		let { constants, settings, theme, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
-		
-		let decls = [
-			utils.css.newDeclObj('font-size', `${fontSize}px`),
-			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}`),
-		]
 
-		return utils.css.newRule('html.chassis', [...decls, ...this.getThemeDecls('html')])
+		return utils.css.newRule('html.chassis', [
+			utils.css.newDeclObj('font-size', `${fontSize}px`),
+			...this.getThemeDecls('html')]
+		)
 	}
 
 	get body () {
 		let { constants, settings, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
-		
-		let decls = [
-			utils.css.newDeclObj('min-width', `${settings.layout.minWidth}px`),
-			utils.css.newDeclObj('line-height', `${utils.units.toEms(lineHeight, fontSize)}`)
-		]
 
-		return utils.css.newRule('.chassis body', [...decls,  ...this.getThemeDecls('body')])
+		return utils.css.newRule('.chassis body', [
+			utils.css.newDeclObj('min-width', `${settings.layout.minWidth}px`),
+			...this.getThemeDecls('body')]
+		)
 	}
 
 	get rootHeadings () {
@@ -227,11 +223,11 @@ class ChassisCore {
 			htmlRule.append(utils.css.newDecl('line-height', `${utils.units.toEms(lineHeight, fontSize)}`))
 
 			mediaQuery.nodes.push(htmlRule)
-			
+
 			let bodyRule = utils.css.newRule('.chassis body', [
 				utils.css.newDecl('line-height', `${utils.units.toEms(lineHeight, fontSize)}`)
 			])
-			
+
 			mediaQuery.nodes.push(bodyRule)
 
 			let headingSizeAliases = settings.typography.fontSizes.headings
@@ -274,7 +270,7 @@ class ChassisCore {
 					`${utils.units.toEms(layout.calculateMarginBottom(range.typography.root.lineHeight, 'inner'), range.typography.root.fontSize)}em`
 				)
 			]))
-			
+
 			mediaQuery.nodes.push(utils.css.newRule('.chassis p', [
 				utils.css.newDeclObj(
 					'margin-bottom',
@@ -315,7 +311,7 @@ class ChassisCore {
 			)
 		])
 	}
-	
+
 	get paragraph () {
 		let { layout, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
@@ -327,25 +323,25 @@ class ChassisCore {
 			)
 		])
 	}
-	
+
 	get componentReset () {
 		let { utils } = this.chassis
-		
+
 		return utils.css.newAtRule({
 			name: 'chassis-post',
 			params: 'component-reset',
 			nodes: utils.files.parseStylesheet('../stylesheets/component-reset.css').nodes
 		})
 	}
-	
+
 	getThemeDecls (component) {
 		let { theme, utils } = this.chassis
 		let decls = theme.getComponentProperties(component)
-		
+
 		if (decls) {
 			return Object.keys(decls).map((decl) => utils.css.newDeclObj(decl, decls[decl]))
 		}
-		
+
 		return []
 	}
 }

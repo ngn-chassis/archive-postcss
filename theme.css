@@ -4,7 +4,7 @@ custom-properties {
 	--red: hsl(11,74%,54%);
 	--green: hsl(89,82%,40%);
 	--blue: hsl(200,100%,47%);
-	
+
 	--font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', Avenir, Helvetica, Arial, sans-serif;
 	--text-color: rgb(68,68,68);
 }
@@ -35,6 +35,10 @@ h5 {
 }
 
 h6 {
+	font-weight: 700;
+}
+
+legend {
 	font-weight: 700;
 }
 
@@ -98,7 +102,7 @@ tag {
 	background: var(--green);
 	border-radius: .236em;
 	color: var(--white);
-	
+
 	icon {
 		stroke: currentColor;
 	}

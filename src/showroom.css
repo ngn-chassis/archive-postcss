@@ -14,10 +14,6 @@
 		@chassis font-size larger;
 	}
 
-	& h3 {
-		@chassis font-size large;
-	}
-
 	& code {
 		background: var(--grey-n00);
 		border-radius: .236em;
@@ -99,7 +95,7 @@
   }
 
 	& .content {
-		flex: 0 0 76.4%;
+		flex: 1 1 76.4%;
 
 		& > section {
 			& section header {
