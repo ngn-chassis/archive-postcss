@@ -10,6 +10,7 @@ require('ngn')
 require('ngn-data')
 
 const postcss = require('postcss')
+const cssnext = require('postcss-cssnext')
 const cssnano = require('cssnano')
 const customProperties = require('postcss-custom-properties')
 const perfectionist = require('perfectionist')
@@ -66,8 +67,9 @@ class ChassisPostCss {
 				}
 			})
 			
+			output = cssnext.process(output.toString())
  			output = perfectionist.process(output.toString())
-			output = customProperties.process(output)
+			// output = customProperties.process(output)
 			
 			result.root = postcss.parse(output)
 		}
