@@ -26,17 +26,23 @@ gulp.task('css', () => {
     .pipe(sourcemaps.init())
     .pipe(chassis({
       // basePath: path.resolve('../')
-      // supportIe: false,
-    	theme: path.resolve('./theme.css'),
+      theme: path.resolve('./theme.css'),
+      // legacy: false,
+      customProperties: {
+        'black': 'rgb(0,0,0)',
+      	'white': 'rgb(255,255,255)',
+      	'red': 'hsl(11,74%,54%)',
+      	'green': 'hsl(89,82%,40%)',
+      	'blue': 'hsl(200,100%,47%)',
+        'yellow': 'hsl(55,100%,64%)',
+      	'font-family': '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, Helvetica, Arial, sans-serif',
+      	'text-color': 'rgb(68,68,68)'
+      },
     	layout: {
     		minWidth: 320,
     		maxWidth: 1600
     	}
     }))
-    // .pipe(autoprefixer({
-    //   browsers: ['> 5%'],
-    //   cascade: false
-    // }))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(DEST + '/css'))
 })

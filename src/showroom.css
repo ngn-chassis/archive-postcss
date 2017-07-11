@@ -15,8 +15,10 @@
 	}
 
 	& code {
-		background: var(--grey-n00);
+		background: color(var(--grey-n00) alpha(61.8%));
+		border: 1px solid var(--grey-n01);
 		border-radius: .236em;
+		
 		font-family: monospace;
 		color: var(--grey-n08);
 
@@ -104,9 +106,6 @@
 				& code.example {
 					display: block;
 					@chassis inline-block-layout multi-line no-margin-right;
-
-					background: var(--grey-n00);
-					border: 1px solid var(--grey-n01);
 
 					&:before,
 					&:after {

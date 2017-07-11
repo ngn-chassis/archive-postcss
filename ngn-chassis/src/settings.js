@@ -33,7 +33,7 @@ class ChassisSettings extends NGN.EventEmitter {
 					}
 				},
 
-				supportIe: {
+				legacy: {
 					type: Boolean,
 					default: true
 				},

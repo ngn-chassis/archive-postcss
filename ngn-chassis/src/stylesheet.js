@@ -10,7 +10,7 @@ class ChassisStylesheet {
 
 	get css () {
 		this.tree.walkAtRules('chassis', (atRule) => this.processAtRule(atRule))
-		this.unnest()
+		this.unnest() // cssnext nesting isn't handled correctly
 
 		let output = postcss.parse(this.tree)
 		output.walkRules((rule) => {

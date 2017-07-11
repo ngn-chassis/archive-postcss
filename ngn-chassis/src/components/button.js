@@ -34,7 +34,7 @@ class ChassisButtonComponent extends ChassisComponent {
 		let { atRules, settings, theme, utils } = this.chassis
 		let { rules } = this
 
-		if (settings.supportIe) {
+		if (settings.legacy) {
 			rules.push(atRules.browserMixins.ieOnly({
 				nodes: [
 					utils.css.newRule('button, button:focus, button:active', [

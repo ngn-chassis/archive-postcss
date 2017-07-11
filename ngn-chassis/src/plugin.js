@@ -11,8 +11,6 @@ require('ngn-data')
 
 const postcss = require('postcss')
 const cssnext = require('postcss-cssnext')
-const cssnano = require('cssnano')
-const customProperties = require('postcss-custom-properties')
 const perfectionist = require('perfectionist')
 
 const ChassisAtRules = require('./at-rules.js')
@@ -28,6 +26,14 @@ const ChassisViewport = require('./viewport.js')
 
 class ChassisPostCss {
 	constructor (cfg) {
+		this.cssnextCfg = {
+			features: {
+				customProperties: {
+					variables: {}
+				}
+			}
+		}
+		
 		cfg = this._cleanseCfg(NGN.coalesce(cfg, {}))
 
 		this.utils = ChassisUtilities
@@ -67,9 +73,8 @@ class ChassisPostCss {
 				}
 			})
 			
-			output = cssnext.process(output.toString())
+			output = cssnext(this.cssnextCfg).process(output.toString())
  			output = perfectionist.process(output.toString())
-			// output = customProperties.process(output)
 			
 			result.root = postcss.parse(output)
 		}
@@ -80,6 +85,16 @@ class ChassisPostCss {
 
 		if (cleansedCfg.hasOwnProperty('componentResetSelectors')) {
 			delete cleansedCfg.componentResetSelectors
+		}
+		
+		if (cleansedCfg.hasOwnProperty('customProperties')) {
+			if (typeof cleansedCfg.customProperties === 'boolean') {
+				this.cssnextCfg.features.customProperties = cleansedCfg.customProperties
+			} else {
+				this.cssnextCfg.features.customProperties.variables = cleansedCfg.customProperties
+			}
+			
+			delete cleansedCfg.customProperties
 		}
 
 		return cleansedCfg
