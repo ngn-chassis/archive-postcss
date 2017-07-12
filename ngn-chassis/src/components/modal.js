@@ -18,7 +18,7 @@ class ChassisModalComponent extends ChassisComponent {
 	get default () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule('chassis-modal', [
+		return utils.css.newRule(this.generateSelectorList(), [
 			...this.getThemeDecls('modal')
 		])
 	}

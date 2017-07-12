@@ -4,11 +4,11 @@ class ChassisTagComponent extends ChassisComponent {
 	constructor	(chassis) {
 		super(chassis)
 		
-		this.states = [
-			'default',
-			'icon',
-			'pill'
-		]
+		this.states = {
+			'default': [''],
+			'icon': [' svg.icon'],
+			'pill': ['.pill']
+		}
 		
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
 		
@@ -29,7 +29,7 @@ class ChassisTagComponent extends ChassisComponent {
 		
 		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
 
-		return utils.css.newRule('.tag', [
+		return utils.css.newRule(this.generateSelectorList(), [
 			utils.css.newDeclObj('display', 'inline-flex'),
 			utils.css.newDeclObj('justify-content', 'center'),
 			utils.css.newDeclObj('align-items', 'center'),
@@ -50,7 +50,7 @@ class ChassisTagComponent extends ChassisComponent {
 		let dimension = `${lineHeightMultiplier * (settings.typography.scaleRatio - 1)}em`
 		let offset = `-${(Math.log(lineHeightMultiplier) / 2) - utils.units.toEms(fontSize / (settings.typography.scaleRatio * 10), fontSize)}em`
 
-		return utils.css.newRule('.tag svg.icon', [
+		return utils.css.newRule(this.generateSelectorList(' svg.icon'), [
 			utils.css.newDeclObj('transform', `translateX(${offset})`),
 			utils.css.newDeclObj('width', dimension),
 			utils.css.newDeclObj('height', dimension),
@@ -64,7 +64,7 @@ class ChassisTagComponent extends ChassisComponent {
 
 		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
 
-		return utils.css.newRule('.pill.tag', [
+		return utils.css.newRule(this.generateSelectorList('.pill'), [
 			utils.css.newDeclObj('padding-left', `${Math.sin(lineHeightMultiplier) / 2}em`),
 			utils.css.newDeclObj('padding-right', `${Math.sin(lineHeightMultiplier) / 2}em`),
 			utils.css.newDeclObj('border-radius', `${lineHeightMultiplier}em`),

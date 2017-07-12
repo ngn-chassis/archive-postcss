@@ -39,6 +39,7 @@ class ChassisComponentMixins {
 	}
 	
 	extend () {
+		let { utils } = this.chassis
 		let { args, atRule, source } = arguments[0]
 		let component = args[0]
 		
@@ -48,9 +49,35 @@ class ChassisComponentMixins {
 			return
 		}
 		
-		// TODO: Add atRule.parent.selector to root component selector list somehow
+		let instance = new this.specs[component](this.chassis)
 		
-		atRule.replaceWith(atRule.nodes)
+		let root = utils.css.newRoot([
+			utils.css.newRule(atRule.parent.selector, atRule.nodes.map((node) => {
+				if (node.type === 'decl') {
+					return node
+				}
+				
+				return
+			}).filter((entry) => entry !== undefined))
+		])
+		
+		atRule.nodes.forEach((node) => {
+			if (node.type === 'rule') {
+				if (!(node.selector in instance)) {
+					// TODO: Add link to proper documentation!
+					console.warn(`[WARNING] Line ${source.line}: Chassis extend mixin cannot accept nested rulesets. Please see documentation for formatting. Discarding...`)
+					node.remove()
+					return
+				}
+				
+				let state = node.selector
+				let selector = instance.generateSelectorList(instance.states[state], [atRule.parent.selector], true)
+				
+				root.append(utils.css.newRule(selector, node.nodes))
+			}
+		})
+		
+		atRule.parent.replaceWith(root)
 	}
 }
 

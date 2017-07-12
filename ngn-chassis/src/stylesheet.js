@@ -17,7 +17,7 @@ class ChassisStylesheet {
 			}
 		})
 		
-		// cssnext nesting isn't handled correctly, so we're short-circuiting it
+		// in cssnext, nesting isn't handled correctly, so we're short-circuiting it
 		// by handling unnesting here
 		this.unnest()
 		
@@ -34,6 +34,7 @@ class ChassisStylesheet {
 		output.walkAtRules('chassis', (atRule) => this.processAtRule(atRule))
 		
 		// Cleanup empty rulesets and prepend .chassis namespace to all selectors
+		// except 'html' and ':root'
 		output.walkRules((rule) => {
 			if (rule.nodes.length === 0) {
 				rule.remove()
@@ -67,6 +68,7 @@ class ChassisStylesheet {
 			atRule
 		}, this.getAtRuleProperties(atRule))
 		
+		// Populate custom selectors to append to default component selector lists
 		if (data.mixin === 'extend') {
 			if (this.chassis.extensions.hasOwnProperty(data.args[0])) {
 				this.chassis.extensions[data.args[0]].push(atRule.parent.selector)

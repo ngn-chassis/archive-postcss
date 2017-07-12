@@ -1,6 +1,25 @@
 const postcss = require('postcss')
 
 class ChassisCssUtils {
+	static mergeDecls (originalDecls, newDecls) {
+		let finalDecls = originalDecls
+		
+		newDecls.forEach((newDecl) => {
+			let index = originalDecls.findIndex((originalDecl) => {
+				return originalDecl.prop === newDecl.prop
+			})
+			
+			if (index) {
+				finalDecls[index] = newDecl
+				return
+			}
+			
+			finalDecls.push(newDecl)
+		})
+		
+		return finalDecls
+	}
+	
 	/**
 	 * @method newAtRule
 	 * Generate new postcss at-rule AST

@@ -6,17 +6,17 @@ class ChassisButtonComponent extends ChassisComponent {
 
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
 
-		this.states = [
-			'default',
-			'visited',
-			'hover',
-			'active',
-			'disabled',
-			'focus',
-			'icon',
-			'pill',
-			'multi-line'
-		]
+		this.states = {
+			'default': [''],
+			'visited': [':visited'],
+			'hover': [':hover'],
+			'active': [':active'],
+			'disabled': ['[disabled]', '.disabled'],
+			'focus': [':focus'],
+			'icon': [' svg.icon'],
+			'pill': ['.pill'],
+			'multi-line': ['.multi-line']
+		}
 
 		this.variants = {
 			'class': '.button',
@@ -58,7 +58,7 @@ class ChassisButtonComponent extends ChassisComponent {
 		
 		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
 
-		return utils.css.newRule(this.generateSelectorList(), [
+		return utils.css.newRule(this.generateSelectorList(this.states.default), [
 			utils.css.newDeclObj('display', 'inline-flex'),
 			utils.css.newDeclObj('justify-content', 'center'),
 			utils.css.newDeclObj('align-items', 'center'),
@@ -77,7 +77,7 @@ class ChassisButtonComponent extends ChassisComponent {
 	get visited () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule(this.generateSelectorList(null, ':visited'), [
+		return utils.css.newRule(this.generateSelectorList(this.states.visited), [
 			...this.getThemeDecls('button.visited')
 		])
 	}
@@ -85,7 +85,7 @@ class ChassisButtonComponent extends ChassisComponent {
 	get hover () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule(this.generateSelectorList(null, ':hover'), [
+		return utils.css.newRule(this.generateSelectorList(this.states.hover), [
 			...this.getThemeDecls('button.hover')
 		])
 	}
@@ -93,7 +93,7 @@ class ChassisButtonComponent extends ChassisComponent {
 	get active () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule(this.generateSelectorList(null, ':active'), [
+		return utils.css.newRule(this.generateSelectorList(this.states.active), [
 			...this.getThemeDecls('button.active')
 		])
 	}
@@ -101,7 +101,7 @@ class ChassisButtonComponent extends ChassisComponent {
 	get disabled () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule(`${this.generateSelectorList(null, '[disabled]')}, ${this.generateSelectorList(null, '.disabled')}`, [
+		return utils.css.newRule(`${this.generateSelectorList(this.states.disabled[0])}, ${this.generateSelectorList(this.states.disabled[1])}`, [
 			utils.css.newDeclObj('pointer-events', 'none'),
 			...this.getThemeDecls('button.disabled')
 		])
@@ -110,7 +110,7 @@ class ChassisButtonComponent extends ChassisComponent {
 	get focus () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule(this.generateSelectorList(null, ':focus'), [
+		return utils.css.newRule(this.generateSelectorList(this.states.focus), [
 			...this.getThemeDecls('button.focus')
 		])
 	}
@@ -122,7 +122,7 @@ class ChassisButtonComponent extends ChassisComponent {
 		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
 		let offset = `-${(typography.calculateInlinePaddingX(lineHeightMultiplier) / 2) - utils.units.toEms(fontSize / (settings.typography.scaleRatio * 10), fontSize)}em`
 
-		return utils.css.newRule(this.generateSelectorList(null, ' svg.icon'), [
+		return utils.css.newRule(this.generateSelectorList(this.states.icon), [
 			utils.css.newDeclObj('transform', `translateX(${offset})`),
 			...this.getThemeDecls('button.icon')
 		])
@@ -134,7 +134,7 @@ class ChassisButtonComponent extends ChassisComponent {
 
 		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
 
-		return utils.css.newRule(this.generateSelectorList(null, '.pill'), [
+		return utils.css.newRule(this.generateSelectorList(this.states.pill), [
 			utils.css.newDeclObj('padding-left', `${settings.typography.scaleRatio}em`),
 			utils.css.newDeclObj('padding-right', `${settings.typography.scaleRatio}em`),
 			utils.css.newDeclObj('border-radius', `${lineHeightMultiplier}em`),
@@ -151,7 +151,7 @@ class ChassisButtonComponent extends ChassisComponent {
 
 		let padding = (inlineHeight - lineHeightMultiplier) / 2
 
-		return utils.css.newRule(this.generateSelectorList(null, '.multi-line'), [
+		return utils.css.newRule(this.generateSelectorList(this.states['multi-line']), [
 			utils.css.newDeclObj('padding-top', `${padding}em`),
 			utils.css.newDeclObj('padding-bottom', `${padding}em`),
 			utils.css.newDeclObj('line-height', `${lineHeightMultiplier}`),

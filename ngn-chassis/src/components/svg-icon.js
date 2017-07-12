@@ -7,7 +7,7 @@ class ChassisSvgIconComponent extends ChassisComponent {
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
 		
 		this.selectors = ['svg.icon']
-		this.extensions = NGN.coalesce(chassis.extensions.link, null)
+		this.extensions = NGN.coalesce(chassis.extensions.icon, null)
 	}
 
 	get css () {
@@ -23,7 +23,7 @@ class ChassisSvgIconComponent extends ChassisComponent {
 		
 		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
 
-		return utils.css.newRule('svg.icon', [
+		return utils.css.newRule(this.generateSelectorList(), [
 			utils.css.newDeclObj('width', 'auto'),
 			utils.css.newDeclObj('height', `${lineHeightInEms}em`),
 			utils.css.newDeclObj('vertical-align', 'middle'),
