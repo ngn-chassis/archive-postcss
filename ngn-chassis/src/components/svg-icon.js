@@ -1,20 +1,18 @@
 const ChassisComponent = require('../component')
 
 class ChassisSvgIconComponent extends ChassisComponent {
-	constructor	(chassis, cfg) {
+	constructor	(chassis) {
 		super(chassis)
-
-		this.chassis = chassis
-		this.cfg = cfg || null
 		
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
+		
+		this.selectors = ['svg.icon']
+		this.extensions = NGN.coalesce(chassis.extensions.link, null)
 	}
 
 	get css () {
 		let { settings, utils } = this.chassis
 		let { rules } = this
-
-		settings.componentResetSelectors.push('.icon')
 
 		return utils.css.newRoot(rules)
 	}

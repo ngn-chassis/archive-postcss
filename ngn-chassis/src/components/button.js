@@ -1,11 +1,8 @@
 const ChassisComponent = require('../component')
 
 class ChassisButtonComponent extends ChassisComponent {
-	constructor	(chassis, cfg) {
+	constructor	(chassis) {
 		super(chassis)
-
-		this.chassis = chassis
-		this.cfg = cfg || null // TODO: use this for extending components
 
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
 
@@ -25,10 +22,12 @@ class ChassisButtonComponent extends ChassisComponent {
 			'class': '.button',
 			'tag': 'button'
 		}
+		
+		// TODO: Use this to determine which reset to use
+		this.type = 'inline-block'
+		this.selectors = ['.button', 'button']
+		this.extensions = NGN.coalesce(chassis.extensions.button, null)
 	}
-
-	// TODO:
-	// - figure out what to do about multi-line buttons
 
 	get css () {
 		let { atRules, settings, theme, utils } = this.chassis
@@ -50,18 +49,16 @@ class ChassisButtonComponent extends ChassisComponent {
 			}))
 		}
 
-		settings.componentResetSelectors.push('.button, button')
-
 		return utils.css.newRoot(rules)
 	}
 
 	get default () {
 		let { typography, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
-
+		
 		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
 
-		return utils.css.newRule('.button, button', [
+		return utils.css.newRule(this.generateSelectorList(), [
 			utils.css.newDeclObj('display', 'inline-flex'),
 			utils.css.newDeclObj('justify-content', 'center'),
 			utils.css.newDeclObj('align-items', 'center'),
@@ -80,7 +77,7 @@ class ChassisButtonComponent extends ChassisComponent {
 	get visited () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule('.button:visited, button:visited', [
+		return utils.css.newRule(this.generateSelectorList(null, ':visited'), [
 			...this.getThemeDecls('button.visited')
 		])
 	}
@@ -88,7 +85,7 @@ class ChassisButtonComponent extends ChassisComponent {
 	get hover () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule('.button:hover, button:hover', [
+		return utils.css.newRule(this.generateSelectorList(null, ':hover'), [
 			...this.getThemeDecls('button.hover')
 		])
 	}
@@ -96,7 +93,7 @@ class ChassisButtonComponent extends ChassisComponent {
 	get active () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule('.button:active, button:active', [
+		return utils.css.newRule(this.generateSelectorList(null, ':active'), [
 			...this.getThemeDecls('button.active')
 		])
 	}
@@ -104,7 +101,7 @@ class ChassisButtonComponent extends ChassisComponent {
 	get disabled () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule('.button[disabled], button[disabled], .disabled.button, button.disabled', [
+		return utils.css.newRule(`${this.generateSelectorList(null, '[disabled]')}, ${this.generateSelectorList(null, '.disabled')}`, [
 			utils.css.newDeclObj('pointer-events', 'none'),
 			...this.getThemeDecls('button.disabled')
 		])
@@ -113,7 +110,7 @@ class ChassisButtonComponent extends ChassisComponent {
 	get focus () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule('.button:focus, button:focus', [
+		return utils.css.newRule(this.generateSelectorList(null, ':focus'), [
 			...this.getThemeDecls('button.focus')
 		])
 	}
@@ -125,7 +122,7 @@ class ChassisButtonComponent extends ChassisComponent {
 		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
 		let offset = `-${(typography.calculateInlinePaddingX(lineHeightMultiplier) / 2) - utils.units.toEms(fontSize / (settings.typography.scaleRatio * 10), fontSize)}em`
 
-		return utils.css.newRule('.button svg.icon, button svg.icon', [
+		return utils.css.newRule(this.generateSelectorList(null, ' svg.icon'), [
 			utils.css.newDeclObj('transform', `translateX(${offset})`),
 			...this.getThemeDecls('button.icon')
 		])
@@ -137,7 +134,7 @@ class ChassisButtonComponent extends ChassisComponent {
 
 		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
 
-		return utils.css.newRule('.pill.button, button.pill', [
+		return utils.css.newRule(this.generateSelectorList(null, '.pill'), [
 			utils.css.newDeclObj('padding-left', `${settings.typography.scaleRatio}em`),
 			utils.css.newDeclObj('padding-right', `${settings.typography.scaleRatio}em`),
 			utils.css.newDeclObj('border-radius', `${lineHeightMultiplier}em`),
@@ -154,7 +151,7 @@ class ChassisButtonComponent extends ChassisComponent {
 
 		let padding = (inlineHeight - lineHeightMultiplier) / 2
 
-		return utils.css.newRule('.multi-line.button , button.multi-line', [
+		return utils.css.newRule(this.generateSelectorList(null, '.multi-line'), [
 			utils.css.newDeclObj('padding-top', `${padding}em`),
 			utils.css.newDeclObj('padding-bottom', `${padding}em`),
 			utils.css.newDeclObj('line-height', `${lineHeightMultiplier}`),

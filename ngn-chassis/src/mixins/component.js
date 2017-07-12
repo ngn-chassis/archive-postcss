@@ -39,7 +39,18 @@ class ChassisComponentMixins {
 	}
 	
 	extend () {
-		console.log(`extending`);
+		let { args, atRule, source } = arguments[0]
+		let component = args[0]
+		
+		if (!this._componentExists(component)) {
+			console.warn(`[WARNING] Line ${source.line}: Extensible component "${component}" not found. Discarding...`)
+			atRule.remove()
+			return
+		}
+		
+		// TODO: Add atRule.parent.selector to root component selector list somehow
+		
+		atRule.replaceWith(atRule.nodes)
 	}
 }
 

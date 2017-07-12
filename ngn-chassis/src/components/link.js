@@ -1,11 +1,8 @@
 const ChassisComponent = require('../component')
 
 class ChassisLinkComponent extends ChassisComponent {
-	constructor	(chassis, cfg) {
+	constructor	(chassis) {
 		super(chassis)
-
-		this.chassis = chassis
-		this.cfg = cfg || null
 
 		this.states = [
 			'default',
@@ -15,13 +12,20 @@ class ChassisLinkComponent extends ChassisComponent {
 			'disabled',
 			'focus'
 		]
+		
+		this.selectors = ['a']
+		this.extensions = NGN.coalesce(chassis.extensions.link, null)
+		
+		this.blacklist = ['.button']
+		
+		if (chassis.extensions.hasOwnProperty('button')) {
+			this.blacklist = [...this.blacklist, ...chassis.extensions.button]
+		}
 	}
 
 	get css () {
 		let { settings, utils } = this.chassis
 		let { rules } = this
-
-		settings.componentResetSelectors.push('a')
 
 		return utils.css.newRoot(rules)
 	}
@@ -29,7 +33,7 @@ class ChassisLinkComponent extends ChassisComponent {
 	get default () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule('a:not(.button)', [
+		return utils.css.newRule(this.generateSelectorList(), [
 			...this.getThemeDecls('a')
 		])
 	}
@@ -37,7 +41,7 @@ class ChassisLinkComponent extends ChassisComponent {
 	get visited () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule('a:visited:not(.button)', [
+		return utils.css.newRule(this.generateSelectorList(null, ':visited'), [
 			...this.getThemeDecls('a.visited')
 		])
 	}
@@ -45,7 +49,7 @@ class ChassisLinkComponent extends ChassisComponent {
 	get hover () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule('a:hover:not(.button)', [
+		return utils.css.newRule(this.generateSelectorList(null, ':hover'), [
 			...this.getThemeDecls('a.hover')
 		])
 	}
@@ -53,7 +57,7 @@ class ChassisLinkComponent extends ChassisComponent {
 	get active () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule('a:active:not(.button)', [
+		return utils.css.newRule(this.generateSelectorList(null, ':active'), [
 			...this.getThemeDecls('a.active')
 		])
 	}
@@ -61,7 +65,7 @@ class ChassisLinkComponent extends ChassisComponent {
 	get disabled () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule('a[disabled]:not(.button), a.disabled:not(.button)', [
+		return utils.css.newRule(`${this.generateSelectorList(null, '[disabled]')}, ${this.generateSelectorList(null, '.disabled')}`, [
 			utils.css.newDeclObj('cursor', 'default'),
 			utils.css.newDeclObj('pointer-events', 'none'),
 			...this.getThemeDecls('a.disabled')
@@ -71,7 +75,7 @@ class ChassisLinkComponent extends ChassisComponent {
 	get focus () {
 		let { utils } = this.chassis
 
-		return utils.css.newRule('a:focus:not(.button)', [
+		return utils.css.newRule(this.generateSelectorList(null, ':focus'), [
 			...this.getThemeDecls('a.focus')
 		])
 	}

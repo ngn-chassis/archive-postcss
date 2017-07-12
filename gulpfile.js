@@ -28,16 +28,7 @@ gulp.task('css', () => {
       // basePath: path.resolve('../')
       theme: path.resolve('./theme.css'),
       // legacy: false,
-      customProperties: {
-        'black': 'rgb(0,0,0)',
-      	'white': 'rgb(255,255,255)',
-      	'red': 'hsl(11,74%,54%)',
-      	'green': 'hsl(89,82%,40%)',
-      	'blue': 'hsl(200,100%,47%)',
-        'yellow': 'hsl(55,100%,64%)',
-      	'font-family': '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, Helvetica, Arial, sans-serif',
-      	'text-color': 'rgb(68,68,68)'
-      },
+      // customProperties: {},
     	layout: {
     		minWidth: 320,
     		maxWidth: 1600

@@ -97,7 +97,7 @@ class ChassisTheme {
 				return
 			}
 
-			console.warn(`[WARNING]: ${this.filename} line ${componentNode.source.start.line}: Chassis Themes do not currently support nodes of type "${componentNode.type}". Discarding...`)
+			console.warn(`[WARNING]: ${this.filename} line ${componentNode.source.start.line}: Chassis Themes do not support nodes of type "${componentNode.type}". Discarding...`)
 		})
 
 		return json
@@ -110,7 +110,7 @@ class ChassisTheme {
 			if (node.type === 'comment') {
 				return
 			} else if (node.type !== 'decl') {
-				console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: Chassis Themes do not support nested rule blocks within component states. Discarding...`)
+				console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: Chassis Themes do not support nested rulesets within component states. Discarding...`)
 				node.remove()
 				return
 			}
@@ -128,7 +128,7 @@ class ChassisTheme {
 			if (node.type === 'comment') {
 				return
 			} else if (node.type !== 'rule') {
-				console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: Invalid Component Variant type "${node.type}". Component Variants must be declared as rule blocks with CSS declarations inside. Discarding...`)
+				console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: Invalid Component Variant type "${node.type}". Component Variants must be declared as rulesets with CSS declarations inside. Discarding...`)
 				node.remove()
 				return
 			}
@@ -183,14 +183,6 @@ class ChassisTheme {
 
 			this.rules.push(rule.selector)
 		})
-		
-		if (this.hasCustomProperties || this.hasRootBlock) {
-			this._resolveCustomProperties()
-		}
-	}
-	
-	_resolveCustomProperties () {
-		this.tree = postcss.parse(customProperties.process(this.tree))
 	}
 }
 

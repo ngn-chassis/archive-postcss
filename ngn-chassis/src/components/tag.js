@@ -1,11 +1,8 @@
 const ChassisComponent = require('../component')
 
 class ChassisTagComponent extends ChassisComponent {
-	constructor	(chassis, cfg) {
+	constructor	(chassis) {
 		super(chassis)
-
-		this.chassis = chassis
-		this.cfg = cfg || null
 		
 		this.states = [
 			'default',
@@ -14,13 +11,14 @@ class ChassisTagComponent extends ChassisComponent {
 		]
 		
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
+		
+		this.selectors = ['.tag']
+		this.extensions = NGN.coalesce(chassis.extensions.tag, null)
 	}
 
 	get css () {
 		let { settings, utils } = this.chassis
 		let { rules } = this
-
-		settings.componentResetSelectors.push('.tag')
 
 		return utils.css.newRoot(rules)
 	}

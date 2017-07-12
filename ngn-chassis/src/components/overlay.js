@@ -1,11 +1,11 @@
 const ChassisComponent = require('../component')
 
 class ChassisOverlayComponent extends ChassisComponent {
-	constructor	(chassis, cfg) {
+	constructor	(chassis) {
 		super(chassis)
-
-		this.chassis = chassis
-		this.cfg = cfg || null
+		
+		this.selectors = ['chassis-overlay']
+		this.extensions = NGN.coalesce(chassis.extensions.overlay, null)
 	}
 
 	get css () {

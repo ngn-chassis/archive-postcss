@@ -22,6 +22,10 @@ class ChassisAtRules {
 	get 'ellipsis' () {
 		return (data) => this.typographyMixins.ellipsis(data)
 	}
+	
+	get 'extend' () {
+		return (data) => this.componentMixins.extend(data)
+	}
 
 	get 'ie-only' () {
 		return (data) => this.browserMixins.ieOnly(data)

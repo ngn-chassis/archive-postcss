@@ -1,7 +1,4 @@
 // TODO:
-// - Figure out what to do about components with multiple element types,
-// ie buttons (.button vs. <button>)
-//
 // - Split component reset into types (inline, block, etc)
 //
 // - Generate custom properties from theme values for each component
@@ -26,14 +23,6 @@ const ChassisViewport = require('./viewport.js')
 
 class ChassisPostCss {
 	constructor (cfg) {
-		this.cssnextCfg = {
-			features: {
-				customProperties: {
-					variables: {}
-				}
-			}
-		}
-		
 		cfg = this._cleanseCfg(NGN.coalesce(cfg, {}))
 
 		this.utils = ChassisUtilities
@@ -54,6 +43,7 @@ class ChassisPostCss {
 		this.layout = new ChassisLayout(this)
 		this.atRules = new ChassisAtRules(this)
 		this.core = new ChassisCore(this)
+		this.extensions = {}
 
 		return this.plugin
 	}
@@ -67,7 +57,10 @@ class ChassisPostCss {
 			output.walkAtRules('chassis-post', (atRule) => {
 				switch (atRule.params) {
 					case 'component-reset':
-						output.insertBefore(atRule, this.utils.css.newRule(this.settings.componentResetSelectorList, atRule.nodes))
+						if (this.settings.componentResetSelectorList.length > 0) {
+							output.insertBefore(atRule, this.utils.css.newRule(this.settings.componentResetSelectorList, atRule.nodes))
+						}
+						
 						output.removeChild(atRule)
 						break
 				}
@@ -82,6 +75,14 @@ class ChassisPostCss {
 
 	_cleanseCfg (cfg) {
 		let cleansedCfg = cfg
+		
+		this.cssnextCfg = {
+			features: {
+				customProperties: {
+					variables: {}
+				}
+			}
+		}
 
 		if (cleansedCfg.hasOwnProperty('componentResetSelectors')) {
 			delete cleansedCfg.componentResetSelectors

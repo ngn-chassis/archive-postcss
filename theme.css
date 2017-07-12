@@ -1,3 +1,15 @@
+custom-properties {
+	--black: rgb(0,0,0);
+	--white: rgb(255,255,255);
+	--red: hsl(11,74%,54%);
+	--green: hsl(89,82%,40%);
+	--blue: hsl(200,100%,47%);
+	--yellow: hsl(55,100%,64%);
+
+	--font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', Avenir, Helvetica, Arial, sans-serif;
+	--text-color: rgb(68,68,68);
+}
+
 body {
 	font-family: var(--font-family);
 	color: var(--text-color);
@@ -35,16 +47,16 @@ a {
 	color: var(--blue);
 
 	hover {
-		color: hsl(200,100%,50%);
+		color: color(var(--blue) lightness(50%));
 		text-decoration: underline;
 	}
 
 	active {
-		color: hsl(200,100%,40%);
+		color: color(var(--blue) lightness(44%));
 	}
 
 	disabled {
-		color: rgb(192,192,192);
+		color: var(--grey-n04);
 		text-decoration: none;
 	}
 }
@@ -55,11 +67,11 @@ button {
 	color: var(--white);
 
 	hover {
-		background: hsl(200,100%,50%);
+		background: color(var(--blue) lightness(50%));
 	}
 
 	active {
-		background: hsl(200,100%,44%);
+		background: color(var(--blue) lightness(44%));
 	}
 
 	disabled {
