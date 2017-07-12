@@ -63,16 +63,16 @@ class ChassisComponentMixins {
 		
 		atRule.nodes.forEach((node) => {
 			if (node.type === 'rule') {
-				if (!(node.selector in instance)) {
+				let state = node.selector
+				
+				if (!(state in instance)) {
 					// TODO: Add link to proper documentation!
 					console.warn(`[WARNING] Line ${source.line}: Chassis extend mixin cannot accept nested rulesets. Please see documentation for formatting. Discarding...`)
 					node.remove()
 					return
 				}
 				
-				let state = node.selector
 				let selector = instance.generateSelectorList(instance.states[state], [atRule.parent.selector], true)
-				
 				root.append(utils.css.newRule(selector, node.nodes))
 			}
 		})

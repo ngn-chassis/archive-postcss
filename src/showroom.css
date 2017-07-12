@@ -99,20 +99,6 @@
 	& .content {
 		flex: 1 1 76.4%;
 
-		& .extended {
-			@chassis extend button {
-				background: var(--green);
-				
-				hover {
-					background: color(var(--green) lightness(44%));
-				}
-				
-				active {
-					background: color(var(--green) lightness(37%));
-				}
-			}
-		}
-
 		& > section {
 			& section header {
 				margin-bottom: 1em;
@@ -128,7 +114,7 @@
 				}
 			}
 			
-			&.components {
+			&.ui-components {
 				& .buttons {
 					& .extended {
 						@chassis extend button {
