@@ -63,7 +63,7 @@
             </section>
           </section>
         </section>
-        
+
         <section id="layout">
           <header>
             <h2>Layout</h2>
@@ -128,7 +128,7 @@
             </section>
           </section>
         </section>
-        
+
         <section id="components">
           <header>
             <h2>UI Component Mixins</h2>
@@ -160,7 +160,7 @@
             </section>
           </section>
         </section>
-        
+
         <section class="ui-components">
           <h2>Built-in UI Components</h2>
           <section class="links">
@@ -181,29 +181,53 @@
                 Chassis' default button component has calculated margin, padding, line-height values by default, so its proportions will be correct to your base typography rules.
               </p>
             </header>
-            <a class="button" href="#">
-              <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="8" r="7"></circle>
-                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-              </svg>
-              Button Class
-            </a>
-            <a class="pill button" href="#">
-              <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="8" r="7"></circle>
-                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-              </svg>
-              Pill Button
-            </a>
-            <button>Button Tag</button>
-            <br>
-            <a class="multi-line button" href="#">
-              "multi-line" class allows button text to wrap
-            </a>
-            
-            <a class="extended" href="#">
-              Button component extension
-            </a>
+            <section class="default">
+              <code class="example">
+                &lt;a class="button" href="#"&gt;Default Button&lt;/a&gt;<br>
+                &lt;button&gt;Button Tag&lt;/button&gt;
+              </code>
+              <a class="button" href="#">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="8" r="7"></circle>
+                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                </svg>
+                Default Button
+              </a>
+              <button>Button Tag</button>
+            </section>
+
+            <section class="pill">
+              <code class="example">&lt;a class="pill button" href="#"&gt;Pill Button&lt;/a&gt;</code>
+              <a class="pill button" href="#">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="8" r="7"></circle>
+                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                </svg>
+                Pill Button
+              </a>
+            </section>
+
+            <section class="multi-line">
+              <code class="example">&lt;a class="multi-line button" href="#"&gt;Button with text wrap&lt;/a&gt;</code>
+              <a class="multi-line button" href="#">
+                "multi-line" class allows button text to wrap when it is too wide
+              </a>
+            </section>
+
+            <section class="variations">
+              <code class="example">
+                &lt;a class="custom" href="#"&gt;Custom Button&lt;/a&gt;
+              </code>
+              <a class="custom-1" href="#">
+                Custom Button
+              </a>
+              <a class="custom-2" href="#">
+                Custom Button
+              </a>
+              <a class="custom-3" href="#">
+                Custom Button
+              </a>
+            </section>
           </section>
           <section class="tags">
             <header>

@@ -5,67 +5,67 @@ class ChassisComponent {
 	constructor (chassis) {
 		this.chassis = chassis
 	}
-	
+
 	get rules () {
 		let { settings } = this.chassis
-		
+
 		settings.componentResetSelectors = [
 			...settings.componentResetSelectors,
 			...this.selectors,
 		]
-		
+
 		if (this.extensions) {
 			settings.componentResetSelectors = [
 				...settings.componentResetSelectors,
 				...this.extensions,
 			]
 		}
-		
+
 		if (this.states) {
 			return Object.keys(this.states).map((state) => {
 				let rule = this[state]
-				
+
 				if (rule.nodes.length > 0) {
 					return rule
 				}
 			}).filter((rule) => rule !== undefined)
 		}
-		
+
 		return this.default && this.default.nodes.length > 0 ? [this.default] : null
 	}
-	
+
 	getThemeDecls (state) {
 		let { theme, utils } = this.chassis
 		let decls = theme.getComponentProperties(state)
-		
+
 		if (decls) {
 			return Object.keys(decls).map((decl) => utils.css.newDeclObj(decl, decls[decl]))
 		}
-		
+
 		return []
 	}
-	
+
 	_decorateSelector (selector, decorators) {
 		if (decorators) {
 			if (Array.isArray(decorators)) {
 				selector = decorators.map((decorator) => {
 					return `${selector}${decorator}`
 				}).join(', ')
-				
+
 			} else {
 				selector = `${selector}${decorators}`
 			}
 		}
-		
+
 		if (this.hasOwnProperty('blacklist')) {
 			let blacklisted = []
-			
+
 			this.blacklist.forEach((item) => {
 				if (item.includes(' ')) {
 					let arr = item.split(' ')
 					item = arr.pop()
 				}
-				
+
 				if (!blacklisted.includes(item)) {
 					blacklisted.push(item)
 					selector = `${selector}:not(${item})`
@@ -75,23 +75,23 @@ class ChassisComponent {
 
 		return selector
 	}
-	
+
 	generateSelectorList (decorators, selectors = this.selectors, extending = false) {
 		if (!extending) {
 			selectors = this.extensions ? [...selectors, ...this.extensions] : selectors
 		}
-		
+
 		return selectors.map((selector) => {
 			if (selector.includes(' ')) {
 				let arr = selector.split(' ')
 				let firstMatch = arr.pop()
-				
+
 				arr.push(this._decorateSelector(firstMatch, decorators))
 				return arr.join(' ')
 			}
-			
+
 			return this._decorateSelector(selector, decorators)
-			
+
 		}).join(', ')
 	}
 }

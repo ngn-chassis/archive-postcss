@@ -5,12 +5,20 @@
 	...
 }
 
-- make separate component reset blocks for different box-models. This will
-minimize the amount of incompatible style rules on different types of elements
-versus using a shared component reset.
-
 - image replacement mixin
 - maybe some flexbox mixins if they can be done elegantly
 - maybe some helper mixins for responsive embeds
 - screenreader helpers
 - add disabled states to all form controls
+
+
+COMPONENT RESET
+- make separate component reset blocks for different box-models. This will
+  minimize the amount of incompatible style rules on different types of elements
+  versus using a shared component reset.
+
+- blacklist method for <a> isn't going to work since if too many items
+  get added to the blacklist, the specificity gets too high and overwrites
+	intended styling. Maybe try fleshing out the component reset to handle
+	different states of that use <a> tags. Check the <a> theme and be sure to
+	any of its state properties on buttons and any other applicable components.
