@@ -15,8 +15,12 @@ class ChassisSettings extends NGN.EventEmitter {
 
 			fields: {
 				componentResetSelectors: {
-					type: Array,
-					default: []
+					type: Object,
+					default: {
+						'inline': [],
+						'inline-block': [],
+						'block': []
+					}
 				},
 
 				plugins: {
@@ -64,18 +68,22 @@ class ChassisSettings extends NGN.EventEmitter {
 			},
 
 			virtuals: {
-				componentResetSelectorList () {
-					let selectors = this.componentResetSelectors.map((selectorString) => {
-						selectorString = `.chassis ${selectorString.trim()}`
-
-						if (selectorString.includes(',')) {
-							return selectorString.split(',').map((selector) => selector.trim()).join(', .chassis ')
-						}
-
-						return selectorString
-					})
-
-					return selectors.join(', ')
+				componentResetSelectorLists () {
+					let selectors = {}
+					
+					for (let list in this.componentResetSelectors) {
+						selectors[list] = this.componentResetSelectors[list].map((selectorString) => {
+							selectorString = `.chassis ${selectorString.trim()}`
+							
+							if (selectorString.includes(',')) {
+								return selectorString.split(',').map((selector) => selector.trim()).join(', .chassis ')
+							}
+						
+							return selectorString
+						}).join(', ')
+					}
+					
+					return selectors
 				}
  			}
 		})

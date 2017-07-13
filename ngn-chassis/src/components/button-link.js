@@ -16,7 +16,7 @@ class ChassisButtonLinkComponent extends ChassisComponent {
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
 	}
 	
-	_getLinkOverrides (state) {
+	_generateLinkOverrides (state) {
 		let { linkOverrides, utils } = this.chassis
 	
 		let globalLinkOverrides = linkOverrides.find((decl) => {
@@ -43,7 +43,7 @@ class ChassisButtonLinkComponent extends ChassisComponent {
 	
 		// If both link.${state} AND button.default themes include a property,
 		// AND it is not already included in the button.${state} theme, add this override:
-		// property: default button value;
+		// property: button.default value;
 		if (commonProps.length > 0) {
 			let defaultDecls = commonProps.map((prop) => {
 				return stateTheme.find((decl) => decl.prop === prop)
@@ -51,10 +51,6 @@ class ChassisButtonLinkComponent extends ChassisComponent {
 	
 			overrides.push(...defaultDecls)
 		}
-	
-		// UNLESS extending a button, in which case use this override
-		// property: extended button default state value;
-		// TODO
 	
 		// If a property is included in link.${state} theme but not default button theme,
 		// AND it is not already included in the button.${state} theme,
@@ -112,23 +108,23 @@ class ChassisButtonLinkComponent extends ChassisComponent {
 			utils.css.newDeclObj('white-space', 'nowrap'),
 			utils.css.newDeclObj('cursor', 'pointer'),
 			utils.css.newDeclObj('user-select', 'none'),
-			...this._getLinkOverrides('default')
+			...this._generateLinkOverrides('default')
 		]
 	}
 
 	get visited () {
 		let { utils } = this.chassis
-		return [...this._getLinkOverrides('visited')]
+		return [...this._generateLinkOverrides('visited')]
 	}
 	
 	get hover () {
 		let { utils } = this.chassis
-		return [...this._getLinkOverrides('hover')]
+		return [...this._generateLinkOverrides('hover')]
 	}
 	
 	get active () {
 		let { utils } = this.chassis
-		return [...this._getLinkOverrides('active')]
+		return [...this._generateLinkOverrides('active')]
 	}
 	
 	get disabled () {
@@ -136,13 +132,13 @@ class ChassisButtonLinkComponent extends ChassisComponent {
 	
 		return [
 			utils.css.newDeclObj('pointer-events', 'none'),
-			...this._getLinkOverrides('disabled')
+			...this._generateLinkOverrides('disabled')
 		]
 	}
 	
 	get focus () {
 		let { utils } = this.chassis
-		return [...this._getLinkOverrides('focus')]
+		return [...this._generateLinkOverrides('focus')]
 	}
 	
 	get icon () {
@@ -154,7 +150,7 @@ class ChassisButtonLinkComponent extends ChassisComponent {
 	
 		return [
 			utils.css.newDeclObj('transform', `translateX(${offset})`),
-			...this._getLinkOverrides('icon')
+			...this._generateLinkOverrides('icon')
 		]
 	}
 	
@@ -168,7 +164,7 @@ class ChassisButtonLinkComponent extends ChassisComponent {
 			utils.css.newDeclObj('padding-left', `${settings.typography.scaleRatio}em`),
 			utils.css.newDeclObj('padding-right', `${settings.typography.scaleRatio}em`),
 			utils.css.newDeclObj('border-radius', `${lineHeightMultiplier}em`),
-			...this._getLinkOverrides('pill')
+			...this._generateLinkOverrides('pill')
 		]
 	}
 	
@@ -185,7 +181,7 @@ class ChassisButtonLinkComponent extends ChassisComponent {
 			utils.css.newDeclObj('padding-bottom', `${padding}em`),
 			utils.css.newDeclObj('line-height', `${lineHeightMultiplier}`),
 			utils.css.newDeclObj('white-space', 'normal'),
-			...this._getLinkOverrides('multi-line')
+			...this._generateLinkOverrides('multi-line')
 		]
 	}
 }

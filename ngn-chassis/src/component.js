@@ -1,3 +1,7 @@
+// TODO:
+// - Figure out which properties to apply to different component reset types
+// - Generate custom properties from theme values for each component
+
 class ChassisComponent {
 	constructor (chassis, theme, selectors, states, extensions, resetType) {
 		this.chassis = chassis
@@ -16,10 +20,10 @@ class ChassisComponent {
 	get rules () {
 		let { settings, utils } = this.chassis
 
-		settings.componentResetSelectors.push(...this.selectors)
-
+		settings.componentResetSelectors[this.resetType].push(...this.selectors)
+		
 		if (this.extensions) {
-			settings.componentResetSelectors.push(...this.extensions)
+			settings.componentResetSelectors[this.resetType].push(...this.extensions)
 		}
 
 		if (this.states) {

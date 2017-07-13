@@ -1,8 +1,3 @@
-// TODO:
-// - Split component reset into types (inline, block, etc)
-//
-// - Generate custom properties from theme values for each component
-
 require('ngn')
 require('ngn-data')
 
@@ -53,6 +48,10 @@ class ChassisPostCss {
 
 		return this.plugin
 	}
+	
+	_generateComponentResetSelectorList (type) {
+		
+	}
 
 	get plugin () {
 		// this.utils.console.printTree(this.settings.data)
@@ -61,10 +60,15 @@ class ChassisPostCss {
 			let output = this.core.css.append(new ChassisStylesheet(this, root).css)
 			
 			output.walkAtRules('chassis-post', (atRule) => {
-				switch (atRule.params) {
+				let args = atRule.params.split(' ')
+				let mixin = args[0]
+				
+				switch (mixin) {
 					case 'component-reset':
-						if (this.settings.componentResetSelectorList.length > 0) {
-							output.insertBefore(atRule, this.utils.css.newRule(this.settings.componentResetSelectorList, atRule.nodes))
+						let list = this.settings.componentResetSelectorLists[args[1]]
+					
+						if (list.length > 0) {
+							output.insertBefore(atRule, this.utils.css.newRule(list, atRule.nodes))
 						}
 						
 						output.removeChild(atRule)

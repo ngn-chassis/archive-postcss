@@ -1,32 +1,18 @@
-- Add ability to declare color and other variables in theme file
-
-- maybe allow extension of component states as well as full components:
-@chassis extend button.pill {
-	...
-}
-
 - image replacement mixin
 - maybe some flexbox mixins if they can be done elegantly
 - maybe some helper mixins for responsive embeds
 - screenreader helpers
 - add disabled states to all form controls
 
-
 COMPONENT RESET
 - make separate component reset blocks for different box-models. This will
   minimize the amount of incompatible style rules on different types of elements
   versus using a shared component reset.
 
-- blacklist method for <a> isn't going to work since if too many items
-  get added to the blacklist, the specificity gets too high and overwrites
-	intended styling. Maybe try fleshing out the component reset to handle
-	different states of that use <a> tags. Check the <a> theme and be sure to
-	any of its state properties on buttons and any other applicable components.
-	
-
 COMPONENT EXTENSION
-- @chassis extend [component] {...} applies default theme variables
-- @chassis new [component] {...} starts from scratch
+- consider ways of combining rulesets to shrink the size of the css
 
-!! The above means that the theme variables will have to be applied on separate
-rulesets from the base structural styles
+- maybe allow extension of component states as well as full components:
+@chassis extend button.pill {
+	...
+}

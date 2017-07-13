@@ -26,7 +26,9 @@ class ChassisCore {
 			this.innerContainers,
 			this.paragraph,
 			this.typographyRanges,
-			this.componentReset
+			this.inlineComponentReset,
+			this.inlineBlockComponentReset,
+			this.blockComponentReset
 		])
 	}
 
@@ -324,13 +326,33 @@ class ChassisCore {
 		])
 	}
 
-	get componentReset () {
+	get inlineComponentReset () {
 		let { utils } = this.chassis
 
 		return utils.css.newAtRule({
 			name: 'chassis-post',
-			params: 'component-reset',
-			nodes: utils.files.parseStylesheet('../stylesheets/component-reset.css').nodes
+			params: 'component-reset inline',
+			nodes: utils.files.parseStylesheet('../stylesheets/inline-component-reset.css').nodes
+		})
+	}
+	
+	get inlineBlockComponentReset () {
+		let { utils } = this.chassis
+
+		return utils.css.newAtRule({
+			name: 'chassis-post',
+			params: 'component-reset inline-block',
+			nodes: utils.files.parseStylesheet('../stylesheets/inline-block-component-reset.css').nodes
+		})
+	}
+	
+	get blockComponentReset () {
+		let { utils } = this.chassis
+
+		return utils.css.newAtRule({
+			name: 'chassis-post',
+			params: 'component-reset block',
+			nodes: utils.files.parseStylesheet('../stylesheets/block-component-reset.css').nodes
 		})
 	}
 
