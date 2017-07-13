@@ -36,24 +36,6 @@ class ChassisButtonLinkComponent extends ChassisComponent {
 			return uniqueLinkProps.map((prop) => utils.css.newDeclObj(prop, 'unset'))
 		}
 	
-		console.log('--- ' + state.toUpperCase() + ' STATE ---');
-		console.log(state.toUpperCase() + ' LINK THEME:');
-		console.log(linkDecls);
-		console.log('DEFAULT BUTTON THEME');
-		console.log(defaultTheme);
-		console.log(state.toUpperCase() + ' BUTTON THEME');
-		console.log(stateTheme);
-		console.log('---');
-		console.log(`If both ${state} link AND default button themes include a property,`);
-		console.log(`AND it is not already included in the ${state} button theme, add this override:`);
-		console.log(`property: default button value;`);
-		console.log('UNLESS extending a button, in which case use this override');
-		console.log(`property: extended button default state value;`);
-		console.log('---');
-		console.log(`If a property is included in ${state} link theme but not default button theme,`);
-		console.log(`AND it is not already included in the ${state} button theme,`);
-		console.log(`unset it in ${state} button theme`);
-	
 		let overrides = []
 		
 		// Props common between Link Component State and Default Button Component
@@ -84,6 +66,8 @@ class ChassisButtonLinkComponent extends ChassisComponent {
 				return !stateTheme.some((decl) => decl.prop === prop)
 			})
 			
+			// Check for properties in the default theme which should be applied
+			// instead of unsetting the property, and if present, add them to overrides
 			let indexesToRemove = []
 			
 			unset.forEach((prop, index) => {
@@ -95,6 +79,7 @@ class ChassisButtonLinkComponent extends ChassisComponent {
 				}
 			})
 			
+			// Remove properties from unset if they are already present in the default theme
 			indexesToRemove.forEach((index) => {
 				unset.splice(index, 1)
 			})
@@ -105,11 +90,6 @@ class ChassisButtonLinkComponent extends ChassisComponent {
 				}))
 			}
 		}
-	
-		console.log('\n---');
-		console.log('FINAL OUTPUT');
-		console.log(overrides);
-		console.log('\n');
 	
 		return overrides
 	}
