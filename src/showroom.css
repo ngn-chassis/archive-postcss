@@ -4,18 +4,7 @@
 	--sidebar-link-border-color: var(--header-border-color);
 }
 
-/*@chassis include button button-link link modal overlay svg-icon tag;*/
-@chassis include button link svg-icon tag;
-
-a.button {
-	@chassis new button {
-		background: var(--green);
-		
-		hover {
-			background: color(var(--red));
-		}
-	}
-}
+@chassis include button button-link link svg-icon tag;
 
 .showroom {
 	padding-bottom: 3.618em;
@@ -128,8 +117,10 @@ a.button {
 			&.ui-components {
 				& .buttons {
 					& .custom-1 {
-						@chassis extend button {
+						@chassis new button {
 							background: var(--green);
+							border-radius: .236em;
+							color: var(--white);
 
 							hover {
 								background: color(var(--green) lightness(42%));
@@ -142,8 +133,9 @@ a.button {
 					}
 
 					& .custom-2 {
-						@chassis extend button {
+						@chassis new button {
 							background: transparent;
+							border-radius: .236em;
 							color: var(--text-color);
 							box-shadow: inset 0 0 0 2px var(--grey-n06);
 
@@ -158,8 +150,9 @@ a.button {
 					}
 
 					& .custom-3 {
-						@chassis extend button {
+						@chassis new button {
 							background: linear-gradient(to bottom, var(--grey-n00) 0%, var(--grey-n03) 100%);
+							border-radius: .236em;
 							color: var(--grey-n09);
 							box-shadow: inset 0 -2px 0 0 var(--grey-n04);
 							text-shadow: 1px 1px 2px var(--white);

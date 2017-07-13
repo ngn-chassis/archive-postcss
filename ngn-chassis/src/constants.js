@@ -26,7 +26,7 @@ class ChassisConstants {
 			},
 			{
 				name: 'button-link',
-				spec: ChassisButtonComponent
+				spec: ChassisButtonLinkComponent
 			},
 			{
 				name: 'tag',

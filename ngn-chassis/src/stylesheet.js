@@ -8,11 +8,11 @@ class ChassisStylesheet {
 	}
 
 	get css () {
-		// Process all but 'include' and 'extend' mixins
+		// Process all but 'include', 'new' and 'extend' mixins
 		// These need to be processed after the unnest operation to properly resolve
 		// nested selectors
 		this.tree.walkAtRules('chassis', (atRule) => {
-			if (!(atRule.params.startsWith('include') || atRule.params.startsWith('extend'))) {
+			if (!(atRule.params.startsWith('include') || atRule.params.startsWith('new') || atRule.params.startsWith('extend'))) {
 				this.processAtRule(atRule)
 			}
 		})
@@ -23,9 +23,9 @@ class ChassisStylesheet {
 		
 		let output = postcss.parse(this.tree)
 		
-		// Process remaining 'extend' mixins
+		// Process remaining 'new' and 'extend' mixins
 		output.walkAtRules('chassis', (atRule) => {
-			if (atRule.params.startsWith('extend')) {
+			if (atRule.params.startsWith('new') || atRule.params.startsWith('extend')) {
 				this.processAtRule(atRule)
 			}
 		})

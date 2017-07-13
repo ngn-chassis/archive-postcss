@@ -45,7 +45,7 @@ legend {
 
 link {
 	color: var(--blue);
-	/*border: 10px solid red;*/
+	border: 10px solid red;
 
 	hover {
 		color: color(var(--blue) lightness(50%));
@@ -63,6 +63,28 @@ link {
 }
 
 button {
+	background: var(--blue);
+	border-radius: .236em;
+	color: var(--white);
+
+	hover {
+		background: color(var(--blue) lightness(50%));
+	}
+
+	active {
+		background: color(var(--blue) lightness(44%));
+	}
+
+	disabled {
+		opacity: .382;
+	}
+
+	icon {
+		stroke: currentColor;
+	}
+}
+
+button-link {
 	background: var(--blue);
 	border-radius: .236em;
 	color: var(--white);
