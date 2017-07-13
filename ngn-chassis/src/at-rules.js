@@ -58,6 +58,22 @@ class ChassisAtRules {
 	get 'z-index' () {
 		return (data) => this.layoutMixins.zIndex(data)
 	}
+	
+	getProperties (atRule) {
+		let params = atRule.params.split(' ')
+		
+		let data = {
+			mixin: params[0],
+			args: params.length > 1 ? params.slice(1) : null,
+			nodes: atRule.nodes || []
+		}
+		
+		if (atRule.hasOwnProperty('source') && atRule.source.hasOwnProperty('start')) {
+			data.source = atRule.source.start
+		}
+
+		return data
+	}
 
 	process (data) {
 		if (data.mixin in this) {

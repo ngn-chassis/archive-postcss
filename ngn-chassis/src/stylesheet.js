@@ -51,22 +51,11 @@ class ChassisStylesheet {
 		return output
 	}
 
-	getAtRuleProperties (atRule) {
-		let params = atRule.params.split(' ')
-
-		return {
-			source: atRule.source.start,
-			mixin: params[0],
-			args: params.length > 1 ? params.slice(1) : null,
-			nodes: atRule.nodes || []
-		}
-	}
-
 	processAtRule (atRule) {
 		let data = Object.assign({
 			root: this.tree,
 			atRule
-		}, this.getAtRuleProperties(atRule))
+		}, this.chassis.atRules.getProperties(atRule))
 		
 		// Populate custom selectors to append to default component selector lists
 		if (data.mixin === 'extend') {

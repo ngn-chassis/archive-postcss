@@ -9,6 +9,7 @@ const ChassisAtRules = require('./at-rules.js')
 const ChassisConstants = require('./constants.js')
 const ChassisCore = require('./core.js')
 const ChassisLayout = require('./layout.js')
+const ChassisPost = require('./post.js')
 const ChassisSettings = require('./settings.js')
 const ChassisStylesheet = require('./stylesheet.js')
 const ChassisTheme = require('./theme.js')
@@ -33,10 +34,11 @@ class ChassisPostCss {
 
 		this.viewport = new ChassisViewport(this)
 		this.settings.viewportWidthRanges.load(this.viewport.getWidthRanges(this.settings.layout.breakpoints))
-
+		
 		this.theme = new ChassisTheme(this)
 		this.layout = new ChassisLayout(this)
 		this.atRules = new ChassisAtRules(this)
+		this.post = new ChassisPost(this)
 		this.core = new ChassisCore(this)
 		this.extensions = {}
 		
@@ -48,10 +50,6 @@ class ChassisPostCss {
 
 		return this.plugin
 	}
-	
-	_generateComponentResetSelectorList (type) {
-		
-	}
 
 	get plugin () {
 		// this.utils.console.printTree(this.settings.data)
@@ -60,20 +58,12 @@ class ChassisPostCss {
 			let output = this.core.css.append(new ChassisStylesheet(this, root).css)
 			
 			output.walkAtRules('chassis-post', (atRule) => {
-				let args = atRule.params.split(' ')
-				let mixin = args[0]
-				
-				switch (mixin) {
-					case 'component-reset':
-						let list = this.settings.componentResetSelectorLists[args[1]]
-					
-						if (list.length > 0) {
-							output.insertBefore(atRule, this.utils.css.newRule(list, atRule.nodes))
-						}
-						
-						output.removeChild(atRule)
-						break
-				}
+				let data = Object.assign({
+					root: this.tree,
+					atRule
+				}, this.atRules.getProperties(atRule))
+			
+				this.post.process(data, output)
 			})
 			
 			output = cssnext(this.cssnextCfg).process(output.toString())
