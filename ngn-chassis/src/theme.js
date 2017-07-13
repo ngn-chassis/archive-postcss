@@ -79,7 +79,7 @@ class ChassisTheme {
 		return this.components.includes(component)
 	}
 	
-	_generateComponentJson (component) {
+	generateComponentJson (component) {
 		let json = {}
 
 		component.nodes.forEach((node) => {
@@ -142,7 +142,7 @@ class ChassisTheme {
 			}
 
 			let variant = node.selector
-			json[variant] = this._generateComponentJson(node)
+			json[variant] = this.generateComponentJson(node)
 		})
 
 		return json
@@ -157,7 +157,7 @@ class ChassisTheme {
 			}
 
 			let componentName = component.selector
-			json[componentName] = this._generateComponentJson(component)
+			json[componentName] = this.generateComponentJson(component)
 		})
 
 		return json

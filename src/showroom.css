@@ -4,11 +4,16 @@
 	--sidebar-link-border-color: var(--header-border-color);
 }
 
-@chassis include button button-link link modal overlay svg-icon tag;
+/*@chassis include button button-link link modal overlay svg-icon tag;*/
+@chassis include button link svg-icon tag;
 
 a.button {
 	@chassis new button {
 		background: var(--green);
+		
+		hover {
+			background: color(var(--red));
+		}
 	}
 }
 

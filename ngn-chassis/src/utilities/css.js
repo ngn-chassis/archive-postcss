@@ -121,10 +121,12 @@ class ChassisCssUtils {
 	 */
 	static newRule (selector, decls = []) {
 		let rule = postcss.rule({selector})
-
-		decls.forEach(decl => {
-			rule.append(postcss.decl(this.newDeclObj(decl.prop, decl.value)))
-		})
+		
+		if (decls.length > 0) {
+			decls.forEach(decl => {
+				rule.append(postcss.decl(this.newDeclObj(decl.prop, decl.value)))
+			})
+		}
 
 		return rule
 	}

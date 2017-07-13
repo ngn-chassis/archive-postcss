@@ -1,14 +1,20 @@
-// TODO:
-// - Handle component variants as component extensions
-
 class ChassisComponent {
-	constructor (chassis, theme) {
+	constructor (chassis, theme, selectors, states, extensions, resetType) {
 		this.chassis = chassis
 		this.theme = NGN.coalesce(theme, null)
+		this.selectors = selectors
+		this.states = states
+		this.extensions = extensions
+		this.resetType = resetType
+	}
+	
+	get css () {
+		let { utils } = this.chassis
+		return utils.css.newRoot(this.rules)
 	}
 
 	get rules () {
-		let { settings } = this.chassis
+		let { settings, utils } = this.chassis
 
 		settings.componentResetSelectors.push(...this.selectors)
 
@@ -17,16 +23,66 @@ class ChassisComponent {
 		}
 
 		if (this.states) {
-			return Object.keys(this.states).map((state) => {
-				let rule = this[state]
+			let rules = Object.keys(this.states).map((state) => {
+				let baseRule = utils.css.newRule(this.generateSelectorList(this.states[state]), this[state])
+				let themeRule = utils.css.newRule(this.generateSelectorList(this.states[state]), this.getThemeDecls(state))
+				let finalOutput = utils.css.newRoot([])
 
-				if (rule.nodes.length > 0) {
-					return rule
+				if (state in this && baseRule.nodes.length > 0) {
+					finalOutput.append(baseRule)
 				}
+				
+				if (themeRule.nodes.length > 0) {
+					finalOutput.append(themeRule)
+				}
+				
+				return finalOutput
 			}).filter((rule) => rule !== undefined)
+			
+			if (settings.legacy && 'legacy' in this) {
+				rules.push(this.legacy)
+			}
+			
+			return rules
+		}
+		
+		
+		
+		return this.default && this.default.nodes.length > 0 ? [this.default] : null
+	}
+	
+	_decorateSelector (selector, decorators) {
+		if (decorators) {
+			if (Array.isArray(decorators)) {
+				selector = decorators.map((decorator) => {
+					return `${selector}${decorator}`
+				}).join(', ')
+
+			} else {
+				selector = `${selector}${decorators}`
+			}
 		}
 
-		return this.default && this.default.nodes.length > 0 ? [this.default] : null
+		return selector
+	}
+	
+	generateSelectorList (decorators, selectors = this.selectors, extending = false) {
+		if (!extending) {
+			selectors = this.extensions ? [...selectors, ...this.extensions] : selectors
+		}
+
+		return selectors.map((selector) => {
+			if (selector.includes(' ')) {
+				let arr = selector.split(' ')
+				let firstMatch = arr.pop()
+
+				arr.push(this._decorateSelector(firstMatch, decorators))
+				return arr.join(' ')
+			}
+
+			return this._decorateSelector(selector, decorators)
+
+		}).join(', ')
 	}
 
 	getThemeDecls (state) {
@@ -63,56 +119,6 @@ class ChassisComponent {
 
 		// console.info(`[INFO] ${this.filename} does not contain theming information for "${component}" component. Using default styles...`)
 		return null
-	}
-
-	_decorateSelector (selector, decorators) {
-		if (decorators) {
-			if (Array.isArray(decorators)) {
-				selector = decorators.map((decorator) => {
-					return `${selector}${decorator}`
-				}).join(', ')
-
-			} else {
-				selector = `${selector}${decorators}`
-			}
-		}
-
-		// if (this.hasOwnProperty('blacklist')) {
-		// 	let blacklisted = []
-		//
-		// 	this.blacklist.forEach((item) => {
-		// 		if (item.includes(' ')) {
-		// 			let arr = item.split(' ')
-		// 			item = arr.pop()
-		// 		}
-		//
-		// 		if (!blacklisted.includes(item)) {
-		// 			blacklisted.push(item)
-		// 			selector = `${selector}:not(${item})`
-		// 		}
-		// 	})
-		// }
-
-		return selector
-	}
-
-	generateSelectorList (decorators, selectors = this.selectors, extending = false) {
-		if (!extending) {
-			selectors = this.extensions ? [...selectors, ...this.extensions] : selectors
-		}
-
-		return selectors.map((selector) => {
-			if (selector.includes(' ')) {
-				let arr = selector.split(' ')
-				let firstMatch = arr.pop()
-
-				arr.push(this._decorateSelector(firstMatch, decorators))
-				return arr.join(' ')
-			}
-
-			return this._decorateSelector(selector, decorators)
-
-		}).join(', ')
 	}
 }
 

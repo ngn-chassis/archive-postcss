@@ -22,7 +22,7 @@ class ChassisComponentMixins {
 			return componentExists
 		})
 		
-		// Order components for correct cascade behavior
+		// Order component includes for correct cascade behavior
 		components.sort((a, b) => {
 		  return this._getIndex(a) > this._getIndex(b) ? 1 : -1;
 		});
@@ -42,7 +42,7 @@ class ChassisComponentMixins {
 	}
 	
 	new () {
-		let { utils } = this.chassis
+		let { theme, utils } = this.chassis
 		let { args, atRule, source } = arguments[0]
 		let name = args[0]
 		
@@ -53,19 +53,9 @@ class ChassisComponentMixins {
 		}
 		
 		let Component = this.get(name)
-		let instance = new Component(this.chassis, {})
+		let component = new Component(this.chassis, theme.generateComponentJson(atRule), [atRule.parent.selector])
 		
-		let root = utils.css.newRoot([
-			utils.css.newRule(atRule.parent.selector, atRule.nodes.map((node) => {
-				if (node.type === 'decl') {
-					return node
-				}
-				
-				return
-			}).filter((entry) => entry !== undefined))
-		])
-		
-		atRule.replaceWith(root)
+		atRule.parent.replaceWith(component.css)
 	}
 	
 	extend () {
@@ -96,7 +86,7 @@ class ChassisComponentMixins {
 			if (node.type === 'rule') {
 				let state = node.selector
 				
-				if (!(state in instance)) {
+				if (!(state in instance.states)) {
 					// TODO: Add link to proper documentation!
 					console.warn(`[WARNING] Line ${source.line}: Chassis extend mixin cannot accept nested rulesets. Please see documentation for formatting. Discarding...`)
 					node.remove()

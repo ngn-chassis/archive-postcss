@@ -1,32 +1,19 @@
 const ChassisComponent = require('../component')
 
 class ChassisButtonComponent extends ChassisComponent {
-	constructor	(chassis, theme) {
-		super(chassis, theme)
-
+	constructor	(chassis, theme, selectors = ['.button'], states = {
+		'default': [''],
+		'visited': [':visited'],
+		'hover': [':hover'],
+		'active': [':active'],
+		'disabled': ['[disabled]', '.disabled'],
+		'focus': [':focus'],
+		'icon': [' svg.icon'],
+		'pill': ['.pill'],
+		'multi-line': ['.multi-line']
+	}, extensions = NGN.coalesce(chassis.extensions.button, null), resetType = 'inline-block') {
+		super(chassis, theme, selectors, states, extensions, resetType)
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
-
-		this.states = {
-			'default': [''],
-			'visited': [':visited'],
-			'hover': [':hover'],
-			'active': [':active'],
-			'disabled': ['[disabled]', '.disabled'],
-			'focus': [':focus'],
-			'icon': [' svg.icon'],
-			'pill': ['.pill'],
-			'multi-line': ['.multi-line']
-		}
-
-		this.variants = {
-			'class': '.button',
-			'tag': 'button'
-		}
-		
-		// TODO: Use this to determine which reset to use
-		this.type = 'inline-block'
-		this.selectors = ['.button', 'button']
-		this.extensions = NGN.coalesce(chassis.extensions.button, null)
 	}
 
 	get css () {
