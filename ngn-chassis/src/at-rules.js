@@ -42,6 +42,10 @@ class ChassisAtRules {
 	get 'inline-block-layout' () {
 		return (data) => this.typographyMixins.inlineBlockLayout(data)
 	}
+	
+	get 'new' () {
+		return (data) => this.componentMixins.new(data)
+	}
 
 	get 'viewport-height' () {
 		return (data) => this.viewportMixins.height(data)

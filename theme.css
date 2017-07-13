@@ -43,9 +43,9 @@ legend {
 	font-weight: 700;
 }
 
-a {
+link {
 	color: var(--blue);
-	border: 10px solid red;
+	/*border: 10px solid red;*/
 
 	hover {
 		color: color(var(--blue) lightness(50%));
@@ -81,22 +81,6 @@ button {
 
 	icon {
 		stroke: currentColor;
-	}
-
-	variants {
-		tag {
-			border: 2px solid var(--green);
-		}
-
-		class {
-			border: 2px solid yellow;
-		}
-
-		multi-line {
-			background: transparent;
-			box-shadow: inset 0 0 0 1px var(--black);
-			color: var(--black);
-		}
 	}
 }
 

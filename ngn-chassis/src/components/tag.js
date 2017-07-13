@@ -1,8 +1,8 @@
 const ChassisComponent = require('../component')
 
 class ChassisTagComponent extends ChassisComponent {
-	constructor	(chassis) {
-		super(chassis)
+	constructor	(chassis, theme) {
+		super(chassis, theme)
 		
 		this.states = {
 			'default': [''],
@@ -38,7 +38,7 @@ class ChassisTagComponent extends ChassisComponent {
 			utils.css.newDeclObj('font-size', `${utils.units.toEms(fontSize, this.baseTypography.root.fontSize)}em`),
 			utils.css.newDeclObj('line-height', `${lineHeightMultiplier}`),
 			utils.css.newDeclObj('vertical-align', 'baseline'),
-			...this.getThemeDecls('tag')
+			...this.getThemeDecls('default')
 		])
 	}
 	
@@ -54,7 +54,7 @@ class ChassisTagComponent extends ChassisComponent {
 			utils.css.newDeclObj('transform', `translateX(${offset})`),
 			utils.css.newDeclObj('width', dimension),
 			utils.css.newDeclObj('height', dimension),
-			...this.getThemeDecls('tag.icon')
+			...this.getThemeDecls('icon')
 		])
 	}
 
@@ -68,7 +68,7 @@ class ChassisTagComponent extends ChassisComponent {
 			utils.css.newDeclObj('padding-left', `${Math.sin(lineHeightMultiplier) / 2}em`),
 			utils.css.newDeclObj('padding-right', `${Math.sin(lineHeightMultiplier) / 2}em`),
 			utils.css.newDeclObj('border-radius', `${lineHeightMultiplier}em`),
-			...this.getThemeDecls('tag.pill')
+			...this.getThemeDecls('pill')
 		])
 	}
 }

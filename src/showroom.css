@@ -4,7 +4,13 @@
 	--sidebar-link-border-color: var(--header-border-color);
 }
 
-@chassis include button link modal overlay svg-icon tag;
+@chassis include button button-link link modal overlay svg-icon tag;
+
+a.button {
+	@chassis new button {
+		background: var(--green);
+	}
+}
 
 .showroom {
 	padding-bottom: 3.618em;
@@ -116,7 +122,7 @@
 
 			&.ui-components {
 				& .buttons {
-					/*& .custom-1 {
+					& .custom-1 {
 						@chassis extend button {
 							background: var(--green);
 
@@ -165,7 +171,7 @@
 								box-shadow: inset 0 2px 0 0 var(--grey-n05);
 							}
 						}
-					}*/
+					}
 				}
 			}
 		}

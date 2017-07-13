@@ -22,3 +22,11 @@ COMPONENT RESET
 	intended styling. Maybe try fleshing out the component reset to handle
 	different states of that use <a> tags. Check the <a> theme and be sure to
 	any of its state properties on buttons and any other applicable components.
+	
+
+COMPONENT EXTENSION
+- @chassis extend [component] {...} applies default theme variables
+- @chassis new [component] {...} starts from scratch
+
+!! The above means that the theme variables will have to be applied on separate
+rulesets from the base structural styles

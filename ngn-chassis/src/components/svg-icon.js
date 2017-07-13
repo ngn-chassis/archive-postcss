@@ -1,8 +1,8 @@
 const ChassisComponent = require('../component')
 
 class ChassisSvgIconComponent extends ChassisComponent {
-	constructor	(chassis) {
-		super(chassis)
+	constructor	(chassis, theme) {
+		super(chassis, theme)
 		
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
 		
@@ -28,7 +28,7 @@ class ChassisSvgIconComponent extends ChassisComponent {
 			utils.css.newDeclObj('height', `${lineHeightInEms}em`),
 			utils.css.newDeclObj('vertical-align', 'middle'),
 			utils.css.newDeclObj('pointer-events', 'none'),
-			...this.getThemeDecls('icon')
+			...this.getThemeDecls('default')
 		])
 	}
 }

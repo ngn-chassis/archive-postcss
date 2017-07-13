@@ -1,8 +1,8 @@
 const ChassisComponent = require('../component')
 
 class ChassisModalComponent extends ChassisComponent {
-	constructor	(chassis) {
-		super(chassis)
+	constructor	(chassis, theme) {
+		super(chassis, theme)
 
 		this.selectors = ['chassis-modal']
 		this.extensions = NGN.coalesce(chassis.extensions.modal, null)
@@ -19,7 +19,7 @@ class ChassisModalComponent extends ChassisComponent {
 		let { utils } = this.chassis
 
 		return utils.css.newRule(this.generateSelectorList(), [
-			...this.getThemeDecls('modal')
+			...this.getThemeDecls('default')
 		])
 	}
 }

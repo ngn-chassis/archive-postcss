@@ -2,23 +2,18 @@
 // - Handle component variants as component extensions
 
 class ChassisComponent {
-	constructor (chassis) {
+	constructor (chassis, theme) {
 		this.chassis = chassis
+		this.theme = NGN.coalesce(theme, null)
 	}
 
 	get rules () {
 		let { settings } = this.chassis
 
-		settings.componentResetSelectors = [
-			...settings.componentResetSelectors,
-			...this.selectors,
-		]
+		settings.componentResetSelectors.push(...this.selectors)
 
 		if (this.extensions) {
-			settings.componentResetSelectors = [
-				...settings.componentResetSelectors,
-				...this.extensions,
-			]
+			settings.componentResetSelectors.push(...this.extensions)
 		}
 
 		if (this.states) {
@@ -36,13 +31,38 @@ class ChassisComponent {
 
 	getThemeDecls (state) {
 		let { theme, utils } = this.chassis
-		let decls = theme.getComponentProperties(state)
-
+		let decls = this.getStateProperties(state)
+	
 		if (decls) {
 			return Object.keys(decls).map((decl) => utils.css.newDeclObj(decl, decls[decl]))
 		}
-
+	
 		return []
+	}
+	
+	getStateProperties (state) {
+		if (!this.theme) {
+			return []
+		}
+		
+		if (state === 'default') {
+			let defaults = {}
+			
+			for (let prop in this.theme) {
+				if (typeof this.theme[prop] === 'string') {
+					defaults[prop] = this.theme[prop]
+				}
+			}
+			
+			return defaults
+		}
+
+		if (this.theme.hasOwnProperty(state)) {
+			return this.theme[state]
+		}
+
+		// console.info(`[INFO] ${this.filename} does not contain theming information for "${component}" component. Using default styles...`)
+		return null
 	}
 
 	_decorateSelector (selector, decorators) {

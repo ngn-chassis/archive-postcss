@@ -1,4 +1,5 @@
 const ChassisButtonComponent = require('./components/button.js')
+const ChassisButtonLinkComponent = require('./components/button-link.js')
 const ChassisSvgIconComponent = require('./components/svg-icon.js')
 const ChassisLinkComponent = require('./components/link.js')
 const ChassisModalComponent = require('./components/modal.js')
@@ -21,6 +22,10 @@ class ChassisConstants {
 			},
 			{
 				name: 'button',
+				spec: ChassisButtonComponent
+			},
+			{
+				name: 'button-link',
 				spec: ChassisButtonComponent
 			},
 			{

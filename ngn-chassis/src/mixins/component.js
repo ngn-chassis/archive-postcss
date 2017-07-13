@@ -30,7 +30,8 @@ class ChassisComponentMixins {
 		let css = components.map((name) => {
 			if (this._componentExists(name)) {
 				let Component = this.get(name)
-				return new Component(this.chassis).css
+				let theme = this.chassis.theme.getComponentProperties(name)
+				return new Component(this.chassis, theme).css
 			}
 		
 			console.warn(`[WARNING] Line ${source.line}: Component "${name}" not found.`)
@@ -38,6 +39,33 @@ class ChassisComponentMixins {
 		}).filter((entry) => entry !== undefined)
 		
 		atRule.replaceWith(css)
+	}
+	
+	new () {
+		let { utils } = this.chassis
+		let { args, atRule, source } = arguments[0]
+		let name = args[0]
+		
+		if (!this._componentExists(name)) {
+			console.warn(`[WARNING] Line ${source.line}: Extensible component "${name}" not found. Discarding...`)
+			atRule.remove()
+			return
+		}
+		
+		let Component = this.get(name)
+		let instance = new Component(this.chassis, {})
+		
+		let root = utils.css.newRoot([
+			utils.css.newRule(atRule.parent.selector, atRule.nodes.map((node) => {
+				if (node.type === 'decl') {
+					return node
+				}
+				
+				return
+			}).filter((entry) => entry !== undefined))
+		])
+		
+		atRule.replaceWith(root)
 	}
 	
 	extend () {

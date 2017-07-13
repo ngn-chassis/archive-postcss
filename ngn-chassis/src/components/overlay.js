@@ -1,8 +1,8 @@
 const ChassisComponent = require('../component')
 
 class ChassisOverlayComponent extends ChassisComponent {
-	constructor	(chassis) {
-		super(chassis)
+	constructor	(chassis, theme) {
+		super(chassis, theme)
 		
 		this.selectors = ['chassis-overlay']
 		this.extensions = NGN.coalesce(chassis.extensions.overlay, null)
@@ -19,7 +19,7 @@ class ChassisOverlayComponent extends ChassisComponent {
 		let { utils } = this.chassis
 
 		return utils.css.newRule(this.generateSelectorList(), [
-			...this.getThemeDecls('overlay')
+			...this.getThemeDecls('default')
 		])
 	}
 }

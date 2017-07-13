@@ -32,7 +32,15 @@ class ChassisTheme {
 		return numIssues === 0
 	}
 	
-	getComponentProperties(component) {
+	getComponentProperties (component) {
+		if (!this.json.hasOwnProperty(component)) {
+			return null
+		}
+		
+		return this.json[component]
+	}
+	
+	getComponentStateProperties (component) {
 		let state = 'default'
 
 		if (component.includes('.')) {

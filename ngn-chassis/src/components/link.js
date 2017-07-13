@@ -1,8 +1,8 @@
 const ChassisComponent = require('../component')
 
 class ChassisLinkComponent extends ChassisComponent {
-	constructor	(chassis) {
-		super(chassis)
+	constructor	(chassis, theme) {
+		super(chassis, theme)
 
 		this.states = {
 			'default': [''],
@@ -32,7 +32,7 @@ class ChassisLinkComponent extends ChassisComponent {
 
 	get default () {
 		let { utils } = this.chassis
-		let themeDecls = this.getThemeDecls('a')
+		let themeDecls = this.getThemeDecls('default')
 		
 		this.declGroups.push({
 			state: 'default',
@@ -46,7 +46,7 @@ class ChassisLinkComponent extends ChassisComponent {
 
 	get visited () {
 		let { utils } = this.chassis
-		let themeDecls = this.getThemeDecls('a.visited')
+		let themeDecls = this.getThemeDecls('visited')
 		
 		this.declGroups.push({
 			state: 'visited',
@@ -60,7 +60,7 @@ class ChassisLinkComponent extends ChassisComponent {
 
 	get hover () {
 		let { utils } = this.chassis
-		let themeDecls = this.getThemeDecls('a.hover')
+		let themeDecls = this.getThemeDecls('hover')
 		
 		this.declGroups.push({
 			state: 'hover',
@@ -74,7 +74,7 @@ class ChassisLinkComponent extends ChassisComponent {
 
 	get active () {
 		let { utils } = this.chassis
-		let themeDecls = this.getThemeDecls('a.active')
+		let themeDecls = this.getThemeDecls('active')
 		
 		this.declGroups.push({
 			state: 'active',
@@ -88,7 +88,7 @@ class ChassisLinkComponent extends ChassisComponent {
 
 	get disabled () {
 		let { utils } = this.chassis
-		let themeDecls = this.getThemeDecls('a.disabled')
+		let themeDecls = this.getThemeDecls('disabled')
 		
 		this.declGroups.push({
 			state: 'disabled',
@@ -104,7 +104,7 @@ class ChassisLinkComponent extends ChassisComponent {
 
 	get focus () {
 		let { utils } = this.chassis
-		let themeDecls = this.getThemeDecls('a.focus')
+		let themeDecls = this.getThemeDecls('focus')
 		
 		this.declGroups.push({
 			state: 'focus',
