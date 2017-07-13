@@ -116,7 +116,7 @@
 
 			&.ui-components {
 				& .buttons {
-					& .custom-1 {
+					/*& .custom-1 {
 						@chassis extend button {
 							background: var(--green);
 
@@ -165,7 +165,7 @@
 								box-shadow: inset 0 2px 0 0 var(--grey-n05);
 							}
 						}
-					}
+					}*/
 				}
 			}
 		}

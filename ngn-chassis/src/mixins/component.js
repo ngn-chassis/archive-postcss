@@ -1,37 +1,39 @@
-const ChassisButtonComponent = require('../components/button.js')
-const ChassisSvgIconComponent = require('../components/svg-icon.js')
-const ChassisLinkComponent = require('../components/link.js')
-const ChassisModalComponent = require('../components/modal.js')
-const ChassisOverlayComponent = require('../components/overlay.js')
-const ChassisTagComponent = require('../components/tag.js')
-
 class ChassisComponentMixins {
 	constructor (chassis) {
     this.chassis = chassis
-		
-		this.specs = {
-			'button': ChassisButtonComponent,
-			'link': ChassisLinkComponent,
-			'modal': ChassisModalComponent,
-			'overlay': ChassisOverlayComponent,
-			'svg-icon': ChassisSvgIconComponent,
-			'tag': ChassisTagComponent
-		}
+		this.components = chassis.constants.components
   }
 	
-	_componentExists (component) {
-		return Object.keys(this.specs).includes(component)
+	get (name) {
+		let component = this.components.find((component) => component.name === name)
+		return component ? component.spec : null
 	}
 	
 	include () {
 		let { args, atRule, source } = arguments[0]
+		
+		let components = args.filter((component) => {
+			let componentExists = this._componentExists(component)
+			
+			if (!componentExists) {
+				console.warn(`[WARNING] Line ${source.line}: Component "${component}" not found.`)
+			}
+			
+			return componentExists
+		})
+		
+		// Order components for correct cascade behavior
+		components.sort((a, b) => {
+		  return this._getIndex(a) > this._getIndex(b) ? 1 : -1;
+		});
 	
-		let css = args.map((component) => {
-			if (this._componentExists(component)) {
-				return new this.specs[component](this.chassis).css
+		let css = components.map((name) => {
+			if (this._componentExists(name)) {
+				let Component = this.get(name)
+				return new Component(this.chassis).css
 			}
 		
-			console.warn(`[WARNING] Line ${source.line}: Component "${component}" not found.`)
+			console.warn(`[WARNING] Line ${source.line}: Component "${name}" not found.`)
 			return
 		}).filter((entry) => entry !== undefined)
 		
@@ -41,15 +43,16 @@ class ChassisComponentMixins {
 	extend () {
 		let { utils } = this.chassis
 		let { args, atRule, source } = arguments[0]
-		let component = args[0]
+		let name = args[0]
 		
-		if (!this._componentExists(component)) {
-			console.warn(`[WARNING] Line ${source.line}: Extensible component "${component}" not found. Discarding...`)
+		if (!this._componentExists(name)) {
+			console.warn(`[WARNING] Line ${source.line}: Extensible component "${name}" not found. Discarding...`)
 			atRule.remove()
 			return
 		}
 		
-		let instance = new this.specs[component](this.chassis)
+		let Component = this.get(name)
+		let instance = new Component(this.chassis)
 		
 		let root = utils.css.newRoot([
 			utils.css.newRule(atRule.parent.selector, atRule.nodes.map((node) => {
@@ -78,6 +81,14 @@ class ChassisComponentMixins {
 		})
 		
 		atRule.parent.replaceWith(root)
+	}
+	
+	_componentExists (name) {
+		return this.components.some((component) => component.name === name)
+	}
+	
+	_getIndex (name) {
+		return this.components.findIndex((component) => component.name === name)
 	}
 }
 

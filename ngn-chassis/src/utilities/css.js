@@ -1,6 +1,41 @@
 const postcss = require('postcss')
 
 class ChassisCssUtils {
+	/**
+	 * @method getCommonProps
+	 * @param  {array} firstGroup
+	 * @param  {array} secondGroup
+	 * @return {array} props common to both arrays
+	 */
+	static getCommonProps (firstArr, secondArr) {
+		let baseArr = []
+		let refArr = []
+		
+		if (firstArr.length >= secondArr.length) {
+			baseArr = secondArr
+			refArr = firstArr
+		} else {
+			baseArr = firstArr
+			refArr = secondArr
+		}
+		
+		return baseArr.filter((base) => {
+			return refArr.some((ref) => ref.prop === base.prop)
+		}).map((decl) => decl.prop)
+	}
+	
+	/**
+	 * @method getUniqueProps
+	 * @param  {array} baseArr
+	 * @param  {array} refArr
+	 * @return {array} props unique to base array
+	 */
+	static getUniqueProps (baseArr, refArr) {
+		return baseArr.filter((base) => {
+			return !refArr.some((ref) => ref.prop === base.prop)
+		}).map((decl) => decl.prop)
+	}
+	
 	static mergeDecls (originalDecls, newDecls) {
 		let finalDecls = originalDecls
 		

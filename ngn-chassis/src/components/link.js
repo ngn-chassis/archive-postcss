@@ -16,67 +16,103 @@ class ChassisLinkComponent extends ChassisComponent {
 		this.selectors = ['a']
 		this.extensions = NGN.coalesce(chassis.extensions.link, null)
 		
-		this.blacklist = ['.button']
-		
-		if (chassis.extensions.hasOwnProperty('button')) {
-			this.blacklist = [...this.blacklist, ...chassis.extensions.button]
-		}
+		// All decls applied to <a> tags. These will be unset or overridden on
+		// other components that use <a> tags in conjunction with a class or attr
+		this.declGroups = []
 	}
 
 	get css () {
-		let { settings, utils } = this.chassis
+		let { linkOverrides, settings, utils } = this.chassis
 		let { rules } = this
+		
+		this.chassis.linkOverrides = this.declGroups
 
 		return utils.css.newRoot(rules)
 	}
 
 	get default () {
 		let { utils } = this.chassis
-
+		let themeDecls = this.getThemeDecls('a')
+		
+		this.declGroups.push({
+			state: 'default',
+			decls: [...themeDecls]
+		})
+		
 		return utils.css.newRule(this.generateSelectorList(), [
-			...this.getThemeDecls('a')
+			...themeDecls
 		])
 	}
 
 	get visited () {
 		let { utils } = this.chassis
+		let themeDecls = this.getThemeDecls('a.visited')
+		
+		this.declGroups.push({
+			state: 'visited',
+			decls: [...themeDecls]
+		})
 
 		return utils.css.newRule(this.generateSelectorList(':visited'), [
-			...this.getThemeDecls('a.visited')
+			...themeDecls
 		])
 	}
 
 	get hover () {
 		let { utils } = this.chassis
+		let themeDecls = this.getThemeDecls('a.hover')
+		
+		this.declGroups.push({
+			state: 'hover',
+			decls: [...themeDecls]
+		})
 
 		return utils.css.newRule(this.generateSelectorList(':hover'), [
-			...this.getThemeDecls('a.hover')
+			...themeDecls
 		])
 	}
 
 	get active () {
 		let { utils } = this.chassis
+		let themeDecls = this.getThemeDecls('a.active')
+		
+		this.declGroups.push({
+			state: 'active',
+			decls: [...themeDecls]
+		})
 
 		return utils.css.newRule(this.generateSelectorList(':active'), [
-			...this.getThemeDecls('a.active')
+			...themeDecls
 		])
 	}
 
 	get disabled () {
 		let { utils } = this.chassis
+		let themeDecls = this.getThemeDecls('a.disabled')
+		
+		this.declGroups.push({
+			state: 'disabled',
+			decls: [...themeDecls]
+		})
 
 		return utils.css.newRule(`${this.generateSelectorList('[disabled]')}, ${this.generateSelectorList('.disabled')}`, [
 			utils.css.newDeclObj('cursor', 'default'),
 			utils.css.newDeclObj('pointer-events', 'none'),
-			...this.getThemeDecls('a.disabled')
+			...themeDecls
 		])
 	}
 
 	get focus () {
 		let { utils } = this.chassis
+		let themeDecls = this.getThemeDecls('a.focus')
+		
+		this.declGroups.push({
+			state: 'focus',
+			decls: [...themeDecls]
+		})
 
 		return utils.css.newRule(this.generateSelectorList(':focus'), [
-			...this.getThemeDecls('a.focus')
+			...themeDecls
 		])
 	}
 }

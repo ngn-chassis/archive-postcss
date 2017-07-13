@@ -57,21 +57,21 @@ class ChassisComponent {
 			}
 		}
 
-		if (this.hasOwnProperty('blacklist')) {
-			let blacklisted = []
-
-			this.blacklist.forEach((item) => {
-				if (item.includes(' ')) {
-					let arr = item.split(' ')
-					item = arr.pop()
-				}
-
-				if (!blacklisted.includes(item)) {
-					blacklisted.push(item)
-					selector = `${selector}:not(${item})`
-				}
-			})
-		}
+		// if (this.hasOwnProperty('blacklist')) {
+		// 	let blacklisted = []
+		//
+		// 	this.blacklist.forEach((item) => {
+		// 		if (item.includes(' ')) {
+		// 			let arr = item.split(' ')
+		// 			item = arr.pop()
+		// 		}
+		//
+		// 		if (!blacklisted.includes(item)) {
+		// 			blacklisted.push(item)
+		// 			selector = `${selector}:not(${item})`
+		// 		}
+		// 	})
+		// }
 
 		return selector
 	}
