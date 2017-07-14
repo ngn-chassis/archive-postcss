@@ -6,7 +6,7 @@ class ChassisTagComponent extends ChassisComponent {
 		'icon': [' svg.icon'],
 		'pill': ['.pill']
 	}, extensions = NGN.coalesce(chassis.extensions.tag, null), resetType = 'inline') {
-		super(chassis, theme, selectors, states, extensions, resetType)
+		super(chassis, 'tag', theme, selectors, states, extensions, resetType)
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
 	}
 

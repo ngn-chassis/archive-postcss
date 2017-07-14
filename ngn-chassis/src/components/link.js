@@ -9,7 +9,7 @@ class ChassisLinkComponent extends ChassisComponent {
 		'disabled': ['[disabled]', '.disabled'],
 		'focus': [':focus']
 	}, extensions = NGN.coalesce(chassis.extensions.link, null), resetType = 'inline') {
-		super(chassis, theme, selectors, states, extensions, resetType)
+		super(chassis, 'link', theme, selectors, states, extensions, resetType)
 		
 		// All decls applied to <a> tags. These will be unset or overridden on
 		// other components that use <a> tags in conjunction with a class or attr

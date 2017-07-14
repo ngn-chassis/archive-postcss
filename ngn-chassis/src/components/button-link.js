@@ -12,7 +12,7 @@ class ChassisButtonLinkComponent extends ChassisComponent {
 		'pill': ['.pill'],
 		'multi-line': ['.multi-line']
 	}, extensions = NGN.coalesce(chassis.extensions.button, null), resetType = 'inline-block') {
-		super(chassis, theme, selectors, states, extensions, resetType)
+		super(chassis, 'button-link', theme, selectors, states, extensions, resetType)
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
 	}
 	

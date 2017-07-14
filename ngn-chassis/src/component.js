@@ -3,8 +3,9 @@
 // - Generate custom properties from theme values for each component
 
 class ChassisComponent {
-	constructor (chassis, theme, selectors, states, extensions, resetType) {
+	constructor (chassis, component, theme, selectors, states, extensions, resetType) {
 		this.chassis = chassis
+		this.name = component
 		this.theme = NGN.coalesce(theme, null)
 		this.selectors = selectors
 		this.states = states
@@ -25,34 +26,33 @@ class ChassisComponent {
 		if (this.extensions) {
 			settings.componentResetSelectors[this.resetType].push(...this.extensions)
 		}
+		
+		if (Object.keys(this.states).length < 1) {
+			console.error(`[ERROR] Chassis "${this.name}" component has no states.`)
+			return null
+		}
 
-		if (this.states) {
-			let rules = Object.keys(this.states).map((state) => {
-				let baseRule = utils.css.newRule(this.generateSelectorList(this.states[state]), this[state])
-				let themeRule = utils.css.newRule(this.generateSelectorList(this.states[state]), this.getThemeDecls(state))
-				let finalOutput = utils.css.newRoot([])
+		let rules = Object.keys(this.states).map((state) => {
+			let baseRule = utils.css.newRule(this.generateSelectorList(this.states[state]), this[state])
+			let themeRule = utils.css.newRule(this.generateSelectorList(this.states[state]), this.getThemeDecls(state))
+			let finalOutput = utils.css.newRoot([])
 
-				if (state in this && baseRule.nodes.length > 0) {
-					finalOutput.append(baseRule)
-				}
-				
-				if (themeRule.nodes.length > 0) {
-					finalOutput.append(themeRule)
-				}
-				
-				return finalOutput
-			}).filter((rule) => rule !== undefined)
-			
-			if (settings.legacy && 'legacy' in this) {
-				rules.push(this.legacy)
+			if (state in this && baseRule.nodes.length > 0) {
+				finalOutput.append(baseRule)
 			}
 			
-			return rules
+			if (themeRule.nodes.length > 0) {
+				finalOutput.append(themeRule)
+			}
+			
+			return finalOutput
+		}).filter((rule) => rule !== undefined)
+		
+		if (settings.legacy && 'legacy' in this) {
+			rules.push(this.legacy)
 		}
 		
-		
-		
-		return this.default && this.default.nodes.length > 0 ? [this.default] : null
+		return rules
 	}
 	
 	_decorateSelector (selector, decorators) {

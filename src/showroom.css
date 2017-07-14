@@ -4,7 +4,7 @@
 	--sidebar-link-border-color: var(--header-border-color);
 }
 
-@chassis include button button-link link svg-icon tag;
+@chassis include button button-link link svg-icon table tag;
 
 .showroom {
 	padding-bottom: 3.618em;

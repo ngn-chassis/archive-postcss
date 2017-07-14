@@ -4,7 +4,7 @@ class ChassisModalComponent extends ChassisComponent {
 	constructor	(chassis, theme, selectors = ['chassis-modal'], states = {
 		
 	}, extensions = NGN.coalesce(chassis.extensions.modal, null), resetType = 'block') {
-		super(chassis, theme, selectors, states, extensions, resetType)
+		super(chassis, 'modal', theme, selectors, states, extensions, resetType)
 	}
 }
 

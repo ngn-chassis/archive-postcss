@@ -4,6 +4,7 @@ const ChassisSvgIconComponent = require('./components/svg-icon.js')
 const ChassisLinkComponent = require('./components/link.js')
 const ChassisModalComponent = require('./components/modal.js')
 const ChassisOverlayComponent = require('./components/overlay.js')
+const ChassisTableComponent = require('./components/table.js')
 const ChassisTagComponent = require('./components/tag.js')
 
 class ChassisConstants {
@@ -31,6 +32,10 @@ class ChassisConstants {
 			{
 				name: 'tag',
 				spec: ChassisTagComponent
+			},
+			{
+				name: 'table',
+				spec: ChassisTableComponent
 			},
 			{
 				name: 'overlay',
