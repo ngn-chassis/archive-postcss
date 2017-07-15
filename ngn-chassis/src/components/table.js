@@ -2,15 +2,18 @@ const ChassisComponent = require('../component')
 
 class ChassisTableComponent extends ChassisComponent {
 	constructor	(chassis, theme, selectors = ['table'], states = {
-		'default': ['']
+		'default': [''],
+		'th': [' th'],
+		'td': [' td'],
+		'caption': [' caption']
 	}, extensions = NGN.coalesce(chassis.extensions.table, null), resetType = 'block') {
 		super(chassis, 'table', theme, selectors, states, extensions, resetType)
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
 	}
-	
+
 	get default () {
 		let { utils } = this.chassis
-		
+
 		return [
 			utils.css.newDeclObj('table-layout', 'fixed'),
 			utils.css.newDeclObj('width', '100%'),
@@ -19,21 +22,43 @@ class ChassisTableComponent extends ChassisComponent {
 			utils.css.newDeclObj('border-spacing', '0')
 		]
 	}
-	
-	get children () {
+
+	get th () {
+		let { typography, utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
+
+		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
+
+		return [
+			utils.css.newDeclObj('overflow', 'hidden'),
+			utils.css.newDeclObj('padding', `0 ${typography.calculateInlinePaddingX(lineHeightMultiplier)}em`),
+			utils.css.newDeclObj('line-height', `${typography.calculateInlineHeight(lineHeightMultiplier)}`),
+			utils.css.newDeclObj('text-align', 'left'),
+			utils.css.newDeclObj('text-overflow', 'ellipsis'),
+			utils.css.newDeclObj('vertical-align', 'top')
+		]
+	}
+
+	get td () {
+		let { typography, utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
+
+		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
+
+		return [
+			utils.css.newDeclObj('overflow', 'hidden'),
+			utils.css.newDeclObj('padding', `0 ${typography.calculateInlinePaddingX(lineHeightMultiplier)}em`),
+			utils.css.newDeclObj('line-height', `${typography.calculateInlineHeight(lineHeightMultiplier)}`),
+			utils.css.newDeclObj('text-align', 'left'),
+			utils.css.newDeclObj('text-overflow', 'ellipsis'),
+			utils.css.newDeclObj('vertical-align', 'top')
+		]
+	}
+
+	get caption () {
 		let { utils } = this.chassis
-		
-		return utils.css.newRoot([
-			utils.css.newRule(`${this.generateSelectorList('default')} th, ${this.generateSelectorList('default')} td`, [
-				utils.css.newDeclObj('overflow', 'hidden'),
-				utils.css.newDeclObj('text-align', 'left'),
-				utils.css.newDeclObj('text-overflow', 'ellipsis'),
-				utils.css.newDeclObj('vertical-align', 'top')
-			]),
-			utils.css.newRule(`${this.generateSelectorList('default')} caption`, [
-				utils.css.newDeclObj('text-align', 'left')
-			])
-		])
+
+		return [utils.css.newDeclObj('text-align', 'left')]
 	}
 }
 

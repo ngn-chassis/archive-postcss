@@ -18,7 +18,11 @@
     "ngn-data": "0.1.7",
     "perfectionist": "^2.4.0",
     "postcss": "^5.2.17",
+    "postcss-advanced-variables": "^1.2.2",
     "postcss-cssnext": "^3.0.2",
+    "postcss-discard-comments": "^2.0.4",
+    "postcss-merge-rules": "^2.1.2",
+    "postcss-variables": "^1.1.0",
     "precss": "^1.4.0"
   }
 }

@@ -22,7 +22,7 @@ class ChassisAtRules {
 	get 'ellipsis' () {
 		return (data) => this.typographyMixins.ellipsis(data)
 	}
-	
+
 	get 'extend' () {
 		return (data) => this.componentMixins.extend(data)
 	}
@@ -42,7 +42,7 @@ class ChassisAtRules {
 	get 'inline-block-layout' () {
 		return (data) => this.typographyMixins.inlineBlockLayout(data)
 	}
-	
+
 	get 'new' () {
 		return (data) => this.componentMixins.new(data)
 	}
@@ -58,16 +58,16 @@ class ChassisAtRules {
 	get 'z-index' () {
 		return (data) => this.layoutMixins.zIndex(data)
 	}
-	
+
 	getProperties (atRule) {
 		let params = atRule.params.split(' ')
-		
+
 		let data = {
 			mixin: params[0],
-			args: params.length > 1 ? params.slice(1) : null,
+			args: params.length > 1 ? params.slice(1) : [],
 			nodes: atRule.nodes || []
 		}
-		
+
 		if (atRule.hasOwnProperty('source') && atRule.source.hasOwnProperty('start')) {
 			data.source = atRule.source.start
 		}

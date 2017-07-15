@@ -2,7 +2,7 @@ class ChassisTypographyMixins {
   constructor (chassis) {
     this.chassis = chassis
     this.baseTypography = chassis.settings.typography.ranges.first.typography
-    
+
     this.dimensions = [
       'top',
       'right',
@@ -10,45 +10,45 @@ class ChassisTypographyMixins {
       'left'
     ]
   }
-  
+
   inlineBlockLayout () {
     let { settings, typography, utils } = this.chassis
     let { fontSize, lineHeight } = this.baseTypography.root
     let { args, atRule, source } = arguments[0]
-    
+
     let decls = []
-    
+
     let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
     let calcLineHeight = typography.calculateInlineHeight(lineHeightInEms)
-    
+
+    let margin = [null, `${typography.calculateInlineMarginX(lineHeightInEms)}em`, `${typography.calculateInlineMarginY(lineHeightInEms)}em`, null]
+    let padding = [null, `${typography.calculateInlinePaddingX(lineHeightInEms)}em`, null, `${typography.calculateInlinePaddingX(lineHeightInEms)}em`]
+
     let stripMargin = args.includes('no-margin')
     let stripMarginBottom = args.includes('no-margin-bottom')
     let stripMarginRight = args.includes('no-margin-right')
-    
+
     let stripPadding = args.includes('no-padding')
     let stripPaddingTop = args.includes('no-padding-top')
     let stripPaddingRight = args.includes('no-padding-right')
     let stripPaddingBottom = args.includes('no-padding-bottom')
     let stripPaddingLeft = args.includes('no-padding-left')
-    
+
     let multiLine = args.includes('multi-line')
     let stripLineHeight = multiLine || args.includes('no-line-height')
-    
-    let margin = [null, `${typography.calculateInlineMarginX(lineHeightInEms)}em`, `${typography.calculateInlineMarginY(lineHeightInEms)}em`, null]
-    let padding = [null, `${typography.calculateInlinePaddingX(lineHeightInEms)}em`, null, `${typography.calculateInlinePaddingX(lineHeightInEms)}em`]
-    
+
     if (stripMargin) {
       margin = null
     } else {
       if (stripMarginBottom) {
         margin[2] = null
       }
-      
+
       if (stripMarginRight) {
         margin[1] = null
       }
     }
-    
+
     if (margin && margin.some((value) => value !== null)) {
       margin.forEach((value, index) => {
         if (value) {
@@ -56,7 +56,7 @@ class ChassisTypographyMixins {
         }
       })
     }
-    
+
     if (stripPadding) {
       padding = null
     } else {
@@ -64,24 +64,24 @@ class ChassisTypographyMixins {
         padding[0] = `${(calcLineHeight - lineHeightInEms) / 2}em`
         padding[2] = padding[0]
       }
-      
+
       if (stripPaddingTop) {
         padding[0] = null
       }
-      
+
       if (stripPaddingRight) {
         padding[1] = null
       }
-      
+
       if (stripPaddingBottom) {
         padding[2] = null
       }
-      
+
       if (stripPaddingLeft) {
         padding[3] = null
       }
     }
-    
+
     if (padding && padding.some((value) => value !== null)) {
       padding.forEach((value, index) => {
         if (value) {
@@ -89,7 +89,7 @@ class ChassisTypographyMixins {
         }
       })
     }
-    
+
     if (!stripLineHeight && !multiLine) {
       decls.push(utils.css.newDecl('line-height', `${calcLineHeight}em`))
     }

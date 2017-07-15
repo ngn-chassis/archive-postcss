@@ -1,103 +1,58 @@
-const ChassisComponent = require('../component')
+const ChassisComponent = require('../component.js')
 
 class ChassisButtonComponent extends ChassisComponent {
-	constructor	(chassis, theme, selectors = ['button'], states = {
-		'default': [''],
-		'visited': [':visited'],
-		'hover': [':hover'],
-		'active': [':active'],
-		'disabled': ['[disabled]', '.disabled'],
-		'focus': [':focus'],
-		'icon': [' svg.icon'],
-		'pill': ['.pill'],
-		'multi-line': ['.multi-line']
-	}, extensions = NGN.coalesce(chassis.extensions.button, null), resetType = 'inline-block') {
-		super(chassis, 'button', theme, selectors, states, extensions, resetType)
-		this.baseTypography = chassis.settings.typography.ranges.first.typography
-	}
+  constructor (chassis, theme) {
+    super(chassis)
+    this.chassis = chassis
 
-	get default () {
-		let { typography, utils } = this.chassis
-		let { fontSize, lineHeight } = this.baseTypography.root
-		
-		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
+    this.name = 'button'
+    this.theme = theme
+    this.stylesheet = '../component-sheets/button.spec.css'
+    this.selectors = ['button']
 
-		return [
-			utils.css.newDeclObj('display', 'inline-flex'),
-			utils.css.newDeclObj('justify-content', 'center'),
-			utils.css.newDeclObj('align-items', 'center'),
-			utils.css.newDeclObj('margin', `0 ${typography.calculateInlineMarginX(lineHeightMultiplier)}em ${typography.calculateInlineMarginY(lineHeightMultiplier)}em 0`),
-			utils.css.newDeclObj('padding', `0 ${typography.calculateInlinePaddingX(lineHeightMultiplier)}em`),
-			utils.css.newDeclObj('line-height', `${typography.calculateInlineHeight(lineHeightMultiplier)}`),
-			utils.css.newDeclObj('vertical-align', 'middle'),
-			utils.css.newDeclObj('text-align', 'center'),
-			utils.css.newDeclObj('white-space', 'nowrap'),
-			utils.css.newDeclObj('cursor', 'pointer'),
-			utils.css.newDeclObj('user-select', 'none'),
-		]
-	}
+    this.states = [
+      'default',
+  		'visited',
+  		'hover',
+  		'active',
+  		'disabled',
+  		'focus'
+    ]
 
-	get disabled () {
-		let { utils } = this.chassis
-		return [utils.css.newDeclObj('pointer-events', 'none')]
-	}
+    this.children = [
+      'icon',
+    ]
 
-	get icon () {
-		let { settings, typography, utils } = this.chassis
-		let { fontSize, lineHeight } = this.baseTypography.root
+    this.variants = [
+      'pill',
+  		'multi-line'
+    ]
 
-		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
-		let offset = `-${(typography.calculateInlinePaddingX(lineHeightMultiplier) / 2) - utils.units.toEms(fontSize / (settings.typography.scaleRatio * 10), fontSize)}em`
+    this.extensions = NGN.coalesce(chassis.extensions.button, null)
+    this.resetType = 'inline-block'
+  }
 
-		return [utils.css.newDeclObj('transform', `translateX(${offset})`)]
-	}
+  get variables () {
+    let { settings, typography, utils } = this.chassis
+    let { fontSize, lineHeight } = settings.typography.ranges.first.typography.root
 
-	get pill () {
-		let { settings, utils } = this.chassis
-		let { fontSize, lineHeight } = this.baseTypography.root
-
-		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
-
-		return [
-			utils.css.newDeclObj('padding-left', `${settings.typography.scaleRatio}em`),
-			utils.css.newDeclObj('padding-right', `${settings.typography.scaleRatio}em`),
-			utils.css.newDeclObj('border-radius', `${lineHeightMultiplier}em`)
-		]
-	}
-
-	get 'multi-line' () {
-		let { typography, utils } = this.chassis
-		let { fontSize, lineHeight } = this.baseTypography.root
-
-		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
-		let inlineHeight = typography.calculateInlineHeight(lineHeightMultiplier)
+    let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
+    let inlineHeight = typography.calculateInlineHeight(lineHeightMultiplier)
 		let padding = (inlineHeight - lineHeightMultiplier) / 2
 
-		return [
-			utils.css.newDeclObj('padding-top', `${padding}em`),
-			utils.css.newDeclObj('padding-bottom', `${padding}em`),
-			utils.css.newDeclObj('line-height', `${lineHeightMultiplier}`),
-			utils.css.newDeclObj('white-space', 'normal')
-		]
-	}
-	
-	get legacy () {
-		let { atRules, utils } = this.chassis
-		
-		return atRules.browserMixins.ieOnly({
-			nodes: [
-				utils.css.newRule('button, button:focus, button:active', [
-					utils.css.newDeclObj('background', 'none'),
-					utils.css.newDeclObj('border', 'none'),
-					utils.css.newDeclObj('outline', 'none'),
-					utils.css.newDeclObj('color', 'inherit')
-				]),
-				utils.css.newRule('button span', [
-					utils.css.newDeclObj('position', 'relative')
-				])
-			]
-		})
-	}
+    return {
+      'margin-right': `${typography.calculateInlineMarginX(lineHeightMultiplier)}em`,
+      'margin-bottom': `${typography.calculateInlineMarginY(lineHeightMultiplier)}em`,
+      'padding-x': `${typography.calculateInlinePaddingX(lineHeightMultiplier)}em`,
+      'line-height': typography.calculateInlineHeight(lineHeightMultiplier),
+      'icon-offset': `translateX(-${(typography.calculateInlinePaddingX(lineHeightMultiplier) / 2) - utils.units.toEms(fontSize / (settings.typography.scaleRatio * 10), fontSize)}em)`,
+      'pill-padding-x': `${settings.typography.scaleRatio}em`,
+      'pill-border-radius': `${lineHeightMultiplier}em`,
+      'multi-line-padding-y': `${padding}em`,
+			'multi-line-line-height': `${lineHeightMultiplier}`,
+			'multi-line-white-space': 'normal'
+    }
+  }
 }
 
 module.exports = ChassisButtonComponent

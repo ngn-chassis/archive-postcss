@@ -1,129 +1,88 @@
-// TODO:
-// - Figure out which properties to apply to different component reset types
-// - Generate custom properties from theme values for each component
+const ChassisStylesheet = require('./stylesheet.js')
 
 class ChassisComponent {
-	constructor (chassis, component, theme, selectors, states, extensions, resetType) {
-		this.chassis = chassis
-		this.name = component
-		this.theme = NGN.coalesce(theme, null)
-		this.selectors = selectors
-		this.states = states
-		this.extensions = extensions
-		this.resetType = resetType
-	}
-	
-	get css () {
-		let { utils } = this.chassis
-		return utils.css.newRoot(this.rules)
-	}
+  constructor (chassis) {
+    this.chassis = chassis
+  }
 
-	get rules () {
-		let { settings, utils } = this.chassis
+  get css () {
+    let { settings } = this.chassis
 
-		settings.componentResetSelectors[this.resetType].push(...this.selectors)
-		
-		if (this.extensions) {
+    settings.componentResetSelectors[this.resetType].push(...this.selectors)
+
+    if (this.extensions) {
 			settings.componentResetSelectors[this.resetType].push(...this.extensions)
 		}
-		
-		if (Object.keys(this.states).length < 1) {
-			console.error(`[ERROR] Chassis "${this.name}" component has no states.`)
-			return null
-		}
 
-		let rules = Object.keys(this.states).map((state) => {
-			let baseRule = utils.css.newRule(this.generateSelectorList(this.states[state]), this[state])
-			let themeRule = utils.css.newRule(this.generateSelectorList(this.states[state]), this.getThemeDecls(state))
-			let finalOutput = utils.css.newRoot([])
+    return new ChassisStylesheet(this.chassis, this.parseSpecsheet(this.stylesheet), false).css
+  }
 
-			if (state in this && baseRule.nodes.length > 0) {
-				finalOutput.append(baseRule)
-			}
-			
-			if (themeRule.nodes.length > 0) {
-				finalOutput.append(themeRule)
-			}
-			
-			return finalOutput
-		}).filter((rule) => rule !== undefined)
-		
-		if (settings.legacy && 'legacy' in this) {
-			rules.push(this.legacy)
-		}
-		
-		return rules
-	}
-	
-	_decorateSelector (selector, decorators) {
-		if (decorators) {
-			if (Array.isArray(decorators)) {
-				selector = decorators.map((decorator) => {
-					return `${selector}${decorator}`
-				}).join(', ')
+  injectThemeProps (atRule) {
+    console.log(`Injecting ${atRule.params.length > 0 ? atRule.params : atRule.name} ${this.name} theme props.`);
+  }
 
-			} else {
-				selector = `${selector}${decorators}`
-			}
-		}
+  parseSpecsheet (path) {
+    let { settings, utils } = this.chassis
 
-		return selector
-	}
-	
-	generateSelectorList (decorators, selectors = this.selectors, extending = false) {
-		if (!extending) {
-			selectors = this.extensions ? [...selectors, ...this.extensions] : selectors
-		}
+    let tree = utils.files.parseStylesheet(path)
 
-		return selectors.map((selector) => {
-			if (selector.includes(' ')) {
-				let arr = selector.split(' ')
-				let firstMatch = arr.pop()
+    tree.walkAtRules((atRule) => {
+      let param = atRule.params
+      let replace = false
 
-				arr.push(this._decorateSelector(firstMatch, decorators))
-				return arr.join(' ')
-			}
+      switch (atRule.name) {
+        case 'state':
+          replace = this.states.includes(param)
+          break;
 
-			return this._decorateSelector(selector, decorators)
+        case 'child':
+          replace = this.children.includes(param)
+          break;
 
-		}).join(', ')
-	}
+        case 'variant':
+          replace = this.variants.includes(param)
+          break;
 
-	getThemeDecls (state) {
-		let { theme, utils } = this.chassis
-		let decls = this.getStateProperties(state)
-	
-		if (decls) {
-			return Object.keys(decls).map((decl) => utils.css.newDeclObj(decl, decls[decl]))
-		}
-	
-		return []
-	}
-	
-	getStateProperties (state) {
-		if (!this.theme) {
-			return []
-		}
-		
-		if (state === 'default') {
-			let defaults = {}
-			
-			for (let prop in this.theme) {
-				if (typeof this.theme[prop] === 'string') {
-					defaults[prop] = this.theme[prop]
-				}
-			}
-			
-			return defaults
-		}
+        case 'legacy':
+          replace = settings.legacy
+          break;
 
-		if (this.theme.hasOwnProperty(state)) {
-			return this.theme[state]
-		}
+        default:
+          return
+      }
 
-		// console.info(`[INFO] ${this.filename} does not contain theming information for "${component}" component. Using default styles...`)
-		return null
-	}
+      if (replace) {
+        this.injectThemeProps(atRule)
+        atRule.replaceWith(atRule.nodes)
+        return
+      }
+
+      atRule.remove()
+    })
+
+    return this.resolveVars(tree)
+  }
+
+  resolveVars (tree) {
+    let { utils } = this.chassis
+
+    if (!this.variables) {
+      return
+    }
+
+    tree.walkRules((rule) => {
+      rule.selector = this.selectors.map((selector) => {
+        return utils.string.resolveVariables(rule.selector, {selector})
+      }).join(',')
+
+      rule.walkDecls((decl) => {
+        decl.prop = utils.string.resolveVariables(decl.prop, this.variables)
+        decl.value = utils.string.resolveVariables(decl.value, this.variables)
+      })
+    })
+
+    return tree
+  }
 }
 
 module.exports = ChassisComponent

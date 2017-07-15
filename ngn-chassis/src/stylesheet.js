@@ -2,9 +2,10 @@ const postcss = require('postcss')
 const nesting = require('postcss-nesting')
 
 class ChassisStylesheet {
-	constructor (chassis, tree) {
+	constructor (chassis, tree, namespace = true) {
 		this.chassis = chassis
 		this.tree = tree
+		this.namespace = namespace
 	}
 
 	get css () {
@@ -16,23 +17,23 @@ class ChassisStylesheet {
 				this.processAtRule(atRule)
 			}
 		})
-		
+
 		// in cssnext, nesting isn't handled correctly, so we're short-circuiting it
 		// by handling unnesting here
 		this.unnest()
-		
+
 		let output = postcss.parse(this.tree)
-		
+
 		// Process remaining 'new' and 'extend' mixins
 		output.walkAtRules('chassis', (atRule) => {
 			if (atRule.params.startsWith('new') || atRule.params.startsWith('extend')) {
 				this.processAtRule(atRule)
 			}
 		})
-		
+
 		// Process remaining 'include' mixins
 		output.walkAtRules('chassis', (atRule) => this.processAtRule(atRule))
-		
+
 		// Cleanup empty rulesets and prepend .chassis namespace to all selectors
 		// except 'html' and ':root'
 		output.walkRules((rule) => {
@@ -41,10 +42,12 @@ class ChassisStylesheet {
 				return
 			}
 
-			rule.selector = rule.selector === 'html' || rule.selector === ':root'  ? rule.selector.trim() : `.chassis ${rule.selector.trim()}`
+			if (this.namespace) {
+				rule.selector = rule.selector === 'html' || rule.selector === ':root'  ? rule.selector.trim() : `.chassis ${rule.selector.trim()}`
 
-			if (rule.selector.includes(',')) {
-				rule.selector = rule.selector.split(',').map((selector) => selector.trim()).join(', .chassis ')
+				if (rule.selector.includes(',')) {
+					rule.selector = rule.selector.split(',').map((selector) => selector.trim()).join(', .chassis ')
+				}
 			}
 		})
 
@@ -56,16 +59,7 @@ class ChassisStylesheet {
 			root: this.tree,
 			atRule
 		}, this.chassis.atRules.getProperties(atRule))
-		
-		// Populate custom selectors to append to default component selector lists
-		if (data.mixin === 'extend') {
-			if (this.chassis.extensions.hasOwnProperty(data.args[0])) {
-				this.chassis.extensions[data.args[0]].push(atRule.parent.selector)
-			} else {
-				this.chassis.extensions[data.args[0]] = [atRule.parent.selector]
-			}
-		}
-		
+
 		this.chassis.atRules.process(data)
 	}
 

@@ -4,7 +4,8 @@
 	--sidebar-link-border-color: var(--header-border-color);
 }
 
-@chassis include button button-link link svg-icon table tag;
+/*@chassis include button-link link svg-icon table tag;*/
+@chassis include button button-link;
 
 .showroom {
 	padding-bottom: 3.618em;
@@ -114,7 +115,7 @@
 				margin-bottom: 1em;
 			}
 
-			&.ui-components {
+			/*&.ui-components {
 				& .buttons {
 					& .custom-1 {
 						@chassis new button {
@@ -133,7 +134,7 @@
 					}
 
 					& .custom-2 {
-						@chassis new button {
+						@chassis extend button {
 							background: transparent;
 							border-radius: .236em;
 							color: var(--text-color);
@@ -141,6 +142,7 @@
 
 							hover {
 								background: color(var(--grey-n00) alpha(61.8%));
+								color: currentColor;
 							}
 
 							active {
@@ -150,7 +152,7 @@
 					}
 
 					& .custom-3 {
-						@chassis new button {
+						@chassis extend button {
 							background: linear-gradient(to bottom, var(--grey-n00) 0%, var(--grey-n03) 100%);
 							border-radius: .236em;
 							color: var(--grey-n09);
@@ -171,7 +173,7 @@
 						}
 					}
 				}
-			}
+			}*/
 		}
 
 		@chassis viewport-width from medium {

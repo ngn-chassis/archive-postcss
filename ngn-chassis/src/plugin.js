@@ -3,6 +3,8 @@ require('ngn-data')
 
 const postcss = require('postcss')
 const cssnext = require('postcss-cssnext')
+const mergeAdjacentRules = require('postcss-merge-rules')
+const removeComments = require('postcss-discard-comments')
 const perfectionist = require('perfectionist')
 
 const ChassisAtRules = require('./at-rules.js')
@@ -34,14 +36,14 @@ class ChassisPostCss {
 
 		this.viewport = new ChassisViewport(this)
 		this.settings.viewportWidthRanges.load(this.viewport.getWidthRanges(this.settings.layout.breakpoints))
-		
+
 		this.theme = new ChassisTheme(this)
 		this.layout = new ChassisLayout(this)
 		this.atRules = new ChassisAtRules(this)
 		this.post = new ChassisPost(this)
 		this.core = new ChassisCore(this)
 		this.extensions = {}
-		
+
 		// List of CSS properties that are applied to <a> tags. Other components that
 		// use <a> tags with an additional class or attribute will need to unset or
 		// override these properties to avoid picking up unintended styling from
@@ -62,20 +64,22 @@ class ChassisPostCss {
 					root: this.tree,
 					atRule
 				}, this.atRules.getProperties(atRule))
-			
+
 				this.post.process(data, output)
 			})
-			
+
 			output = cssnext(this.cssnextCfg).process(output.toString())
+			output = removeComments.process(output.toString())
+			output = mergeAdjacentRules.process(output.toString())
  			output = perfectionist.process(output.toString())
-			
+
 			result.root = postcss.parse(output)
 		}
 	}
 
 	_cleanseCfg (cfg) {
 		let cleansedCfg = cfg
-		
+
 		this.cssnextCfg = {
 			features: {
 				customProperties: {
@@ -87,14 +91,14 @@ class ChassisPostCss {
 		if (cleansedCfg.hasOwnProperty('componentResetSelectors')) {
 			delete cleansedCfg.componentResetSelectors
 		}
-		
+
 		if (cleansedCfg.hasOwnProperty('customProperties')) {
 			if (typeof cleansedCfg.customProperties === 'boolean') {
 				this.cssnextCfg.features.customProperties = cleansedCfg.customProperties
 			} else {
 				this.cssnextCfg.features.customProperties.variables = cleansedCfg.customProperties
 			}
-			
+
 			delete cleansedCfg.customProperties
 		}
 
