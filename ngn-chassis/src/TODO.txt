@@ -16,3 +16,13 @@ COMPONENT EXTENSION
 @chassis extend button.pill {
 	...
 }
+
+AUTO-TYPOGRAPHY SYSTEM
+- Tags do not look right at small type scale ratios. The math used to
+  calculate the position of icons in the tags outputs a negative number at
+  small ratios like 1.2. The math for padding seems to break down on inline
+  elements at those small ratios as well. In addition, the vertical alignment
+  starts behaving very strangely at those small sizes.
+- Possible solution is to make sure the scale ratio value is utilized in all
+  calculations- right now, some values are just using Math.sin or log or
+  something without respect to the actual scale ratio value. 

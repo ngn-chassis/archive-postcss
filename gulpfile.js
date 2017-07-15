@@ -31,7 +31,7 @@ gulp.task('css', () => {
       // customProperties: {},
     	layout: {
     		minWidth: 320,
-    		maxWidth: 1600
+    		maxWidth: 1024
     	}
     }))
     .pipe(sourcemaps.write('.'))
