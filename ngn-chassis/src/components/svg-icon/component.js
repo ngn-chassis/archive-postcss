@@ -1,4 +1,4 @@
-const ChassisComponent = require('../component')
+const ChassisComponent = require('../../component')
 
 class ChassisSvgIconComponent extends ChassisComponent {
 	constructor	(chassis, theme, selectors = ['svg.icon'], states = {

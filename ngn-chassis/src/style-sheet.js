@@ -1,7 +1,7 @@
 const postcss = require('postcss')
 const nesting = require('postcss-nesting')
 
-class ChassisStylesheet {
+class ChassisStyleSheet {
 	constructor (chassis, tree, namespace = true) {
 		this.chassis = chassis
 		this.tree = tree
@@ -68,4 +68,4 @@ class ChassisStylesheet {
 	}
 }
 
-module.exports = ChassisStylesheet
+module.exports = ChassisStyleSheet

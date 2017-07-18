@@ -84,7 +84,7 @@ class ChassisCore {
 		let { settings, utils } = this.chassis
 
 		return utils.css.newRule(':root', [
-			...utils.files.parseStylesheet('../stylesheets/copic-greys.css').nodes,
+			...utils.files.parseStyleSheet('../style-sheets/copic-greys.css').nodes,
 			utils.css.newDeclObj('--ui-min-width', `${settings.layout.minWidth}px`),
 			utils.css.newDeclObj('--ui-max-width', `${settings.layout.maxWidth}px`),
 			utils.css.newDeclObj('--ui-gutter', `${settings.layout.gutter}`),
@@ -95,7 +95,7 @@ class ChassisCore {
 	get modifiers () {
 		let { utils } = this.chassis
 
-		return utils.files.parseStylesheet('../stylesheets/global-modifiers.css')
+		return utils.files.parseStyleSheet('../style-sheets/global-modifiers.css')
 	}
 
 	get widthConstraint () {
@@ -332,7 +332,7 @@ class ChassisCore {
 		return utils.css.newAtRule({
 			name: 'chassis-post',
 			params: 'component-reset inline',
-			nodes: utils.files.parseStylesheet('../stylesheets/inline-component-reset.css').nodes
+			nodes: utils.files.parseStyleSheet('../style-sheets/inline-component-reset.css').nodes
 		})
 	}
 	
@@ -342,7 +342,7 @@ class ChassisCore {
 		return utils.css.newAtRule({
 			name: 'chassis-post',
 			params: 'component-reset inline-block',
-			nodes: utils.files.parseStylesheet('../stylesheets/inline-block-component-reset.css').nodes
+			nodes: utils.files.parseStyleSheet('../style-sheets/inline-block-component-reset.css').nodes
 		})
 	}
 	
@@ -352,7 +352,7 @@ class ChassisCore {
 		return utils.css.newAtRule({
 			name: 'chassis-post',
 			params: 'component-reset block',
-			nodes: utils.files.parseStylesheet('../stylesheets/block-component-reset.css').nodes
+			nodes: utils.files.parseStyleSheet('../style-sheets/block-component-reset.css').nodes
 		})
 	}
 

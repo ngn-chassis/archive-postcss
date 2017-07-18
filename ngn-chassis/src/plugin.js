@@ -3,7 +3,7 @@ require('ngn-data')
 
 const postcss = require('postcss')
 const cssnext = require('postcss-cssnext')
-const mergeAdjacentRules = require('postcss-merge-rules')
+// const mergeAdjacentRules = require('postcss-merge-rules')
 const removeComments = require('postcss-discard-comments')
 const perfectionist = require('perfectionist')
 
@@ -13,7 +13,7 @@ const ChassisCore = require('./core.js')
 const ChassisLayout = require('./layout.js')
 const ChassisPost = require('./post.js')
 const ChassisSettings = require('./settings.js')
-const ChassisStylesheet = require('./stylesheet.js')
+const ChassisStyleSheet = require('./style-sheet.js')
 const ChassisTheme = require('./theme.js')
 const ChassisTypography = require('./typography.js')
 const ChassisUtilities = require('./utilities.js')
@@ -57,7 +57,7 @@ class ChassisPostCss {
 		// this.utils.console.printTree(this.settings.data)
 		// this.utils.console.printTree(this.theme.json)
 		return (root, result) => {
-			let output = this.core.css.append(new ChassisStylesheet(this, root).css)
+			let output = this.core.css.append(new ChassisStyleSheet(this, root).css)
 			
 			output.walkAtRules('chassis-post', (atRule) => {
 				let data = Object.assign({
@@ -70,7 +70,7 @@ class ChassisPostCss {
 
 			output = cssnext(this.cssnextCfg).process(output.toString())
 			output = removeComments.process(output.toString())
-			output = mergeAdjacentRules.process(output.toString())
+			// output = mergeAdjacentRules.process(output.toString())
  			output = perfectionist.process(output.toString())
 
 			result.root = postcss.parse(output)

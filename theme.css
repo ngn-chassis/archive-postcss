@@ -43,82 +43,87 @@ legend {
 	font-weight: 700;
 }
 
-link {
-	color: var(--blue);
+components {
+	button {
+		@state default {
+			background: var(--blue);
+			border-radius: .236em;
+			color: var(--white);
+			
+			svg.icon {
+				stroke: currentColor;
+			}
+		}
 
-	hover {
-		color: color(var(--blue) lightness(50%));
-		text-decoration: underline;
+		@state hover {
+			background: color(var(--blue) lightness(50%));
+		}
+
+		@state active {
+			background: color(var(--blue) lightness(44%));
+		}
+
+		@state disabled {
+			opacity: .382;
+		}
+	}
+	
+	/*link {
+		color: var(--blue);
+
+		@state hover {
+			color: color(var(--blue) lightness(50%));
+			text-decoration: underline;
+		}
+
+		@state active {
+			color: color(var(--blue) lightness(44%));
+		}
+
+		@state disabled {
+			color: var(--grey-n04);
+			text-decoration: none;
+		}
+	}*/
+
+	/*button-link {
+		background: var(--blue);
+		border-radius: .236em;
+		color: var(--white);
+
+		hover {
+			background: color(var(--blue) lightness(50%));
+		}
+
+		active {
+			background: color(var(--blue) lightness(44%));
+		}
+
+		disabled {
+			opacity: .382;
+		}
+
+		icon {
+			stroke: currentColor;
+		}
 	}
 
-	active {
-		color: color(var(--blue) lightness(44%));
+	tag {
+		background: var(--green);
+		border-radius: .236em;
+		color: var(--white);
+
+		icon {
+			stroke: currentColor;
+		}
 	}
 
-	disabled {
-		color: var(--grey-n04);
-		text-decoration: none;
-	}
-}
-
-button {
-	background: var(--blue);
-	border-radius: .236em;
-	color: var(--white);
-
-	hover {
-		background: color(var(--blue) lightness(50%));
+	overlay {
+		background: var(--black);
 	}
 
-	active {
-		background: color(var(--blue) lightness(44%));
-	}
+	modal {
+		background: var(--white);
+	}*/
 
-	disabled {
-		opacity: .382;
-	}
-
-	icon {
-		stroke: currentColor;
-	}
-}
-
-button-link {
-	background: var(--blue);
-	border-radius: .236em;
-	color: var(--white);
-
-	hover {
-		background: color(var(--blue) lightness(50%));
-	}
-
-	active {
-		background: color(var(--blue) lightness(44%));
-	}
-
-	disabled {
-		opacity: .382;
-	}
-
-	icon {
-		stroke: currentColor;
-	}
-}
-
-tag {
-	background: var(--green);
-	border-radius: .236em;
-	color: var(--white);
-
-	icon {
-		stroke: currentColor;
-	}
-}
-
-overlay {
-	background: var(--black);
-}
-
-modal {
-	background: var(--white);
 }

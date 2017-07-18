@@ -1,4 +1,4 @@
-const ChassisComponent = require('../component')
+const ChassisComponent = require('../../component')
 
 class ChassisTagComponent extends ChassisComponent {
 	constructor	(chassis, theme, selectors = ['.tag'], states = {

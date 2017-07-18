@@ -47,7 +47,7 @@ class ChassisFileUtils {
 	
 	/**
 	 * @method parseDirectory
-	 * Parse all stylesheets in a given directory
+	 * Parse all style sheets in a given directory
 	 * @param {string} dirpath
 	 * @param {boolean} relative
 	 * Whether or not dirpath is relative (false means absolute)
@@ -59,17 +59,17 @@ class ChassisFileUtils {
 		}
 
 		let files = fs.readdirSync(dirpath).map(file => `${dirpath}/${file}`)
-		return this.parseStylesheets(files, false)
+		return this.parseStyleSheets(files, false)
 	}
 
 	/**
-	 * @method parseStylesheet
-	 * Parse a CSS stylesheet into a postcss AST
+	 * @method parseStyleSheet
+	 * Parse a CSS style sheet into a postcss AST
 	 * @param {string} filepath
 	 * @return {AST}
 	 * @static
 	 */
-	static parseStylesheet (filepath, relative = true) {
+	static parseStyleSheet (filepath, relative = true) {
 		if (relative) {
 			filepath = this.resolve(filepath)
 		}
@@ -78,18 +78,18 @@ class ChassisFileUtils {
 	}
 
 	/**
-	 * @method parseStylesheets
-	 * Parse an array of CSS stylesheets into a single postcss AST
+	 * @method parseStyleSheets
+	 * Parse an array of CSS style sheets into a single postcss AST
 	 * @param {array} filepaths
 	 * @return {AST}
 	 * @static
 	 */
-	static parseStylesheets (filepaths, relative = true) {
-		let output = this.parseStylesheet(filepaths[0], relative)
+	static parseStyleSheets (filepaths, relative = true) {
+		let output = this.parseStyleSheet(filepaths[0], relative)
 		let remainingFilepaths = filepaths.slice(1)
 
 		remainingFilepaths.forEach(path => {
-			output.append(this.parseStylesheet(path, relative))
+			output.append(this.parseStyleSheet(path, relative))
 		})
 
 		return output

@@ -1,11 +1,11 @@
-const ChassisButtonComponent = require('./components/button.js')
-const ChassisButtonLinkComponent = require('./components/button-link.js')
-const ChassisSvgIconComponent = require('./components/svg-icon.js')
-const ChassisLinkComponent = require('./components/link.js')
-const ChassisModalComponent = require('./components/modal.js')
-const ChassisOverlayComponent = require('./components/overlay.js')
-const ChassisTableComponent = require('./components/table.js')
-const ChassisTagComponent = require('./components/tag.js')
+const ChassisButtonComponent = require('./components/button/component.js')
+const ChassisButtonLinkComponent = require('./components/button-link/component.js')
+const ChassisSvgIconComponent = require('./components/svg-icon/component.js')
+const ChassisLinkComponent = require('./components/link/component.js')
+const ChassisModalComponent = require('./components/modal/component.js')
+const ChassisOverlayComponent = require('./components/overlay/component.js')
+const ChassisTableComponent = require('./components/table/component.js')
+const ChassisTagComponent = require('./components/tag/component.js')
 
 class ChassisConstants {
 	// Order is important!
@@ -63,7 +63,7 @@ class ChassisConstants {
 	
 	static get theme () {
 		return {
-			defaultFilePath: '../stylesheets/default-theme.css'
+			defaultFilePath: '../style-sheets/default-theme.css'
 		}
 	}
 	

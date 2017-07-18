@@ -1,4 +1,4 @@
-const ChassisComponent = require('../component')
+const ChassisComponent = require('../../component')
 
 class ChassisOverlayComponent extends ChassisComponent {
 	constructor	(chassis, theme, selectors = ['chassis-overlay'], states = {

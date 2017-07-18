@@ -1,34 +1,12 @@
-const ChassisComponent = require('../component.js')
+const ChassisComponent = require('../../component.js')
 
 class ChassisButtonComponent extends ChassisComponent {
   constructor (chassis, theme) {
-    super(chassis)
+    super(chassis, theme)
     this.chassis = chassis
 
-    this.name = 'button-link'
-    this.theme = theme
-    this.stylesheet = '../component-sheets/button-link.spec.css'
-    this.selectors = ['.button']
-
-    this.states = [
-      'default',
-  		'visited',
-  		'hover',
-  		'active',
-  		'disabled',
-  		'focus'
-    ]
-
-    this.children = [
-      'icon',
-    ]
-
-    this.variants = [
-      'pill',
-  		'multi-line'
-    ]
-
-    this.extensions = NGN.coalesce(chassis.extensions['button-link'], null)
+    this.name = 'button'
+    this.selectors = ['button']
     this.resetType = 'inline-block'
   }
 
