@@ -121,6 +121,9 @@ components {
 	
 	table {
 		@state default {
+			border-collapse: separate;
+			border-spacing: .382em 0;
+			
 			caption {
 				font-weight: 700;
 			}
