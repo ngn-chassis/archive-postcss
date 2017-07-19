@@ -118,6 +118,34 @@ components {
 			}
 		}
 	}
+	
+	table {
+		@state default {
+			caption {
+				font-weight: 700;
+			}
+			
+			thead {
+				position: sticky;
+				top: 0;
+				
+				border-bottom: 3px solid var(--grey-n03);
+				box-shadow: 0 3px 0 0 var(--grey-n03);
+			}
+			
+			tfoot {
+				border-top: 3px solid var(--grey-n03);
+			}
+			
+			tbody tr td {
+				border-bottom: 1px solid var(--grey-n03);
+			}
+			
+			tbody tr:last-child td {
+				border-bottom: 0;
+			}
+		}
+	}
 
 	overlay {
 		@state default {

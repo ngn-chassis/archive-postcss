@@ -3,6 +3,8 @@ table {
 		$(selector) {
 			table-layout: fixed;
 			width: 100%;
+			border-collapse: collapse;
+	    border-spacing: 0;
 		}
 		
 		$(selector) th, $(selector) td {
