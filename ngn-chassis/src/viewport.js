@@ -1,7 +1,6 @@
 class ChassisViewport {
 	constructor (chassis) {
 		this.chassis = chassis
-
 		this.validOperators = ['<', '<=', '=', '>=', '>', 'from', 'to']
 	}
 

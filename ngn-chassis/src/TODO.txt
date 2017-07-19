@@ -7,6 +7,10 @@ BUGS
 - maybe some helper mixins for responsive embeds
 - screenreader helpers
 - add disabled states to all form controls
+- Animated loaders
+
+Errors are thrown if you set default vwrs to a wider range than your min/max
+layout width. 
 
 COMPONENT RESET
 - make separate component reset blocks for different box-models. This will
