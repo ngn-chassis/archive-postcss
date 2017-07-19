@@ -20,7 +20,7 @@ class ChassisTheme {
 		this.json = this._generateJson()
 	}
 
-	applyToComponent (component, defaultRules, state, root) {
+	applyToComponent (component, defaultRules, state, root, overrides = null) {
 		let { utils } = this.chassis
 		let {
 			name,
@@ -47,7 +47,11 @@ class ChassisTheme {
 			for (let property in theme[state].properties) {
 				decls.push(utils.css.newDecl(property, theme[state].properties[property]))
 			}
-
+			
+			if (overrides) {
+				decls = utils.css.mergeDecls(decls, overrides)
+			}
+			
 			defaultRule.nodes = utils.css.mergeDecls(defaultRule.nodes, decls)
 		}
 
@@ -208,13 +212,39 @@ class ChassisTheme {
 	getCustomProperties () {
 		return this.json['custom-properties']
 	}
-
+	
+	getDecls (theme) {
+		if (!theme.hasOwnProperty('properties')) {
+			return []
+		}
+		
+		let { utils } = this.chassis
+		
+		return Object.keys(theme.properties).map((property) => {
+			return utils.css.newDecl(property, theme.properties[property])
+		})
+	}
+	
 	getElement (element) {
 		if (!this.json.elements.hasOwnProperty(element)) {
 			return null
 		}
 
 		return this.json.elements[element]
+	}
+
+	getRules (theme) {
+		if (!theme.hasOwnProperty('rules')) {
+			return []
+		}
+		
+		let { utils } = this.chassis
+		
+		return Object.keys(theme.rules).map((rule) => {
+			console.log(rule);
+			
+			return rule
+		})
 	}
 
 	hasComponent (component) {

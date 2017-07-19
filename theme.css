@@ -107,22 +107,28 @@ components {
 		}
 	}
 
-	/*tag {
-		background: var(--green);
-		border-radius: .236em;
-		color: var(--white);
+	tag {
+		@state default {
+			background: var(--green);
+			border-radius: .236em;
+			color: var(--white);
 
-		icon {
-			stroke: currentColor;
+			svg.icon {
+				stroke: currentColor;
+			}
 		}
 	}
 
 	overlay {
-		background: var(--black);
+		@state default {
+			background: var(--black);
+		}
 	}
 
 	modal {
-		background: var(--white);
-	}*/
+		@state default {
+			background: var(--white);
+		}
+	}
 
 }

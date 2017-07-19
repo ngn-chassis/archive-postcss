@@ -1,7 +1,4 @@
-BUGS
-- component state themes with no default styles don't work - figure out how to
-  get the correct selector for those states
-
+MISC
 - image replacement mixin
 - maybe some flexbox mixins if they can be done elegantly
 - maybe some helper mixins for responsive embeds
@@ -9,8 +6,10 @@ BUGS
 - add disabled states to all form controls
 - Animated loaders
 
-Errors are thrown if you set default vwrs to a wider range than your min/max
-layout width. 
+BUGS
+- Tags need help at scale ratios other than default
+- Errors are thrown if you set default vwrs to a wider range than your min/max
+  layout width.
 
 COMPONENT RESET
 - make separate component reset blocks for different box-models. This will
@@ -19,7 +18,6 @@ COMPONENT RESET
 
 COMPONENT EXTENSION
 - consider ways of combining rulesets to shrink the size of the css
-
 - maybe allow extension of component states as well as full components:
 @chassis extend button.pill {
 	...

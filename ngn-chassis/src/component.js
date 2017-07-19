@@ -33,6 +33,19 @@ class ChassisComponent {
 
     return new ChassisStyleSheet(this.chassis, this.parseSpecSheet(`../components/${this.name}/spec.css`), false).css
   }
+  
+  getStateTheme (state) {
+		if (!this.theme) {
+			return null
+		}
+
+		if (this.theme.hasOwnProperty(state)) {
+			return this.theme[state]
+		}
+
+		// console.info(`[INFO] ${this.filename} does not contain theming information for "${component}" component. Using default styles...`)
+		return null
+	}
 
   parseSpecSheet (path) {
     let { theme, utils } = this.chassis
@@ -45,21 +58,28 @@ class ChassisComponent {
       this.states.push(state)
       
       let defaultRules = this.resolveVars(atRule.nodes)
+      let overrides = null
       
-      theme.applyToComponent(this.asJson, defaultRules, state, root)
+      if ('generateOverrides' in this) {
+        overrides = this.generateOverrides(state)
+        
+        if (overrides.length === 0) {
+          overrides = null
+        }
+      }
+      
+      theme.applyToComponent(this.asJson, defaultRules, state, root, overrides)
     })
     
     // TODO: Handle variants
+    
+    this.postCallback && this.postCallback(tree)
 
     return root
   }
 
-  resolveVars (rules) {
+  resolveVars (rules, variables = this.variables) {
     let { utils } = this.chassis
-
-    if (!this.variables) {
-      return []
-    }
 
     rules.forEach((rule) => {
       rule.selector = this.selectors.map((selector) => {
@@ -67,8 +87,8 @@ class ChassisComponent {
       }).join(',')
 
       rule.walkDecls((decl) => {
-        decl.prop = utils.string.resolveVariables(decl.prop, this.variables)
-        decl.value = utils.string.resolveVariables(decl.value, this.variables)
+        decl.prop = utils.string.resolveVariables(decl.prop, variables)
+        decl.value = utils.string.resolveVariables(decl.value, variables)
       })
     })
 

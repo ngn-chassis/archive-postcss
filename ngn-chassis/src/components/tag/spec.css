@@ -1,0 +1,33 @@
+tag {
+	@state default {
+		$(selector) {
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+			margin: 0;
+			padding: 0;
+			font-size: $(font-size);
+			line-height: $(line-height);
+			vertical-align: baseline;
+		}
+		
+		$(selector):before, $(selector):after {
+			content: "\00a0";
+		}
+		
+		$(selector) svg.icon {
+			flex: 0 0 auto;
+			width: $(icon-width);
+			height: $(icon-height);
+			transform: $(icon-offset);
+		}
+	}
+	
+	/*@variant pill {
+		$(selector).pill {
+			padding-left: ${Math.sin(lineHeightMultiplier) / 2}em`;
+			padding-right: ${Math.sin(lineHeightMultiplier) / 2}em`;
+			border-radius: `${lineHeightMultiplier}em`;
+		}
+	}*/
+}

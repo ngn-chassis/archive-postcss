@@ -82,6 +82,7 @@ class ChassisPostCss {
 
 		this.cssnextCfg = {
 			features: {
+				autoprefixer: false,
 				customProperties: {
 					variables: {}
 				}

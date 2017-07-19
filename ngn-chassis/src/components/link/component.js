@@ -7,15 +7,24 @@ class ChassisLinkComponent extends ChassisComponent {
 		this.name = 'link'
 		this.selectors = ['a']
 		this.resetType = 'inline'
-		
-		// All decls applied to <a> tags. These will be unset or overridden on
-		// other components that use <a> tags in conjunction with a class or attr
-		for (let state in this.states) {
+	}
+	
+	postCallback () {
+		// All decls applied to <a> tags will be unset or overridden on other
+		// components that use <a> tags in conjunction with a class or attr
+		this.states.forEach((state) => {
+			let theme = this.getStateTheme(state)
+			
+			if (!theme || Object.keys(theme).length === 0) {
+				return
+			}
+			
 			this.chassis.linkOverrides.push({
 				state,
-				decls: []// this.getThemeDecls(state)
+				properties: theme.properties,
+				rules: theme.rules
 			})
-		}
+		})
 	}
 }
 

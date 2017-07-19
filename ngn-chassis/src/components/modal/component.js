@@ -1,10 +1,12 @@
 const ChassisComponent = require('../../component')
 
 class ChassisModalComponent extends ChassisComponent {
-	constructor	(chassis, theme, selectors = ['chassis-modal'], states = {
+	constructor	(chassis, theme) {
+		super(chassis, theme)
 		
-	}, extensions = NGN.coalesce(chassis.extensions.modal, null), resetType = 'block') {
-		super(chassis, 'modal', theme, selectors, states, extensions, resetType)
+		this.name = 'modal'
+		this.selectors = ['chassis-modal']
+		this.resetType = 'block'
 	}
 }
 

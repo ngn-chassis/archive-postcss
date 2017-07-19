@@ -5,7 +5,7 @@
 }
 
 /*@chassis include button-link link svg-icon table tag;*/
-@chassis include link;
+@chassis include link button button-link tag table overlay modal;
 
 .showroom {
 	padding-bottom: 3.618em;
