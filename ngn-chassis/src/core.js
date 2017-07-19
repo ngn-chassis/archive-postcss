@@ -45,6 +45,8 @@ class ChassisCore {
 		let { settings, theme, utils } = this.chassis
 		let themeProps = theme.getCustomProperties()
 		
+		// TODO: Add component properties
+		
 		return utils.css.newRule(':root', [
 			...utils.files.parseStyleSheet('../style-sheets/copic-greys.css').nodes,
 			utils.css.newDeclObj('--ui-min-width', `${settings.layout.minWidth}px`),
@@ -98,13 +100,25 @@ class ChassisCore {
 	}
 
 	get html () {
-		return this.parseSpecSheet('../style-sheets/html.css', {
-			'font-size': `${this.baseTypography.root.fontSize}px`
-		})
+		let { constants, settings, theme, utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
+		
+		let root = utils.css.newRule('html.chassis', [
+			utils.css.newDeclObj('font-size', `${fontSize}px`)
+		])
+
+		return root
 	}
 
 	get body () {
-		return this.parseSpecSheet('../style-sheets/body.css')
+		let { settings, theme, utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
+
+		return theme.applyToElement('body', utils.css.newRule('.chassis body', [
+			utils.css.newDeclObj('min-width', `${settings.layout.minWidth}px`),
+			utils.css.newDeclObj('font-family', 'var(--font-family, initial)'),
+			utils.css.newDeclObj('color', 'var(--text-color, initial)')
+		]))
 	}
 
 	get rootHeadings () {
@@ -113,20 +127,43 @@ class ChassisCore {
 
 		let headingSizeAliases = settings.typography.fontSizes.headings
 		let formLegendAlias = settings.typography.fontSizes.formLegend
-		
-		let variables = {
-			'legend-font-size': `${utils.units.toEms(this.baseTypography[formLegendAlias].fontSize, root.fontSize)}rem`,
-			'legend-line-height': `${utils.units.toEms(this.baseTypography[formLegendAlias].lineHeight, this.baseTypography[formLegendAlias].fontSize)}`,
-			'legend-margin-bottom': `${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[formLegendAlias].lineHeight), this.baseTypography[formLegendAlias].fontSize)}em`
-		}
-		
+		let rules = utils.css.newRoot([])
+
 		for (let i = 1; i <= 6; i++) {
-			variables[`h${i}-font-size`] = `${utils.units.toEms(this.baseTypography[headingSizeAliases[i]].fontSize, root.fontSize)}em`
-			variables[`h${i}-line-height`] = `${utils.units.toEms(this.baseTypography[headingSizeAliases[i]].lineHeight, this.baseTypography[headingSizeAliases[i]].fontSize)}`
-			variables[`h${i}-margin-bottom`] = `${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[headingSizeAliases[i]].lineHeight), this.baseTypography[headingSizeAliases[i]].fontSize)}em`
+			rules.append(utils.css.newRule(`.chassis h${i}`, [
+				utils.css.newDeclObj(
+					'font-size',
+					`${utils.units.toEms(this.baseTypography[headingSizeAliases[i]].fontSize, root.fontSize)}em`
+				),
+				utils.css.newDeclObj(
+					'line-height',
+					`${utils.units.toEms(this.baseTypography[headingSizeAliases[i]].lineHeight, this.baseTypography[headingSizeAliases[i]].fontSize)}`
+				),
+				utils.css.newDeclObj(
+					'margin-bottom',
+					`${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[headingSizeAliases[i]].lineHeight), this.baseTypography[headingSizeAliases[i]].fontSize)}em`
+				),
+				// ...this.getThemeDecls(`h${i}`)
+			]))
 		}
-		
-		return this.parseSpecSheet('../style-sheets/headings.css', variables)
+
+		rules.append(utils.css.newRule('.chassis legend', [
+			utils.css.newDeclObj(
+				'font-size',
+				`${utils.units.toEms(this.baseTypography[formLegendAlias].fontSize, root.fontSize)}rem`
+			),
+			utils.css.newDeclObj(
+				'line-height',
+				`${utils.units.toEms(this.baseTypography[formLegendAlias].lineHeight, this.baseTypography[formLegendAlias].fontSize)}`
+			),
+			utils.css.newDeclObj(
+				'margin-bottom',
+				`${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[formLegendAlias].lineHeight), this.baseTypography[formLegendAlias].fontSize)}em`
+			),
+			// ...this.getThemeDecls('legend')
+		]))
+
+		return rules
 	}
 
 	get typographyRanges () {

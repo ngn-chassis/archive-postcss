@@ -44,7 +44,7 @@ class ChassisCssUtils {
 				return originalDecl.prop === newDecl.prop
 			})
 			
-			if (index) {
+			if (index >= 0) {
 				finalDecls[index] = newDecl
 				return
 			}

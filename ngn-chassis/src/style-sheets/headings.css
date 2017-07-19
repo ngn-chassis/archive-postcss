@@ -35,7 +35,7 @@
 }
 
 .chassis legend {
-	font-size: $(h1-font-size);
-	line-height: $(h1-line-height);
-	margin-bottom: $(h1-margin-bottom);
+	font-size: $(legend-font-size);
+	line-height: $(legend-line-height);
+	margin-bottom: $(legend-margin-bottom);
 }

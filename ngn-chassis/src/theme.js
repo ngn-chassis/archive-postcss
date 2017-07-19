@@ -20,6 +20,53 @@ class ChassisTheme {
 		this.json = this._generateJson()
 	}
 	
+	applyToElement (element, defaultRule, root = this.chassis.utils.css.newRoot([])) {
+		let { utils } = this.chassis
+		
+		let selector = defaultRule.selector
+		let theme = this.getElement(element)
+		
+		let propKeys = Object.keys(theme.properties)
+		let ruleKeys = Object.keys(theme.rules)
+
+		if (propKeys.length > 0) {
+			let decls = []
+			
+			for (let property in theme.properties) {
+				decls.push(utils.css.newDecl(property, theme.properties[property]))
+			}
+			
+			defaultRule.nodes = utils.css.mergeDecls(defaultRule.nodes, decls)
+		}
+		
+		root.append(defaultRule)
+		
+		if (ruleKeys.length > 0) {
+			let rulesets = this.appendNestedRulesets(root, selector, theme.rules)
+		}
+		
+		return root
+	}
+	
+	appendNestedRulesets (root, selector, nestedRules) {
+		let { utils } = this.chassis
+		
+		Object.keys(nestedRules).forEach((nestedRule) => {
+			let nestedSelector = `${selector} ${nestedRule}`
+			let { properties, rules } = nestedRules[nestedRule]
+			
+			let decls = Object.keys(properties).map((property) => {
+				return utils.css.newDeclObj(property, properties[property])
+			})
+			
+			root.append(utils.css.newRule(nestedSelector, decls))
+			
+			if (Object.keys(rules).length > 0) {
+				this.appendNestedRulesets(root, nestedSelector, rules)
+			}
+		})
+	}
+	
 	componentSelectorIsValid (component) {
 		let hasCommas = component.selector.includes(',')
 		let numIssues = 0
@@ -68,7 +115,7 @@ class ChassisTheme {
 			return null
 		}
 		
-		return this.json[component]
+		return this.json.components[component]
 	}
 	
 	getComponentStateProperties (component) {
@@ -110,12 +157,12 @@ class ChassisTheme {
 		return this.json['custom-properties']
 	}
 	
-	getElementProperties (element) {
+	getElement (element) {
 		if (!this.json.elements.hasOwnProperty(element)) {
 			return null
 		}
 		
-		return this.json[element]
+		return this.json.elements[element]
 	}
 	
 	hasComponent (component) {
@@ -133,9 +180,11 @@ class ChassisTheme {
 		state.nodes.forEach((node) => {
 			if (node.type === 'comment') {
 				return
+				
 			} else if (node.type === 'rule') {
 				json.rules[node.selector] = this._generateRulesetJson(node)
 				return
+				
 			} else if (node.type !== 'decl') {
 				console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: Chassis Themes: Component states do not support nodes of type "${node.type}". Discarding...`)
 				node.remove()
@@ -154,14 +203,14 @@ class ChassisTheme {
 		variant.nodes.forEach((node) => {
 			if (node.type === 'comment') {
 				return
+				
 			} else if (node.type !== 'rule') {
 				console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: Invalid Component Variant type "${node.type}". Component Variants must be declared as rulesets with CSS declarations inside. Discarding...`)
 				node.remove()
 				return
 			}
 
-			let variant = node.selector
-			json[variant] = this.generateComponentJson(node)
+			json[node.selector] = this.generateComponentJson(node)
 		})
 
 		return json
@@ -252,8 +301,11 @@ class ChassisTheme {
 		ruleset.nodes.forEach((node) => {
 			if (node.type === 'comment') {
 				return
+				
 			} else if (node.type === 'rule') {
 				json.rules[node.selector] = this._generateRulesetJson(node)
+				return
+				
 			} else if (node.type !== 'decl') {
 				console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: Chassis Themes: Rulesets nested within component states do not support nodes of type "${node.type}". Discarding...`)
 				node.remove()
