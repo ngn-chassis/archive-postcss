@@ -1,5 +1,3 @@
-// TODO: Refactor to use spec sheet
-
 const postcss = require('postcss')
 const customProperties = require('postcss-custom-properties')
 

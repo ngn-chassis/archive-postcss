@@ -6,9 +6,20 @@ class ChassisComponent {
     this.theme = theme
     
     this.states = []
-    this.children = []
     this.variants = []
     this.subcomponents = []
+  }
+  
+  get asJson () {
+    return {
+      name: this.name,
+      theme: this.theme,
+      selectors: this.selectors,
+      states: this.states,
+      children: this.children,
+      variants: this.variants,
+      subcomponents: this.subcomponents
+    }
   }
 
   get css () {
@@ -23,60 +34,8 @@ class ChassisComponent {
     return new ChassisStyleSheet(this.chassis, this.parseSpecSheet(`../components/${this.name}/spec.css`), false).css
   }
 
-  // injectThemeDecls (atRule) {
-  //   let { theme, utils } = this.chassis
-  //   let themeDecls = this.getThemeDecls(atRule.params)
-  //
-  //   if (themeDecls.length > 0) {
-  //     atRule.nodes.push(...themeDecls.map((decl) => {
-  //       return utils.css.newDecl(decl.prop, decl.value)
-  //     }))
-  //   }
-  //
-  //   console.log(atRule.nodes);
-  //
-  //   // ;
-  //   // console.log(`Injecting ${atRule.params.length > 0 ? atRule.params : atRule.name} ${this.name} theme props.`);
-  // }
-  
-  // getThemeDecls (state) {
-	// 	let { theme, utils } = this.chassis
-	// 	let decls = this.getStateProperties(state)
-  //
-	// 	if (decls) {
-	// 		return Object.keys(decls).map((decl) => utils.css.newDecl(decl, decls[decl]))
-	// 	}
-  //
-	// 	return []
-	// }
-  //
-	// getStateProperties (state) {
-	// 	if (!this.theme) {
-	// 		return []
-	// 	}
-  //
-	// 	if (state === 'default') {
-	// 		let defaults = {}
-  //
-	// 		for (let prop in this.theme) {
-	// 			if (typeof this.theme[prop] === 'string') {
-	// 				defaults[prop] = this.theme[prop]
-	// 			}
-	// 		}
-  //
-	// 		return defaults
-	// 	}
-  //
-	// 	if (this.theme.hasOwnProperty(state)) {
-	// 		return this.theme[state]
-	// 	}
-  //
-	// 	// console.info(`[INFO] ${this.filename} does not contain theming information for "${component}" component. Using default styles...`)
-	// 	return null
-	// }
-
   parseSpecSheet (path) {
-    let { utils } = this.chassis
+    let { theme, utils } = this.chassis
 
     let tree = utils.files.parseStyleSheet(path)
     let root = utils.css.newRoot([])
@@ -85,28 +44,24 @@ class ChassisComponent {
       let state = atRule.params
       this.states.push(state)
       
-      let rules = atRule.nodes
+      let defaultRules = this.resolveVars(atRule.nodes)
       
-      // TODO: Apply theme
-      // let themeDecls = this.getThemeDecls(state)
-      // console.log(themeDecls);
-      
-      root.append(...rules)
+      theme.applyToComponent(this.asJson, defaultRules, state, root)
     })
     
     // TODO: Handle variants
 
-    return this.resolveVars(root)
+    return root
   }
 
-  resolveVars (tree) {
+  resolveVars (rules) {
     let { utils } = this.chassis
 
     if (!this.variables) {
-      return
+      return []
     }
 
-    tree.walkRules((rule) => {
+    rules.forEach((rule) => {
       rule.selector = this.selectors.map((selector) => {
         return utils.string.resolveVariables(rule.selector, {selector})
       }).join(',')
@@ -117,7 +72,7 @@ class ChassisComponent {
       })
     })
 
-    return tree
+    return rules
   }
 }
 

@@ -20,10 +20,50 @@ class ChassisTheme {
 		this.json = this._generateJson()
 	}
 	
+	applyToComponent (component, defaultRules, state, root) {
+		let { utils } = this.chassis
+		let {
+			name,
+			theme,
+			selectors,
+			subcomponents
+		} = component
+		
+		if (!theme || !theme[state]) {
+			return root.append(...defaultRules)
+		}
+		
+		let propKeys = Object.keys(theme[state].properties)
+		let ruleKeys = Object.keys(theme[state].rules)
+		
+		if (propKeys.length > 0) {
+			if (defaultRules.length === 0) {
+				defaultRules.push(utils.css.newRule(selectors.join(', ')))
+			}
+			
+			let defaultRule = defaultRules[0]
+			let decls = []
+			
+			for (let property in theme[state].properties) {
+				decls.push(utils.css.newDecl(property, theme[state].properties[property]))
+			}
+			
+			defaultRule.nodes = utils.css.mergeDecls(defaultRule.nodes, decls)
+		}
+		
+		root.append(...defaultRules)
+		
+		if (ruleKeys.length > 0) {
+			let rulesets = this.appendNestedRulesets(root, selectors, theme[state].rules)
+		}
+		
+		return root
+	}
+	
 	applyToElement (element, defaultRule, root = this.chassis.utils.css.newRoot([])) {
 		let { utils } = this.chassis
 		
-		let selector = defaultRule.selector
+		let selectors = defaultRule.selector.split(',').map((entry) => entry.trim())
 		let theme = this.getElement(element)
 		
 		if (!theme) {
@@ -46,17 +86,17 @@ class ChassisTheme {
 		root.append(defaultRule)
 		
 		if (ruleKeys.length > 0) {
-			let rulesets = this.appendNestedRulesets(root, selector, theme.rules)
+			let rulesets = this.appendNestedRulesets(root, selectors, theme.rules)
 		}
 		
 		return root
 	}
 	
-	appendNestedRulesets (root, selector, nestedRules) {
+	appendNestedRulesets (root, selectors, nestedRules) {
 		let { utils } = this.chassis
 		
 		Object.keys(nestedRules).forEach((nestedRule) => {
-			let nestedSelector = `${selector} ${nestedRule}`
+			let nestedSelector = selectors.map((selector) => `${selector} ${nestedRule}`).join(', ')
 			let { properties, rules } = nestedRules[nestedRule]
 			
 			let decls = Object.keys(properties).map((property) => {
@@ -66,7 +106,7 @@ class ChassisTheme {
 			root.append(utils.css.newRule(nestedSelector, decls))
 			
 			if (Object.keys(rules).length > 0) {
-				this.appendNestedRulesets(root, nestedSelector, rules)
+				this.appendNestedRulesets(root, [nestedSelector], rules)
 			}
 		})
 	}
@@ -81,6 +121,14 @@ class ChassisTheme {
 		}
 
 		return numIssues === 0
+	}
+	
+	getComponent (component) {
+		if (!this.json.components.hasOwnProperty(component)) {
+			return null
+		}
+		
+		return this.json.components[component]
 	}
 	
 	generateComponentJson (component) {

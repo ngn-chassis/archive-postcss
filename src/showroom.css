@@ -5,7 +5,7 @@
 }
 
 /*@chassis include button-link link svg-icon table tag;*/
-@chassis include button;
+@chassis include link;
 
 .showroom {
 	padding-bottom: 3.618em;

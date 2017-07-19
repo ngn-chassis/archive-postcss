@@ -1,3 +1,7 @@
+BUGS
+- component state themes with no default styles don't work - figure out how to
+  get the correct selector for those states
+
 - image replacement mixin
 - maybe some flexbox mixins if they can be done elegantly
 - maybe some helper mixins for responsive embeds
@@ -25,4 +29,4 @@ AUTO-TYPOGRAPHY SYSTEM
   starts behaving very strangely at those small sizes.
 - Possible solution is to make sure the scale ratio value is utilized in all
   calculations- right now, some values are just using Math.sin or log or
-  something without respect to the actual scale ratio value. 
+  something without respect to the actual scale ratio value.

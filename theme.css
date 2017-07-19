@@ -51,7 +51,7 @@ components {
 		}
 
 		@state hover {
-			background: color(var(--blue) lightness(50%));
+			background: color(var(--blue) lightness(55%));
 		}
 
 		@state active {
@@ -63,8 +63,10 @@ components {
 		}
 	}
 	
-	/*link {
-		color: var(--blue);
+	link {
+		@state default {
+			color: var(--blue);
+		}
 
 		@state hover {
 			color: color(var(--blue) lightness(50%));
@@ -79,31 +81,33 @@ components {
 			color: var(--grey-n04);
 			text-decoration: none;
 		}
-	}*/
+	}
 
-	/*button-link {
-		background: var(--blue);
-		border-radius: .236em;
-		color: var(--white);
-
-		hover {
-			background: color(var(--blue) lightness(50%));
+	button-link {
+		@state default {
+			background: var(--blue);
+			border-radius: .236em;
+			color: var(--white);
+			
+			svg.icon {
+				stroke: currentColor;
+			}
 		}
 
-		active {
+		@state hover {
+			background: color(var(--blue) lightness(55%));
+		}
+
+		@state active {
 			background: color(var(--blue) lightness(44%));
 		}
 
-		disabled {
+		@state disabled {
 			opacity: .382;
-		}
-
-		icon {
-			stroke: currentColor;
 		}
 	}
 
-	tag {
+	/*tag {
 		background: var(--green);
 		border-radius: .236em;
 		color: var(--white);
