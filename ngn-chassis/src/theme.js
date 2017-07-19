@@ -26,6 +26,10 @@ class ChassisTheme {
 		let selector = defaultRule.selector
 		let theme = this.getElement(element)
 		
+		if (!theme) {
+			return root.append(defaultRule)
+		}
+		
 		let propKeys = Object.keys(theme.properties)
 		let ruleKeys = Object.keys(theme.rules)
 

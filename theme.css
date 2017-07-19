@@ -3,7 +3,7 @@ custom-properties {
 	--white: rgb(255,255,255);
 	--red: hsl(11,74%,54%);
 	--green: hsl(89,82%,40%);
-	--blue: hsl(200,100%,47%);
+	--blue: #0099FF;
 	--yellow: hsl(55,100%,64%);
 
 	--font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', Avenir, Helvetica, Arial, sans-serif;

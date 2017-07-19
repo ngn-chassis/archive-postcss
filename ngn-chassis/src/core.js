@@ -103,9 +103,9 @@ class ChassisCore {
 		let { constants, settings, theme, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
 		
-		let root = utils.css.newRule('html.chassis', [
+		let root = theme.applyToElement('html', utils.css.newRule('html.chassis', [
 			utils.css.newDeclObj('font-size', `${fontSize}px`)
-		])
+		]))
 
 		return root
 	}
@@ -122,7 +122,7 @@ class ChassisCore {
 	}
 
 	get rootHeadings () {
-		let { settings, typography, utils } = this.chassis
+		let { settings, theme, typography, utils } = this.chassis
 		let { root } = this.baseTypography
 
 		let headingSizeAliases = settings.typography.fontSizes.headings
@@ -130,7 +130,7 @@ class ChassisCore {
 		let rules = utils.css.newRoot([])
 
 		for (let i = 1; i <= 6; i++) {
-			rules.append(utils.css.newRule(`.chassis h${i}`, [
+			theme.applyToElement(`h${i}`, utils.css.newRule(`.chassis h${i}`, [
 				utils.css.newDeclObj(
 					'font-size',
 					`${utils.units.toEms(this.baseTypography[headingSizeAliases[i]].fontSize, root.fontSize)}em`
@@ -142,12 +142,11 @@ class ChassisCore {
 				utils.css.newDeclObj(
 					'margin-bottom',
 					`${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[headingSizeAliases[i]].lineHeight), this.baseTypography[headingSizeAliases[i]].fontSize)}em`
-				),
-				// ...this.getThemeDecls(`h${i}`)
-			]))
+				)
+			]), rules)
 		}
-
-		rules.append(utils.css.newRule('.chassis legend', [
+		
+		theme.applyToElement('legend', utils.css.newRule('.chassis legend', [
 			utils.css.newDeclObj(
 				'font-size',
 				`${utils.units.toEms(this.baseTypography[formLegendAlias].fontSize, root.fontSize)}rem`
@@ -159,9 +158,8 @@ class ChassisCore {
 			utils.css.newDeclObj(
 				'margin-bottom',
 				`${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[formLegendAlias].lineHeight), this.baseTypography[formLegendAlias].fontSize)}em`
-			),
-			// ...this.getThemeDecls('legend')
-		]))
+			)
+		]), rules)
 
 		return rules
 	}
