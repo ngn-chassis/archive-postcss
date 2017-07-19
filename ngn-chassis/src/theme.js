@@ -18,7 +18,6 @@ class ChassisTheme {
 		
 		this._generateRules()
 		this.json = this._generateJson()
-		this.chassis.utils.console.printTree(this.json);
 	}
 	
 	componentSelectorIsValid (component) {
@@ -105,6 +104,10 @@ class ChassisTheme {
 
 		// console.info(`[INFO] ${this.filename} does not contain theming information for "${component}" component. Using default styles...`)
 		return null
+	}
+	
+	getCustomProperties () {
+		return this.json['custom-properties']
 	}
 	
 	getElementProperties (element) {

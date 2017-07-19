@@ -42,13 +42,16 @@ class ChassisCore {
 	}
 
 	get customProperties () {
-		let { settings } = this.chassis
+		let { settings, theme, utils } = this.chassis
+		let themeProps = theme.getCustomProperties()
 		
-		return this.parseSpecSheet('../style-sheets/custom-properties.css', {
-			'layout-min-width': `${settings.layout.minWidth}px`,
-			'layout-max-width': `${settings.layout.maxWidth}px`,
-			'layout-gutter': settings.layout.gutter
-		})
+		return utils.css.newRule(':root', [
+			...utils.files.parseStyleSheet('../style-sheets/copic-greys.css').nodes,
+			utils.css.newDeclObj('--ui-min-width', `${settings.layout.minWidth}px`),
+			utils.css.newDeclObj('--ui-max-width', `${settings.layout.maxWidth}px`),
+			utils.css.newDeclObj('--ui-gutter', `${settings.layout.gutter}`),
+			...Object.keys(themeProps).map((prop) => utils.css.newDeclObj(prop, themeProps[prop]))
+		])
 	}
 
 	get modifiers () {
