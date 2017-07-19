@@ -39,44 +39,44 @@ class ChassisComponent {
   //   // console.log(`Injecting ${atRule.params.length > 0 ? atRule.params : atRule.name} ${this.name} theme props.`);
   // }
   
-  getThemeDecls (state) {
-		let { theme, utils } = this.chassis
-		let decls = this.getStateProperties(state)
-
-		if (decls) {
-			return Object.keys(decls).map((decl) => utils.css.newDecl(decl, decls[decl]))
-		}
-
-		return []
-	}
-
-	getStateProperties (state) {
-		if (!this.theme) {
-			return []
-		}
-
-		if (state === 'default') {
-			let defaults = {}
-
-			for (let prop in this.theme) {
-				if (typeof this.theme[prop] === 'string') {
-					defaults[prop] = this.theme[prop]
-				}
-			}
-
-			return defaults
-		}
-
-		if (this.theme.hasOwnProperty(state)) {
-			return this.theme[state]
-		}
-
-		// console.info(`[INFO] ${this.filename} does not contain theming information for "${component}" component. Using default styles...`)
-		return null
-	}
+  // getThemeDecls (state) {
+	// 	let { theme, utils } = this.chassis
+	// 	let decls = this.getStateProperties(state)
+  //
+	// 	if (decls) {
+	// 		return Object.keys(decls).map((decl) => utils.css.newDecl(decl, decls[decl]))
+	// 	}
+  //
+	// 	return []
+	// }
+  //
+	// getStateProperties (state) {
+	// 	if (!this.theme) {
+	// 		return []
+	// 	}
+  //
+	// 	if (state === 'default') {
+	// 		let defaults = {}
+  //
+	// 		for (let prop in this.theme) {
+	// 			if (typeof this.theme[prop] === 'string') {
+	// 				defaults[prop] = this.theme[prop]
+	// 			}
+	// 		}
+  //
+	// 		return defaults
+	// 	}
+  //
+	// 	if (this.theme.hasOwnProperty(state)) {
+	// 		return this.theme[state]
+	// 	}
+  //
+	// 	// console.info(`[INFO] ${this.filename} does not contain theming information for "${component}" component. Using default styles...`)
+	// 	return null
+	// }
 
   parseSpecSheet (path) {
-    let { settings, utils } = this.chassis
+    let { utils } = this.chassis
 
     let tree = utils.files.parseStyleSheet(path)
     let root = utils.css.newRoot([])
@@ -86,7 +86,10 @@ class ChassisComponent {
       this.states.push(state)
       
       let rules = atRule.nodes
-      let themeDecls = this.getThemeDecls(state)
+      
+      // TODO: Apply theme
+      // let themeDecls = this.getThemeDecls(state)
+      // console.log(themeDecls);
       
       root.append(...rules)
     })

@@ -6,7 +6,9 @@ const customProperties = require('postcss-custom-properties')
 class ChassisCore {
 	constructor (chassis) {
 		this.chassis = chassis
+
 		this.baseTypography = chassis.settings.typography.ranges.first.typography
+
 		this.selectors = {
 			outerContainers: '.chassis section, .chassis nav, .chassis form',
 			innerContainers: '.chassis nav section, .chassis section nav, .chassis nav nav, .chassis article, .chassis fieldset, .chassis figure, .chassis pre, .chassis blockquote, .chassis table, .chassis canvas, .chassis embed'
@@ -33,32 +35,70 @@ class ChassisCore {
 	}
 
 	get reset () {
-		let { utils } = this.chassis
+		let { typography, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
-		
-		return this.parseSpecSheet('../style-sheets/reset.css', {
-			'root-line-height': utils.units.toEms(lineHeight, fontSize)
-		})
+		let lineHeightMultiplier = utils.units.toEms(lineHeight, fontSize)
+
+		return utils.css.newRoot([
+			utils.css.newAtRule({
+				name: 'charset',
+				params: '"UTF-8"'
+			}),
+			utils.css.newRule('*, *:before, *:after', [
+				utils.css.newDeclObj('box-sizing', 'border-box')
+			]),
+			utils.css.newRule('html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video', [
+				utils.css.newDeclObj('margin', '0'),
+				utils.css.newDeclObj('padding', '0'),
+				utils.css.newDeclObj('border', '0'),
+				utils.css.newDeclObj('font', 'inherit'),
+				utils.css.newDeclObj('font-size', '100%'),
+				utils.css.newDeclObj('line-height', `${lineHeightMultiplier}`),
+				utils.css.newDeclObj('vertical-align', 'baseline')
+			]),
+			utils.css.newRule('ol, ul', [
+				utils.css.newDeclObj('list-style', 'none')
+			]),
+			utils.css.newRule('q, blockquote', [
+				utils.css.newDeclObj('quotes', 'none')
+			]),
+			utils.css.newRule('q:before, q:after, blockquote:before, blockquote:after', [
+				utils.css.newDeclObj('content', '""'),
+				utils.css.newDeclObj('content', 'none')
+			]),
+			utils.css.newRule('a img', [
+				utils.css.newDeclObj('border', 'none')
+			]),
+			utils.css.newRule('article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary', [
+				utils.css.newDeclObj('display', 'block')
+			]),
+			utils.css.newRule('input, textarea, button', [
+				utils.css.newDeclObj('font-size', 'inherit'),
+				utils.css.newDeclObj('line-height', 'inherit')
+			])
+		])
 	}
 
 	get customProperties () {
-		let { settings } = this.chassis
-		
-		return this.parseSpecSheet('../style-sheets/custom-properties.css', {
-			'layout-min-width': `${settings.layout.minWidth}px`,
-			'layout-max-width': `${settings.layout.maxWidth}px`,
-			'layout-gutter': settings.layout.gutter
-		})
+		let { settings, utils } = this.chassis
+
+		return utils.css.newRule(':root', [
+			...utils.files.parseStyleSheet('../style-sheets/copic-greys.css').nodes,
+			utils.css.newDeclObj('--ui-min-width', `${settings.layout.minWidth}px`),
+			utils.css.newDeclObj('--ui-max-width', `${settings.layout.maxWidth}px`),
+			utils.css.newDeclObj('--ui-gutter', `${settings.layout.gutter}`),
+			...this.getThemeDecls('custom-properties')
+		])
 	}
 
 	get modifiers () {
-		// TODO: Add font-weight stuff here
+		let { utils } = this.chassis
 
-		return this.parseSpecSheet('../style-sheets/global-modifiers.css')
+		return utils.files.parseStyleSheet('../style-sheets/global-modifiers.css')
 	}
 
 	get widthConstraint () {
-		let { layout, settings, utils } = this.chassis
+		let { constants, layout, settings, utils } = this.chassis
 
 		let css = utils.css.newRoot([
 			utils.css.newRule('.chassis .width-constraint', [
@@ -95,13 +135,25 @@ class ChassisCore {
 	}
 
 	get html () {
-		return this.parseSpecSheet('../style-sheets/html.css', {
-			'font-size': `${this.baseTypography.root.fontSize}px`
-		})
+		let { constants, settings, theme, utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
+
+		return utils.css.newRule('html.chassis', [
+			utils.css.newDeclObj('font-size', `${fontSize}px`),
+			...this.getThemeDecls('html')
+		])
 	}
 
 	get body () {
-		return this.parseSpecSheet('../style-sheets/body.css')
+		let { constants, settings, utils } = this.chassis
+		let { fontSize, lineHeight } = this.baseTypography.root
+
+		return utils.css.newRule('.chassis body', [
+			utils.css.newDeclObj('min-width', `${settings.layout.minWidth}px`),
+			utils.css.newDeclObj('font-family', 'var(--font-family, initial)'),
+			utils.css.newDeclObj('color', 'var(--text-color, initial)'),
+			...this.getThemeDecls('body')
+		])
 	}
 
 	get rootHeadings () {
@@ -110,20 +162,43 @@ class ChassisCore {
 
 		let headingSizeAliases = settings.typography.fontSizes.headings
 		let formLegendAlias = settings.typography.fontSizes.formLegend
-		
-		let variables = {
-			'legend-font-size': `${utils.units.toEms(this.baseTypography[formLegendAlias].fontSize, root.fontSize)}rem`,
-			'legend-line-height': `${utils.units.toEms(this.baseTypography[formLegendAlias].lineHeight, this.baseTypography[formLegendAlias].fontSize)}`,
-			'legend-margin-bottom': `${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[formLegendAlias].lineHeight), this.baseTypography[formLegendAlias].fontSize)}em`
-		}
-		
+		let rules = utils.css.newRoot([])
+
 		for (let i = 1; i <= 6; i++) {
-			variables[`h${i}-font-size`] = `${utils.units.toEms(this.baseTypography[headingSizeAliases[i]].fontSize, root.fontSize)}em`
-			variables[`h${i}-line-height`] = `${utils.units.toEms(this.baseTypography[headingSizeAliases[i]].lineHeight, this.baseTypography[headingSizeAliases[i]].fontSize)}`
-			variables[`h${i}-margin-bottom`] = `${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[headingSizeAliases[i]].lineHeight), this.baseTypography[headingSizeAliases[i]].fontSize)}em`
+			rules.append(utils.css.newRule(`.chassis h${i}`, [
+				utils.css.newDeclObj(
+					'font-size',
+					`${utils.units.toEms(this.baseTypography[headingSizeAliases[i]].fontSize, root.fontSize)}em`
+				),
+				utils.css.newDeclObj(
+					'line-height',
+					`${utils.units.toEms(this.baseTypography[headingSizeAliases[i]].lineHeight, this.baseTypography[headingSizeAliases[i]].fontSize)}`
+				),
+				utils.css.newDeclObj(
+					'margin-bottom',
+					`${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[headingSizeAliases[i]].lineHeight), this.baseTypography[headingSizeAliases[i]].fontSize)}em`
+				),
+				...this.getThemeDecls(`h${i}`)
+			]))
 		}
-		
-		return this.parseSpecSheet('../style-sheets/headings.css', variables)
+
+		rules.append(utils.css.newRule('.chassis legend', [
+			utils.css.newDeclObj(
+				'font-size',
+				`${utils.units.toEms(this.baseTypography[formLegendAlias].fontSize, root.fontSize)}rem`
+			),
+			utils.css.newDeclObj(
+				'line-height',
+				`${utils.units.toEms(this.baseTypography[formLegendAlias].lineHeight, this.baseTypography[formLegendAlias].fontSize)}`
+			),
+			utils.css.newDeclObj(
+				'margin-bottom',
+				`${utils.units.toEms(typography.calculateMarginBottom(this.baseTypography[formLegendAlias].lineHeight), this.baseTypography[formLegendAlias].fontSize)}em`
+			),
+			...this.getThemeDecls('legend')
+		]))
+
+		return rules
 	}
 
 	get typographyRanges () {
@@ -220,68 +295,77 @@ class ChassisCore {
 		let { layout, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
 
-		return this.parseSpecSheet('../style-sheets/outer-containers.css', {
-			'selectors': this.selectors.outerContainers,
-			'margin-bottom': `${utils.units.toEms(layout.calculateMarginBottom(lineHeight, 'outer'), fontSize)}em`
-		})
+		return utils.css.newRule(this.selectors.outerContainers, [
+			utils.css.newDeclObj(
+				'margin-bottom',
+				`${utils.units.toEms(layout.calculateMarginBottom(lineHeight, 'outer'), fontSize)}em`
+			)
+		])
 	}
 
 	get innerContainers () {
 		let { layout, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
 
-		return this.parseSpecSheet('../style-sheets/inner-containers.css', {
-			'selectors': this.selectors.innerContainers,
-			'margin-bottom': `${utils.units.toEms(layout.calculateMarginBottom(lineHeight, 'inner'), fontSize)}em`
-		})
+		return utils.css.newRule(this.selectors.innerContainers, [
+			utils.css.newDeclObj(
+				'margin-bottom',
+				`${utils.units.toEms(layout.calculateMarginBottom(lineHeight, 'inner'), fontSize)}em`
+			)
+		])
 	}
 
 	get paragraph () {
 		let { layout, utils } = this.chassis
 		let { fontSize, lineHeight } = this.baseTypography.root
 
-		return this.parseSpecSheet('../style-sheets/paragraph.css', {
-			'margin-bottom': `${utils.units.toEms(lineHeight, fontSize)}em`
-		})
+		return utils.css.newRule('.chassis p', [
+			utils.css.newDeclObj(
+				'margin-bottom',
+				`${utils.units.toEms(lineHeight, fontSize)}em`
+			)
+		])
 	}
 
 	get inlineComponentReset () {
-		return this.parseSpecSheet('../style-sheets/inline-component-reset.css')
+		let { utils } = this.chassis
+
+		return utils.css.newAtRule({
+			name: 'chassis-post',
+			params: 'component-reset inline',
+			nodes: utils.files.parseStyleSheet('../style-sheets/inline-component-reset.css').nodes
+		})
 	}
 	
 	get inlineBlockComponentReset () {
-		return this.parseSpecSheet('../style-sheets/inline-block-component-reset.css')
+		let { utils } = this.chassis
+
+		return utils.css.newAtRule({
+			name: 'chassis-post',
+			params: 'component-reset inline-block',
+			nodes: utils.files.parseStyleSheet('../style-sheets/inline-block-component-reset.css').nodes
+		})
 	}
 	
 	get blockComponentReset () {
-		return this.parseSpecSheet('../style-sheets/block-component-reset.css')
-	}
-	
-	parseSpecSheet (path, variables = {}) {
 		let { utils } = this.chassis
-		
-		let tree = utils.files.parseStyleSheet(path)
-		
-		if (!variables) {
-			return tree
+
+		return utils.css.newAtRule({
+			name: 'chassis-post',
+			params: 'component-reset block',
+			nodes: utils.files.parseStyleSheet('../style-sheets/block-component-reset.css').nodes
+		})
+	}
+
+	getThemeDecls (element) {
+		let { theme, utils } = this.chassis
+		let decls = theme.getElementProperties(element)
+
+		if (decls) {
+			return Object.keys(decls).map((decl) => utils.css.newDeclObj(decl, decls[decl]))
 		}
 
-		tree.walk((node) => {
-			if (node.type === 'atrule') {
-				node.params = utils.string.resolveVariables(node.params, variables)
-			}
-			
-			if (node.type === 'rule') {
-				node.selector = utils.string.resolveVariables(node.selector, variables)
-			}
-			
-			if (node.type === 'decl') {
-				node.prop = utils.string.resolveVariables(node.prop, variables)
-				node.value = utils.string.resolveVariables(node.value, variables)
-			}
-    })
-		
-		return tree
+		return []
 	}
 }
 

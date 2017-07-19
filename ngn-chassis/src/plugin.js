@@ -64,14 +64,14 @@ class ChassisPostCss {
 					root: this.tree,
 					atRule
 				}, this.atRules.getProperties(atRule))
-
-				this.post.process(data, output)
+				
+				this.post.process(data)
 			})
 
 			output = cssnext(this.cssnextCfg).process(output.toString())
 			output = removeComments.process(output.toString())
 			// output = mergeAdjacentRules.process(output.toString())
- 			output = perfectionist.process(output.toString())
+			output = perfectionist.process(output.toString())
 
 			result.root = postcss.parse(output)
 		}

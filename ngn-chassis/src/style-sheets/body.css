@@ -1,0 +1,5 @@
+.chassis body {
+	min-width: var(--ui-min-width);
+	font-family: var(--font-family, initial);
+	color: var(--text-color, initial);
+}

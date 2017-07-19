@@ -10,11 +10,6 @@ custom-properties {
 	--text-color: rgb(68,68,68);
 }
 
-body {
-	font-family: var(--font-family);
-	color: var(--text-color);
-}
-
 h1 {
 	font-weight: 700;
 }

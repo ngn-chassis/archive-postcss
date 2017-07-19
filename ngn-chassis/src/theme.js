@@ -33,8 +33,39 @@ class ChassisTheme {
 		return numIssues === 0
 	}
 	
+	generateComponentJson (component) {
+		let json = {
+			default: {}
+		}
+		
+		component.nodes.forEach((node) => {
+			if (node.type === 'comment') {
+				return
+			} else if (node.type === 'decl') {
+				let { prop, value } = node
+				
+				console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: "${component.selector}" component: Theme properties must be assigned to a component state or an element selector. Discarding unassigned "${node.prop}" property...`)
+				return
+			} else if (node.type === 'atrule') {
+				let state = node.params
+
+				if (state === 'variants') {
+					json.variants = this._generateComponentVariantJson(node)
+					return
+				}
+
+				json[state] = this._generateComponentStateJson(node)
+				return
+			}
+
+			console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: Chassis Themes do not support nodes of type "${node.type}". Discarding...`)
+		})
+
+		return json
+	}
+	
 	getComponentProperties (component) {
-		if (!this.json.hasOwnProperty(component)) {
+		if (!this.json.components.hasOwnProperty(component)) {
 			return null
 		}
 		
@@ -75,83 +106,20 @@ class ChassisTheme {
 		// console.info(`[INFO] ${this.filename} does not contain theming information for "${component}" component. Using default styles...`)
 		return null
 	}
-
+	
+	getElementProperties (element) {
+		if (!this.json.elements.hasOwnProperty(element)) {
+			return null
+		}
+		
+		return this.json[element]
+	}
+	
 	hasComponent (component) {
 		return this.components.includes(component)
 	}
 	
-	generateRuleJson (rule) {
-		let json = {}
-		
-		rule.nodes.forEach((node) => {
-			if (node.type === 'comment') {
-				return
-			} else if (node.type === 'decl') {
-				let { prop, value } = node
-				json[prop] = value
-				return
-			} else {
-				console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: Chassis Themes do not support nested rulesets. Discarding...`)
-				return
-			}
-		})
-		
-		return json
-	}
-	
-	generateComponentJson (component) {
-		let json = {
-			default: {}
-		}
-		
-		component.nodes.forEach((node) => {
-			if (node.type === 'comment') {
-				return
-			} else if (node.type === 'decl') {
-				let { prop, value } = node
-				
-				console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: "${component.selector}" component: Theme properties must be assigned to a component state or an element selector. Discarding unassigned "${node.prop}" property...`)
-				return
-			} else if (node.type === 'atrule') {
-				let state = node.params
-
-				if (state === 'variants') {
-					json.variants = this._generateComponentVariantJson(node)
-					return
-				}
-
-				json[state] = this._generateComponentStateJson(node)
-				return
-			}
-
-			console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: Chassis Themes do not support nodes of type "${node.type}". Discarding...`)
-		})
-
-		return json
-	}
-	
-	_generateNestedRulesetJson (ruleset) {
-		let json = {
-			properties: {},
-			rules: {}
-		}
-		
-		ruleset.nodes.forEach((node) => {
-			if (node.type === 'comment') {
-				return
-			} else if (node.type === 'rule') {
-				json.rules[node.selector] = this._generateNestedRulesetJson(node)
-			} else if (node.type !== 'decl') {
-				console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: Chassis Themes: Rulesets nested within component states do not support nodes of type "${node.type}". Discarding...`)
-				node.remove()
-				return
-			}
-			
-			json.properties[node.prop] = node.value
-		})
-		
-		return json
-	}
+	// Private Methods -----------------------------------------------------------
 	
 	_generateComponentStateJson (state) {
 		let json = {
@@ -163,7 +131,7 @@ class ChassisTheme {
 			if (node.type === 'comment') {
 				return
 			} else if (node.type === 'rule') {
-				json.rules[node.selector] = this._generateNestedRulesetJson(node)
+				json.rules[node.selector] = this._generateRulesetJson(node)
 				return
 			} else if (node.type !== 'decl') {
 				console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: Chassis Themes: Component states do not support nodes of type "${node.type}". Discarding...`)
@@ -195,10 +163,21 @@ class ChassisTheme {
 
 		return json
 	}
-
+	
+	_generateCustomProperties (root) {
+		let json = {}
+		
+		root.nodes.forEach((node) => {
+			json[node.prop] = node.value
+		})
+		
+		return json
+	}
+	
 	_generateJson () {
 		let json = {
-			components: {}
+			components: {},
+			elements: {}
 		}
 		
 		this.tree.nodes.forEach((node) => {
@@ -220,7 +199,12 @@ class ChassisTheme {
 				return
 			}
 			
-			json[node.selector] = this.generateRuleJson(node)
+			if (node.selector === ':root' || node.selector === 'custom-properties') {
+				json[node.selector] = this._generateCustomProperties(node)
+				return
+			}
+			
+			json.elements[node.selector] = this._generateRulesetJson(node)
 		})
 		
 		return json
@@ -254,6 +238,29 @@ class ChassisTheme {
 
 			this.rules.push(rule.selector)
 		})
+	}
+	
+	_generateRulesetJson (ruleset) {
+		let json = {
+			properties: {},
+			rules: {}
+		}
+		
+		ruleset.nodes.forEach((node) => {
+			if (node.type === 'comment') {
+				return
+			} else if (node.type === 'rule') {
+				json.rules[node.selector] = this._generateRulesetJson(node)
+			} else if (node.type !== 'decl') {
+				console.warn(`[WARNING]: ${this.filename} line ${node.source.start.line}: Chassis Themes: Rulesets nested within component states do not support nodes of type "${node.type}". Discarding...`)
+				node.remove()
+				return
+			}
+			
+			json.properties[node.prop] = node.value
+		})
+		
+		return json
 	}
 }
 
