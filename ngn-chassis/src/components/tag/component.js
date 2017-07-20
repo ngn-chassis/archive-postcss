@@ -1,10 +1,9 @@
 const ChassisComponent = require('../../component')
 
 class ChassisTagComponent extends ChassisComponent {
-	constructor	(chassis, theme) {
-		super(chassis, theme)
+	constructor	(chassis, customSpec) {
+		super(chassis, 'tag', customSpec)
 		
-		this.name = 'tag'
 		this.selectors = ['.tag']
 		this.resetType = 'inline'
 		

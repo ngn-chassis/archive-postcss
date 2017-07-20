@@ -1,10 +1,9 @@
 const ChassisComponent = require('../../component')
 
 class ChassisOverlayComponent extends ChassisComponent {
-	constructor	(chassis, theme) {
-		super(chassis, theme)
+	constructor	(chassis, customSpec) {
+		super(chassis, 'overlay', customSpec)
 		
-		this.name = 'overlay'
 		this.selectors = ['chassis-overlay']
 		this.resetType = 'block'
 	}

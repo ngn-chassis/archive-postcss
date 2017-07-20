@@ -30,9 +30,8 @@ class ChassisComponentMixins {
 		let css = components.map((name) => {
 			if (this._componentExists(name)) {
 				let Component = this.get(name)
-				let theme = this.chassis.theme.getComponentProperties(name)
 				
-				return new Component(this.chassis, theme).css
+				return new Component(this.chassis).css
 			}
 			
 			console.warn(`[WARNING] Line ${source.line}: Component "${name}" not found.`)
@@ -41,6 +40,82 @@ class ChassisComponentMixins {
 		
 		atRule.replaceWith(css)
 	}
+	
+	extend () {
+		let { extensions, utils } = this.chassis
+		let { args, atRule, source } = arguments[0]
+		let name = args[0]
+		
+		if (!this._componentExists(name)) {
+			console.warn(`[WARNING] Line ${source.line}: Extensible component "${name}" not found. Discarding...`)
+			atRule.remove()
+			return
+		}
+		
+		if (extensions.hasOwnProperty(name)) {
+			extensions[name].push(atRule.parent.selector)
+		} else {
+			extensions[name] = [atRule.parent.selector]
+		}
+		
+		let Component = this.get(name)
+		let instance = new Component(this.chassis, atRule.nodes)
+		
+		let decls = instance.getDiffedDecls()
+		// TODO: In component.js, diff the custom spec against the default component
+		// styles and return the decls to apply to the component extension
+		
+		atRule.parent.replaceWith(utils.css.newRoot([]))
+	}
+	
+	// extend () {
+	// 	let { extensions, utils } = this.chassis
+	// 	let { args, atRule, source } = arguments[0]
+	// 	let name = args[0]
+	//
+	// 	if (!this._componentExists(name)) {
+	// 		console.warn(`[WARNING] Line ${source.line}: Extensible component "${name}" not found. Discarding...`)
+	// 		atRule.remove()
+	// 		return
+	// 	}
+	//
+	// 	if (extensions.hasOwnProperty(name)) {
+	// 		extensions[name].push(atRule.parent.selector)
+	// 	} else {
+	// 		extensions[name] = [atRule.parent.selector]
+	// 	}
+	//
+	// 	let Component = this.get(name)
+	// 	let instance = new Component(this.chassis)
+	//
+	// 	let root = utils.css.newRoot([
+	// 		utils.css.newRule(atRule.parent.selector, atRule.nodes.map((node) => {
+	// 			if (node.type === 'decl') {
+	// 				return node
+	// 			}
+	//
+	// 			return
+	// 		}).filter((entry) => entry !== undefined))
+	// 	])
+	//
+	// 	atRule.nodes.forEach((node) => {
+	// 		if (node.type === 'rule') {
+	// 			let state = node.selector
+	//
+	// 			if (!(state in instance.states)) {
+	// 				// TODO: Add link to proper documentation!
+	// 				console.warn(`[WARNING] Line ${source.line}: Chassis extend mixin cannot accept nested rulesets. Please see documentation for formatting. Discarding...`)
+	// 				node.remove()
+	// 				return
+	// 			}
+	//
+	// 			let selector = instance.generateSelectorList(instance.states[state], [atRule.parent.selector], true)
+	// 			root.append(utils.css.newRule(selector, node.nodes))
+	// 		}
+	// 	})
+	//
+	// 	atRule.parent.replaceWith(root)
+	// }
 
 	// new () {
 	// 	let { theme, utils } = this.chassis

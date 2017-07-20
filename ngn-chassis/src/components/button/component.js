@@ -1,11 +1,10 @@
 const ChassisComponent = require('../../component.js')
 
 class ChassisButtonComponent extends ChassisComponent {
-  constructor (chassis, theme) {
-    super(chassis, theme)
+  constructor (chassis, customSpec) {
+    super(chassis, 'button', customSpec)
     this.chassis = chassis
 
-    this.name = 'button'
     this.selectors = ['button']
     this.resetType = 'inline-block'
   }

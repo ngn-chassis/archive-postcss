@@ -32,7 +32,11 @@ class ChassisStyleSheet {
 		})
 
 		// Process remaining 'include' mixins
-		output.walkAtRules('chassis', (atRule) => this.processAtRule(atRule))
+		output.walkAtRules('chassis', (atRule) => {
+			if (atRule.params.startsWith('include')) {
+				this.processAtRule(atRule)
+			}
+		})
 
 		// Cleanup empty rulesets and prepend .chassis namespace to all selectors
 		// except 'html' and ':root'

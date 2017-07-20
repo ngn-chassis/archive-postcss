@@ -68,7 +68,7 @@ button {
     
     ...Additional states
     ...Additional variants
-  }
+  }*/
 
   @variant multi-line {
     default {
@@ -79,5 +79,5 @@ button {
         white-space: $(multi-line-white-space);
       }
     }
-  }*/
+  }
 }

@@ -115,25 +115,27 @@
 				margin-bottom: 1em;
 			}
 
-			/*&.ui-components {
+			&.ui-components {
 				& .buttons {
 					& .custom-1 {
-						@chassis new button {
-							background: var(--green);
-							border-radius: .236em;
-							color: var(--white);
+						@chassis extend button {
+							@state default {
+								background: var(--green);
+								border-radius: .236em;
+								color: var(--white);
+							}
 
-							hover {
+							@state hover {
 								background: color(var(--green) lightness(42%));
 							}
 
-							active {
+							@state active {
 								background: color(var(--green) lightness(38%));
 							}
 						}
 					}
 
-					& .custom-2 {
+					/*& .custom-2 {
 						@chassis extend button {
 							background: transparent;
 							border-radius: .236em;
@@ -171,9 +173,9 @@
 								box-shadow: inset 0 2px 0 0 var(--grey-n05);
 							}
 						}
-					}
+					}*/
 				}
-			}*/
+			}
 		}
 
 		@chassis viewport-width from medium {
