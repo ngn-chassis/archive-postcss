@@ -1,0 +1,244 @@
+@charset "UTF-8";
+
+/* Chassis Reset ------------------------------------------------------------ */
+*, *:before, *:after { box-sizing: border-box; }
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
+blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img,
+ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center,
+dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody,
+tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure,
+figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font: inherit;
+	font-size: $root-font-size;
+	vertical-align: baseline;
+}
+
+ol,
+ul {
+	list-style: none;
+}
+
+q,
+blockquote {
+	quotes: none;
+}
+
+q:before,
+q:after,
+blockquote:before,
+blockquote:after {
+	content: "";
+	content: none;
+}
+
+a img {
+	border: none;
+}
+
+/* For IE and Opera Mini */
+/* Set default box model on HTML5 semantic elements */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+	display: block;
+}
+
+input,
+textarea,
+button {
+	font-size: inherit;
+}
+
+/* Chassis Global Modifiers ------------------------------------------------- */
+
+/* Hide element */
+.hidden {
+	display: none !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+}
+
+/* Font Styles */
+.normal-style {
+	font-style: normal !important;
+}
+
+.italic-style {
+	font-style: italic !important;
+}
+
+.oblique-style {
+	font-style: oblique !important;
+}
+
+/* Font Variants */
+.normal-variant {
+	font-variant: normal !important;
+}
+
+.small-caps-variant {
+	font-variant: small-caps !important;
+}
+
+/*@chassis generate font-weight-classes;*/
+
+/*.width-constraint {
+	@chassis constrain-width;
+}*/
+
+.chassis {
+	min-width: $min-ui-width;
+	margin: 0;
+	padding: 0;
+	font-size: 1rem;
+	line-height: $root-line-height em;
+}
+
+.chassis h1 {
+	font-size: $root-h1-font-size em;
+	@chassis line-height $root-h1-font-size em;
+	@chassis margin-bottom $root-h1-font-size em;
+}
+
+.chassis h2 {
+	font-size: $root-h2-font-size em;
+	@chassis line-height $root-h2-font-size em;
+	@chassis margin-bottom $root-h2-font-size em;
+}
+
+.chassis h3 {
+	font-size: $root-h3-font-size em;
+	@chassis line-height $root-h3-font-size em;
+	@chassis margin-bottom $root-h3-font-size em;
+}
+
+.chassis h4 {
+	font-size: $root-h4-font-size em;
+	@chassis line-height $root-h4-font-size em;
+	@chassis margin-bottom $root-h4-font-size em;
+}
+
+.chassis h5 {
+	font-size: $root-h5-font-size em;
+	@chassis line-height $root-h5-font-size em;
+	@chassis margin-bottom $root-h5-font-size em;
+}
+
+.chassis h6 {
+	font-size: $root-h6-font-size em;
+	@chassis line-height $root-h6-font-size em;
+	@chassis margin-bottom $root-h6-font-size em;
+}
+
+.chassis legend {
+	font-size: $root-legend-font-size em;
+	@chassis line-height $root-legend-font-size em;
+	@chassis margin-bottom $root-legend-font-size em;
+}
+
+.chassis
+.chassis section,
+.chassis nav,
+.chassis form {
+	margin-bottom: $root-outer-container-margin-bottom em;
+}
+
+.chassis nav section,
+.chassis section nav,
+.chassis nav nav,
+.chassis article,
+.chassis fieldset,
+.chassis figure,
+.chassis pre,
+.chassis blockquote,
+.chassis table,
+.chassis canvas,
+.chassis embed {
+	margin-bottom: $root-inner-container-margin-bottom em;
+}
+
+.chassis p {
+	margin-bottom: 1rem;
+}
+
+@chassis-spec for typography-range 1 {
+	.chassis {
+		@chassis font-size root px;
+		@chassis line-height root em;
+	}
+
+	.chassis h1 {
+		@chassis line-height $h1-font-size em;
+		@chassis margin-bottom $h1-font-size em;
+	}
+	
+	.chassis h2 {
+		@chassis line-height $h2-font-size em;
+		@chassis margin-bottom $h2-font-size em;
+	}
+	
+	.chassis h3 {
+		@chassis line-height $h3-font-size em;
+		@chassis margin-bottom $h3-font-size em;
+	}
+	
+	.chassis h4 {
+		@chassis line-height $h4-font-size em;
+		@chassis margin-bottom $h4-font-size em;
+	}
+	
+	.chassis h5 {
+		@chassis line-height $h5-font-size em;
+		@chassis margin-bottom $h5-font-size em;
+	}
+	
+	.chassis h6 {
+		@chassis line-height $h6-font-size em;
+		@chassis margin-bottom $h6-font-size em;
+	}
+
+	.chassis legend {
+		@chassis line-height $legend-font-size em;
+		@chassis margin-bottom $legend-font-size em;
+	}
+	
+	.chassis
+	.chassis section,
+	.chassis nav,
+	.chassis form {
+		@chassis margin-bottom $outer-container-margin-bottom em;
+	}
+
+	.chassis nav section,
+	.chassis section nav,
+	.chassis nav nav,
+	.chassis article,
+	.chassis fieldset,
+	.chassis figure,
+	.chassis pre,
+	.chassis blockquote,
+	.chassis table,
+	.chassis canvas,
+	.chassis embed {
+		@chassis margin-bottom $inner-container-margin-bottom em;
+	}
+	
+	.chassis p {
+		margin-bottom: 1rem;
+	}
+}

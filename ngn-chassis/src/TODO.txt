@@ -1,0 +1,34 @@
+MISC
+- image replacement mixin
+- maybe some flexbox mixins if they can be done elegantly
+- maybe some helper mixins for responsive embeds
+- screenreader helpers
+- add disabled states to all form controls
+- Animated loaders
+
+BUGS
+- Tags need help at scale ratios other than default
+- Errors are thrown if you set default vwrs to a wider range than your min/max
+  layout width.
+
+COMPONENT RESET
+- make separate component reset blocks for different box-models. This will
+  minimize the amount of incompatible style rules on different types of elements
+  versus using a shared component reset.
+
+COMPONENT EXTENSION
+- consider ways of combining rulesets to shrink the size of the css
+- maybe allow extension of component states as well as full components:
+@chassis extend button.pill {
+	...
+}
+
+AUTO-TYPOGRAPHY SYSTEM
+- Tags do not look right at small type scale ratios. The math used to
+  calculate the position of icons in the tags outputs a negative number at
+  small ratios like 1.2. The math for padding seems to break down on inline
+  elements at those small ratios as well. In addition, the vertical alignment
+  starts behaving very strangely at those small sizes.
+- Possible solution is to make sure the scale ratio value is utilized in all
+  calculations- right now, some values are just using Math.sin or log or
+  something without respect to the actual scale ratio value.

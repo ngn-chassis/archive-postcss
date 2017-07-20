@@ -1,0 +1,165 @@
+custom-properties {
+	--black: rgb(0,0,0);
+	--white: rgb(255,255,255);
+	--red: hsl(11,74%,54%);
+	--green: hsl(89,82%,40%);
+	--blue: #0099FF;
+	--yellow: hsl(55,100%,64%);
+
+	--font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', Avenir, Helvetica, Arial, sans-serif;
+	--text-color: rgb(68,68,68);
+}
+
+h1 {
+	font-weight: 700;
+}
+
+h2 {
+	font-weight: 700;
+}
+
+h3 {
+	font-weight: 700;
+}
+
+h4 {
+	font-weight: 700;
+}
+
+h5 {
+	font-weight: 700;
+}
+
+h6 {
+	font-weight: 700;
+}
+
+legend {
+	font-weight: 700;
+}
+
+components {
+	button {
+		@state default {
+			background: var(--blue);
+			border-radius: .236em;
+			color: var(--white);
+			
+			svg.icon {
+				stroke: currentColor;
+			}
+		}
+
+		@state hover {
+			background: color(var(--blue) lightness(55%));
+		}
+
+		@state active {
+			background: color(var(--blue) lightness(44%));
+		}
+
+		@state disabled {
+			opacity: .382;
+		}
+	}
+	
+	link {
+		@state default {
+			color: var(--blue);
+		}
+
+		@state hover {
+			color: color(var(--blue) lightness(50%));
+			text-decoration: underline;
+		}
+
+		@state active {
+			color: color(var(--blue) lightness(44%));
+		}
+
+		@state disabled {
+			color: var(--grey-n04);
+			text-decoration: none;
+		}
+	}
+
+	button-link {
+		@state default {
+			background: var(--blue);
+			border-radius: .236em;
+			color: var(--white);
+			
+			svg.icon {
+				stroke: currentColor;
+			}
+		}
+
+		@state hover {
+			background: color(var(--blue) lightness(55%));
+		}
+
+		@state active {
+			background: color(var(--blue) lightness(44%));
+		}
+
+		@state disabled {
+			opacity: .382;
+		}
+	}
+
+	tag {
+		@state default {
+			background: var(--green);
+			border-radius: .236em;
+			color: var(--white);
+
+			svg.icon {
+				stroke: currentColor;
+			}
+		}
+	}
+	
+	table {
+		@state default {
+			border-collapse: separate;
+			border-spacing: .382em 0;
+			
+			caption {
+				font-weight: 700;
+			}
+			
+			thead {
+				position: sticky;
+				top: 0;
+				
+				border-bottom: 3px solid var(--grey-n03);
+				box-shadow: 0 3px 0 0 var(--grey-n03);
+			}
+			
+			tfoot {
+				border-top: 3px solid var(--grey-n03);
+			}
+			
+			tbody tr td {
+				border-bottom: 1px solid var(--grey-n03);
+			}
+			
+			tbody tr:last-child td {
+				border-bottom: 0;
+			}
+		}
+	}
+
+	overlay {
+		@state default {
+			background: var(--black);
+		}
+	}
+
+	modal {
+		@state default {
+			background: var(--white);
+		}
+	}
+
+}

@@ -1,0 +1,271 @@
+:root {
+	--header-border-color: var(--grey-n00);
+	--footer-border-color: var(--header-border-color);
+	--sidebar-link-border-color: var(--header-border-color);
+}
+
+/*@chassis include button-link link svg-icon table tag;*/
+@chassis include link button button-link tag table overlay modal;
+
+.showroom {
+	padding-bottom: 3.618em;
+
+	& h2 {
+		border-bottom: 1px solid var(--header-border-color);
+		@chassis font-size larger;
+	}
+
+	& code {
+		background: color(var(--grey-n00) alpha(61.8%));
+		border: 1px solid var(--grey-n01);
+		border-radius: .236em;
+
+		font-family: monospace;
+		color: var(--grey-n08);
+
+		&:before,
+		&:after {
+			letter-spacing: -0.2em;
+    	content: "\00a0";
+		}
+
+		&.example {
+			display: block;
+			@chassis inline-block-layout multi-line no-margin-right;
+
+			&:before,
+			&:after {
+				content: "";
+			}
+		}
+	}
+
+	& > header {
+		padding: 1.46em 0 .90169942em;
+		border-bottom: 4px solid var(--header-border-color);
+
+		& h1 {
+			flex: 1;
+			margin: 0 1em 0 0;
+
+			@chassis font-size large;
+		}
+
+		& .links {
+			display: flex;
+			align-items: center;
+
+			& a {
+				margin-left: 1em;
+
+				&:first-child {
+					margin-left: 0;
+				}
+			}
+		}
+
+		@chassis viewport-width from medium {
+			padding-top: 2.36em;
+
+			& .width-constraint {
+				display: flex;
+			}
+		}
+	}
+
+	& .sidebar {
+    position: sticky;
+    top: 0;
+
+    display: none;
+		margin: 0;
+
+    & nav a {
+      display: block;
+			@chassis inline-block-layout no-margin multi-line;
+
+      &:not(:first-child) {
+        box-shadow: 0 -1px 0 0 var(--sidebar-link-border-color);
+      }
+
+      &:hover {
+				background: var(--blue);
+        box-shadow: none;
+        color: var(--white);
+        text-decoration: none;
+
+        & + a {
+          box-shadow: none;
+        }
+      }
+    }
+
+		@chassis viewport-width from medium {
+			flex: 1 0 23.6%;
+      display: block;
+			min-width: 220px;
+    }
+  }
+
+	& .content {
+		flex: 1 1 76.4%;
+
+		& > section {
+			& section header {
+				margin-bottom: 1em;
+			}
+
+			/*&.ui-components {
+				& .buttons {
+					& .custom-1 {
+						@chassis new button {
+							background: var(--green);
+							border-radius: .236em;
+							color: var(--white);
+
+							hover {
+								background: color(var(--green) lightness(42%));
+							}
+
+							active {
+								background: color(var(--green) lightness(38%));
+							}
+						}
+					}
+
+					& .custom-2 {
+						@chassis extend button {
+							background: transparent;
+							border-radius: .236em;
+							color: var(--text-color);
+							box-shadow: inset 0 0 0 2px var(--grey-n06);
+
+							hover {
+								background: color(var(--grey-n00) alpha(61.8%));
+								color: currentColor;
+							}
+
+							active {
+								background: var(--grey-n00);
+							}
+						}
+					}
+
+					& .custom-3 {
+						@chassis extend button {
+							background: linear-gradient(to bottom, var(--grey-n00) 0%, var(--grey-n03) 100%);
+							border-radius: .236em;
+							color: var(--grey-n09);
+							box-shadow: inset 0 -2px 0 0 var(--grey-n04);
+							text-shadow: 1px 1px 2px var(--white);
+
+							hover {
+								background: linear-gradient(to bottom, var(--grey-n01) 0%, var(--grey-n04) 100%);
+								color: var(--grey-n10);
+								box-shadow: inset 0 -2px 0 0 var(--grey-n05);
+							}
+
+							active {
+								background: linear-gradient(to bottom, var(--grey-n04) 0%, var(--grey-n01) 100%);
+								color: var(--grey-n10);
+								box-shadow: inset 0 2px 0 0 var(--grey-n05);
+							}
+						}
+					}
+				}
+			}*/
+		}
+
+		@chassis viewport-width from medium {
+			padding-left: var(--ui-gutter);
+		}
+	}
+
+	& > footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+		display: block;
+    padding: 1em 0;
+
+    background: var(--white);
+    box-shadow: inset 0 1px 0 0 var(--footer-border-color);
+
+		@chassis font-size small;
+    text-align: center;
+
+    & .label {
+      font-weight: bold;
+    }
+
+    & .range {
+      display: none;
+
+			@chassis viewport-width < tiny {
+        &.below-min {
+          display: inline;
+        }
+      }
+
+      @chassis viewport-width = tiny {
+        &.tiny {
+          display: inline;
+        }
+      }
+
+      @chassis viewport-width = small {
+        &.small {
+          display: inline;
+        }
+      }
+
+      @chassis viewport-width = medium {
+        &.medium {
+          display: inline;
+        }
+      }
+
+      @chassis viewport-width = large {
+        &.large {
+          display: inline;
+        }
+      }
+
+      @chassis viewport-width = huge {
+        &.huge {
+          display: inline;
+        }
+      }
+
+			@chassis viewport-width = massive {
+        &.massive {
+          display: inline;
+        }
+      }
+
+      @chassis viewport-width > massive {
+        &.above-max {
+          display: inline;
+        }
+      }
+    }
+  }
+}
+
+/* Singletons ----------------------------------------------------------------*/
+
+main {
+  @chassis constrain-width;
+
+	& .sidebar,
+	& .content {
+		padding-top: 3.82em;
+	}
+
+  @chassis viewport-width from medium {
+    display: flex;
+    align-items: flex-start;
+  }
+}
