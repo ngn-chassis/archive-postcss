@@ -1,6 +1,16 @@
 const postcss = require('postcss')
 
 class ChassisCssUtils {
+	static generateDeclsFromTheme (theme) {
+		if (!theme.hasOwnProperty('properties')) {
+			return []
+		}
+	
+		return Object.keys(theme.properties).map((property) => {
+			return this.newDecl(property, theme.properties[property])
+		})
+	}
+	
 	/**
 	 * @method getCommonProps
 	 * @param  {array} firstGroup

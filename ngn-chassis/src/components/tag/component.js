@@ -2,8 +2,9 @@ const ChassisComponent = require('../../component')
 
 class ChassisTagComponent extends ChassisComponent {
 	constructor	(chassis, customSpec) {
-		super(chassis, 'tag', customSpec)
+		super(chassis, customSpec)
 		
+		this.name = 'tag'
 		this.selectors = ['.tag']
 		this.resetType = 'inline'
 		
@@ -27,11 +28,12 @@ class ChassisTagComponent extends ChassisComponent {
 
     return {
 			'font-size': `${utils.units.toEms(fontSize, this.baseTypography.root.fontSize)}em`,
-      // 'padding-x': `${Math.log(lineHeightMultiplier)}em`,
       'line-height': `${lineHeightMultiplier}`,
 			'icon-width': iconDimension,
 			'icon-height': iconDimension,
-			'icon-offset': `translateX(${iconOffset})`
+			'icon-offset': `translateX(${iconOffset})`,
+			'pill-padding-x': `${Math.sin(lineHeightMultiplier) / 2}em`,
+			'pill-border-radius': `${lineHeightMultiplier}em`
     }
 	}
 }

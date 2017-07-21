@@ -1,11 +1,13 @@
 const ChassisComponent = require('../../component')
 
 class ChassisSvgIconComponent extends ChassisComponent {
-	constructor	(chassis, theme, selectors = ['svg.icon'], states = {
-		default: ['']
-	}, extensions = NGN.coalesce(chassis.extensions.icon, null), resetType = 'inline-block') {
-		super(chassis, 'svg-icon', theme, selectors, states, extensions, resetType)
-		this.baseTypography = chassis.settings.typography.ranges.first.typography
+	constructor (chassis, customSpec) {
+    super(chassis, customSpec)
+    this.chassis = chassis
+		
+		this.name = 'svg-icon'
+    this.selectors = ['svg.icon']
+    this.resetType = 'inline-block'
 	}
 
 	get default () {

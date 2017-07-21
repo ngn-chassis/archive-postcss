@@ -4,8 +4,7 @@
 	--sidebar-link-border-color: var(--header-border-color);
 }
 
-/*@chassis include button-link link svg-icon table tag;*/
-@chassis include link button button-link tag table overlay modal;
+@chassis include link button button-link tag;
 
 .showroom {
 	padding-bottom: 3.618em;
@@ -135,19 +134,21 @@
 						}
 					}
 
-					/*& .custom-2 {
+					& .custom-2 {
 						@chassis extend button {
-							background: transparent;
-							border-radius: .236em;
-							color: var(--text-color);
-							box-shadow: inset 0 0 0 2px var(--grey-n06);
+							@state default {
+								background: transparent;
+								border-radius: .236em;
+								color: var(--text-color);
+								box-shadow: inset 0 0 0 2px var(--grey-n06);
+							}
 
-							hover {
+							@state hover {
 								background: color(var(--grey-n00) alpha(61.8%));
 								color: currentColor;
 							}
 
-							active {
+							@state active {
 								background: var(--grey-n00);
 							}
 						}
@@ -155,25 +156,27 @@
 
 					& .custom-3 {
 						@chassis extend button {
-							background: linear-gradient(to bottom, var(--grey-n00) 0%, var(--grey-n03) 100%);
-							border-radius: .236em;
-							color: var(--grey-n09);
-							box-shadow: inset 0 -2px 0 0 var(--grey-n04);
-							text-shadow: 1px 1px 2px var(--white);
+							@state default {
+								background: linear-gradient(to bottom, var(--grey-n00) 0%, var(--grey-n03) 100%);
+								border-radius: .236em;
+								color: var(--grey-n09);
+								box-shadow: inset 0 -2px 0 0 var(--grey-n04);
+								text-shadow: 1px 1px 2px var(--white);
+							}
 
-							hover {
+							@state hover {
 								background: linear-gradient(to bottom, var(--grey-n01) 0%, var(--grey-n04) 100%);
 								color: var(--grey-n10);
 								box-shadow: inset 0 -2px 0 0 var(--grey-n05);
 							}
 
-							active {
+							@state active {
 								background: linear-gradient(to bottom, var(--grey-n04) 0%, var(--grey-n01) 100%);
 								color: var(--grey-n10);
 								box-shadow: inset 0 2px 0 0 var(--grey-n05);
 							}
 						}
-					}*/
+					}
 				}
 			}
 		}

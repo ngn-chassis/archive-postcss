@@ -42,7 +42,7 @@ class ChassisPostCss {
 		this.atRules = new ChassisAtRules(this)
 		this.post = new ChassisPost(this)
 		this.core = new ChassisCore(this)
-		this.extensions = {}
+		this.componentExtensions = {}
 
 		// List of CSS properties that are applied to <a> tags. Other components that
 		// use <a> tags with an additional class or attribute will need to unset or

@@ -1,12 +1,19 @@
+/* TODO: Generate docs from the notes below */
+
+/* All spec info must be contained inside a component rule as below */
 button {
+  /* This rule can contain @state rules and an @legacy rule */
+  /*
+    The first element inside each @state rule MUST be the default selector
+    for the state. Component extensions rely on this being the first so they
+    can properly generate selectors.
+   */
   @state default {
     $(selector) {
       display: inline-flex;
       justify-content: center;
       align-items: center;
-      margin: 0 $(margin-right) $(margin-bottom) 0;
-      padding: 0 $(padding-x);
-      line-height: $(line-height);
+      @chassis inline-block-layout;
       vertical-align: middle;
       text-align: center;
       white-space: nowrap;
@@ -16,6 +23,19 @@ button {
     
     $(selector) svg.icon {
       transform: $(icon-offset);
+    }
+    
+    $(selector).pill {
+      padding-left: $(pill-padding-x);
+      padding-right: $(pill-padding-x);
+      border-radius: $(pill-border-radius);
+    }
+    
+    $(selector).multi-line {
+      padding-top: $(multi-line-padding-y);
+      padding-bottom: $(multi-line-padding-y);
+      line-height: $(multi-line-line-height);
+      white-space: $(multi-line-white-space);
     }
   }
 
@@ -52,31 +72,6 @@ button {
 
       $(selector) span {
         position: relative;
-      }
-    }
-  }
-  
-  /* Variants work like extensions, each with their own full theme */
-  /*@variant pill {
-    default {
-      $(selector).pill {
-        padding-left: $(pill-padding-x);
-        padding-right: $(pill-padding-x);
-        border-radius: $(pill-border-radius);
-      }
-    }
-    
-    ...Additional states
-    ...Additional variants
-  }*/
-
-  @variant multi-line {
-    default {
-      $(selector).multi-line {
-        padding-top: $(multi-line-padding-y);
-        padding-bottom: $(multi-line-padding-y);
-        line-height: $(multi-line-line-height);
-        white-space: $(multi-line-white-space);
       }
     }
   }

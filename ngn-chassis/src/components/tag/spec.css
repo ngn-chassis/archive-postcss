@@ -21,13 +21,11 @@ tag {
 			height: $(icon-height);
 			transform: $(icon-offset);
 		}
-	}
-	
-	/*@variant pill {
+		
 		$(selector).pill {
-			padding-left: ${Math.sin(lineHeightMultiplier) / 2}em`;
-			padding-right: ${Math.sin(lineHeightMultiplier) / 2}em`;
-			border-radius: `${lineHeightMultiplier}em`;
+			padding-right: $(pill-padding-x);
+			padding-left: $(pill-padding-x);
+			border-radius: $(pill-border-radius);
 		}
-	}*/
+	}
 }
