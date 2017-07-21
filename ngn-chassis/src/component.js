@@ -60,7 +60,7 @@ class ChassisComponent {
 			root.append(utils.css.newRule(nestedSelector, decls))
 	
 			if (Object.keys(rules).length > 0) {
-				this.appendNestedRulesets(root, [nestedSelector], rules)
+				this._appendNestedRulesets(root, [nestedSelector], rules)
 			}
 		})
 	}

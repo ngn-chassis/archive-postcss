@@ -2,8 +2,9 @@ const ChassisComponent = require('../../component')
 
 class ChassisTableComponent extends ChassisComponent {
 	constructor	(chassis, customSpec) {
-		super(chassis, 'table', customSpec)
+		super(chassis, customSpec)
 		
+		this.name = 'table'
 		this.selectors = ['table']
 		this.resetType = 'block'
 	}

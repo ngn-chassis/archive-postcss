@@ -9,19 +9,17 @@ class ChassisSvgIconComponent extends ChassisComponent {
     this.selectors = ['svg.icon']
     this.resetType = 'inline-block'
 	}
-
-	get default () {
-		let { utils } = this.chassis
-		let { fontSize, lineHeight } = this.baseTypography.root
+	
+	get variables () {
+		let { settings, utils } = this.chassis
+		let { fontSize, lineHeight } = settings.typography.ranges.first.typography.root
 		
 		let lineHeightInEms = utils.units.toEms(lineHeight, fontSize)
-
-		return [
-			utils.css.newDeclObj('width', 'auto'),
-			utils.css.newDeclObj('height', `${lineHeightInEms}em`),
-			utils.css.newDeclObj('vertical-align', 'middle'),
-			utils.css.newDeclObj('pointer-events', 'none'),
-		]
+		
+		return {
+			'width': 'auto',
+			'height': `${lineHeightInEms}em`
+		}
 	}
 }
 

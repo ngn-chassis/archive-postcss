@@ -4,7 +4,7 @@
 	--sidebar-link-border-color: var(--header-border-color);
 }
 
-@chassis include link button button-link tag;
+@chassis include link button button-link tag table svg-icon overlay modal;
 
 .showroom {
 	padding-bottom: 3.618em;
