@@ -5,15 +5,15 @@ tag {
 			justify-content: center;
 			align-items: center;
 			margin: 0;
-			padding: 0;
+			padding: $(padding);
 			font-size: $(font-size);
 			line-height: $(line-height);
 			vertical-align: baseline;
 		}
 		
-		$(selector):before, $(selector):after {
+		/*$(selector):before, $(selector):after {
 			content: "\00a0";
-		}
+		}*/
 		
 		$(selector) svg.icon {
 			flex: 0 0 auto;
