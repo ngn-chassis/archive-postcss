@@ -32,3 +32,6 @@ AUTO-TYPOGRAPHY SYSTEM
 - Possible solution is to make sure the scale ratio value is utilized in all
   calculations- right now, some values are just using Math.sin or log or
   something without respect to the actual scale ratio value.
+  
+FORM COMPONENTS
+- Add height rule to inputs, matching line-height, for IE11
