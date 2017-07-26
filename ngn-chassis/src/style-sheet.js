@@ -10,9 +10,16 @@ class ChassisStyleSheet {
 	
 	// TODO: Account for multiple "include" mixins
 	get css () {
+		// Process imports first
+		this.tree.walkAtRules('chassis', (atRule) => {
+			if (atRule.params.startsWith('import')) {
+				this.processAtRule(atRule)
+			}
+		})
+		
 		// Process all but 'include', 'new' and 'extend' mixins
-		// These need to be processed after the unnest operation to properly resolve
-		// nested selectors
+		// The above need to be processed after the unnest operation to properly
+		// resolve nested selectors
 		this.tree.walkAtRules('chassis', (atRule) => {
 			if (!(atRule.params.startsWith('include') || atRule.params.startsWith('new') || atRule.params.startsWith('extend'))) {
 				this.processAtRule(atRule)

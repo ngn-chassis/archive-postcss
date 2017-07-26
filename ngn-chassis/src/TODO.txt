@@ -5,16 +5,12 @@ MISC
 - screenreader helpers
 - add disabled states to all form controls
 - Animated loaders
+- Maybe add ui-gutter-x and ui-gutter-y values
 
 BUGS
 - Tags need help at scale ratios other than default
 - Errors are thrown if you set default vwrs to a wider range than your min/max
   layout width.
-
-COMPONENT RESET
-- make separate component reset blocks for different box-models. This will
-  minimize the amount of incompatible style rules on different types of elements
-  versus using a shared component reset.
 
 COMPONENT EXTENSION
 - consider ways of combining rulesets to shrink the size of the css
@@ -35,3 +31,9 @@ AUTO-TYPOGRAPHY SYSTEM
   
 FORM COMPONENTS
 - Add height rule to inputs, matching line-height, for IE11
+
+NOTE TO SELF: Use viewport units for HORIZONTAL padding on the outside of a UI,
+like for gutters, but use percentages on interior elements. This way, the
+padding remains in proportion to the container if the font size or container
+dimensions are changed, rather than in proportion to the viewport itself, which
+doesn't make sense.

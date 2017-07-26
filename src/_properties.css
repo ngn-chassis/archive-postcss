@@ -1,0 +1,5 @@
+:root {
+	--header-border-color: var(--grey-n00);
+	--footer-border-color: var(--header-border-color);
+	--sidebar-link-border-color: var(--header-border-color);
+}

@@ -1,6 +1,7 @@
 const ChassisBrowserMixins = require('./mixins/browser.js')
 const ChassisComponentMixins = require('./mixins/component.js')
 const ChassisLayoutMixins = require('./mixins/layout.js')
+const ChassisStyleSheetMixins = require('./mixins/style-sheet.js')
 const ChassisTypographyMixins = require('./mixins/typography.js')
 const ChassisViewportMixins = require('./mixins/viewport.js')
 
@@ -12,6 +13,7 @@ class ChassisAtRules {
 		this.componentMixins = new ChassisComponentMixins(chassis)
 		this.layoutMixins = new ChassisLayoutMixins(chassis)
 		this.typographyMixins = new ChassisTypographyMixins(chassis)
+		this.styleSheetMixins = new ChassisStyleSheetMixins(chassis)
 		this.viewportMixins = new ChassisViewportMixins(chassis)
 	}
 
@@ -29,6 +31,10 @@ class ChassisAtRules {
 
 	get 'ie-only' () {
 		return (data) => this.browserMixins.ieOnly(data)
+	}
+	
+	get 'import' () {
+		return (data) => this.styleSheetMixins.import(data)
 	}
 
 	get 'include' () {

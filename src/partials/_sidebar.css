@@ -1,0 +1,33 @@
+& .sidebar {
+	position: sticky;
+	top: 0;
+
+	display: none;
+	margin: 0;
+
+	& nav a {
+		display: block;
+		@chassis inline-block-layout no-margin multi-line;
+
+		&:not(:first-child) {
+			box-shadow: 0 -1px 0 0 var(--sidebar-link-border-color);
+		}
+
+		&:hover {
+			background: var(--blue);
+			box-shadow: none;
+			color: var(--white);
+			text-decoration: none;
+
+			& + a {
+				box-shadow: none;
+			}
+		}
+	}
+
+	@chassis viewport-width from medium {
+		flex: 1 0 23.6%;
+		display: block;
+		min-width: 220px;
+	}
+}

@@ -1,0 +1,29 @@
+& h2 {
+	border-bottom: 1px solid var(--header-border-color);
+	@chassis font-size larger;
+}
+
+& code {
+	background: color(var(--grey-n00) alpha(61.8%));
+	border: 1px solid var(--grey-n01);
+	border-radius: .236em;
+
+	font-family: monospace;
+	color: var(--grey-n08);
+
+	&:before,
+	&:after {
+		letter-spacing: -0.2em;
+		content: "\00a0";
+	}
+
+	&.example {
+		display: block;
+		@chassis inline-block-layout multi-line no-margin-right;
+
+		&:before,
+		&:after {
+			content: "";
+		}
+	}
+}

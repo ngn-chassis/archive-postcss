@@ -1,0 +1,13 @@
+main {
+  @chassis constrain-width;
+
+	& .sidebar,
+	& .content {
+		padding-top: 3.82em;
+	}
+
+  @chassis viewport-width from medium {
+    display: flex;
+    align-items: flex-start;
+  }
+}

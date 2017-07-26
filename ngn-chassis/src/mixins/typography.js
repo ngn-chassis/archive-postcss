@@ -120,7 +120,7 @@ class ChassisTypographyMixins {
 		let addMargin = false
 
 		if (!constants.typography.sizeAliases.includes(alias)) {
-			console.log(`[ERROR] Line ${source.line}: Font size alias "${alias}" not found.  Accepted values: ${utils.string.listValues(constants.typography.sizeAliases)}`);
+			console.error(`[ERROR] Line ${source.line}: Font size alias "${alias}" not found.  Accepted values: ${utils.string.listValues(constants.typography.sizeAliases)}`);
 			atRule.remove()
 			return
 		}

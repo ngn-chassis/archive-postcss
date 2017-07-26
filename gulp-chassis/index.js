@@ -11,6 +11,13 @@ module.exports = function (cfg) {
   let proc = postcss([chassis(cfg)])
 
 	return through.obj((file, enc, cb) => {
+		let filename = file.relative
+		
+		if (filename.startsWith('_')) {
+			cb(null)
+			return
+		}
+		
 		if (file.isNull()) {
 			cb(null, file)
 			return

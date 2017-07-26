@@ -22,6 +22,14 @@ class ChassisSettings extends NGN.EventEmitter {
 						'block': []
 					}
 				},
+				
+				importBasePath: {
+					type: String,
+					default: './',
+					validate (filepath) {
+						return chassis.utils.files.isDirectory(filepath)
+					}
+				},
 
 				plugins: {
 					type: Array,

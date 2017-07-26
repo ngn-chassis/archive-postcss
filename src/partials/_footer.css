@@ -1,0 +1,71 @@
+& > footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	display: block;
+	padding: 1em 0;
+
+	background: var(--white);
+	box-shadow: inset 0 1px 0 0 var(--footer-border-color);
+
+	@chassis font-size small;
+	text-align: center;
+
+	& .label {
+		font-weight: bold;
+	}
+
+	& .range {
+		display: none;
+
+		@chassis viewport-width < tiny {
+			&.below-min {
+				display: inline;
+			}
+		}
+
+		@chassis viewport-width = tiny {
+			&.tiny {
+				display: inline;
+			}
+		}
+
+		@chassis viewport-width = small {
+			&.small {
+				display: inline;
+			}
+		}
+
+		@chassis viewport-width = medium {
+			&.medium {
+				display: inline;
+			}
+		}
+
+		@chassis viewport-width = large {
+			&.large {
+				display: inline;
+			}
+		}
+
+		@chassis viewport-width = huge {
+			&.huge {
+				display: inline;
+			}
+		}
+
+		@chassis viewport-width = massive {
+			&.massive {
+				display: inline;
+			}
+		}
+
+		@chassis viewport-width > massive {
+			&.above-max {
+				display: inline;
+			}
+		}
+	}
+}

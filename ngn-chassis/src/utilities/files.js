@@ -36,8 +36,6 @@ class ChassisFileUtils {
 	 * @static
 	 */
 	static isDirectory (filepath) {
-		filepath = path.join(__dirname, filepath)
-
 		if (fs.existsSync(filepath)) {
 			return fs.lstatSync(filepath).isDirectory()
 		}
