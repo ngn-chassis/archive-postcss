@@ -81,14 +81,18 @@ class ChassisConstants {
 			})(),
 			scale: {
 				ratios: {
-					'minor second': 1.067,
-					'major second': 1.125,
-					'minor third': 1.2,
-					'major third': 1.25,
-					'perfect fourth': 4 / 3,
-					'tritone': 1.414,
-					'perfect fifth': 1.5,
-					'golden ratio': 1.61803398875
+					'minor 2nd': 1 + (1 / 12),
+					'major 2nd': 1 + (2 / 12),
+					'minor 3rd': 1 + (3 / 12),
+					'major 3rd': 1 + (4 / 12),
+					'perfect 4th': 1 + (5 / 12),
+					'tritone': 1 + (6 / 12),
+					'perfect 5th': 1 + (7 / 12),
+					'golden ratio': 1.61803398875,
+					'minor 6th': 1 + (8 / 12),
+					'major 6th': 1 + (9 /12),
+					'minor 7th': 1 + (10 / 12),
+					'major 7th': 1 + (11 / 12)
 				},
 				threshold: 640 // The viewport width above which font size should start to increment from base
 			},

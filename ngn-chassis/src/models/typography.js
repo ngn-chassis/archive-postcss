@@ -62,13 +62,7 @@ class ChassisTypographyModel {
 				scaleRatio: {
 					type: Number,
 					default: chassis.constants.typography.scale.ratios['golden ratio'],
-					min: 0,
-					validate (ratio) {
-						// TODO: Validate this against the values in constants so that the
-						// the value of this property can just be 'golden ratio'
-						console.log(`Validating type scale ratio. Current value: ${ratio}`);
-						return true
-					}
+					min: 0
 				},
 				fontWeights: {
 					type: Object,
