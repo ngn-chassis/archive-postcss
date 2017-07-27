@@ -11,10 +11,6 @@ tag {
 			vertical-align: baseline;
 		}
 		
-		/*$(selector):before, $(selector):after {
-			content: "\00a0";
-		}*/
-		
 		$(selector) svg.icon {
 			flex: 0 0 auto;
 			width: $(icon-width);
