@@ -42,6 +42,9 @@ class ChassisStyleSheet {
 				this.processAtRule(atRule)
 			}
 		})
+		
+		// Process all remaining mixins
+		this.tree.walkAtRules('chassis', (atRule) => this.processAtRule(atRule))
 
 		// Cleanup empty rulesets and prepend .chassis namespace to all selectors
 		// except 'html' and ':root'

@@ -1,3 +1,7 @@
+// TODO: Don't create ChassisSpecSheet for custom specs, just for default. Then,
+// add a method to ChassisSpecSheet like "getCombinedSpec" or something which can
+// have custom specs passed in, and return the combine stylesheet
+
 const ChassisSpecSheet = require('./spec-sheet.js')
 const ChassisStyleSheet = require('./style-sheet.js')
 
@@ -8,8 +12,8 @@ class ChassisComponent {
     
     this.instance = new (chassis.constants.components.get(type))(chassis)
     
-    this.defaultSpec = new ChassisSpecSheet(this.chassis, chassis.utils.files.parseStyleSheet(`../components/${type}/spec.css`))
-    this.customSpec = customSpec ? new ChassisSpecSheet(this.chassis, customSpec) : null
+    this.defaultSpec = new ChassisSpecSheet(this.chassis, type, chassis.utils.files.parseStyleSheet(`../components/${type}/spec.css`), this.instance.variables)
+    // this.customSpec = customSpec ? new ChassisSpecSheet(this.chassis, type, customSpec, this.instance.variables) : null
     
     this.overridesLinks = this.instance.hasOwnProperty('overridesLinks') && this.instance.overridesLinks
     this.theme = chassis.theme.getComponent(type)
@@ -18,9 +22,7 @@ class ChassisComponent {
   get unthemed () {
     let { utils } = this.chassis
     
-    
-    
-    return ''
+    return this.defaultSpec.css
   }
   
   get themed () {

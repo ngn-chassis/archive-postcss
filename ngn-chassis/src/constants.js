@@ -12,7 +12,7 @@ class ChassisConstants {
 	// The order specified here determines the order in which components will be
 	// added to the style sheet; This must be correct for proper cascade behavior.
 	static get components () {
-		let map = new Map([
+		return new Map([
 			['link', ChassisLinkComponent],
 			['svg-icon', ChassisSvgIconComponent],
 			['button', ChassisButtonComponent],
@@ -22,8 +22,6 @@ class ChassisConstants {
 			['overlay', ChassisOverlayComponent],
 			['modal', ChassisModalComponent]
 		])
-		
-		return map
 	}
 
 	static get layout () {
