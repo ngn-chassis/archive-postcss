@@ -9,7 +9,7 @@ class ChassisComponent {
     this.instance = new (chassis.constants.components.get(type))(chassis)
     
     this.defaultSpec = new ChassisSpecSheet(this.chassis, chassis.utils.files.parseStyleSheet(`../components/${type}/spec.css`))
-    this.customSpec = customSpec ? new ChassisSpecSheet(this.chassis, chassis.utils.css.newRoot([customSpec])) : null
+    this.customSpec = customSpec ? new ChassisSpecSheet(this.chassis, customSpec) : null
     
     this.overridesLinks = this.instance.hasOwnProperty('overridesLinks') && this.instance.overridesLinks
     this.theme = chassis.theme.getComponent(type)

@@ -10,9 +10,9 @@ class ChassisSpecSheet {
 		this.selectors = spec.nodes[0].selector.split(',')
 	}
 	
-	
-	
-	
+	get css () {
+		// TODO handle states, resolve vars
+	}
 }
 
 module.exports = ChassisSpecSheet

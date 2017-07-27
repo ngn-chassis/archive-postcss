@@ -20,7 +20,7 @@ class ChassisComponentMixins {
 		let spec = utils.css.newRule(atRule.parent.selector)
 		spec.nodes = atRule.nodes
 		
-		let component = new ChassisComponent(this.chassis, type, spec)
+		let component = new ChassisComponent(this.chassis, type, utils.css.newRoot([spec]))
 		
 		atRule.parent.replaceWith(component.unthemed)
 	}
