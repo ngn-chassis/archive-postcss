@@ -1,10 +1,15 @@
 & .buttons {
-	/*& .custom-1 {
-		@chassis extend button {
+	& .custom-1 {
+		@chassis new button {
 			@state default {
 				background: var(--green);
 				border-radius: .236em;
 				color: var(--white);
+				text-decoration: none;
+				
+				& svg.icon {
+					stroke: var(--white);
+				}
 			}
 
 			@state hover {
@@ -18,12 +23,17 @@
 	}
 
 	& .custom-2 {
-		@chassis extend button {
+		@chassis new button {
 			@state default {
 				background: transparent;
 				border-radius: .236em;
 				color: var(--text-color);
 				box-shadow: inset 0 0 0 2px var(--grey-n06);
+				text-decoration: none;
+				
+				& svg.icon {
+					stroke: var(--text-color);
+				}
 			}
 
 			@state hover {
@@ -38,33 +48,34 @@
 	}
 
 	& .custom-3 {
-		@chassis extend button {
+		@chassis new button {
 			@state default {
 				background: linear-gradient(to bottom, var(--grey-n00) 0%, var(--grey-n03) 100%);
 				border-radius: .236em;
 				color: var(--grey-n09);
 				box-shadow: inset 0 -2px 0 0 var(--grey-n04);
 				text-shadow: 1px 1px 2px var(--white);
+				text-decoration: none;
+				
+				& svg.icon {
+					stroke: var(--grey-n09);
+				}
 			}
 
 			@state hover {
 				background: linear-gradient(to bottom, var(--grey-n01) 0%, var(--grey-n04) 100%);
 				color: var(--grey-n10);
 				box-shadow: inset 0 -2px 0 0 var(--grey-n05);
+				
+				& svg.icon {
+					stroke: var(--grey-n10);
+				}
 			}
 
 			@state active {
 				background: linear-gradient(to bottom, var(--grey-n04) 0%, var(--grey-n01) 100%);
 				color: var(--grey-n10);
 				box-shadow: inset 0 2px 0 0 var(--grey-n05);
-			}
-		}
-	}*/
-	
-	& .custom-4 {
-		@chassis new button {
-			@state default {
-				background: red;
 			}
 		}
 	}
