@@ -31,7 +31,7 @@
 				box-shadow: inset 0 0 0 2px var(--grey-n06);
 				text-decoration: none;
 				
-				& svg.icon {
+				svg.icon {
 					stroke: var(--text-color);
 				}
 			}

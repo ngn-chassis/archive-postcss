@@ -4,13 +4,11 @@
 
 .showroom {
 	padding-bottom: 3.618em;
+	transition: all ease-in-out .382s;
 	
 	@chassis import partials/overrides.css;
 	@chassis import partials/header.css;
 	@chassis import partials/sidebar.css;
-	@chassis import partials/footer.css;
-	
-	transition: all ease-in-out .382s;
 
 	& .content {
 		flex: 1 1 76.4%;
@@ -29,6 +27,8 @@
 			padding-left: 6.18%;
 		}
 	}
+	
+	@chassis import partials/footer.css;
 }
 
 @chassis import singletons.css;

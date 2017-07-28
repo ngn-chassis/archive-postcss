@@ -123,7 +123,7 @@ class ChassisSpecSheet {
 		})
 		
 		customRules.forEach((customRule) => {
-			customRule.selector = `${state.nodes[0].selector}${customRule.selector.replace('&', '')}`
+			customRule.selector = `${state.nodes[0].selector} ${customRule.selector.replace('&', '').trim()}`
 		})
 		
 		state.nodes.push(...customRules)
