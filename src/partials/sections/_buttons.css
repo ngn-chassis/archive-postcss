@@ -1,5 +1,5 @@
 & .buttons {
-	& .custom-1 {
+	/*& .custom-1 {
 		@chassis extend button {
 			@state default {
 				background: var(--green);
@@ -16,9 +16,9 @@
 				background: color(var(--green) lightness(38%));
 			}
 		}
-	}
+	}*/
 
-	& .custom-2 {
+	/*& .custom-2 {
 		@chassis extend button {
 			@state default {
 				background: transparent;
@@ -27,7 +27,7 @@
 				box-shadow: inset 0 0 0 2px var(--grey-n06);
 				text-decoration: none;
 				
-				svg.icon {
+				& svg.icon {
 					stroke: var(--text-color);
 				}
 			}
@@ -41,9 +41,9 @@
 				background: var(--grey-n00);
 			}
 		}
-	}
+	}*/
 
-	& .custom-3 {
+	/*& .custom-3 {
 		@chassis extend button {
 			@state default {
 				background: linear-gradient(to bottom, var(--grey-n00) 0%, var(--grey-n03) 100%);
@@ -74,5 +74,5 @@
 				box-shadow: inset 0 2px 0 0 var(--grey-n05);
 			}
 		}
-	}
+	}*/
 }

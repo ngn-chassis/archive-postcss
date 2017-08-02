@@ -1,10 +1,11 @@
 const nesting = require('postcss-nesting')
 
 class ChassisSpecSheet {
-	constructor (chassis, type, spec, variables = {}) {
+	constructor (chassis, type, spec, instance) {
 		this.chassis = chassis
 		this.type = type
 		this.spec = spec
+		this.overridesLinks = instance.overridesLinks === true
 		
 		this.states = []
 		
@@ -16,15 +17,15 @@ class ChassisSpecSheet {
       this.selectors.push(...chassis.componentExtensions[type]);
 		}
 		
-		this.variables = Object.assign(variables, {
+		this.variables = Object.assign(NGN.coalesce(instance.variables, {}), {
 			selectors: this.selectors
 		})
 		
 		this.spec.walkAtRules('state', (atRule) => this.states.push(atRule.params))
 	}
 	
-	getCss (overrides = null) {
-		let template = this.generateTemplate(null, overrides)
+	get css () {
+		let template = this.generateTemplate()
 		
 		return this.resolveVariables(template)
 	}
@@ -49,9 +50,8 @@ class ChassisSpecSheet {
 		return this.resolveVariables(template, customVariables)
 	}
 	
-	getThemedCss (theme, overrides = null) {
-		let template = this.generateTemplate(theme, overrides)
-		
+	getThemedCss (theme) {
+		let template = this.generateTemplate(theme)
 		return this.resolveVariables(template)
 	}
 	
@@ -72,6 +72,10 @@ class ChassisSpecSheet {
 					state.nodes.forEach((node) => root.append(node))
 					break
 					
+				case 'legacy':
+					
+					break
+					
 				default:
 					return
 			}
@@ -80,7 +84,7 @@ class ChassisSpecSheet {
 		return root
 	}
 	
-	generateTemplate (customSpec = null, overrides = null) {
+	generateTemplate (customSpec = null) {
 		let { utils } = this.chassis
 		let root = utils.css.newRoot([])
 		
@@ -129,6 +133,88 @@ class ChassisSpecSheet {
 		return root
 	}
 	
+	_generateLinkOverrides (state) {
+		let { linkOverrides, theme, utils } = this.chassis
+		
+		let linkStateOverrides = linkOverrides[state.params]
+	
+		if (!linkStateOverrides) {
+			return
+		}
+		
+		let defaultTheme = theme.getComponent(this.type)
+		
+		let defaultState = defaultTheme['default']
+		let currentState = defaultTheme[state.params]
+		
+		let linkDecls = utils.css.generateDeclsFromTheme(linkStateOverrides)
+		let defaultStateDecls = utils.css.generateDeclsFromTheme(defaultState)
+		let currentStateDecls = utils.css.generateDeclsFromTheme(currentState)
+		
+		let linkUniqueDecls = utils.css.getUniqueProps(linkDecls, currentStateDecls)
+		
+		// TODO: Handle nested rulesets
+    // let defaultRules = theme.getRules(defaultTheme)
+    // let stateRules = theme.getRules(stateTheme)
+    
+		if (state.params === 'default') {
+			return linkUniqueDecls.map((prop) => utils.css.newDecl(prop, 'unset'))
+		}
+		
+		let overrides = []
+		
+		// Props common between link.${state} and component.${state}
+		let commonDecls = utils.css.getCommonProps(linkDecls, currentStateDecls)
+		
+		// If both link.${state} AND component.default themes include a property,
+		// AND it is not already included in the component.${state} theme, add this override:
+		// property: component.default value;
+		if (commonDecls.length > 0) {
+			let defaultOverrides = commonDecls.map((prop) => {
+				return currentStateDecls.find((decl) => decl.prop === prop)
+			}).filter((entry) => entry !== undefined)
+		
+			overrides.push(...defaultOverrides)
+		}
+		
+		// If a property is included in link.${state} theme but not default button theme,
+		// AND it is NOT already included in the button.${state} theme,
+		// unset it in ${state} button theme
+		if (linkUniqueDecls.length > 0) {
+			let unset = linkUniqueDecls.filter((prop) => {
+				return !commonDecls.includes(prop)
+			}).filter((prop) => {
+				return !currentStateDecls.some((decl) => decl.prop === prop)
+			})
+	
+			// Check for properties in the default theme which should be applied
+			// instead of unsetting the property, and if present, add them to overrides
+			let indexesToRemove = []
+	
+			unset.forEach((prop, index) => {
+				let matchInDefaultDecls = defaultStateDecls.find((decl) => decl.prop === prop)
+	
+				if (matchInDefaultDecls) {
+					indexesToRemove.push(index)
+					overrides.push(matchInDefaultDecls)
+				}
+			})
+	
+			// Remove properties from unset if they are already present in the default theme
+			indexesToRemove.forEach((index) => {
+				unset.splice(index, 1)
+			})
+  
+			if (unset.length > 0) {
+				overrides.push(...unset.map((prop) => {
+					return utils.css.newDecl(prop, 'unset')
+				}))
+			}
+		}
+		
+		return overrides.length > 0 ? overrides : null
+	}
+	
 	_applyCustomizedState (state, customState) {
 		let { utils } = this.chassis
 		
@@ -139,11 +225,22 @@ class ChassisSpecSheet {
 		
 		let customRules = customState.nodes.filter((node) => node.type === 'rule')
 		let customDecls = customState.nodes.filter((node) => node.type === 'decl')
+		let overrides = null
+		
+		if (this.overridesLinks) {
+			overrides = this._generateLinkOverrides(state)
+		}
+		
+		console.log(overrides);
 		
 		state.walkRules((rule, index) => {
 			// Default state is always first
 			if (index === 0) {
 				this._mergeDecls(rule, customDecls)
+				
+				if (overrides) {
+					this._mergeDecls(rule, overrides)
+				}
 			}
 			
 			let customRuleIndex
@@ -209,97 +306,6 @@ class ChassisSpecSheet {
 				rule.remove()
 			}
 		})
-	}
-	
-	/**
-   * @method _generateLinkOverrides
-   * Generate decls to overwrite link properties for components which use
-   * <a> tags in conjunction with classes or attributes
-   * @param  {string} state
-   * State of the current component
-   * @return {array} of decls.
-   * @private
-   */
-  _generateLinkOverrides (state) {
-		let { linkOverrides, theme, utils } = this.chassis
-	
-		let globalLinkOverrides = linkOverrides.find((override) => {
-			return override.state === state
-		})
-	
-		if (!globalLinkOverrides) {
-			return []
-		}
-  
-    let defaultState = this.getStateTheme('default')
-    let currentState = this.getStateTheme(state)
-  
-    let linkDecls = utils.css.generateDeclsFromTheme(globalLinkOverrides.theme)
-    let defaultDecls = utils.css.generateDeclsFromTheme(defaultState)
-    let stateDecls = utils.css.generateDeclsFromTheme(currentState)
-  
-    let linkUniqueProps = utils.css.getUniqueProps(linkDecls, stateDecls)
-  
-    // TODO: Handle nested rulesets
-    // let defaultRules = theme.getRules(defaultTheme)
-    // let stateRules = theme.getRules(stateTheme)
-    
-    if (state === 'default') {
-			return linkUniqueProps.map((prop) => utils.css.newDecl(prop, 'unset'))
-		}
-    
-    let overrides = []
-  
-    // Props common between Link Component State and Default Button Component State
-		let commonDecls = utils.css.getCommonProps(linkDecls, stateDecls)
-  
-    // If both link.${state} AND button.default themes include a property,
-		// AND it is not already included in the button.${state} theme, add this override:
-		// property: button.default value;
-		if (commonDecls.length > 0) {
-			let defaultOverrides = commonDecls.map((prop) => {
-				return stateDecls.find((decl) => decl.prop === prop)
-			}).filter((entry) => entry !== undefined)
-  
-			overrides.push(...defaultOverrides)
-		}
-
-    // If a property is included in link.${state} theme but not default button theme,
-		// AND it is NOT already included in the button.${state} theme,
-		// unset it in ${state} button theme
-		if (linkUniqueProps.length > 0) {
-			let unset = linkUniqueProps.filter((prop) => {
-				return !commonDecls.includes(prop)
-			}).filter((prop) => {
-				return !stateDecls.some((decl) => decl.prop === prop)
-			})
-	
-			// Check for properties in the default theme which should be applied
-			// instead of unsetting the property, and if present, add them to overrides
-			let indexesToRemove = []
-	
-			unset.forEach((prop, index) => {
-				let matchInDefaultDecls = defaultDecls.find((decl) => decl.prop === prop)
-	
-				if (matchInDefaultDecls) {
-					indexesToRemove.push(index)
-					overrides.push(matchInDefaultDecls)
-				}
-			})
-	
-			// Remove properties from unset if they are already present in the default theme
-			indexesToRemove.forEach((index) => {
-				unset.splice(index, 1)
-			})
-  
-			if (unset.length > 0) {
-				overrides.push(...unset.map((prop) => {
-					return utils.css.newDecl(prop, 'unset')
-				}))
-			}
-		}
-  
-		return overrides.length > 0 ? overrides : null
 	}
 	
 	_mergeDecls (rule, customDecls) {

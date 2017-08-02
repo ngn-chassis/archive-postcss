@@ -1,7 +1,3 @@
-// TODO: Don't create ChassisSpecSheet for custom specs, just for default. Then,
-// add a method to ChassisSpecSheet like "getCombinedSpec" or something which can
-// have custom specs passed in, and return the combine stylesheet
-
 const ChassisSpecSheet = require('./spec-sheet.js')
 const ChassisStyleSheet = require('./style-sheet.js')
 
@@ -11,14 +7,10 @@ class ChassisComponent {
     this.type = type
     
     this.instance = new (chassis.constants.components.get(type))(chassis)
-    
-    this.overridesLinks = this.instance.hasOwnProperty('overridesLinks') && this.instance.overridesLinks
     this.theme = chassis.theme.getComponentSpec(type)
     
-    this.defaultSpec = new ChassisSpecSheet(this.chassis, type, chassis.utils.files.parseStyleSheet(`../components/${type}/spec.css`), this.instance.variables, this.overridesLinks)
+    this.defaultSpec = new ChassisSpecSheet(this.chassis, type, chassis.utils.files.parseStyleSheet(`../components/${type}/spec.css`), this.instance)
     this.customSpec = customSpec
-    
-    this.linkOverrides = []
   }
   
   get customRules () {
@@ -31,7 +23,7 @@ class ChassisComponent {
   
   get unthemed () {
     if (!this.customSpec) {
-      return this.defaultSpec.getCss()
+      return this.defaultSpec.css
     }
     
     return this.defaultSpec.getUnthemedCss(this.customSpec)
@@ -44,15 +36,7 @@ class ChassisComponent {
       this._storeLinkOverrideProps()
     }
     
-    if (!this.theme) {
-      return this.defaultSpec.getCss(this.linkOverrides)
-    }
-    
-    return this.defaultSpec.getThemedCss(this.theme, this.linkOverrides)
-  }
-  
-  _applyLinkOverrides (css) {
-    return css
+    return this.theme ? this.defaultSpec.getThemedCss(this.theme) : this.defaultSpec.css
   }
   
   /**
@@ -87,7 +71,10 @@ class ChassisComponent {
         return
       }
       
-      this.linkOverrides.push({state, theme})
+      this.chassis.linkOverrides[state] = {
+        properties: theme.properties,
+        rules: theme.rules
+      }
     })
   }
 }

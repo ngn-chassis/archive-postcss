@@ -1,7 +1,7 @@
 @chassis import properties.css;
 
 /*@chassis include link button button-link tag table svg-icon overlay modal;*/
-@chassis include link button button-link;
+@chassis include link button-link;
 
 .showroom {
 	padding-bottom: 3.618em;

@@ -52,7 +52,6 @@ class ChassisTheme {
 		})
 	}
 	
-	
 	_initialize () {
 		let { constants } = this.chassis
 		
