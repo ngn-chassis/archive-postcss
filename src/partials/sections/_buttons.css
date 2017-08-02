@@ -1,15 +1,11 @@
 & .buttons {
 	& .custom-1 {
-		@chassis new button {
+		@chassis extend button {
 			@state default {
 				background: var(--green);
 				border-radius: .236em;
 				color: var(--white);
 				text-decoration: none;
-				
-				& svg.icon {
-					stroke: var(--white);
-				}
 			}
 
 			@state hover {
@@ -23,7 +19,7 @@
 	}
 
 	& .custom-2 {
-		@chassis new button {
+		@chassis extend button {
 			@state default {
 				background: transparent;
 				border-radius: .236em;
@@ -48,7 +44,7 @@
 	}
 
 	& .custom-3 {
-		@chassis new button {
+		@chassis extend button {
 			@state default {
 				background: linear-gradient(to bottom, var(--grey-n00) 0%, var(--grey-n03) 100%);
 				border-radius: .236em;

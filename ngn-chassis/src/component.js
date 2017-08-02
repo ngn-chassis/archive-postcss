@@ -6,7 +6,7 @@ const ChassisSpecSheet = require('./spec-sheet.js')
 const ChassisStyleSheet = require('./style-sheet.js')
 
 class ChassisComponent {
-  constructor (chassis, type, customSpec) {
+  constructor (chassis, type, customSpec, extending = false) {
     this.chassis = chassis
     this.type = type
     
@@ -16,7 +16,15 @@ class ChassisComponent {
     this.customSpec = customSpec
     
     this.overridesLinks = this.instance.hasOwnProperty('overridesLinks') && this.instance.overridesLinks
-    this.theme = chassis.theme.getComponent(type)
+    this.theme = chassis.theme.getComponentSpec(type)
+  }
+  
+  get customRules () {
+    if (!this.customSpec) {
+      return null
+    }
+    
+    return this.defaultSpec.getCustomizedCss(this.customSpec)
   }
   
   get unthemed () {
@@ -24,12 +32,15 @@ class ChassisComponent {
       return this.defaultSpec.css
     }
     
-    return this.defaultSpec.applyCustomSpec(this.customSpec)
+    return this.defaultSpec.getUnthemedCss(this.customSpec)
   }
   
   get themed () {
-    // TODO: Theme needs to treat the components section as a group of spec sheets.
-    // Here, we need to combine the defaultSpec with the theme spec.
+    if (!this.theme) {
+      return this.defaultSpec.css
+    }
+    
+    return this.defaultSpec.getThemedCss(this.theme)
   }
 }
 

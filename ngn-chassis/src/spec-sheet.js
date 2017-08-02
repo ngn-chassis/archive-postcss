@@ -1,7 +1,7 @@
 const nesting = require('postcss-nesting')
 
 class ChassisSpecSheet {
-	constructor (chassis, type, spec, variables) {
+	constructor (chassis, type, spec, variables = {}) {
 		this.chassis = chassis
 		this.type = type
 		this.spec = spec
@@ -9,8 +9,14 @@ class ChassisSpecSheet {
 		
 		this.spec.walkComments((comment) => comment.remove())
 		
+		this.selectors = this.spec.nodes[0].selector.split(',')
+		
+		if (chassis.componentExtensions.hasOwnProperty(type)) {
+      this.selectors.push(...chassis.componentExtensions[type]);
+		}
+		
 		this.variables = Object.assign(variables, {
-			selectors: this.spec.nodes[0].selector.split(',')
+			selectors: this.selectors
 		})
 		
 		this.spec.walkAtRules('state', (atRule) => this.states.push(atRule.params))
@@ -21,7 +27,17 @@ class ChassisSpecSheet {
 		return this.resolveVariables(template)
 	}
 	
-	applyCustomSpec (customSpec) {
+	getCustomizedCss (customSpec) {
+		let template = this.generateCustomTemplate(customSpec)
+		
+		let customVariables = Object.assign(this.variables, {
+			selectors: customSpec.nodes[0].selector.split(',')
+		})
+		
+		return this.resolveVariables(template, customVariables)
+	}
+	
+	getUnthemedCss (customSpec) {
 		let template = this.generateTemplate(customSpec)
 		
 		let customVariables = Object.assign(this.variables, {
@@ -29,6 +45,12 @@ class ChassisSpecSheet {
 		})
 		
 		return this.resolveVariables(template, customVariables)
+	}
+	
+	getThemedCss (theme) {
+		let template = this.generateTemplate(theme)
+		
+		return this.resolveVariables(template)
 	}
 	
 	_findMatchingState (state, customSpec) {
@@ -41,6 +63,31 @@ class ChassisSpecSheet {
 		})
 		
 		return customState
+	}
+	
+	generateCustomTemplate (customSpec) {
+		let { utils } = this.chassis
+		let root = utils.css.newRoot([])
+		
+		this.spec.walkAtRules((state) => {
+			switch (state.name) {
+				case 'state':
+					let customState = this._findMatchingState(state, customSpec)
+					
+					if (!customState) {
+						return
+					}
+					
+					this._generateCustomizedState(state, customState)
+					state.nodes.forEach((node) => root.append(node))
+					break
+					
+				default:
+					return
+			}
+		})
+		
+		return root
 	}
 	
 	generateTemplate (customSpec = null) {
@@ -90,6 +137,39 @@ class ChassisSpecSheet {
 		})
 		
 		return root
+	}
+	
+	_generateCustomizedState (state, customState) {
+		let { utils } = this.chassis
+		
+		if (!this.states.includes(customState.params)) {
+			console.warn(`[WARNING] Chassis "${this.type}" component does not support "${customState.params}" state. Discarding...`)
+			return
+		}
+		
+		let customRules = customState.nodes.filter((node) => node.type === 'rule')
+		let customDecls = customState.nodes.filter((node) => node.type === 'decl')
+		
+		state.walkRules((rule, index) => {
+			if (index === 0) {
+				rule.nodes = customDecls
+				return
+			}
+		
+			let customRuleIndex
+			
+			let match = customRules.find((customRule, i) => {
+				customRuleIndex = i
+				return customRule.selector.replace('&', '').trim() === rule.selector.replace('$(selector)', '').trim()
+			})
+			
+			if (match) {
+				customRules.splice(customRuleIndex, 1)
+				rule.nodes = match.nodes.filter((node) => node.type === 'decl')
+			} else {
+				rule.remove()
+			}
+		})
 	}
 	
 	_applyCustomizedState (state, customState) {
