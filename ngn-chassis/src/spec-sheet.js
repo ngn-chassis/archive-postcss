@@ -5,6 +5,7 @@ class ChassisSpecSheet {
 		this.chassis = chassis
 		this.type = type
 		this.spec = spec
+		
 		this.states = []
 		
 		this.spec.walkComments((comment) => comment.remove())
@@ -22,8 +23,9 @@ class ChassisSpecSheet {
 		this.spec.walkAtRules('state', (atRule) => this.states.push(atRule.params))
 	}
 	
-	get css () {
-		let template = this.generateTemplate()
+	getCss (overrides = null) {
+		let template = this.generateTemplate(null, overrides)
+		
 		return this.resolveVariables(template)
 	}
 	
@@ -47,22 +49,10 @@ class ChassisSpecSheet {
 		return this.resolveVariables(template, customVariables)
 	}
 	
-	getThemedCss (theme) {
-		let template = this.generateTemplate(theme)
+	getThemedCss (theme, overrides = null) {
+		let template = this.generateTemplate(theme, overrides)
 		
 		return this.resolveVariables(template)
-	}
-	
-	_findMatchingState (state, customSpec) {
-		let customState = null
-		
-		customSpec.walkAtRules('state', (atRule) => {
-			if (atRule.params === state.params) {
-				customState = atRule
-			}
-		})
-		
-		return customState
 	}
 	
 	generateCustomTemplate (customSpec) {
@@ -90,7 +80,7 @@ class ChassisSpecSheet {
 		return root
 	}
 	
-	generateTemplate (customSpec = null) {
+	generateTemplate (customSpec = null, overrides = null) {
 		let { utils } = this.chassis
 		let root = utils.css.newRoot([])
 		
@@ -139,39 +129,6 @@ class ChassisSpecSheet {
 		return root
 	}
 	
-	_generateCustomizedState (state, customState) {
-		let { utils } = this.chassis
-		
-		if (!this.states.includes(customState.params)) {
-			console.warn(`[WARNING] Chassis "${this.type}" component does not support "${customState.params}" state. Discarding...`)
-			return
-		}
-		
-		let customRules = customState.nodes.filter((node) => node.type === 'rule')
-		let customDecls = customState.nodes.filter((node) => node.type === 'decl')
-		
-		state.walkRules((rule, index) => {
-			if (index === 0) {
-				rule.nodes = customDecls
-				return
-			}
-		
-			let customRuleIndex
-			
-			let match = customRules.find((customRule, i) => {
-				customRuleIndex = i
-				return customRule.selector.replace('&', '').trim() === rule.selector.replace('$(selector)', '').trim()
-			})
-			
-			if (match) {
-				customRules.splice(customRuleIndex, 1)
-				rule.nodes = match.nodes.filter((node) => node.type === 'decl')
-			} else {
-				rule.remove()
-			}
-		})
-	}
-	
 	_applyCustomizedState (state, customState) {
 		let { utils } = this.chassis
 		
@@ -207,6 +164,142 @@ class ChassisSpecSheet {
 		})
 		
 		state.nodes.push(...customRules)
+	}
+	
+	_findMatchingState (state, customSpec) {
+		let customState = null
+		
+		customSpec.walkAtRules('state', (atRule) => {
+			if (atRule.params === state.params) {
+				customState = atRule
+			}
+		})
+		
+		return customState
+	}
+	
+	_generateCustomizedState (state, customState) {
+		let { utils } = this.chassis
+		
+		if (!this.states.includes(customState.params)) {
+			console.warn(`[WARNING] Chassis "${this.type}" component does not support "${customState.params}" state. Discarding...`)
+			return
+		}
+		
+		let customRules = customState.nodes.filter((node) => node.type === 'rule')
+		let customDecls = customState.nodes.filter((node) => node.type === 'decl')
+		
+		state.walkRules((rule, index) => {
+			if (index === 0) {
+				rule.nodes = customDecls
+				return
+			}
+		
+			let customRuleIndex
+			
+			let match = customRules.find((customRule, i) => {
+				customRuleIndex = i
+				return customRule.selector.replace('&', '').trim() === rule.selector.replace('$(selector)', '').trim()
+			})
+			
+			if (match) {
+				customRules.splice(customRuleIndex, 1)
+				rule.nodes = match.nodes.filter((node) => node.type === 'decl')
+			} else {
+				rule.remove()
+			}
+		})
+	}
+	
+	/**
+   * @method _generateLinkOverrides
+   * Generate decls to overwrite link properties for components which use
+   * <a> tags in conjunction with classes or attributes
+   * @param  {string} state
+   * State of the current component
+   * @return {array} of decls.
+   * @private
+   */
+  _generateLinkOverrides (state) {
+		let { linkOverrides, theme, utils } = this.chassis
+	
+		let globalLinkOverrides = linkOverrides.find((override) => {
+			return override.state === state
+		})
+	
+		if (!globalLinkOverrides) {
+			return []
+		}
+  
+    let defaultState = this.getStateTheme('default')
+    let currentState = this.getStateTheme(state)
+  
+    let linkDecls = utils.css.generateDeclsFromTheme(globalLinkOverrides.theme)
+    let defaultDecls = utils.css.generateDeclsFromTheme(defaultState)
+    let stateDecls = utils.css.generateDeclsFromTheme(currentState)
+  
+    let linkUniqueProps = utils.css.getUniqueProps(linkDecls, stateDecls)
+  
+    // TODO: Handle nested rulesets
+    // let defaultRules = theme.getRules(defaultTheme)
+    // let stateRules = theme.getRules(stateTheme)
+    
+    if (state === 'default') {
+			return linkUniqueProps.map((prop) => utils.css.newDecl(prop, 'unset'))
+		}
+    
+    let overrides = []
+  
+    // Props common between Link Component State and Default Button Component State
+		let commonDecls = utils.css.getCommonProps(linkDecls, stateDecls)
+  
+    // If both link.${state} AND button.default themes include a property,
+		// AND it is not already included in the button.${state} theme, add this override:
+		// property: button.default value;
+		if (commonDecls.length > 0) {
+			let defaultOverrides = commonDecls.map((prop) => {
+				return stateDecls.find((decl) => decl.prop === prop)
+			}).filter((entry) => entry !== undefined)
+  
+			overrides.push(...defaultOverrides)
+		}
+
+    // If a property is included in link.${state} theme but not default button theme,
+		// AND it is NOT already included in the button.${state} theme,
+		// unset it in ${state} button theme
+		if (linkUniqueProps.length > 0) {
+			let unset = linkUniqueProps.filter((prop) => {
+				return !commonDecls.includes(prop)
+			}).filter((prop) => {
+				return !stateDecls.some((decl) => decl.prop === prop)
+			})
+	
+			// Check for properties in the default theme which should be applied
+			// instead of unsetting the property, and if present, add them to overrides
+			let indexesToRemove = []
+	
+			unset.forEach((prop, index) => {
+				let matchInDefaultDecls = defaultDecls.find((decl) => decl.prop === prop)
+	
+				if (matchInDefaultDecls) {
+					indexesToRemove.push(index)
+					overrides.push(matchInDefaultDecls)
+				}
+			})
+	
+			// Remove properties from unset if they are already present in the default theme
+			indexesToRemove.forEach((index) => {
+				unset.splice(index, 1)
+			})
+  
+			if (unset.length > 0) {
+				overrides.push(...unset.map((prop) => {
+					return utils.css.newDecl(prop, 'unset')
+				}))
+			}
+		}
+  
+		return overrides.length > 0 ? overrides : null
 	}
 	
 	_mergeDecls (rule, customDecls) {

@@ -1,5 +1,3 @@
-const ChassisComponent = require('../../component.js')
-
 class ChassisButtonComponent {
   constructor (chassis) {
     this.chassis = chassis

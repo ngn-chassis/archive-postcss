@@ -1,4 +1,4 @@
-link {
+a {
 	@state default {
 		$(selector) {}
 	}
