@@ -1,6 +1,5 @@
 @chassis import properties.css;
 
-/*@chassis include link button button-link tag table svg-icon overlay modal;*/
 @chassis include button link button-link tag table svg-icon overlay modal;
 
 .showroom {
