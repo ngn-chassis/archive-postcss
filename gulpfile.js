@@ -26,7 +26,7 @@ gulp.task('css', () => {
     .pipe(sourcemaps.init())
     .pipe(chassis({
       importBasePath: path.resolve(SRC),
-      theme: path.resolve('./theme.css'),
+      theme: path.resolve(DEST + '/theme.css'),
       // legacy: false,
       // customProperties: {},
     	layout: {
