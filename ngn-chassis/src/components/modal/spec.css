@@ -1,4 +1,4 @@
-modal {
+chassis-modal {
 	@state default {
 		$(selector) {}
 	}

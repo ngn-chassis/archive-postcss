@@ -1,11 +1,6 @@
-const ChassisComponent = require('../../component')
-
-class ChassisTagComponent extends ChassisComponent {
-	constructor	(chassis, customSpec) {
-		super(chassis, customSpec)
-		
-		this.name = 'tag'
-		this.selectors = ['.tag']
+class ChassisTagComponent {
+	constructor	(chassis) {
+		this.chassis = chassis
 		this.resetType = 'inline'
 		
 		this.baseTypography = chassis.settings.typography.ranges.first.typography

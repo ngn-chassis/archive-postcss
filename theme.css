@@ -140,14 +140,12 @@ components {
 				border-top: 3px solid var(--grey-n03);
 			}
 			
-			& tbody {
-				& tr td {
-					border-bottom: 1px solid var(--grey-n03);
-				}
+			& tbody tr td {
+				border-bottom: 1px solid var(--grey-n03);
+			}
 				
-				& tr:last-child td {
-					border-bottom: 0;
-				}
+			& tbody tr tr:last-child td {
+				border-bottom: 0;
 			}
 		}
 	}

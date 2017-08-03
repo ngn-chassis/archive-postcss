@@ -231,8 +231,6 @@ class ChassisSpecSheet {
 			overrides = this._generateLinkOverrides(state)
 		}
 		
-		console.log(overrides);
-		
 		state.walkRules((rule, index) => {
 			// Default state is always first
 			if (index === 0) {
