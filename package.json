@@ -9,6 +9,7 @@
   "author": "Graham Butler",
   "license": "ISC",
   "dependencies": {
+    "co": "^4.6.0",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-postcss": "^6.4.0",
