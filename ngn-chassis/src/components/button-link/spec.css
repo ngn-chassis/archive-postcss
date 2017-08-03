@@ -1,4 +1,4 @@
-button-link {
+a.button {
   @state default {
     $(selector) {
       display: inline-flex;

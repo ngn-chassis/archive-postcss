@@ -12,40 +12,16 @@ class ChassisConstants {
 	// The order specified here determines the order in which components will be
 	// added to the style sheet; This must be correct for proper cascade behavior.
 	static get components () {
-		return [
-			{
-				name: 'link',
-				spec: ChassisLinkComponent
-			},
-			{
-				name: 'svg-icon',
-				spec: ChassisSvgIconComponent
-			},
-			{
-				name: 'button',
-				spec: ChassisButtonComponent
-			},
-			{
-				name: 'button-link',
-				spec: ChassisButtonLinkComponent
-			},
-			{
-				name: 'tag',
-				spec: ChassisTagComponent
-			},
-			{
-				name: 'table',
-				spec: ChassisTableComponent
-			},
-			{
-				name: 'overlay',
-				spec: ChassisOverlayComponent
-			},
-			{
-				name: 'modal',
-				spec: ChassisModalComponent
-			}
-		]
+		return new Map([
+			['link', ChassisLinkComponent],
+			['svg-icon', ChassisSvgIconComponent],
+			['button', ChassisButtonComponent],
+			['button-link', ChassisButtonLinkComponent],
+			['tag', ChassisTagComponent],
+			['table', ChassisTableComponent],
+			['overlay', ChassisOverlayComponent],
+			['modal', ChassisModalComponent]
+		])
 	}
 
 	static get layout () {

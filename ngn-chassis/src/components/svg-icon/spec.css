@@ -1,4 +1,4 @@
-svg-icon {
+svg.icon {
 	@state default {
 		$(selector) {
 			width: $(width);

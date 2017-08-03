@@ -144,6 +144,12 @@ class ChassisCssUtils {
 	static newMediaQuery (params, nodes) {
 		return this.newAtRule({name: 'media', params, nodes})
 	}
+	
+	static stripComments (tree) {
+		tree.walkComments((comment) => {
+			comment.remove()
+		})
+	}
 }
 
 module.exports = ChassisCssUtils

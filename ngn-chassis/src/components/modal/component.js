@@ -1,11 +1,6 @@
-const ChassisComponent = require('../../component')
-
-class ChassisModalComponent extends ChassisComponent {
-	constructor	(chassis, customSpec) {
-		super(chassis, customSpec)
-		
-		this.name = 'modal'
-		this.selectors = ['chassis-modal']
+class ChassisModalComponent {
+	constructor	(chassis) {
+		this.chassis = chassis
 		this.resetType = 'block'
 	}
 }

@@ -1,12 +1,6 @@
-const ChassisComponent = require('../../component')
-
-class ChassisSvgIconComponent extends ChassisComponent {
-	constructor (chassis, customSpec) {
-    super(chassis, customSpec)
+class ChassisSvgIconComponent {
+	constructor (chassis) {
     this.chassis = chassis
-		
-		this.name = 'svg-icon'
-    this.selectors = ['svg.icon']
     this.resetType = 'inline-block'
 	}
 	

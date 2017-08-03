@@ -48,7 +48,7 @@ class ChassisPostCss {
 		// use <a> tags with an additional class or attribute will need to unset or
 		// override these properties to avoid picking up unintended styling from
 		// default links.
-		this.linkOverrides = []
+		this.linkOverrides = {}
 
 		return this.plugin
 	}

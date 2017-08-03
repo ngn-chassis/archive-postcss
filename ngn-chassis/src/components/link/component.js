@@ -1,11 +1,6 @@
-const ChassisComponent = require('../../component')
-
-class ChassisLinkComponent extends ChassisComponent {
-	constructor	(chassis, customSpec) {
-		super(chassis, customSpec)
-		
-		this.name = 'link'
-		this.selectors = ['a']
+class ChassisLinkComponent {
+	constructor	(chassis) {
+		this.chassis = chassis
 		this.resetType = 'inline'
 	}
 }

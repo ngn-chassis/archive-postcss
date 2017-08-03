@@ -45,7 +45,7 @@ components {
 			border-radius: .236em;
 			color: var(--white);
 			
-			svg.icon {
+			& svg.icon {
 				stroke: currentColor;
 			}
 		}
@@ -89,7 +89,7 @@ components {
 			border-radius: .236em;
 			color: var(--white);
 			
-			svg.icon {
+			& svg.icon {
 				stroke: currentColor;
 			}
 		}
@@ -113,7 +113,7 @@ components {
 			border-radius: .236em;
 			color: var(--white);
 
-			svg.icon {
+			& svg.icon {
 				stroke: currentColor;
 			}
 		}
@@ -124,11 +124,11 @@ components {
 			border-collapse: separate;
 			border-spacing: .382em 0;
 			
-			caption {
+			& caption {
 				font-weight: 700;
 			}
 			
-			thead {
+			& thead {
 				position: sticky;
 				top: 0;
 				
@@ -136,18 +136,16 @@ components {
 				box-shadow: 0 3px 0 0 var(--grey-n03);
 			}
 			
-			tfoot {
+			& tfoot {
 				border-top: 3px solid var(--grey-n03);
 			}
 			
-			tbody {
-				tr td {
-					border-bottom: 1px solid var(--grey-n03);
-				}
+			& tbody tr td {
+				border-bottom: 1px solid var(--grey-n03);
+			}
 				
-				tr:last-child td {
-					border-bottom: 0;
-				}
+			& tbody tr tr:last-child td {
+				border-bottom: 0;
 			}
 		}
 	}
