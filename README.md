@@ -1,2 +1,2 @@
-# chassis-postcss
-An alternative to the Chassis SASS layout engine.
+# Chassis
+Chassis is a PostCSS-based CSS pre-processor and UI framework.
