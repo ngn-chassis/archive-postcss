@@ -19,6 +19,7 @@ class ChassisConstants {
 			['svg-icon', ChassisSvgIconComponent],
 			['button', ChassisButtonComponent],
 			['button-link', ChassisButtonLinkComponent],
+			['buttons', ['button', 'button-link']],
 			['tag', ChassisTagComponent],
 			['table', ChassisTableComponent],
 			['overlay', ChassisOverlayComponent],

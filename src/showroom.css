@@ -1,6 +1,6 @@
 @chassis import properties.css;
 
-@chassis include button link button-link tag table svg-icon overlay modal form-controls;
+@chassis include buttons link button tag table svg-icon overlay modal form-controls;
 
 .showroom {
 	padding-bottom: 3.618em;

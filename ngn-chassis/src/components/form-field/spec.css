@@ -1,21 +1,32 @@
-chassis-control[type="field"] {
+chassis-control {
 	@state default {
-		$(selector) {
-			display: flex;
-			flex-direction: column;
-			max-width: 100%;
+		$(selector)[type="field"] {
 			margin-bottom: $(margin-bottom);
 		}
 		
-		$(selector) .input-wrapper {
-			display: flex;
+		$(selector)[type="field"] label {
+			display: inline-block;
 		}
 		
-		$(selector) input {
+		input[type="date"],
+		input[type="datetime-local"],
+		input[type="email"],
+		input[type="file"],
+		input[type="month"],
+		input[type="number"],
+		input[type="password"],
+		input[type="range"],
+		input[type="search"],
+		input[type="tel"],
+		input[type="text"],
+		input[type="time"],
+		input[type="url"],
+		input[type="week"],
+		$(selector)[type="field"] input {
 			flex: 1 1 auto;
 			width: 100%;
 			padding: 0;
-			margin: $(input-margin-top) 0 0;
+			margin: 0;
 			@chassis inline-block-layout no-margin;
 			
 			/* Reset */
@@ -23,16 +34,33 @@ chassis-control[type="field"] {
 			border: none;
 		}
 		
-		$(selector) textarea {
+		textarea,
+		$(selector)[type="field"] textarea {
 			flex: 1 1 auto;
 			width: 100%;
-			margin: $(input-margin-top) 0 0;
+			max-width: 100%;
+			margin: 0;
 			@chassis inline-block-layout multi-line no-margin;
+			overflow: auto;
 			
 			/* Reset */
+			vertical-align: top;
+			resize: vertical;
+			
 			background: transparent;
 			border: none;
 		}
+		
+		$(selector)[type="field"] input,
+		$(selector)[type="field"] textarea,
+		$(selector)[type="field"] chassis-select {
+			margin: $(input-margin-top) 0 0;
+		}
+		
+		select,
+		$(selector)[type="select"] select[multiple] {
+			vertical-align: top;
+    }
 		
 		/* TODO: Add validation states, sub-label */
 	}

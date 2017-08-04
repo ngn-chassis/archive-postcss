@@ -1,30 +1,12 @@
-chassis-control[type="toggle"] {
+chassis-control {
 	@state default {
-		$(selector) {
-			display: flex;
-			align-items: center;
-			max-width: 100%;
-		}
-		
-		$(selector) .label-wrapper {
-			flex: 1 1 auto;
-			display: flex;
-		}
-		
-		$(selector) .input-wrapper {
-			order: -1;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			margin-right: $(control-margin-right);
-		}
-		
-		$(selector) label {
+		$(selector)[type="toggle"] label {
+			display: inline-block;
 			width: 100%;
 		}
 		
-		$(selector) input {
-			margin: 0;
+		$(selector)[type="toggle"] input {
+			margin: 0 $(control-margin-right) 0 0;
 		}
 		
 		/* TODO: Add validation states, sub-label */

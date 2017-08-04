@@ -1,4 +1,4 @@
-class AuthorWindow extends ChassisWebComponent {
+class ChassisFormControl extends ChassisWebComponent {
   constructor () {
     super(`{{TEMPLATE}}`)
 
@@ -20,4 +20,4 @@ class AuthorWindow extends ChassisWebComponent {
   }
 }
 
-customElements.define('author-window', AuthorWindow)
+customElements.define('chassis-control', ChassisFormControl)

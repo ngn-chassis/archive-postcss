@@ -61,6 +61,10 @@ components {
 		@state disabled {
 			opacity: .382;
 		}
+		
+		@state focus {
+			outline: 0;
+		}
 	}
 	
 	link {
