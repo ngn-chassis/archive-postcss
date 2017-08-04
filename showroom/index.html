@@ -175,6 +175,7 @@
 
         <section class="ui-components">
           <h2>Built-in UI Components</h2>
+          
           <section class="links">
             <header>
               <h3>Link</h3>
@@ -186,6 +187,7 @@
               <a href="#">Here's a link</a>
             </p>
           </section>
+          
           <section class="buttons">
             <header>
               <h3>Button</h3>
@@ -260,6 +262,7 @@
               </a>
             </section>
           </section>
+          
           <section class="tags">
             <header>
               <h3>Tag</h3>
@@ -280,6 +283,72 @@
                 pill-shaped
               </span> varieties.
             </p>
+          </section>
+        
+          <section class="forms">
+            <header>
+              <h3>Forms</h3>
+            </header>
+            
+            <div class="standalone">
+              <chassis-control type="field">
+                <div class="label-wrapper">
+                  <label for="text_field">Text field</label>
+                </div>
+                <div class="input-wrapper">
+                  <input id="text_field" type="text" value="" placeholder="Placeholder">
+                </div>
+              </chassis-control>
+              
+              <chassis-control type="field">
+                <div class="label-wrapper">
+                  <label for="email_field">Email field</label>
+                </div>
+                <div class="input-wrapper">
+                  <input id="email_field" type="email" value="" placeholder="my-email@address.com">
+                </div>
+              </chassis-control>
+              
+              <chassis-control type="field">
+                <div class="label-wrapper">
+                  <label for="email_field">Textarea</label>
+                </div>
+                <div class="input-wrapper">
+                  <textarea id="textarea" rows="5"></textarea>
+                </div>
+              </chassis-control>
+              
+              <h4>Radio Buttons</h4>
+              <chassis-control type="toggle">
+                <div class="label-wrapper">
+                  <label for="radio_button_1">Radio Button</label>
+                </div>
+                <div class="input-wrapper">
+                  <input id="radio_button_1" name="radios" type="radio" value="">
+                </div>
+              </chassis-control>
+              <chassis-control type="toggle">
+                <div class="label-wrapper">
+                  <label for="radio_button_2">Radio Button</label>
+                </div>
+                <div class="input-wrapper">
+                  <input id="radio_button_2" name="radios" type="radio" value="">
+                </div>
+              </chassis-control>
+              <chassis-control type="toggle">
+                <div class="label-wrapper">
+                  <label for="radio_button_3">Radio Button</label>
+                </div>
+                <div class="input-wrapper">
+                  <input id="radio_button_3" name="radios" type="radio" value="">
+                </div>
+              </chassis-control>
+              
+              <!-- <chassis-control-group>
+                
+              </chassis-control-group> -->
+            </div>
+            
           </section>
         </section>
       </div>

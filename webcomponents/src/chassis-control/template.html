@@ -1,0 +1,28 @@
+<template>
+  <!-- {{STYLES}} -->
+
+  <div class="toolbar">
+    <div class="title"></div>
+    <div class="tools">
+      <div class="close tool">
+        <svg class="mac windows icon" viewPort="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="100%" x2="100%" y2="0" stroke-width="2"/>
+          <line x1="0" y1="0" x2="100%" y2="100%" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="minimize tool">
+        <svg class="windows icon" width="100%" height="2px" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="1px"></rect>
+        </svg>
+      </div>
+      <div class="maximize tool">
+        <svg class="windows icon" width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="transparent" stroke-width="3"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <slot></slot>
+  </div>
+</template>

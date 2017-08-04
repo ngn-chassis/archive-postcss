@@ -1,0 +1,32 @@
+chassis-control[type="toggle"] {
+	@state default {
+		$(selector) {
+			display: flex;
+			align-items: center;
+			max-width: 100%;
+		}
+		
+		$(selector) .label-wrapper {
+			flex: 1 1 auto;
+			display: flex;
+		}
+		
+		$(selector) .input-wrapper {
+			order: -1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-right: $(control-margin-right);
+		}
+		
+		$(selector) label {
+			width: 100%;
+		}
+		
+		$(selector) input {
+			margin: 0;
+		}
+		
+		/* TODO: Add validation states, sub-label */
+	}
+}

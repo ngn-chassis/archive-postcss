@@ -52,7 +52,11 @@ class ChassisComponentMixins {
 		
 		for (let [key, value] of this.components) {
 			if (requestedComponents.includes(key)) {
-				sorted.push(key)
+				if (Array.isArray(value)) {
+					sorted.push(...value)
+				} else {
+					sorted.push(key)
+				}
 			}
 		}
 		

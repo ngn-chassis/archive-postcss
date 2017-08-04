@@ -1,0 +1,173 @@
+@charset "UTF-8";
+
+:host {
+  display: flex;
+  flex-direction: column;
+
+  background: #fff;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+}
+
+:host * {
+  box-sizing: border-box;
+}
+
+:host *:before {
+  box-sizing: border-box;
+}
+
+:host *:after {
+  box-sizing: border-box;
+}
+
+/* Default Styles *************************************************************/
+:host > .toolbar {
+  flex: 0 0 auto;
+  position: relative;
+
+  background: #eee;
+  border: 1px solid #d1d2d4;
+  border-radius: .246em .246em 0 0;
+}
+
+:host > .toolbar .title {
+  text-align: center;
+  height: 1.618em;
+  line-height: 1.618em;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+:host > .toolbar .tools {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  display: flex;
+  align-items: center;
+
+  height: 1.618em;
+  line-height: 1.618em;
+
+  padding: 0 .618em 0 0;
+}
+
+:host > .toolbar .tool {
+  width: .8em;
+  height: .8em;
+
+  margin-left: .618em;
+
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px #bbb;
+  background: #d8d8d8;
+}
+
+:host > .toolbar .tool .icon {
+  display: none;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  align-self: center;
+  stroke: black;
+}
+
+:host > .content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+
+  border-right: 1px solid #d1d2d4;
+  border-bottom: 1px solid #d1d2d4;
+  border-left: 1px solid #d1d2d4;
+}
+
+/* Mac-specific Styles ********************************************************/
+:host([os="mac"]) > .toolbar {
+  background: linear-gradient(to bottom, #ebebeb 0%,#dddcea 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  box-shadow: inset 0 1px 0 0 #f6f6f6;
+}
+
+:host([os="mac"]) > .toolbar .tool {
+  width: .8em;
+  height: .8em;
+
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px #bbb;
+  background: #d8d8d8;
+}
+
+:host([os="mac"]) > .toolbar .tools {
+  right: unset;
+  left: 0;
+}
+
+:host([os="mac"]) > .toolbar .close.tool {
+  background: #ff6158;
+  box-shadow: inset 0 0 0 1px #e24540;
+}
+
+:host([os="mac"]) > .toolbar .minimize.tool {
+  background: #ffbd2e;
+  box-shadow: inset 0 0 0 1px #e1a120;
+}
+
+:host([os="mac"]) > .toolbar .maximize.tool {
+  background: #27c940;
+  box-shadow: inset 0 0 0 1px #23ac27;
+}
+
+/* Windows-specific styles ****************************************************/
+:host([os="windows"]) > .toolbar {
+  background: #e7e7e7;
+
+  border-bottom: 0;
+  border-radius: 0;
+
+  color: #0c0c0c;
+}
+
+:host([os="windows"]) > .toolbar .title {
+  height: 2.382em;
+  line-height: 2.382em;
+  text-align: left;
+  padding-left: 1.382em;
+}
+
+:host([os="windows"]) > .toolbar .tools {
+  height: 2.382em;
+  padding-right: 1.382em;
+}
+
+:host([os="windows"]) > .toolbar .tool {
+  display: flex;
+
+  margin-left: 1.618em;
+
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+:host([os="windows"]) > .toolbar .tool .icon {
+  stroke: #595959;
+  fill: #595959;
+}
+
+:host([os="windows"]) > .toolbar .tool .windows.icon {
+  display: block;
+}
+
+:host([os="windows"]) > .toolbar .minimize.tool {
+  order: -1;
+}
+
+:host([os="windows"]) > .toolbar .close.tool {
+  order: 99;
+}

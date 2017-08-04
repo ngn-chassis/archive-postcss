@@ -1,4 +1,3 @@
-const ChassisComponentSpecUtils = require('./utilities/component-spec.js')
 const ChassisConsoleUtils = require('./utilities/console.js')
 const ChassisCssUtils = require('./utilities/css.js')
 const ChassisFileUtils = require('./utilities/files.js')
@@ -21,10 +20,6 @@ class ChassisUtils {
 
 	static get files () {
 		return ChassisFileUtils
-	}
-	
-	static get spec () {
-		return ChassisComponentSpecUtils
 	}
 
 	static get string () {

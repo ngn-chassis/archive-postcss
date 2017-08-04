@@ -1,0 +1,21 @@
+{
+  "name": "author-window",
+  "version": "1.0.0",
+  "description": "Chassis Form Control",
+  "main": "tag.js",
+  "scripts": {
+    "build": "echo bwc ./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webcomponent",
+    "web",
+    "component",
+    "window"
+  ],
+  "author": "authorio",
+  "license": "SEE LICENSE IN LICENSE",
+  "devDependencies": {
+    "gulp-util": "^3.0.8"
+  }
+}

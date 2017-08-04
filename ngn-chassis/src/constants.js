@@ -6,6 +6,8 @@ const ChassisModalComponent = require('./components/modal/component.js')
 const ChassisOverlayComponent = require('./components/overlay/component.js')
 const ChassisTableComponent = require('./components/table/component.js')
 const ChassisTagComponent = require('./components/tag/component.js')
+const ChassisFormFieldComponent = require('./components/form-field/component.js')
+const ChassisFormToggleComponent = require('./components/form-toggle/component.js')
 
 class ChassisConstants {
 	// Order is important!
@@ -20,7 +22,10 @@ class ChassisConstants {
 			['tag', ChassisTagComponent],
 			['table', ChassisTableComponent],
 			['overlay', ChassisOverlayComponent],
-			['modal', ChassisModalComponent]
+			['modal', ChassisModalComponent],
+			['form-field', ChassisFormFieldComponent],
+			['form-toggle', ChassisFormToggleComponent],
+			['form-controls', ['form-field', 'form-toggle']]
 		])
 	}
 

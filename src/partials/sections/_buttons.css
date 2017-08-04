@@ -27,7 +27,7 @@
 				box-shadow: inset 0 0 0 2px var(--grey-n06);
 				text-decoration: none;
 				
-				& svg.icon {
+				svg.icon {
 					stroke: var(--text-color);
 				}
 			}
@@ -54,7 +54,7 @@
 				text-decoration: none;
 				@chassis font-size small;
 				
-				& svg.icon {
+				svg.icon {
 					stroke: var(--grey-n09);
 				}
 			}
@@ -64,7 +64,7 @@
 				color: var(--grey-n10);
 				box-shadow: inset 0 -2px 0 0 var(--grey-n05);
 				
-				& svg.icon {
+				svg.icon {
 					stroke: var(--grey-n10);
 				}
 			}

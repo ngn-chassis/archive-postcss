@@ -1,0 +1,41 @@
+chassis-control[type="field"] {
+	@state default {
+		$(selector) {
+			display: flex;
+			flex-direction: column;
+			max-width: 100%;
+			margin-bottom: $(margin-bottom);
+		}
+		
+		$(selector) .input-wrapper {
+			display: flex;
+		}
+		
+		$(selector) input {
+			flex: 1 1 auto;
+			width: 100%;
+			padding: 0;
+			margin: $(input-margin-top) 0 0;
+			@chassis inline-block-layout no-margin;
+			
+			/* Reset */
+			background: transparent;
+			border: none;
+		}
+		
+		$(selector) textarea {
+			flex: 1 1 auto;
+			width: 100%;
+			margin: $(input-margin-top) 0 0;
+			@chassis inline-block-layout multi-line no-margin;
+			
+			/* Reset */
+			background: transparent;
+			border: none;
+		}
+		
+		/* TODO: Add validation states, sub-label */
+	}
+	
+	
+}
