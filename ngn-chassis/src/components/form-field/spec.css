@@ -3,11 +3,11 @@ chassis-control {
 		$(selector)[type="field"] {
 			margin-bottom: $(margin-bottom);
 		}
-		
+
 		$(selector)[type="field"] label {
 			display: inline-block;
 		}
-		
+
 		input[type="date"],
 		input[type="datetime-local"],
 		input[type="email"],
@@ -28,12 +28,12 @@ chassis-control {
 			padding: 0;
 			margin: 0;
 			@chassis inline-block-layout no-margin;
-			
+
 			/* Reset */
 			background: transparent;
 			border: none;
 		}
-		
+
 		textarea,
 		$(selector)[type="field"] textarea {
 			flex: 1 1 auto;
@@ -42,28 +42,28 @@ chassis-control {
 			margin: 0;
 			@chassis inline-block-layout multi-line no-margin;
 			overflow: auto;
-			
+
 			/* Reset */
 			vertical-align: top;
 			resize: vertical;
-			
+
 			background: transparent;
 			border: none;
 		}
-		
+
 		$(selector)[type="field"] input,
 		$(selector)[type="field"] textarea,
 		$(selector)[type="field"] chassis-select {
 			margin: $(input-margin-top) 0 0;
 		}
-		
+
 		select,
 		$(selector)[type="select"] select[multiple] {
 			vertical-align: top;
     }
-		
+
 		/* TODO: Add validation states, sub-label */
 	}
-	
-	
+
+
 }

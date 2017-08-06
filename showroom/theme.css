@@ -166,7 +166,7 @@ components {
 		}
 	}
 
-	/*form-field {
+	form-field {
 		@state default {
 			input {
 				margin-top: 0;
@@ -186,6 +186,14 @@ components {
 				outline: 0;
 				border-color: var(--blue);
 			}
+
+			chassis-select {
+				box-shadow: inset 0 0 0 2px var(--grey-n04);
+			}
+
+			chassis-option {
+
+			}
 		}
-	}*/
+	}
 }

@@ -8,6 +8,7 @@ const ChassisTableComponent = require('./components/table/component.js')
 const ChassisTagComponent = require('./components/tag/component.js')
 const ChassisFormFieldComponent = require('./components/form-field/component.js')
 const ChassisFormToggleComponent = require('./components/form-toggle/component.js')
+const ChassisSelectMenuComponent = require('./components/select-menu/component.js')
 
 class ChassisConstants {
 	// Order is important!
@@ -26,7 +27,8 @@ class ChassisConstants {
 			['modal', ChassisModalComponent],
 			['form-field', ChassisFormFieldComponent],
 			['form-toggle', ChassisFormToggleComponent],
-			['form-controls', ['form-field', 'form-toggle']]
+			['select-menu', ChassisSelectMenuComponent],
+			['form-controls', ['form-field', 'form-toggle', 'select-menu']]
 		])
 	}
 
@@ -42,13 +44,13 @@ class ChassisConstants {
 			}
 		}
 	}
-	
+
 	static get theme () {
 		return {
 			defaultFilePath: '../style-sheets/default-theme.css'
 		}
 	}
-	
+
 	static get typography () {
 		return {
 			breakpoints: (() => {

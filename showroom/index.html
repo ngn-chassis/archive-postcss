@@ -9,7 +9,7 @@
 
     <!-- <link rel="stylesheet" href="css/core-template.css"> -->
     <link rel="stylesheet" href="css/showroom.css">
-    
+
     <script src="webcomponents/chassis-web-component.js"></script>
     <script src="webcomponents/chassis-control.js"></script>
     <script src="webcomponents/chassis-select.js"></script>
@@ -179,7 +179,7 @@
 
         <section class="ui-components">
           <h2>Built-in UI Components</h2>
-          
+
           <section class="links">
             <header>
               <h3>Link</h3>
@@ -191,7 +191,7 @@
               <a href="#">Here's a link</a>
             </p>
           </section>
-          
+
           <section class="buttons">
             <header>
               <h3>Button</h3>
@@ -266,7 +266,7 @@
               </a>
             </section>
           </section>
-          
+
           <section class="tags">
             <header>
               <h3>Tag</h3>
@@ -288,31 +288,31 @@
               </span> varieties.
             </p>
           </section>
-        
+
           <section class="forms">
             <form>
               <h3>Forms</h3>
-              
+
               <fieldset>
                 <chassis-control type="field">
                   <label for="text_field" slot="label">Text field</label>
                   <input id="text_field" type="text" value="" placeholder="Placeholder" slot="input">
                 </chassis-control>
-                
+
                 <chassis-control type="field">
                   <label for="email_field" slot="label">Email field</label>
                   <input id="email_field" type="email" value="" placeholder="my-email@address.com" slot="input">
                 </chassis-control>
-                
+
                 <chassis-control type="field">
                   <label for="email_field" slot="label">Textarea</label>
                   <textarea id="textarea" rows="5" slot="input"></textarea>
                 </chassis-control>
               </fieldset>
-              
+
               <fieldset>
                 <h4>Radio Buttons</h4>
-                
+
                 <chassis-control type="toggle">
                   <label for="radio_button_1" slot="label">Radio Button</label>
                   <input id="radio_button_1" name="radios" type="radio" value="" slot="input">
@@ -325,28 +325,33 @@
                   <label for="radio_button_3" slot="label">Radio Button</label>
                   <input id="radio_button_3" name="radios" type="radio" value="" slot="input">
                 </chassis-control>
-                
+
                 <!-- <chassis-control-group>
-                  
+
                 </chassis-control-group> -->
               </fieldset>
-              
+
               <fieldset>
                 <h4>Select Menu</h4>
-                
-                
+
                 <chassis-control type="field">
                   <label for="select_menu" slot="label">Select Menu</label>
-                  <chassis-select id="select_menu" slot="input">
-                    <option value="test1">Option 1</option>
-                    <option value="test2">Option 2</option>
-                    <option value="test3">Option 3</option>
-                    <option value="test4">Option 4</option>
+                  <chassis-select class="pill" id="select_menu" slot="input">
+                    <chassis-option label="Using Label" value="test1">
+                      <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="7"></circle>
+                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                      </svg>
+                      Option 1
+                    </chassis-option>
+                    <chassis-option value="test2" selected="false">Option 2</chassis-option>
+                    <chassis-option value="test3">Option 3</chassis-option>
+                    <chassis-option value="test4">Option 4</chassis-option>
                   </chassis-select>
                 </chassis-control>
               </fieldset>
             </form>
-            
+
           </section>
         </section>
       </div>
