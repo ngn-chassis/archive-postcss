@@ -72,8 +72,8 @@ class ChassisSelect extends ChassisWebComponent {
 
   attributeChangedCallback (name, oldValue, newValue) {
     switch (name.toLowerCase()) {
-
-
+      case 'options':
+      console.log('heyyyy');
       default:
         return
     }
@@ -110,6 +110,8 @@ class ChassisSelect extends ChassisWebComponent {
         child.remove()
       }
     }
+
+    setTimeout(() => console.log(this.options), 0)
   }
 }
 
