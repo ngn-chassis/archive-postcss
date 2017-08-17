@@ -64,6 +64,10 @@ class ChassisStyleSheet {
 				rule.remove()
 				return
 			}
+			
+			if (rule.parent.type === 'atrule' && rule.parent.name === 'keyframes') {
+				return
+			}
 
 			if (this.isNamespaced) {
 				rule.selector = rule.selector === 'html' || rule.selector === ':root'  ? rule.selector.trim() : `.chassis ${rule.selector.trim()}`
